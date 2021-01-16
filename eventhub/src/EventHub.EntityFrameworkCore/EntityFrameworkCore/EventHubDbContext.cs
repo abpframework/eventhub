@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EventHub.Organizations;
+using Microsoft.EntityFrameworkCore;
 using EventHub.Users;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
@@ -22,9 +23,7 @@ namespace EventHub.EntityFrameworkCore
     {
         public DbSet<AppUser> Users { get; set; }
 
-        /* Add DbSet properties for your Aggregate Roots / Entities here.
-         * Also map them inside EventHubDbContextModelCreatingExtensions.ConfigureEventHub
-         */
+        public DbSet<Organization> Organizations { get; set; }
 
         public EventHubDbContext(DbContextOptions<EventHubDbContext> options)
             : base(options)
@@ -41,7 +40,7 @@ namespace EventHub.EntityFrameworkCore
             builder.Entity<AppUser>(b =>
             {
                 b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "Users"); //Sharing the same table "AbpUsers" with the IdentityUser
-                
+
                 b.ConfigureByConvention();
                 b.ConfigureAbpUser();
 

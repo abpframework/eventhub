@@ -6,6 +6,8 @@ namespace EventHub.Organizations
 {
     public class Organization : AggregateRoot<Guid>
     {
+        public Guid OwnerUserId { get; set; }
+
         public string Name { get; private set; }
 
         public string DisplayName { get; set; }
@@ -26,15 +28,16 @@ namespace EventHub.Organizations
 
         private Organization()
         {
-
         }
 
-        public Organization(
+        internal Organization(
             Guid id,
+            Guid ownerUserId,
             string name,
             string displayName)
             : base(id)
         {
+            OwnerUserId = ownerUserId;
             SetName(name);
             SetDisplayName(displayName);
         }
@@ -46,7 +49,7 @@ namespace EventHub.Organizations
 
         public void SetDisplayName(string displayName)
         {
-            DisplayName = Check.NotNullOrWhiteSpace(displayName, nameof(displayName));
+            DisplayName = Check.NotNullOrWhiteSpace(displayName, nameof(displayName), OrganizationConsts.MaxDisplayNameLength, OrganizationConsts.MinDisplayNameLength);
         }
     }
 }

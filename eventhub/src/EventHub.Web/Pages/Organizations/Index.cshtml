@@ -1,0 +1,11 @@
+﻿@page "/organizations"
+@model EventHub.Web.Pages.Organizations.Index
+
+<h1>Organizations</h1>
+
+<ul>
+    @foreach (var organization in Model.Organizations)
+    {
+        <li>@organization.Name</li>
+    }
+</ul>
