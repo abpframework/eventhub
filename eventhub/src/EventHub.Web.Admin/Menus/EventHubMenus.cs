@@ -1,4 +1,4 @@
-﻿namespace EventHub.Blazor.Menus
+﻿namespace EventHub.Web.Admin.Menus
 {
     public class EventHubMenus
     {

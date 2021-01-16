@@ -1,4 +1,4 @@
-﻿namespace EventHub.Blazor.Pages
+﻿namespace EventHub.Web.Admin.Pages
 {
     public partial class Index
     {

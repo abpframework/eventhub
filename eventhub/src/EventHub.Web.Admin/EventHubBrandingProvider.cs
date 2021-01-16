@@ -1,7 +1,7 @@
 ﻿using Volo.Abp.DependencyInjection;
 using Volo.Abp.Ui.Branding;
 
-namespace EventHub.Blazor
+namespace EventHub.Web.Admin
 {
     [Dependency(ReplaceServices = true)]
     public class EventHubBrandingProvider : DefaultBrandingProvider

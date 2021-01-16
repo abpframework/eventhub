@@ -1,6 +1,6 @@
 ﻿using Volo.Abp.Bundling;
 
-namespace EventHub.Blazor
+namespace EventHub.Web.Admin
 {
     public class EventHubBundleContributor : IBundleContributor
     {

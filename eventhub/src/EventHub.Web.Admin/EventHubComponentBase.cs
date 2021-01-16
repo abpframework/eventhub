@@ -1,7 +1,7 @@
 ﻿using EventHub.Localization;
 using Volo.Abp.AspNetCore.Components;
 
-namespace EventHub.Blazor
+namespace EventHub.Web.Admin
 {
     public abstract class EventHubComponentBase : AbpComponentBase
     {

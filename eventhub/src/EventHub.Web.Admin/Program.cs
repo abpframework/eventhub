@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
-namespace EventHub.Blazor
+namespace EventHub.Web.Admin
 {
     public class Program
     {
