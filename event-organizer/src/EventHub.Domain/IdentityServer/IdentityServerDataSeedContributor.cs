@@ -142,45 +142,6 @@ namespace EventHub.IdentityServer
 
             var configurationSection = _configuration.GetSection("IdentityServer:Clients");
 
-            //Web Client
-            var webClientId = configurationSection["EventHub_Web:ClientId"];
-            if (!webClientId.IsNullOrWhiteSpace())
-            {
-                var webClientRootUrl = configurationSection["EventHub_Web:RootUrl"].EnsureEndsWith('/');
-
-                /* EventHub_Web client is only needed if you created a tiered
-                 * solution. Otherwise, you can delete this client. */
-
-                await CreateClientAsync(
-                    name: webClientId,
-                    scopes: commonScopes,
-                    grantTypes: new[] { "hybrid" },
-                    secret: (configurationSection["EventHub_Web:ClientSecret"] ?? "1q2w3e*").Sha256(),
-                    redirectUri: $"{webClientRootUrl}signin-oidc",
-                    postLogoutRedirectUri: $"{webClientRootUrl}signout-callback-oidc",
-                    frontChannelLogoutUri: $"{webClientRootUrl}Account/FrontChannelLogout",
-                    corsOrigins: new[] { webClientRootUrl.RemovePostFix("/") }
-                );
-            }
-
-            //Console Test / Angular Client
-            var consoleAndAngularClientId = configurationSection["EventHub_App:ClientId"];
-            if (!consoleAndAngularClientId.IsNullOrWhiteSpace())
-            {
-                var webClientRootUrl = configurationSection["EventHub_App:RootUrl"]?.TrimEnd('/');
-
-                await CreateClientAsync(
-                    name: consoleAndAngularClientId,
-                    scopes: commonScopes,
-                    grantTypes: new[] { "password", "client_credentials", "authorization_code" },
-                    secret: (configurationSection["EventHub_App:ClientSecret"] ?? "1q2w3e*").Sha256(),
-                    requireClientSecret: false,
-                    redirectUri: webClientRootUrl,
-                    postLogoutRedirectUri: webClientRootUrl,
-                    corsOrigins: new[] { webClientRootUrl.RemovePostFix("/") }
-                );
-            }
-
             // Blazor Client
             var blazorClientId = configurationSection["EventHub_Blazor:ClientId"];
             if (!blazorClientId.IsNullOrWhiteSpace())
