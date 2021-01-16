@@ -1,12 +1,10 @@
 ﻿using Localization.Resources.AbpUi;
 using EventHub.Localization;
 using Volo.Abp.Account;
-using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.HttpApi;
-using Volo.Abp.TenantManagement;
 
 namespace EventHub
 {
@@ -14,9 +12,7 @@ namespace EventHub
         typeof(EventHubApplicationContractsModule),
         typeof(AbpAccountHttpApiModule),
         typeof(AbpIdentityHttpApiModule),
-        typeof(AbpPermissionManagementHttpApiModule),
-        typeof(AbpTenantManagementHttpApiModule),
-        typeof(AbpFeatureManagementHttpApiModule)
+        typeof(AbpPermissionManagementHttpApiModule)
         )]
     public class EventHubHttpApiModule : AbpModule
     {

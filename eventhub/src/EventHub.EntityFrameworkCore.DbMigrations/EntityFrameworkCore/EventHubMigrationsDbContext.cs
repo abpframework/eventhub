@@ -2,13 +2,10 @@
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.FeatureManagement.EntityFrameworkCore;
-using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
-using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
 namespace EventHub.EntityFrameworkCore
 {
@@ -19,7 +16,7 @@ namespace EventHub.EntityFrameworkCore
      */
     public class EventHubMigrationsDbContext : AbpDbContext<EventHubMigrationsDbContext>
     {
-        public EventHubMigrationsDbContext(DbContextOptions<EventHubMigrationsDbContext> options) 
+        public EventHubMigrationsDbContext(DbContextOptions<EventHubMigrationsDbContext> options)
             : base(options)
         {
 
@@ -37,8 +34,6 @@ namespace EventHub.EntityFrameworkCore
             builder.ConfigureAuditLogging();
             builder.ConfigureIdentity();
             builder.ConfigureIdentityServer();
-            builder.ConfigureFeatureManagement();
-            builder.ConfigureTenantManagement();
 
             /* Configure your own tables/entities inside the ConfigureEventHub method */
 

@@ -2,11 +2,8 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Localization;
 using EventHub.Localization;
-using EventHub.MultiTenancy;
 using Volo.Abp.Account.Localization;
-using Volo.Abp.TenantManagement.Web.Navigation;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.Users;
 
@@ -35,12 +32,6 @@ namespace EventHub.Web.Menus
 
         private Task ConfigureMainMenuAsync(MenuConfigurationContext context)
         {
-            if (!MultiTenancyConsts.IsEnabled)
-            {
-                var administration = context.Menu.GetAdministration();
-                administration.TryRemoveMenuItem(TenantManagementMenuNames.GroupName);
-            }
-
             var l = context.GetLocalizer<EventHubResource>();
 
             context.Menu.Items.Insert(0, new ApplicationMenuItem(EventHubMenus.Home, l["Menu:Home"], "~/"));
