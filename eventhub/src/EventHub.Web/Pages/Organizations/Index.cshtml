@@ -4,11 +4,20 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @model EventHub.Web.Pages.Organizations.Index
 
-<h1>Organizations</h1>
-
-<ul>
+<abp-row>
     @foreach (var organization in Model.Organizations)
     {
-        <li>@organization.Name</li>
+        <abp-column size-lg="_4" size-md="_6">
+            <abp-card>
+                <img abp-card-image="Top" src="https://picsum.photos/seed/@organization.Name/400/160?blur=8" alt="@organization.DisplayName"/>
+                <abp-card-body>
+                    <abp-card-title>@organization.DisplayName</abp-card-title>
+                    <abp-card-text>
+                        @organization.Description.TruncateWithPostfix(100)
+                    </abp-card-text>
+                    <a abp-button="Primary" href="@Url.Page("/Organizations/OrganizationProfile", new {name = organization.Name})"> @L["SeeOrganization"]</a>
+                </abp-card-body>
+            </abp-card>
+        </abp-column>
     }
-</ul>
+</abp-row>

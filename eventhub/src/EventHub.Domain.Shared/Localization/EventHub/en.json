@@ -2,6 +2,7 @@
   "culture": "en",
   "texts": {
     "Menu:Home": "Home",
+    "Menu:Organizations": "Organizations",
     "Welcome": "Welcome",
     "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io.",
     "Create": "Create",
@@ -12,6 +13,7 @@
     "DisplayName:Description": "Description",
     "EventHub:OrganizationNameAlreadyExists": "The organization {Name} already exists. Please use another name.",
     "Events": "Events",
-    "Members": "Members"
+    "Members": "Members",
+    "SeeOrganization": "See Organization"
   }
 }

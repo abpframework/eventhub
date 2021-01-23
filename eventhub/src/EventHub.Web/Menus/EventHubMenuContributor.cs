@@ -35,6 +35,7 @@ namespace EventHub.Web.Menus
             var l = context.GetLocalizer<EventHubResource>();
 
             context.Menu.Items.Insert(0, new ApplicationMenuItem(EventHubMenus.Home, l["Menu:Home"], "~/"));
+            context.Menu.Items.Insert(1, new ApplicationMenuItem(EventHubMenus.Organizations, l["Menu:Organizations"], "~/organizations"));
 
             return Task.CompletedTask;
         }
