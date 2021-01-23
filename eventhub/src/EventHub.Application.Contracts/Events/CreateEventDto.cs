@@ -5,6 +5,7 @@ namespace EventHub.Events
 {
     public class CreateEventDto
     {
+        [Required]
         public Guid OrganizationId { get; set; }
 
         [Required]

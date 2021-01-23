@@ -4,15 +4,17 @@ using EventHub.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace EventHub.Migrations
 {
     [DbContext(typeof(EventHubMigrationsDbContext))]
-    partial class EventHubMigrationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210123172353_Added_Events")]
+    partial class Added_Events
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

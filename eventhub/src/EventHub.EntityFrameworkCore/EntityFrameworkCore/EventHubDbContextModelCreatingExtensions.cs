@@ -1,4 +1,5 @@
-﻿using EventHub.Organizations;
+﻿using EventHub.Events;
+using EventHub.Organizations;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
@@ -25,6 +26,19 @@ namespace EventHub.EntityFrameworkCore
 
                 b.HasIndex(x => x.Name);
                 b.HasIndex(x => x.DisplayName);
+            });
+
+            builder.Entity<Event>(b =>
+            {
+                b.ToTable(EventHubConsts.DbTablePrefix + "Events", EventHubConsts.DbSchema);
+
+                b.ConfigureByConvention();
+
+                b.Property(x => x.Title).IsRequired().HasMaxLength(EventConsts.MaxTitleLength);
+                b.Property(x => x.Description).IsRequired().HasMaxLength(EventConsts.MaxDescriptionLength);
+
+                b.HasIndex(x => new {x.OrganizationId, x.StartTime});
+                b.HasIndex(x => x.StartTime);
             });
         }
     }

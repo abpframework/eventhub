@@ -27,15 +27,13 @@ namespace EventHub.Organizations
                     .WithData("Name", name);
             }
 
-            var organization = new Organization(
+            return new Organization(
                 GuidGenerator.Create(),
                 ownerUserId,
                 name,
                 displayName,
                 description
             );
-
-            return await _organizationRepository.InsertAsync(organization);
         }
     }
 }

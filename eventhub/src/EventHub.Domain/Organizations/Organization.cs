@@ -1,10 +1,10 @@
 ﻿using System;
 using Volo.Abp;
-using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Auditing;
 
 namespace EventHub.Organizations
 {
-    public class Organization : AggregateRoot<Guid>
+    public class Organization : FullAuditedAggregateRoot<Guid>
     {
         public Guid OwnerUserId { get; set; }
 
@@ -44,19 +44,22 @@ namespace EventHub.Organizations
             SetDescription(description);
         }
 
-        internal void SetName(string name)
+        internal Organization SetName(string name)
         {
             Name = Check.NotNullOrWhiteSpace(name, nameof(name), OrganizationConsts.MaxNameLength, OrganizationConsts.MinNameLength);
+            return this;
         }
 
-        public void SetDisplayName(string displayName)
+        public Organization SetDisplayName(string displayName)
         {
             DisplayName = Check.NotNullOrWhiteSpace(displayName, nameof(displayName), OrganizationConsts.MaxDisplayNameLength, OrganizationConsts.MinDisplayNameLength);
+            return this;
         }
 
-        public void SetDescription(string description)
+        public Organization SetDescription(string description)
         {
             Description = Check.NotNullOrWhiteSpace(description, nameof(description), OrganizationConsts.MaxDescriptionNameLength, OrganizationConsts.MinDescriptionNameLength);
+            return this;
         }
     }
 }

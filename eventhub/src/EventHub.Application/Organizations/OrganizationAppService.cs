@@ -25,12 +25,14 @@ namespace EventHub.Organizations
         [Authorize]
         public async Task CreateAsync(CreateOrganizationDto input)
         {
-            await _organizationManager.CreateAsync(
+            var organization = await _organizationManager.CreateAsync(
                 CurrentUser.GetId(),
                 input.Name,
                 input.DisplayName,
                 input.Description
             );
+
+            await _organizationRepository.InsertAsync(organization);
         }
 
         public async Task<PagedResultDto<OrganizationInListDto>> GetListAsync(PagedResultRequestDto input)

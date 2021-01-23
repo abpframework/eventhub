@@ -1,4 +1,5 @@
-﻿using EventHub.Organizations;
+﻿using EventHub.Events;
+using EventHub.Organizations;
 using Microsoft.EntityFrameworkCore;
 using EventHub.Users;
 using Volo.Abp.Data;
@@ -22,8 +23,8 @@ namespace EventHub.EntityFrameworkCore
     public class EventHubDbContext : AbpDbContext<EventHubDbContext>
     {
         public DbSet<AppUser> Users { get; set; }
-
         public DbSet<Organization> Organizations { get; set; }
+        public DbSet<Event> Events { get; set; }
 
         public EventHubDbContext(DbContextOptions<EventHubDbContext> options)
             : base(options)
