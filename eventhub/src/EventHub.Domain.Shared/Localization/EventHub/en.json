@@ -18,6 +18,7 @@
     "DisplayName:Capacity": "Capacity",
     "EventHub:OrganizationNameAlreadyExists": "The organization {Name} already exists. Please use another name.",
     "EventHub:NotAuthorizedToCreateEventInThisOrganization": "You are not authorized to create events for the organization {OrganizationName}",
+    "EventHub:EventEndTimeCantBeEarlierThanStartTime": "Event end time can not be earlier than the start time.",
     "Events": "Events",
     "Members": "Members",
     "SeeOrganization": "See Organization",

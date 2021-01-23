@@ -25,7 +25,7 @@ namespace EventHub.Events
 
         }
 
-        public Event(
+        internal Event(
             Guid id,
             Guid organizationId,
             string title,
@@ -54,6 +54,11 @@ namespace EventHub.Events
 
         public Event SetTime(DateTime startTime, DateTime endTime)
         {
+            if (startTime > endTime)
+            {
+                throw new BusinessException(EventHubErrorCodes.EventEndTimeCantBeEarlierThanStartTime);
+            }
+
             StartTime = startTime;
             EndTime = endTime;
             return this;
