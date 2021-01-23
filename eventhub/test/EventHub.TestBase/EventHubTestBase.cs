@@ -7,6 +7,7 @@ using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Modularity;
 using Volo.Abp.Uow;
 using Volo.Abp.Testing;
+using Volo.Abp.Users;
 
 namespace EventHub
 {
@@ -15,6 +16,13 @@ namespace EventHub
     public abstract class EventHubTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule>
         where TStartupModule : IAbpModule
     {
+        protected ICurrentUser CurrentUser { get; }
+
+        public EventHubTestBase()
+        {
+            CurrentUser = GetRequiredService<ICurrentUser>();
+        }
+
         protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
         {
             options.UseAutofac();
@@ -33,9 +41,16 @@ namespace EventHub
 
                 using (var uow = uowManager.Begin(options))
                 {
-                    await action();
-
-                    await uow.CompleteAsync();
+                    try
+                    {
+                        await action();
+                        await uow.CompleteAsync();
+                    }
+                    catch
+                    {
+                        await uow.RollbackAsync();
+                        throw;
+                    }
                 }
             }
         }
@@ -53,9 +68,17 @@ namespace EventHub
 
                 using (var uow = uowManager.Begin(options))
                 {
-                    var result = await func();
-                    await uow.CompleteAsync();
-                    return result;
+                    try
+                    {
+                        var result = await func();
+                        await uow.CompleteAsync();
+                        return result;
+                    }
+                    catch
+                    {
+                        await uow.RollbackAsync();
+                        throw;
+                    }
                 }
             }
         }
