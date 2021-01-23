@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 using EventHub.Organizations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 
 namespace EventHub.Web.Pages.Organizations
@@ -17,14 +15,10 @@ namespace EventHub.Web.Pages.Organizations
         public CreateOrganizationViewModel Organization { get; set; }
 
         private readonly IOrganizationAppService _organizationAppService;
-        private readonly IExceptionToErrorInfoConverter _errorInfoConverter;
 
-        public New(
-            IOrganizationAppService organizationAppService,
-            IExceptionToErrorInfoConverter errorInfoConverter)
+        public New(IOrganizationAppService organizationAppService)
         {
             _organizationAppService = organizationAppService;
-            _errorInfoConverter = errorInfoConverter;
         }
 
         public void OnGet()
@@ -45,9 +39,7 @@ namespace EventHub.Web.Pages.Organizations
             }
             catch (Exception exception)
             {
-                Logger.LogException(exception);
-                var errorInfo = _errorInfoConverter.Convert(exception, false);
-                Alerts.Danger(errorInfo.Message);
+                ShowAlert(exception);
                 return Page();
             }
         }
