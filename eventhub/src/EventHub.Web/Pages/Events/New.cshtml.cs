@@ -38,6 +38,11 @@ namespace EventHub.Web.Pages.Events
                 EndTime = DateTime.Now.ClearTime().AddDays(1).AddHours(21)
             };
 
+            await FillOrganizationsAsync();
+        }
+
+        private async Task FillOrganizationsAsync()
+        {
             var result = await _organizationAppService.GetMyOrganizationsAsync();
             Organizations = result.Items.Select(
                 organization => new SelectListItem
@@ -63,6 +68,7 @@ namespace EventHub.Web.Pages.Events
             catch (Exception exception)
             {
                 ShowAlert(exception);
+                await FillOrganizationsAsync();
                 return Page();
             }
         }
