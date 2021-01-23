@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using EventHub.Organizations;
+using EventHub.Web.Pages.Organizations;
 
 namespace EventHub.Web
 {
@@ -6,7 +8,7 @@ namespace EventHub.Web
     {
         public EventHubWebAutoMapperProfile()
         {
-            //Define your AutoMapper configuration here for the Web project.
+            CreateMap<New.CreateOrganizationViewModel, CreateOrganizationDto>();
         }
     }
 }

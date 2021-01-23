@@ -6,6 +6,8 @@ namespace EventHub.Organizations
 {
     public interface IOrganizationAppService : IApplicationService
     {
+        Task CreateAsync(CreateOrganizationDto input);
+
         Task<PagedResultDto<OrganizationInListDto>> GetListAsync(PagedResultRequestDto input);
     }
 }

@@ -1,18 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Users;
 
 namespace EventHub.Organizations
 {
     public class OrganizationAppService : EventHubAppService, IOrganizationAppService
     {
         private readonly IRepository<Organization, Guid> _organizationRepository;
+        private readonly OrganizationManager _organizationManager;
 
-        public OrganizationAppService(IRepository<Organization, Guid> organizationRepository)
+        public OrganizationAppService(
+            IRepository<Organization, Guid> organizationRepository,
+            OrganizationManager organizationManager)
         {
             _organizationRepository = organizationRepository;
+            _organizationManager = organizationManager;
+        }
+
+        [Authorize]
+        public async Task CreateAsync(CreateOrganizationDto input)
+        {
+            await _organizationManager.CreateAsync(
+                CurrentUser.GetId(),
+                input.Name,
+                input.DisplayName,
+                input.Description
+            );
         }
 
         public async Task<PagedResultDto<OrganizationInListDto>> GetListAsync(PagedResultRequestDto input)

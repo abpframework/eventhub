@@ -7,5 +7,8 @@
 
         public const int MinDisplayNameLength = 2;
         public const int MaxDisplayNameLength = 128;
+
+        public const int MinDescriptionNameLength = 50;
+        public const int MaxDescriptionNameLength = 1000;
     }
 }

@@ -10,9 +10,9 @@ namespace EventHub.Organizations
 
         public string Name { get; private set; }
 
-        public string DisplayName { get; set; }
+        public string DisplayName { get; private set; }
 
-        public string Description { get; set; }
+        public string Description { get; private set; }
 
         public string Website { get; set; }
 
@@ -34,12 +34,14 @@ namespace EventHub.Organizations
             Guid id,
             Guid ownerUserId,
             string name,
-            string displayName)
+            string displayName,
+            string description)
             : base(id)
         {
             OwnerUserId = ownerUserId;
             SetName(name);
             SetDisplayName(displayName);
+            SetDescription(description);
         }
 
         internal void SetName(string name)
@@ -50,6 +52,11 @@ namespace EventHub.Organizations
         public void SetDisplayName(string displayName)
         {
             DisplayName = Check.NotNullOrWhiteSpace(displayName, nameof(displayName), OrganizationConsts.MaxDisplayNameLength, OrganizationConsts.MinDisplayNameLength);
+        }
+
+        public void SetDescription(string description)
+        {
+            Description = Check.NotNullOrWhiteSpace(description, nameof(description), OrganizationConsts.MaxDescriptionNameLength, OrganizationConsts.MinDescriptionNameLength);
         }
     }
 }
