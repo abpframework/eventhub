@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
+using EventHub.Organizations;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Modularity;
 using Volo.Abp.Uow;
 using Volo.Abp.Testing;
@@ -10,7 +12,7 @@ namespace EventHub
 {
     /* All test classes are derived from this class, directly or indirectly.
      */
-    public abstract class EventHubTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule> 
+    public abstract class EventHubTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule>
         where TStartupModule : IAbpModule
     {
         protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
@@ -56,6 +58,16 @@ namespace EventHub
                     return result;
                 }
             }
+        }
+
+        protected virtual async Task<Organization> GetOrganizationOrNullAsync(string name)
+        {
+            var organizationRepository = GetRequiredService<IRepository<Organization, Guid>>();
+            return await WithUnitOfWorkAsync(async () =>
+                {
+                    return await organizationRepository.FirstOrDefaultAsync(o => o.Name == name);
+                }
+            );
         }
     }
 }
