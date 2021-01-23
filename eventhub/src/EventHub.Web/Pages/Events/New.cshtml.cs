@@ -17,7 +17,7 @@ namespace EventHub.Web.Pages.Events
         [BindProperty]
         public NewEventViewModel Event { get; set; }
 
-        public List<SelectListItem> Organizations { get; set; }
+        public List<SelectListItem> Organizations { get; private set; }
 
         private readonly IEventAppService _eventAppService;
         private readonly IOrganizationAppService _organizationAppService;

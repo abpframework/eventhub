@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp;
+using Volo.Abp.Timing;
 using Xunit;
 
 namespace EventHub.Events
@@ -55,8 +56,48 @@ namespace EventHub.Events
                     }
                 );
             });
-            
+
             exception.Code.ShouldBe(EventHubErrorCodes.NotAuthorizedToCreateEventInThisOrganization);
+        }
+
+        [Fact]
+        public async Task Should_Get_Upcoming_Events()
+        {
+            var now = GetRequiredService<IClock>().Now;
+
+            var result = await _eventAppService.GetListAsync(
+                new EventListFilterDto
+                {
+                    MinDate = now
+                }
+            );
+
+            result.TotalCount.ShouldBeGreaterThanOrEqualTo(1);
+            result.Items.ShouldContain(x =>
+                x.Id == _testData.AbpMicroservicesFutureEventId &&
+                x.Title == _testData.AbpMicroservicesFutureEventTitle
+            );
+            result.Items.ShouldAllBe(x => x.EndTime >= now);
+        }
+
+        [Fact]
+        public async Task Should_Get_Past_Events()
+        {
+            var now = GetRequiredService<IClock>().Now;
+
+            var result = await _eventAppService.GetListAsync(
+                new EventListFilterDto
+                {
+                    MaxDate = now
+                }
+            );
+
+            result.TotalCount.ShouldBeGreaterThanOrEqualTo(1);
+            result.Items.ShouldContain(x =>
+                x.Id == _testData.AbpBlazorPastEventId &&
+                x.Title == _testData.AbpBlazorPastEventTitle
+            );
+            result.Items.ShouldAllBe(x => x.EndTime <= now);
         }
     }
 }

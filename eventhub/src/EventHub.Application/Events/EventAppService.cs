@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Organizations;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Users;
 
@@ -10,8 +12,8 @@ namespace EventHub.Events
 {
     public class EventAppService : EventHubAppService, IEventAppService
     {
-        private readonly IRepository<Organization, Guid> _organizationRepository;
         private readonly EventManager _eventManager;
+        private readonly IRepository<Organization, Guid> _organizationRepository;
         private readonly IRepository<Event, Guid> _eventRepository;
 
         public EventAppService(
@@ -49,6 +51,48 @@ namespace EventHub.Events
             await _eventRepository.InsertAsync(@event);
 
             return ObjectMapper.Map<Event, EventDto>(@event);
+        }
+
+        public async Task<PagedResultDto<EventInListDto>> GetListAsync(EventListFilterDto input)
+        {
+            var eventQueryable = await _eventRepository.GetQueryableAsync();
+            var organizationQueryable = await _organizationRepository.GetQueryableAsync();
+
+            var query = from @event in eventQueryable
+                join organization in organizationQueryable on @event.OrganizationId equals organization.Id
+                select new {@event, organization};
+
+            if (input.MinDate.HasValue)
+            {
+                query = query.Where(i => i.@event.EndTime >= input.MinDate);
+            }
+
+            if (input.MaxDate.HasValue)
+            {
+                query = query.Where(i => i.@event.EndTime <= input.MaxDate);
+            }
+
+            query = query.PageBy(input).OrderBy(x => x.@event.StartTime);
+
+            var totalCount = await AsyncExecuter.CountAsync(query);
+            var items = await AsyncExecuter.ToListAsync(query);
+            var now = Clock.Now;
+
+            var dtos = items.Select(
+                i => new EventInListDto
+                {
+                    Id = i.@event.Id,
+                    Title = i.@event.Title,
+                    EndTime = i.@event.EndTime,
+                    StartTime = i.@event.StartTime,
+                    IsOnline = i.@event.IsOnline,
+                    OrganizationName = i.organization.Name,
+                    OrganizationDisplayName = i.organization.DisplayName,
+                    IsLive = now.IsBetween(i.@event.StartTime, i.@event.EndTime)
+                }
+            ).ToList();
+
+            return new PagedResultDto<EventInListDto>(totalCount, dtos);
         }
     }
 }
