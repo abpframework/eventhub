@@ -25,7 +25,7 @@ namespace EventHub.Events
         }
 
         [Authorize]
-        public async Task CreateAsync(CreateEventDto input)
+        public async Task<EventDto> CreateAsync(CreateEventDto input)
         {
             var organization = await _organizationRepository.GetAsync(input.OrganizationId);
 
@@ -43,7 +43,12 @@ namespace EventHub.Events
                 input.Description
             );
 
+            @event.IsOnline = input.IsOnline;
+            @event.Capacity = input.Capacity;
+
             await _eventRepository.InsertAsync(@event);
+
+            return ObjectMapper.Map<Event, EventDto>(@event);
         }
     }
 }

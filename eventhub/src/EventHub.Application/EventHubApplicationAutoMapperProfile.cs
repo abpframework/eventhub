@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EventHub.Events;
 using EventHub.Organizations;
 
 namespace EventHub
@@ -9,6 +10,8 @@ namespace EventHub
         {
             CreateMap<Organization, OrganizationInListDto>();
             CreateMap<Organization, OrganizationProfileDto>();
+
+            CreateMap<Event, EventDto>();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using EventHub.Events;
 using EventHub.Organizations;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
@@ -86,10 +87,16 @@ namespace EventHub
         protected virtual async Task<Organization> GetOrganizationOrNullAsync(string name)
         {
             var organizationRepository = GetRequiredService<IRepository<Organization, Guid>>();
-            return await WithUnitOfWorkAsync(async () =>
-                {
-                    return await organizationRepository.FirstOrDefaultAsync(o => o.Name == name);
-                }
+            return await WithUnitOfWorkAsync(
+                () => organizationRepository.FirstOrDefaultAsync(o => o.Name == name)
+            );
+        }
+
+        protected virtual async Task<Event> GetEventOrNullAsync(Guid id)
+        {
+            var organizationRepository = GetRequiredService<IRepository<Event, Guid>>();
+            return await WithUnitOfWorkAsync(
+                () => organizationRepository.FindAsync(id)
             );
         }
     }

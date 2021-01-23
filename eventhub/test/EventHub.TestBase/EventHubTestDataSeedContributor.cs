@@ -46,7 +46,7 @@ namespace EventHub
 
             var dotnetEurope = await _organizationRepository.InsertAsync(
                 await _organizationManager.CreateAsync(
-                    _currentUser.GetId(),
+                    Guid.NewGuid(), //TODO: create a second user and set its id!
                     _eventHubTestData.OrganizationDotnetEuropeName,
                     "Dotnet Europe",
                     "Organizing events on Microsoft's .NET Platform in European Countries."

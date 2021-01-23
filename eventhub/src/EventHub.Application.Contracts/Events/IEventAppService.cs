@@ -5,6 +5,6 @@ namespace EventHub.Events
 {
     public interface IEventAppService : IApplicationService
     {
-        Task CreateAsync(CreateEventDto input);
+        Task<EventDto> CreateAsync(CreateEventDto input);
     }
 }
