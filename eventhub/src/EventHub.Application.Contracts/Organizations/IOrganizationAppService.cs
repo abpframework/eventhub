@@ -11,5 +11,7 @@ namespace EventHub.Organizations
         Task<PagedResultDto<OrganizationInListDto>> GetListAsync(PagedResultRequestDto input);
 
         Task<OrganizationProfileDto> GetProfileAsync(string name);
+
+        Task<ListResultDto<OrganizationInListDto>> GetMyOrganizationsAsync();
     }
 }

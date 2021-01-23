@@ -4,3 +4,13 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @model EventHub.Web.Pages.Events.New
 <h1>@L["NewEvent"]</h1>
+<form method="post">
+    <abp-select asp-for="Event.OrganizationId" />
+    <abp-input asp-for="Event.Title" />
+    <abp-input asp-for="Event.StartTime" />
+    <abp-input asp-for="Event.EndTime" />
+    <abp-input asp-for="Event.Description" />
+    <abp-input asp-for="Event.IsOnline" />
+    <abp-input asp-for="Event.Capacity" />
+    <abp-button size="Large" button-type="Primary" type="submit" text="@L["Submit"].Value" />
+</form>

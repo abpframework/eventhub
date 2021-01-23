@@ -21,6 +21,7 @@ namespace EventHub.EntityFrameworkCore
 
                 b.Property(x => x.Name).IsRequired().HasMaxLength(OrganizationConsts.MaxNameLength);
                 b.Property(x => x.DisplayName).IsRequired().HasMaxLength(OrganizationConsts.MaxDisplayNameLength);
+                b.Property(x => x.Description).IsRequired().HasMaxLength(OrganizationConsts.MaxDescriptionNameLength);
 
                 b.HasIndex(x => x.Name);
                 b.HasIndex(x => x.DisplayName);

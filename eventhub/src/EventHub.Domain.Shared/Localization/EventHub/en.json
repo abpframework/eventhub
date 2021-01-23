@@ -11,9 +11,16 @@
     "DisplayName:Name": "Name",
     "DisplayName:DisplayName": "Display Name",
     "DisplayName:Description": "Description",
+    "DisplayName:Title": "Title",
+    "DisplayName:StartTime": "Start Time",
+    "DisplayName:EndTime": "End Time",
+    "DisplayName:IsOnline": "Is Online?",
+    "DisplayName:Capacity": "Capacity",
     "EventHub:OrganizationNameAlreadyExists": "The organization {Name} already exists. Please use another name.",
     "Events": "Events",
     "Members": "Members",
-    "SeeOrganization": "See Organization"
+    "SeeOrganization": "See Organization",
+    "Organization": "Organization",
+    "Submit": "Submit"
   }
 }

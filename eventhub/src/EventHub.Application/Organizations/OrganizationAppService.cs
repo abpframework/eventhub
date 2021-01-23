@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
@@ -51,6 +52,18 @@ namespace EventHub.Organizations
         {
             var organization = await _organizationRepository.GetAsync(o => o.Name == name);
             return ObjectMapper.Map<Organization, OrganizationProfileDto>(organization);
+        }
+
+        [Authorize]
+        public async Task<ListResultDto<OrganizationInListDto>> GetMyOrganizationsAsync()
+        {
+            var currentUserId = CurrentUser.GetId();
+            var query = (await _organizationRepository.GetQueryableAsync()).Where(o => o.OwnerUserId == currentUserId);
+            var organizations = await AsyncExecuter.ToListAsync(query);
+
+            return new ListResultDto<OrganizationInListDto>(
+                ObjectMapper.Map<List<Organization>, List<OrganizationInListDto>>(organizations)
+            );
         }
     }
 }
