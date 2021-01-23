@@ -8,6 +8,7 @@ namespace EventHub
         public EventHubApplicationAutoMapperProfile()
         {
             CreateMap<Organization, OrganizationInListDto>();
+            CreateMap<Organization, OrganizationProfileDto>();
         }
     }
 }

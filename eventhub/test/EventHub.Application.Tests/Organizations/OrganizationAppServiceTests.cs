@@ -60,5 +60,13 @@ namespace EventHub.Organizations
             result.Items.ShouldContain(o => o.Name == _testData.OrganizationVolosoftName && o.Id == _testData.OrganizationVolosoftId);
             result.Items.ShouldContain(o => o.Name == _testData.OrganizationDotnetEuropeName && o.Id == _testData.OrganizationDotnetEuropeId);
         }
+
+        [Fact]
+        public async Task Should_Get_An_Organization_Profile()
+        {
+            var result = await _organizationAppService.GetProfileAsync(_testData.OrganizationVolosoftName);
+            result.Id.ShouldBe(_testData.OrganizationVolosoftId);
+            result.Name.ShouldBe(_testData.OrganizationVolosoftName);
+        }
     }
 }

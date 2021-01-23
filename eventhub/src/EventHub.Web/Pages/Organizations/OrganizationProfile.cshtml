@@ -1,3 +1,19 @@
 ﻿@page "/organizations/{name}"
+@inject IHtmlLocalizer<EventHubResource> L
+@using EventHub.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
 @model EventHub.Web.Pages.Organizations.OrganizationProfile
-<h1>Organization: @Model.Name</h1>
+<h1>@Model.Organization.DisplayName <small class="text-muted">@Model.Organization.Name</small></h1>
+<img class="img-fluid mb-3" src="https://picsum.photos/seed/@Model.Name/1920/400?blur=8">
+<p class="lead">
+    @Model.Organization.Description
+</p>
+
+<abp-tabs>
+    <abp-tab title="@L["Events"].Value">
+        TODO
+    </abp-tab>
+    <abp-tab title="@L["Members"].Value">
+        TODO
+    </abp-tab>
+</abp-tabs>

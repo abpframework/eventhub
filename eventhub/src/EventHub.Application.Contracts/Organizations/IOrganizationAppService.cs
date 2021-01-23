@@ -9,5 +9,7 @@ namespace EventHub.Organizations
         Task CreateAsync(CreateOrganizationDto input);
 
         Task<PagedResultDto<OrganizationInListDto>> GetListAsync(PagedResultRequestDto input);
+
+        Task<OrganizationProfileDto> GetProfileAsync(string name);
     }
 }

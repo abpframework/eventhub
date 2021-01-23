@@ -46,5 +46,11 @@ namespace EventHub.Organizations
                 ObjectMapper.Map<List<Organization>, List<OrganizationInListDto>>(organizations)
             );
         }
+
+        public async Task<OrganizationProfileDto> GetProfileAsync(string name)
+        {
+            var organization = await _organizationRepository.GetAsync(o => o.Name == name);
+            return ObjectMapper.Map<Organization, OrganizationProfileDto>(organization);
+        }
     }
 }
