@@ -22,7 +22,7 @@
     @foreach (var eventItem in Model.Events)
     {
         <abp-column size-lg="_4" size-md="_6">
-            <abp-card>
+            <abp-card class="mb-3">
                 <img abp-card-image="Top" src="https://picsum.photos/seed/@eventItem.Id.ToString()/400/160?blur=8" alt="@eventItem.Title"/>
                 <abp-card-body>
                     <abp-card-title>@eventItem.Title</abp-card-title>

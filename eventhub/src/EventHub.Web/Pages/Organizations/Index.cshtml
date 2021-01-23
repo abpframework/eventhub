@@ -8,7 +8,7 @@
     @foreach (var organization in Model.Organizations)
     {
         <abp-column size-lg="_4" size-md="_6">
-            <abp-card>
+            <abp-card class="mb-3">
                 <img abp-card-image="Top" src="https://picsum.photos/seed/@organization.Name/400/160?blur=8" alt="@organization.DisplayName"/>
                 <abp-card-body>
                     <abp-card-title>@organization.DisplayName</abp-card-title>
