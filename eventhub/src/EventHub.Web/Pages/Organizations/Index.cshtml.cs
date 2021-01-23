@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using EventHub.Organizations;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Volo.Abp.Application.Dtos;
 
 namespace EventHub.Web.Pages.Organizations

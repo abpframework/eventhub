@@ -1,0 +1,10 @@
+﻿@using EventHub.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IHtmlLocalizer<EventHubResource> L
+<abp-dropdown>
+    <abp-dropdown-button button-type="Primary" text="@L["Create"].Value" icon="fas fa-plus"/>
+    <abp-dropdown-menu>
+        <abp-dropdown-item href="@Url.Page("/Events/New")"><i class="fas fa-calendar-check"></i> @L["NewEvent"]</abp-dropdown-item>
+        <abp-dropdown-item href="@Url.Page("/Organizations/New")"><i class="fas fa-users"></i> @L["NewOrganization"]</abp-dropdown-item>
+    </abp-dropdown-menu>
+</abp-dropdown>

@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using EventHub.Web.Components.Toolbar.CreateButton;
 using Microsoft.Extensions.DependencyInjection;
 using EventHub.Web.Components.Toolbar.LoginLink;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
@@ -15,7 +17,14 @@ namespace EventHub.Web.Menus
                 return Task.CompletedTask;
             }
 
-            if (!context.ServiceProvider.GetRequiredService<ICurrentUser>().IsAuthenticated)
+            var currentUser = context.ServiceProvider.GetRequiredService<ICurrentUser>();
+
+            if (currentUser.IsAuthenticated)
+            {
+                context.Toolbar.Items.AddFirst(new ToolbarItem(typeof(CreateButtonViewComponent)));
+            }
+
+            if (!currentUser.IsAuthenticated)
             {
                 context.Toolbar.Items.Add(new ToolbarItem(typeof(LoginLinkViewComponent)));
             }
