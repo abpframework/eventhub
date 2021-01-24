@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using EventHub.Events.Registrations;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +12,7 @@ namespace EventHub.Web.Pages.Events.Components.AttendeesArea
     [Widget(
         AutoInitialize = true,
         RefreshUrl = "/Widgets/EventAttendeesArea",
+        ScriptFiles = new[] {"/Pages/Events/Components/AttendeesArea/attendees-area.js"},
         StyleFiles = new[] {"/Pages/Events/Components/AttendeesArea/attendees-area.css"}
     )]
     public class AttendeesAreaViewComponent : AbpViewComponent
@@ -27,8 +30,44 @@ namespace EventHub.Web.Pages.Events.Components.AttendeesArea
 
             return View(
                 "~/Pages/Events/Components/AttendeesArea/Default.cshtml",
-                result
+                new AttendeesAreaViewComponentModel
+                {
+                    EventId = eventId,
+                    Attendees = result.Items,
+                    TotalCount = result.TotalCount
+                }
             );
+        }
+
+        public class AttendeesAreaViewComponentModel
+        {
+            public IReadOnlyList<EventAttendeeDto> Attendees { get; set; }
+
+            public long TotalCount { get; set; }
+
+            public Guid EventId { get; set; }
+
+            public string GetAttendeeName(EventAttendeeDto attendee)
+            {
+                var nameBuilder = new StringBuilder();
+
+                if (!attendee.Name.IsNullOrEmpty())
+                {
+                    nameBuilder.Append(attendee.Name);
+                }
+
+                if (!attendee.Surname.IsNullOrEmpty())
+                {
+                    nameBuilder.Append(attendee.Surname);
+                }
+
+                if (nameBuilder.Length == 0)
+                {
+                    nameBuilder.Append(attendee.UserName);
+                }
+
+                return nameBuilder.ToString();
+            }
         }
     }
 }

@@ -20,6 +20,7 @@
                     url: $registerButton.attr('data-url')
                 }).then(function (){
                     widgetManager.refresh();
+                    abp.event.trigger('EventHub.Event.RegistrationStatusChanged');
                     abp.message.success(l('EventRegisterSuccessMessage'), l('EventRegisterSuccessMessageTitle'));
                 }).always(function (){
                     $registerButton.buttonBusy(false);
@@ -34,6 +35,7 @@
                     url: $cancelRegistrationButton.attr('data-url')
                 }).then(function (){
                     widgetManager.refresh();
+                    abp.event.trigger('EventHub.Event.RegistrationStatusChanged');
                     abp.notify.info(l('EventRegistrationCancelledMessage'));
                 }).always(function (){
                     $cancelRegistrationButton.buttonBusy(false);

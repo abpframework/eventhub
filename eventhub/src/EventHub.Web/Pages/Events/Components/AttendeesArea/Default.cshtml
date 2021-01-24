@@ -1,41 +1,14 @@
-﻿@using System.Text
-@using System.Threading.Channels
-@using EventHub.Events.Registrations
-@model Volo.Abp.Application.Dtos.PagedResultDto<EventHub.Events.Registrations.EventAttendeeDto>
-<abp-card class="mb-3">
+﻿@model EventHub.Web.Pages.Events.Components.AttendeesArea.AttendeesAreaViewComponent.AttendeesAreaViewComponentModel
+<abp-card class="mb-3" data-event-id="@Model.EventId">
     <abp-card-body>
         <abp-card-title>Attendees (@Model.TotalCount)</abp-card-title>
         <abp-card-text>
             <ul id="EventAttendeeList">
-                @foreach (var attendee in Model.Items)
+                @foreach (var attendee in Model.Attendees)
                 {
-                    <li class="border p-2 mb-2"><i class="fas fa-user"></i> @GetAttendeeName(attendee)</li>
+                    <li class="border p-2 mb-2"><i class="fas fa-user"></i> @Model.GetAttendeeName(attendee)</li>
                 }
             </ul>
         </abp-card-text>
     </abp-card-body>
 </abp-card>
-@functions
-{
-    private static string GetAttendeeName(EventAttendeeDto attendee)
-    {
-        var nameBuilder = new StringBuilder();
-
-        if (!attendee.Name.IsNullOrEmpty())
-        {
-            nameBuilder.Append(attendee.Name);
-        }
-
-        if (!attendee.Surname.IsNullOrEmpty())
-        {
-            nameBuilder.Append(attendee.Surname);
-        }
-
-        if (nameBuilder.Length == 0)
-        {
-            nameBuilder.Append(attendee.UserName);
-        }
-
-        return nameBuilder.ToString();
-    }
-}
