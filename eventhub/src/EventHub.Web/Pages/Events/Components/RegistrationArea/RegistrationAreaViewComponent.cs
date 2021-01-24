@@ -19,7 +19,7 @@ namespace EventHub.Web.Pages.Events.Components.RegistrationArea
 
         public async Task<IViewComponentResult> InvokeAsync(Guid eventId)
         {
-            return View();
+            return View("~/Pages/Events/Components/RegistrationArea/Default.cshtml");
         }
     }
 }

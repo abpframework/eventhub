@@ -8,7 +8,7 @@ namespace EventHub.Web.Pages.Events.Components.AttendeesArea
 {
     [Widget(
         AutoInitialize = true,
-        RefreshUrl = "/Widgets/EventRegistrationArea"
+        RefreshUrl = "/Widgets/EventAttendeesArea"
     )]
     public class AttendeesAreaViewComponent : AbpViewComponent
     {
@@ -18,7 +18,7 @@ namespace EventHub.Web.Pages.Events.Components.AttendeesArea
 
         public async Task<IViewComponentResult> InvokeAsync(Guid eventId)
         {
-            return View();
+            return View("~/Pages/Events/Components/AttendeesArea/Default.cshtml");
         }
     }
 }

@@ -1,10 +1,12 @@
 ﻿(function () {
     abp.widgets.RegistrationArea = function ($wrapper) {
 
+        var widgetManager = $wrapper.data('abp-widget-manager');
+
         function init() {
             $wrapper.find('#EventRegisterButton').click(function(e){
                 e.preventDefault();
-                alert("TODO: register");
+                widgetManager.refresh();
             });
         }
 
