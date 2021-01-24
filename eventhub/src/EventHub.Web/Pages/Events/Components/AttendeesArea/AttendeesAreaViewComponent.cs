@@ -9,7 +9,8 @@ namespace EventHub.Web.Pages.Events.Components.AttendeesArea
 {
     [Widget(
         AutoInitialize = true,
-        RefreshUrl = "/Widgets/EventAttendeesArea"
+        RefreshUrl = "/Widgets/EventAttendeesArea",
+        StyleFiles = new[] {"/Pages/Events/Components/AttendeesArea/attendees-area.css"}
     )]
     public class AttendeesAreaViewComponent : AbpViewComponent
     {

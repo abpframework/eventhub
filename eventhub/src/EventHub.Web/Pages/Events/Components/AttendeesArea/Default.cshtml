@@ -1,13 +1,15 @@
-﻿@using EventHub.Events.Registrations
+﻿@using System.Text
+@using System.Threading.Channels
+@using EventHub.Events.Registrations
 @model Volo.Abp.Application.Dtos.PagedResultDto<EventHub.Events.Registrations.EventAttendeeDto>
 <abp-card class="mb-3">
     <abp-card-body>
-        <abp-card-title>Attendees</abp-card-title>
+        <abp-card-title>Attendees (@Model.TotalCount)</abp-card-title>
         <abp-card-text>
-            <ul>
+            <ul id="EventAttendeeList">
                 @foreach (var attendee in Model.Items)
                 {
-                    @GetAttendeeName(attendee)
+                    <li class="border p-2 mb-2"><i class="fas fa-user"></i> @GetAttendeeName(attendee)</li>
                 }
             </ul>
         </abp-card-text>
@@ -17,6 +19,23 @@
 {
     private static string GetAttendeeName(EventAttendeeDto attendee)
     {
-        return attendee.UserName;
+        var nameBuilder = new StringBuilder();
+
+        if (!attendee.Name.IsNullOrEmpty())
+        {
+            nameBuilder.Append(attendee.Name);
+        }
+
+        if (!attendee.Surname.IsNullOrEmpty())
+        {
+            nameBuilder.Append(attendee.Surname);
+        }
+
+        if (nameBuilder.Length == 0)
+        {
+            nameBuilder.Append(attendee.UserName);
+        }
+
+        return nameBuilder.ToString();
     }
 }
