@@ -1,8 +1,22 @@
-﻿<abp-card class="mb-3">
+﻿@using EventHub.Events.Registrations
+@model Volo.Abp.Application.Dtos.PagedResultDto<EventHub.Events.Registrations.EventAttendeeDto>
+<abp-card class="mb-3">
     <abp-card-body>
         <abp-card-title>Attendees</abp-card-title>
         <abp-card-text>
-            TODO
+            <ul>
+                @foreach (var attendee in Model.Items)
+                {
+                    @GetAttendeeName(attendee)
+                }
+            </ul>
         </abp-card-text>
     </abp-card-body>
 </abp-card>
+@functions
+{
+    private static string GetAttendeeName(EventAttendeeDto attendee)
+    {
+        return attendee.UserName;
+    }
+}

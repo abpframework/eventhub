@@ -22,9 +22,12 @@ namespace EventHub.Web.Pages.Events.Components.AttendeesArea
 
         public async Task<IViewComponentResult> InvokeAsync(Guid eventId)
         {
-            var attendees = await _eventRegistrationAppService.GetAttendeesAsync(eventId);
+            var result = await _eventRegistrationAppService.GetAttendeesAsync(eventId);
 
-            return View("~/Pages/Events/Components/AttendeesArea/Default.cshtml");
+            return View(
+                "~/Pages/Events/Components/AttendeesArea/Default.cshtml",
+                result
+            );
         }
     }
 }
