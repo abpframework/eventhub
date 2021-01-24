@@ -1,6 +1,8 @@
 ﻿@page "/events/{url}"
 @inject IHtmlLocalizer<EventHubResource> L
 @using EventHub.Localization
+@using EventHub.Web.Pages.Events.Components.AttendeesArea
+@using EventHub.Web.Pages.Events.Components.RegistrationArea
 @using Microsoft.AspNetCore.Mvc.Localization
 @model EventHub.Web.Pages.Events.Detail
 <abp-row>
@@ -17,18 +19,7 @@
         </abp-card>
     </abp-column>
     <abp-column size-lg="_4" size-md="_6">
-        <abp-card class="mb-3">
-            <abp-card-body>
-                <a abp-button="Primary" href="#"> @L["RegisterNow"]</a>
-            </abp-card-body>
-        </abp-card>
-        <abp-card class="mb-3">
-            <abp-card-body>
-                <abp-card-title>Attendees</abp-card-title>
-                <abp-card-text>
-                    TODO
-                </abp-card-text>
-            </abp-card-body>
-        </abp-card>
+        @await Component.InvokeAsync(typeof(RegistrationAreaViewComponent))
+        @await Component.InvokeAsync(typeof(AttendeesAreaViewComponent))
     </abp-column>
 </abp-row>

@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 
-namespace EventHub.Web.Pages.Events.Components.RegistrationArea
+namespace EventHub.Web.Pages.Events.Components.AttendeesArea
 {
     [Widget]
-    public class RegistrationAreaViewComponent : AbpViewComponent
+    public class AttendeesAreaViewComponent : AbpViewComponent
     {
-        public RegistrationAreaViewComponent()
+        public AttendeesAreaViewComponent()
         {
 
         }
