@@ -22,10 +22,15 @@
     "EventHub:CantRegisterOrUnregisterForAPastEvent": "Can not register to or unregister from an event in the past.",
     "Events": "Events",
     "Members": "Members",
-    "SeeOrganization": "See Organization",
+    "SeeOrganization": "See organization",
     "Organization": "Organization",
     "Submit": "Submit",
-    "SeeEvent": "See Event",
-    "RegisterNow": "Register Now"
+    "SeeEvent": "See event",
+    "RegisterNow": "Register Now",
+    "LoginToRegister": "Login to register",
+    "CancelRegistration": "Cancel registration",
+    "EventRegisterSuccessMessageTitle": "Thanks for registering!",
+    "EventRegisterSuccessMessage": "We will send a reminder email before the event.",
+    "EventRegistrationCancelledMessage": "Your event registration has been cancelled."
   }
 }

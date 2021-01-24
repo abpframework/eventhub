@@ -6,8 +6,10 @@ namespace EventHub.Events.Registrations
 {
     public interface IEventRegistrationAppService : IApplicationService
     {
-        Task RegisterAsync(Guid id);
+        Task RegisterAsync(Guid eventId);
 
-        Task UnregisterAsync(Guid id);
+        Task UnregisterAsync(Guid eventId);
+
+        Task<bool> IsRegisteredAsync(Guid eventId);
     }
 }

@@ -24,19 +24,28 @@ namespace EventHub.Events.Registrations
         }
 
         [Authorize]
-        public async Task RegisterAsync(Guid id)
+        public async Task RegisterAsync(Guid eventId)
         {
             await _eventRegistrationManager.RegisterAsync(
-                await _eventRepository.GetAsync(id),
+                await _eventRepository.GetAsync(eventId),
                 await _userRepository.GetAsync(CurrentUser.GetId())
             );
         }
 
         [Authorize]
-        public async Task UnregisterAsync(Guid id)
+        public async Task UnregisterAsync(Guid eventId)
         {
             await _eventRegistrationManager.UnregisterAsync(
-                await _eventRepository.GetAsync(id),
+                await _eventRepository.GetAsync(eventId),
+                await _userRepository.GetAsync(CurrentUser.GetId())
+            );
+        }
+
+        [Authorize]
+        public async Task<bool> IsRegisteredAsync(Guid eventId)
+        {
+            return await _eventRegistrationManager.IsRegisteredAsync(
+                await _eventRepository.GetAsync(eventId),
                 await _userRepository.GetAsync(CurrentUser.GetId())
             );
         }

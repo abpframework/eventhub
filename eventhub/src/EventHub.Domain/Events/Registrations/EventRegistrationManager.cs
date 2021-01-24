@@ -27,7 +27,7 @@ namespace EventHub.Events.Registrations
         {
             CheckEventEndTime(@event);
 
-            if (await _eventRegistrationRepository.AnyAsync(x => x.EventId == @event.Id && x.UserId == user.Id))
+            if (await IsRegisteredAsync(@event, user))
             {
                 return;
             }
@@ -50,6 +50,14 @@ namespace EventHub.Events.Registrations
             await _eventRegistrationRepository.DeleteAsync(
                 x => x.EventId == @event.Id && x.UserId == user.Id
             );
+        }
+
+        public async Task<bool> IsRegisteredAsync(
+            Event @event,
+            AppUser user)
+        {
+            return await _eventRegistrationRepository
+                .AnyAsync(x => x.EventId == @event.Id && x.UserId == user.Id);
         }
 
         private void CheckEventEndTime(Event @event)
