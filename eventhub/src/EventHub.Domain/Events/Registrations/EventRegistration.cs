@@ -14,7 +14,7 @@ namespace EventHub.Events.Registrations
 
         }
 
-        public EventRegistration(
+        internal EventRegistration(
             Guid id,
             Guid eventId,
             Guid userId)

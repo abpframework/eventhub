@@ -2,9 +2,12 @@
 using System.Threading.Tasks;
 using EventHub.Events;
 using EventHub.Organizations;
+using EventHub.Users;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.Uow;
 using Volo.Abp.Testing;
@@ -92,12 +95,53 @@ namespace EventHub
             );
         }
 
+        protected virtual async Task<Organization> GetOrganizationAsync(string name)
+        {
+            var organization = await GetOrganizationOrNullAsync(name);
+            if (organization == null)
+            {
+                throw new EntityNotFoundException(typeof(Event), name);
+            }
+
+            return organization;
+        }
+
         protected virtual async Task<Event> GetEventOrNullAsync(Guid id)
         {
             var organizationRepository = GetRequiredService<IRepository<Event, Guid>>();
             return await WithUnitOfWorkAsync(
                 () => organizationRepository.FindAsync(id)
             );
+        }
+
+        protected virtual async Task<Event> GetEventAsync(Guid id)
+        {
+            var @event = await GetEventOrNullAsync(id);
+            if (@event == null)
+            {
+                throw new EntityNotFoundException(typeof(Event), id);
+            }
+
+            return @event;
+        }
+
+        protected virtual async Task<AppUser> GetUserOrNullAsync(Guid id)
+        {
+            var userRepository = GetRequiredService<IRepository<AppUser, Guid>>();
+            return await WithUnitOfWorkAsync(
+                () => userRepository.FindAsync(id)
+            );
+        }
+
+        protected virtual async Task<AppUser> GetUserAsync(Guid id)
+        {
+            var user = await GetUserOrNullAsync(id);
+            if (user == null)
+            {
+                throw new EntityNotFoundException(typeof(AppUser), id);
+            }
+
+            return user;
         }
     }
 }
