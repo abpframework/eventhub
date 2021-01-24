@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
 namespace EventHub.Events.Registrations
@@ -11,5 +12,7 @@ namespace EventHub.Events.Registrations
         Task UnregisterAsync(Guid eventId);
 
         Task<bool> IsRegisteredAsync(Guid eventId);
+
+        Task<PagedResultDto<EventAttendeeDto>> GetAttendeesAsync(Guid eventId);
     }
 }

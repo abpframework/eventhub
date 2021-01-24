@@ -59,6 +59,37 @@ namespace EventHub.Events.Registrations
             ).ShouldBeNull();
         }
 
+        [Fact]
+        public async Task Should_Get_List_Of_Attendees()
+        {
+            await WithUnitOfWorkAsync(async () =>
+            {
+                await _eventRegistrationRepository.InsertAsync(
+                    new EventRegistration(
+                        Guid.NewGuid(),
+                        _testData.AbpMicroservicesFutureEventId,
+                        _testData.UserAdminId
+                    )
+                );
+
+                await _eventRegistrationRepository.InsertAsync(
+                    new EventRegistration(
+                        Guid.NewGuid(),
+                        _testData.AbpMicroservicesFutureEventId,
+                        _testData.UserJohnId
+                    )
+                );
+            });
+
+            var result = await _eventRegistrationAppService.GetAttendeesAsync(
+                _testData.AbpMicroservicesFutureEventId
+            );
+
+            result.TotalCount.ShouldBeGreaterThanOrEqualTo(2);
+            result.Items.ShouldContain(x => x.Id == _testData.UserAdminId);
+            result.Items.ShouldContain(x => x.Id == _testData.UserJohnId);
+        }
+
         private async Task<EventRegistration> GetRegistrationOrNull(Guid eventId, Guid userId)
         {
             return await WithUnitOfWorkAsync(async () =>

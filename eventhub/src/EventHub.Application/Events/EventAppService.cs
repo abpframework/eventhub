@@ -72,9 +72,10 @@ namespace EventHub.Events
                 query = query.Where(i => i.@event.EndTime <= input.MaxDate);
             }
 
+            var totalCount = await AsyncExecuter.CountAsync(query);
+
             query = query.PageBy(input).OrderBy(x => x.@event.StartTime);
 
-            var totalCount = await AsyncExecuter.CountAsync(query);
             var items = await AsyncExecuter.ToListAsync(query);
             var now = Clock.Now;
 
