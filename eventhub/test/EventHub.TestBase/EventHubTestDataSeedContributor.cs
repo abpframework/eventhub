@@ -5,8 +5,8 @@ using EventHub.Organizations;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Identity;
 using Volo.Abp.Timing;
-using Volo.Abp.Users;
 
 namespace EventHub
 {
@@ -14,28 +14,43 @@ namespace EventHub
     {
         private readonly IRepository<Organization, Guid> _organizationRepository;
         private readonly IRepository<Event, Guid> _eventRepository;
-        private readonly ICurrentUser _currentUser;
         private readonly EventHubTestData _eventHubTestData;
         private readonly IClock _clock;
+        private readonly IIdentityUserRepository _userRepository;
 
         public EventHubTestDataSeedContributor(
             EventHubTestData eventHubTestData,
-            ICurrentUser currentUser,
             IRepository<Organization, Guid> organizationRepository,
             IRepository<Event, Guid> eventRepository,
-            IClock clock)
+            IClock clock,
+            IIdentityUserRepository userRepository)
         {
             _eventHubTestData = eventHubTestData;
-            _currentUser = currentUser;
             _organizationRepository = organizationRepository;
             _eventRepository = eventRepository;
             _clock = clock;
+            _userRepository = userRepository;
         }
 
         public async Task SeedAsync(DataSeedContext context)
         {
+            await CreateUsersAsync();
             await CreateOrganizationsAsync();
-            await CreateEvents();
+            await CreateEventsAsync();
+        }
+
+        private async Task CreateUsersAsync()
+        {
+            var adminUser = await _userRepository.FindByNormalizedUserNameAsync("ADMIN");
+            _eventHubTestData.UserAdminId = adminUser.Id;
+
+            await _userRepository.InsertAsync(
+                new IdentityUser(
+                    _eventHubTestData.UserJohnId,
+                    _eventHubTestData.UserJohnUserName,
+                    "john@abp.io"
+                )
+            );
         }
 
         private async Task CreateOrganizationsAsync()
@@ -43,7 +58,7 @@ namespace EventHub
             await _organizationRepository.InsertAsync(
                 new Organization(
                     _eventHubTestData.OrganizationVolosoftId,
-                    _currentUser.GetId(),
+                    _eventHubTestData.UserAdminId,
                     _eventHubTestData.OrganizationVolosoftName,
                     "Volosoft",
                     "Volosoft is producing software development tools for developers. We are organizing events related to the ABP.IO platform and general software development topic."
@@ -53,7 +68,7 @@ namespace EventHub
             await _organizationRepository.InsertAsync(
                 new Organization(
                     _eventHubTestData.OrganizationDotnetEuropeId,
-                    Guid.NewGuid(),
+                    _eventHubTestData.UserJohnId,
                     _eventHubTestData.OrganizationDotnetEuropeName,
                     "Dotnet Europe",
                     "Organizing events on Microsoft's .NET Platform in European Countries."
@@ -61,7 +76,7 @@ namespace EventHub
             );
         }
 
-        private async Task CreateEvents()
+        private async Task CreateEventsAsync()
         {
             await _eventRepository.InsertAsync(
                 new Event(

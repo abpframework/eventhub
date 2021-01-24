@@ -5,6 +5,14 @@ namespace EventHub
 {
     public class EventHubTestData : ISingletonDependency
     {
+        /* USERS *************************************************************/
+
+        public Guid UserAdminId { get; internal set; }
+        public string UserAdminUserName { get; } = "admin";
+
+        public Guid UserJohnId { get; } = Guid.NewGuid();
+        public string UserJohnUserName { get; } = "john";
+
         /* ORGANIZATIONS *****************************************************/
 
         public Guid OrganizationVolosoftId { get; } = Guid.NewGuid();

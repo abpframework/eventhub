@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EventHub.Events.Registrations;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
@@ -37,7 +39,7 @@ namespace EventHub.EntityFrameworkCore
 
             /* Configure your own tables/entities inside the ConfigureEventHub method */
 
-            builder.ConfigureEventHub();
+            builder.ConfigureEventHub(true);
         }
     }
 }
