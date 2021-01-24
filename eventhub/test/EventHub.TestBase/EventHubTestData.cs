@@ -16,9 +16,11 @@ namespace EventHub
         /* EVENTS ************************************************************/
 
         public Guid AbpBlazorPastEventId { get; } = Guid.NewGuid();
-        public string AbpBlazorPastEventTitle { get; internal set; } = "ABP Framework Blazor UI Introduction";
+        public string AbpBlazorPastEventTitle { get; } = "ABP Framework Blazor UI Introduction";
+        public string AbpBlazorPastEventUrlCode { get; } = "00000001";
 
         public Guid AbpMicroservicesFutureEventId { get;} = Guid.NewGuid();
-        public string AbpMicroservicesFutureEventTitle { get; internal set; } = "ABP Framework Microservice Solution Development";
+        public string AbpMicroservicesFutureEventTitle { get; } = "ABP Framework Microservice Solution Development";
+        public string AbpMicroservicesFutureEventUrlCode { get; } = "00000002";
     }
 }

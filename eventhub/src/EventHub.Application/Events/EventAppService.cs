@@ -79,20 +79,30 @@ namespace EventHub.Events
             var now = Clock.Now;
 
             var dtos = items.Select(
-                i => new EventInListDto
+                i =>
                 {
-                    Id = i.@event.Id,
-                    Title = i.@event.Title,
-                    EndTime = i.@event.EndTime,
-                    StartTime = i.@event.StartTime,
-                    IsOnline = i.@event.IsOnline,
-                    OrganizationName = i.organization.Name,
-                    OrganizationDisplayName = i.organization.DisplayName,
-                    IsLive = now.IsBetween(i.@event.StartTime, i.@event.EndTime)
+                    var dto = ObjectMapper.Map<Event, EventInListDto>(i.@event);
+                    dto.OrganizationName = i.organization.Name;
+                    dto.OrganizationDisplayName = i.organization.DisplayName;
+                    dto.IsLiveNow = now.IsBetween(i.@event.StartTime, i.@event.EndTime);
+                    return dto;
                 }
             ).ToList();
 
             return new PagedResultDto<EventInListDto>(totalCount, dtos);
+        }
+
+        public async Task<EventDetailDto> GetByUrlCodeAsync(string urlCode)
+        {
+            var @event = await _eventRepository.GetAsync(x => x.UrlCode == urlCode);
+            var organization = await _organizationRepository.GetAsync(@event.OrganizationId);
+
+            var dto = ObjectMapper.Map<Event, EventDetailDto>(@event);
+
+            dto.OrganizationName = organization.Name;
+            dto.OrganizationDisplayName = organization.DisplayName;
+
+            return dto;
         }
     }
 }

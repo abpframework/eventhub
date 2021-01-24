@@ -30,7 +30,7 @@
                     <abp-card-text>
                         @eventItem.Description.TruncateWithPostfix(100)
                     </abp-card-text>
-                    <a abp-button="Primary" href="#"> @L["SeeEvent"]</a>
+                    <a abp-button="Primary" href="@Url.Page("/Events/Detail", new { url = eventItem.Url })"> @L["SeeEvent"]</a>
                 </abp-card-body>
             </abp-card>
         </abp-column>

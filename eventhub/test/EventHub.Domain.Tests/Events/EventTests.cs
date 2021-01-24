@@ -15,6 +15,7 @@ namespace EventHub.Events
                 new Event(
                     Guid.NewGuid(),
                     Guid.NewGuid(),
+                    "1a8j3v0d",
                     "Introduction to the ABP Framework",
                     DateTime.Now,
                     DateTime.Now.AddDays(-2),

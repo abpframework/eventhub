@@ -9,5 +9,7 @@ namespace EventHub.Events
         Task<EventDto> CreateAsync(CreateEventDto input);
 
         Task<PagedResultDto<EventInListDto>> GetListAsync(EventListFilterDto input);
+
+        Task<EventDetailDto> GetByUrlCodeAsync(string urlCode);
     }
 }

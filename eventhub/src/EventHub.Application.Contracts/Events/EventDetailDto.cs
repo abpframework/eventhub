@@ -3,7 +3,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace EventHub.Events
 {
-    public class EventInListDto : EntityDto<Guid>
+    public class EventDetailDto : EntityDto<Guid>
     {
         public string OrganizationName { get; set; }
 
@@ -19,12 +19,12 @@ namespace EventHub.Events
 
         public bool IsOnline { get; set; }
 
-        public int? Capacity { get; set; }
-
-        public bool IsLiveNow { get; set; }
+        public bool IsLive { get; set; }
 
         public string UrlCode { get; set; }
 
         public string Url { get; set; }
+
+        public int? Capacity { get; set; }
     }
 }

@@ -36,9 +36,12 @@ namespace EventHub.EntityFrameworkCore
 
                 b.Property(x => x.Title).IsRequired().HasMaxLength(EventConsts.MaxTitleLength);
                 b.Property(x => x.Description).IsRequired().HasMaxLength(EventConsts.MaxDescriptionLength);
+                b.Property(x => x.UrlCode).IsRequired().HasMaxLength(EventConsts.UrlCodeLength);
+                b.Property(x => x.Url).IsRequired().HasMaxLength(EventConsts.MaxUrlLength);
 
                 b.HasIndex(x => new {x.OrganizationId, x.StartTime});
                 b.HasIndex(x => x.StartTime);
+                b.HasIndex(x => x.UrlCode);
             });
         }
     }

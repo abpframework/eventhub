@@ -60,10 +60,9 @@ namespace EventHub.Web.Pages.Events
                 ValidateModel();
 
                 var input = ObjectMapper.Map<NewEventViewModel, CreateEventDto>(Event);
-                await _eventAppService.CreateAsync(input);
+                var eventDto = await _eventAppService.CreateAsync(input);
 
-                //TODO: Redirect to the event!
-                return RedirectToPage("/");
+                return RedirectToPage("/Events/Detail", new {url = eventDto.UrlCode});
             }
             catch (Exception exception)
             {

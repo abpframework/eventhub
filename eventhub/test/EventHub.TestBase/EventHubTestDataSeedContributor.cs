@@ -67,6 +67,7 @@ namespace EventHub
                 new Event(
                     _eventHubTestData.AbpBlazorPastEventId,
                     _eventHubTestData.OrganizationVolosoftId,
+                    _eventHubTestData.AbpBlazorPastEventUrlCode,
                     _eventHubTestData.AbpBlazorPastEventTitle,
                     _clock.Now.ClearTime().AddDays(-2).AddHours(15),
                     _clock.Now.ClearTime().AddDays(-2).AddHours(17),
@@ -78,6 +79,7 @@ namespace EventHub
                 new Event(
                     _eventHubTestData.AbpMicroservicesFutureEventId,
                     _eventHubTestData.OrganizationVolosoftId,
+                    _eventHubTestData.AbpMicroservicesFutureEventUrlCode,
                     _eventHubTestData.AbpMicroservicesFutureEventTitle,
                     _clock.Now.ClearTime().AddDays(1).AddHours(15),
                     _clock.Now.ClearTime().AddDays(1).AddHours(17),

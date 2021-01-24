@@ -7,6 +7,10 @@ namespace EventHub.Events
     {
         public Guid OrganizationId { get; set; }
 
+        public string UrlCode { get; set; }
+
+        public string Url { get; set; }
+
         public string Title { get; set; }
 
         public DateTime StartTime { get; set; }

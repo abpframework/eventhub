@@ -8,6 +8,10 @@ namespace EventHub.Events
     {
         public Guid OrganizationId { get; private set; }
 
+        public string UrlCode { get; private set; }
+
+        public string Url { get; private set; }
+
         public string Title { get; private set; }
 
         public DateTime StartTime { get; private set; }
@@ -28,6 +32,7 @@ namespace EventHub.Events
         internal Event(
             Guid id,
             Guid organizationId,
+            string urlCode,
             string title,
             DateTime startTime,
             DateTime endTime,
@@ -35,6 +40,7 @@ namespace EventHub.Events
         : base(id)
         {
             OrganizationId = organizationId;
+            UrlCode = Check.NotNullOrWhiteSpace(urlCode, urlCode, EventConsts.UrlCodeLength, EventConsts.UrlCodeLength);
             SetTitle(title);
             SetDescription(description);
             SetTime(startTime, endTime);
@@ -43,6 +49,7 @@ namespace EventHub.Events
         public Event SetTitle(string title)
         {
             Title = Check.NotNullOrWhiteSpace(title, nameof(title), EventConsts.MaxTitleLength, EventConsts.MinTitleLength);
+            Url = EventUrlHelper.ConvertTitleToUrlPart(Title) + "-" + UrlCode;
             return this;
         }
 

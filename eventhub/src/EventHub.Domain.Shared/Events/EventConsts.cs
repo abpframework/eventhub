@@ -2,6 +2,10 @@
 {
     public static class EventConsts
     {
+        public const int UrlCodeLength = 8;
+        public const int MaxTitleInUrlLength = 60;
+        public const int MaxUrlLength = MaxTitleInUrlLength + 1 + UrlCodeLength; //Format: {Title}-{UrlCode}
+
         public const int MinTitleLength = 8;
         public const int MaxTitleLength = 128;
 

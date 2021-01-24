@@ -37,6 +37,7 @@ namespace EventHub.Events
             eventDto.Title.ShouldBe("Introduction to the ABP Framework");
             eventDto.Description.ShouldBe("In this event, we will introduce the ABP Framework and explore the fundamental features.");
             eventDto.IsOnline.ShouldBeTrue();
+            eventDto.UrlCode.ShouldNotBeNullOrWhiteSpace();
         }
 
         [Fact]
@@ -75,7 +76,8 @@ namespace EventHub.Events
             result.TotalCount.ShouldBeGreaterThanOrEqualTo(1);
             result.Items.ShouldContain(x =>
                 x.Id == _testData.AbpMicroservicesFutureEventId &&
-                x.Title == _testData.AbpMicroservicesFutureEventTitle
+                x.Title == _testData.AbpMicroservicesFutureEventTitle &&
+                x.UrlCode == _testData.AbpMicroservicesFutureEventUrlCode
             );
             result.Items.ShouldAllBe(x => x.EndTime >= now);
         }
@@ -95,9 +97,20 @@ namespace EventHub.Events
             result.TotalCount.ShouldBeGreaterThanOrEqualTo(1);
             result.Items.ShouldContain(x =>
                 x.Id == _testData.AbpBlazorPastEventId &&
-                x.Title == _testData.AbpBlazorPastEventTitle
+                x.Title == _testData.AbpBlazorPastEventTitle &&
+                x.UrlCode == _testData.AbpBlazorPastEventUrlCode
             );
             result.Items.ShouldAllBe(x => x.EndTime <= now);
+        }
+
+        [Fact]
+        public async Task Should_Get_By_UrlCode()
+        {
+            var eventDetailDto = await _eventAppService.GetByUrlCodeAsync(_testData.AbpBlazorPastEventUrlCode);
+
+            eventDetailDto.Id.ShouldBe(_testData.AbpBlazorPastEventId);
+            eventDetailDto.Title.ShouldBe(_testData.AbpBlazorPastEventTitle);
+            eventDetailDto.UrlCode.ShouldBe(_testData.AbpBlazorPastEventUrlCode);
         }
     }
 }
