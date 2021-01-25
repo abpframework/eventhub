@@ -9,14 +9,14 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 namespace EventHub.Web.Pages.Organizations
 {
     [Authorize]
-    public class New : EventHubPageModel
+    public class NewPageModel : EventHubPageModel
     {
         [BindProperty]
         public CreateOrganizationViewModel Organization { get; set; }
 
         private readonly IOrganizationAppService _organizationAppService;
 
-        public New(IOrganizationAppService organizationAppService)
+        public NewPageModel(IOrganizationAppService organizationAppService)
         {
             _organizationAppService = organizationAppService;
         }
@@ -35,7 +35,7 @@ namespace EventHub.Web.Pages.Organizations
                 var input = ObjectMapper.Map<CreateOrganizationViewModel, CreateOrganizationDto>(Organization);
                 await _organizationAppService.CreateAsync(input);
 
-                return RedirectToPage("./OrganizationProfile", new {name = Organization.Name});
+                return RedirectToPage("./Profile", new {name = Organization.Name});
             }
             catch (Exception exception)
             {

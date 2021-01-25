@@ -4,7 +4,7 @@
 @using EventHub.Web.Pages.Events.Components.AttendeesArea
 @using EventHub.Web.Pages.Events.Components.RegistrationArea
 @using Microsoft.AspNetCore.Mvc.Localization
-@model EventHub.Web.Pages.Events.Detail
+@model EventHub.Web.Pages.Events.DetailPageModel
 <abp-row>
     <abp-column size-lg="_8" size-md="_6">
         <abp-card class="mb-3">
@@ -14,7 +14,7 @@
                 <abp-card-subtitle>
                     @Model.Event.StartTime.ToLongDateString(),
                     @Model.Event.StartTime.ToString("hh:mm") <br/>
-                    <span class="text-muted">@L["OrganizedBy"]</span> <a href="@Url.Page("/Organizations/OrganizationProfile", new {name = Model.Event.OrganizationName})">@Model.Event.OrganizationDisplayName</a>
+                    <span class="text-muted">@L["OrganizedBy"]</span> <a href="@Url.Page("/Organizations/Profile", new {name = Model.Event.OrganizationName})">@Model.Event.OrganizationDisplayName</a>
                 </abp-card-subtitle>
                 <abp-card-text class="mt-3">
                     @Model.Event.Description

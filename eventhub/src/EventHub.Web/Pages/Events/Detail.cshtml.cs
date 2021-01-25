@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Routing;
 
 namespace EventHub.Web.Pages.Events
 {
-    public class Detail : PageModel
+    public class DetailPageModel : PageModel
     {
         [BindProperty(SupportsGet = true)]
         public string Url { get; set; }
@@ -16,7 +16,7 @@ namespace EventHub.Web.Pages.Events
         private readonly IEventAppService _eventAppService;
         private readonly LinkGenerator _linkGenerator;
 
-        public Detail(
+        public DetailPageModel(
             IEventAppService eventAppService,
             LinkGenerator linkGenerator)
         {

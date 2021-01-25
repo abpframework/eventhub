@@ -12,7 +12,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 
 namespace EventHub.Web.Pages.Events
 {
-    public class New : EventHubPageModel
+    public class NewPageModel : EventHubPageModel
     {
         [BindProperty]
         public NewEventViewModel Event { get; set; }
@@ -22,7 +22,7 @@ namespace EventHub.Web.Pages.Events
         private readonly IEventAppService _eventAppService;
         private readonly IOrganizationAppService _organizationAppService;
 
-        public New(
+        public NewPageModel(
             IEventAppService eventAppService,
             IOrganizationAppService organizationAppService)
         {

@@ -8,8 +8,8 @@ namespace EventHub.Web
     {
         public EventHubWebAutoMapperProfile()
         {
-            CreateMap<EventHub.Web.Pages.Organizations.New.CreateOrganizationViewModel, CreateOrganizationDto>();
-            CreateMap<EventHub.Web.Pages.Events.New.NewEventViewModel, CreateEventDto>();
+            CreateMap<EventHub.Web.Pages.Organizations.NewPageModel.CreateOrganizationViewModel, CreateOrganizationDto>();
+            CreateMap<EventHub.Web.Pages.Events.NewPageModel.NewEventViewModel, CreateEventDto>();
         }
     }
 }

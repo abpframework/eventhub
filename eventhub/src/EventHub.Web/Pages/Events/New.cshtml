@@ -2,7 +2,7 @@
 @inject IHtmlLocalizer<EventHubResource> L
 @using EventHub.Localization
 @using Microsoft.AspNetCore.Mvc.Localization
-@model EventHub.Web.Pages.Events.New
+@model EventHub.Web.Pages.Events.NewPageModel
 <h1>@L["NewEvent"]</h1>
 <form method="post">
     <abp-select asp-for="Event.OrganizationId" />

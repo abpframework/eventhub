@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EventHub.Web.Pages.Organizations
 {
-    public class OrganizationProfile : PageModel
+    public class ProfilePageModel : PageModel
     {
         [BindProperty(SupportsGet = true)]
         public string Name { get; set; }
@@ -14,7 +14,7 @@ namespace EventHub.Web.Pages.Organizations
 
         private readonly IOrganizationAppService _organizationAppService;
 
-        public OrganizationProfile(IOrganizationAppService organizationAppService)
+        public ProfilePageModel(IOrganizationAppService organizationAppService)
         {
             _organizationAppService = organizationAppService;
         }

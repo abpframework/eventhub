@@ -5,13 +5,13 @@ using Volo.Abp.Application.Dtos;
 
 namespace EventHub.Web.Pages.Organizations
 {
-    public class Index : EventHubPageModel
+    public class IndexPageModel : EventHubPageModel
     {
         public IReadOnlyList<OrganizationInListDto> Organizations { get; set; }
 
         private readonly IOrganizationAppService _organizationAppService;
 
-        public Index(IOrganizationAppService organizationAppService)
+        public IndexPageModel(IOrganizationAppService organizationAppService)
         {
             _organizationAppService = organizationAppService;
         }
