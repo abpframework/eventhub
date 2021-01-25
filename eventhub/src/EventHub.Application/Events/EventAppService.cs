@@ -64,12 +64,17 @@ namespace EventHub.Events
 
             if (input.MinDate.HasValue)
             {
-                query = query.Where(i => i.@event.EndTime >= input.MinDate);
+                query = query.Where(i => i.@event.EndTime >= input.MinDate.Value);
             }
 
             if (input.MaxDate.HasValue)
             {
-                query = query.Where(i => i.@event.EndTime <= input.MaxDate);
+                query = query.Where(i => i.@event.EndTime <= input.MaxDate.Value);
+            }
+
+            if (input.OrganizationId.HasValue)
+            {
+                query = query.Where(i => i.@event.OrganizationId == input.OrganizationId.Value);
             }
 
             var totalCount = await AsyncExecuter.CountAsync(query);

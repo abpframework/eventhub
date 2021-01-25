@@ -1,6 +1,7 @@
 ﻿@page "/events/{url}"
 @inject IHtmlLocalizer<EventHubResource> L
 @using EventHub.Localization
+@using EventHub.Web.Pages.Events
 @using EventHub.Web.Pages.Events.Components.AttendeesArea
 @using EventHub.Web.Pages.Events.Components.RegistrationArea
 @using Microsoft.AspNetCore.Mvc.Localization
@@ -10,10 +11,11 @@
         <abp-card class="mb-3">
             <img abp-card-image="Top" src="https://picsum.photos/seed/@Model.Event.Id.ToString()/400/160?blur=8" alt="@Model.Event.Title"/>
             <abp-card-body>
-                <abp-card-title>@Model.Event.Title</abp-card-title>
+                <abp-card-title>
+                    <h2>@Model.Event.Title</h2>
+                </abp-card-title>
                 <abp-card-subtitle>
-                    @Model.Event.StartTime.ToLongDateString(),
-                    @Model.Event.StartTime.ToString("hh:mm") <br/>
+                    @EventDateHelper.GetDateRangeText(Model.Event.StartTime, Model.Event.EndTime) <br/>
                     <span class="text-muted">@L["OrganizedBy"]</span> <a href="@Url.Page("/Organizations/Profile", new {name = Model.Event.OrganizationName})">@Model.Event.OrganizationDisplayName</a>
                 </abp-card-subtitle>
                 <abp-card-text class="mt-3">

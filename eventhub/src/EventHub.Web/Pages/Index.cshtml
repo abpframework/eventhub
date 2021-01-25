@@ -2,6 +2,7 @@
 @model EventHub.Web.Pages.IndexModel
 @using Microsoft.AspNetCore.Mvc.Localization
 @using EventHub.Localization
+@using EventHub.Web.Pages.Events
 @inject IHtmlLocalizer<EventHubResource> L
 
 @section styles {
@@ -26,8 +27,11 @@
                 <img abp-card-image="Top" src="https://picsum.photos/seed/@eventItem.Id.ToString()/400/160?blur=8" alt="@eventItem.Title"/>
                 <abp-card-body>
                     <abp-card-title>@eventItem.Title</abp-card-title>
-                    <abp-card-subtitle>@eventItem.StartTime.ToLongDateString(), @eventItem.StartTime.ToString("hh:mm")</abp-card-subtitle>
-                    <abp-card-text>
+                    <abp-card-subtitle>
+                        @EventDateHelper.GetDateRangeText(eventItem.StartTime, eventItem.EndTime) <br/>
+                        <span class="text-muted">@L["OrganizedBy"]</span> <a href="@Url.Page("/Organizations/Profile", new {name = eventItem.OrganizationName})">@eventItem.OrganizationDisplayName</a>
+                    </abp-card-subtitle>
+                    <abp-card-text class="mt-2">
                         @eventItem.Description.TruncateWithPostfix(100)
                     </abp-card-text>
                     <a abp-button="Primary" href="@Url.Page("/Events/Detail", new { url = eventItem.Url })"> @L["SeeEvent"]</a>

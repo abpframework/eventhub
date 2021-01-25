@@ -1,19 +1,53 @@
 ﻿@page "/organizations/{name}"
 @inject IHtmlLocalizer<EventHubResource> L
 @using EventHub.Localization
+@using EventHub.Web.Pages.Events
 @using Microsoft.AspNetCore.Mvc.Localization
 @model EventHub.Web.Pages.Organizations.ProfilePageModel
-<h1>@Model.Organization.DisplayName <small class="text-muted">@Model.Organization.Name</small></h1>
-<img class="img-fluid mb-3" src="https://picsum.photos/seed/@Model.Name/1920/400?blur=8">
-<p class="lead">
-    @Model.Organization.Description
-</p>
+<abp-row>
+    <abp-column size-lg="_12">
+        <abp-card class="mb-3">
+            <img abp-card-image="Top" src="https://picsum.photos/seed/@Model.Name/1920/400?blur=8" alt="@Model.Organization.DisplayName"/>
+            <abp-card-body>
+                <abp-card-title>
+                    <h2>@Model.Organization.DisplayName</h2>
+                </abp-card-title>
+                <abp-card-text class="mt-3">
+                    @Model.Organization.Description
+                </abp-card-text>
+            </abp-card-body>
+        </abp-card>
+    </abp-column>
+</abp-row>
 
-<abp-tabs>
-    <abp-tab title="@L["Events"].Value">
-        TODO
-    </abp-tab>
-    <abp-tab title="@L["Members"].Value">
-        TODO
-    </abp-tab>
-</abp-tabs>
+@if (Model.Events.Any())
+{
+    <h3>Upcoming Events</h3>
+
+    <abp-row>
+        @foreach (var eventItem in Model.Events)
+        {
+            <abp-column size-lg="_4" size-md="_6">
+                <abp-card class="mb-3">
+                    <img abp-card-image="Top" src="https://picsum.photos/seed/@eventItem.Id.ToString()/400/160?blur=8" alt="@eventItem.Title"/>
+                    <abp-card-body>
+                        <abp-card-title>@eventItem.Title</abp-card-title>
+                        <abp-card-subtitle>
+                            @EventDateHelper.GetDateRangeText(eventItem.StartTime, eventItem.EndTime)
+                        </abp-card-subtitle>
+                        <abp-card-text>
+                            @eventItem.Description.TruncateWithPostfix(100)
+                        </abp-card-text>
+                        <a abp-button="Primary" href="@Url.Page("/Events/Detail", new { url = eventItem.Url })"> @L["SeeEvent"]</a>
+                    </abp-card-body>
+                </abp-card>
+            </abp-column>
+        }
+    </abp-row>
+}
+else
+{
+    <abp-alert alert-type="Info">
+        @L["NoEventOrganizedByThisOrganizationYet"]
+    </abp-alert>
+}
