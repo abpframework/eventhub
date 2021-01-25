@@ -11,8 +11,12 @@
             <img abp-card-image="Top" src="https://picsum.photos/seed/@Model.Event.Id.ToString()/400/160?blur=8" alt="@Model.Event.Title"/>
             <abp-card-body>
                 <abp-card-title>@Model.Event.Title</abp-card-title>
-                <abp-card-subtitle>@Model.Event.StartTime.ToLongDateString(), @Model.Event.StartTime.ToString("hh:mm")</abp-card-subtitle>
-                <abp-card-text>
+                <abp-card-subtitle>
+                    @Model.Event.StartTime.ToLongDateString(),
+                    @Model.Event.StartTime.ToString("hh:mm") <br/>
+                    <span class="text-muted">@L["OrganizedBy"]</span> <a href="@Url.Page("/Organizations/OrganizationProfile", new {name = Model.Event.OrganizationName})">@Model.Event.OrganizationDisplayName</a>
+                </abp-card-subtitle>
+                <abp-card-text class="mt-3">
                     @Model.Event.Description
                 </abp-card-text>
             </abp-card-body>

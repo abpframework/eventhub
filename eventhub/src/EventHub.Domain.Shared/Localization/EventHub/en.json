@@ -31,6 +31,7 @@
     "CancelRegistration": "Cancel registration",
     "EventRegisterSuccessMessageTitle": "Thanks for registering!",
     "EventRegisterSuccessMessage": "We will send a reminder email before the event.",
-    "EventRegistrationCancelledMessage": "Your event registration has been cancelled."
+    "EventRegistrationCancelledMessage": "Your event registration has been cancelled.",
+    "OrganizedBy": "Organized by"
   }
 }
