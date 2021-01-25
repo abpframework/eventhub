@@ -28,7 +28,7 @@
         else
         {
             <a abp-button="Primary"
-               href="@Url.Action("Login", "Account")"> @L["LoginToRegister"]</a>
+               href="@Url.Action("Login", "Account", new { returnUrl = Context.Request.Path.Value })"> @L["LoginToRegister"]</a>
         }
     </abp-card-body>
 </abp-card>

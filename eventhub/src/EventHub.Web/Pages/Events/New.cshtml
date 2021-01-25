@@ -4,13 +4,23 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @model EventHub.Web.Pages.Events.NewPageModel
 <h1>@L["NewEvent"]</h1>
-<form method="post">
-    <abp-select asp-for="Event.OrganizationId" />
-    <abp-input asp-for="Event.Title" />
-    <abp-input asp-for="Event.StartTime" />
-    <abp-input asp-for="Event.EndTime" />
-    <abp-input asp-for="Event.Description" />
-    <abp-input asp-for="Event.IsOnline" />
-    <abp-input asp-for="Event.Capacity" />
-    <abp-button size="Large" button-type="Primary" type="submit" text="@L["Submit"].Value" />
-</form>
+@if (!Model.Organizations.Any())
+{
+    <abp-alert alert-type="Danger">
+        <p>@L["NewEventYouHaveNoOrganizationYetMessage"]</p>
+        <a abp-button="Primary" href="@Url.Page("/Organizations/New")">@L["CreateAnOrganization"]</a>
+    </abp-alert>
+}
+else
+{
+    <form method="post">
+        <abp-select asp-for="Event.OrganizationId" />
+        <abp-input asp-for="Event.Title" />
+        <abp-input asp-for="Event.StartTime" />
+        <abp-input asp-for="Event.EndTime" />
+        <abp-input asp-for="Event.Description" />
+        <abp-input asp-for="Event.IsOnline" />
+        <abp-input asp-for="Event.Capacity" />
+        <abp-button size="Large" button-type="Primary" type="submit" text="@L["Submit"].Value" />
+    </form>
+}

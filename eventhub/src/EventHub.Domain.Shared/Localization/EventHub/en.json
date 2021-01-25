@@ -35,6 +35,8 @@
     "OrganizedBy": "Organized by",
     "NoEventOrganizedByThisOrganizationYet": "No event organized by this organization yet!",
     "Upcoming": "Upcoming",
-    "Past": "Past"
+    "Past": "Past",
+    "NewEventYouHaveNoOrganizationYetMessage": "You have to create an organization first!",
+    "CreateAnOrganization": "Create an organization"
   }
 }
