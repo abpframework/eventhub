@@ -12,7 +12,11 @@ namespace EventHub.Web.Pages.Organizations
         public string Name { get; set; }
 
         public OrganizationProfileDto Organization { get; set; }
-        public IReadOnlyList<EventInListDto> Events { get; private set; }
+        public IReadOnlyList<EventInListDto> UpcomingEvents { get; private set; }
+        public long UpcomingEventTotalCount { get; private set; }
+
+        public IReadOnlyList<EventInListDto> PastEvents { get; private set; }
+        public long PastEventTotalCount { get; private set; }
 
         private readonly IEventAppService _eventAppService;
         private readonly IOrganizationAppService _organizationAppService;
@@ -27,8 +31,18 @@ namespace EventHub.Web.Pages.Organizations
 
         public async Task OnGetAsync()
         {
-            Organization = await _organizationAppService.GetProfileAsync(Name);
+            await GetProfileAsync();
+            await GetUpcomingEventsAsync();
+            await GetPastEventsAsync();
+        }
 
+        private async Task GetProfileAsync()
+        {
+            Organization = await _organizationAppService.GetProfileAsync(Name);
+        }
+
+        private async Task GetUpcomingEventsAsync()
+        {
             var result = await _eventAppService.GetListAsync(
                 new EventListFilterDto
                 {
@@ -36,8 +50,21 @@ namespace EventHub.Web.Pages.Organizations
                     OrganizationId = Organization.Id
                 }
             );
+            UpcomingEvents = result.Items;
+            UpcomingEventTotalCount = result.TotalCount;
+        }
 
-            Events = result.Items;
+        private async Task GetPastEventsAsync()
+        {
+            var result = await _eventAppService.GetListAsync(
+                new EventListFilterDto
+                {
+                    MaxDate = Clock.Now,
+                    OrganizationId = Organization.Id
+                }
+            );
+            PastEvents = result.Items;
+            PastEventTotalCount = result.TotalCount;
         }
     }
 }

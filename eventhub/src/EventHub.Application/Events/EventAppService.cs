@@ -79,7 +79,16 @@ namespace EventHub.Events
 
             var totalCount = await AsyncExecuter.CountAsync(query);
 
-            query = query.PageBy(input).OrderBy(x => x.@event.StartTime);
+            query = query.PageBy(input);
+
+            if (input.MaxDate.HasValue && !input.MinDate.HasValue)
+            {
+                query = query.OrderByDescending(x => x.@event.StartTime);
+            }
+            else
+            {
+                query = query.OrderBy(x => x.@event.StartTime);
+            }
 
             var items = await AsyncExecuter.ToListAsync(query);
             var now = Clock.Now;
