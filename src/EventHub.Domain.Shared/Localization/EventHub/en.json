@@ -37,6 +37,11 @@
     "Upcoming": "Upcoming",
     "Past": "Past",
     "NewEventYouHaveNoOrganizationYetMessage": "You have to create an organization first!",
-    "CreateAnOrganization": "Create an organization"
+    "CreateAnOrganization": "Create an organization",
+    "OrganizationJoinSuccessMessageTitle": "Thank you for your membership!",
+    "OrganizationJoinSuccessMessage": "See you at the events.",
+    "OrganizationMembershipLeaveMessage": "You left your organization membership.",
+    "LeaveOrganization": "Leave this organization",
+    "JoinOrganization": "Join the organization"
   }
 }

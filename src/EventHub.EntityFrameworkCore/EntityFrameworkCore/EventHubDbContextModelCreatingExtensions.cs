@@ -1,6 +1,7 @@
 ﻿using EventHub.Events;
 using EventHub.Events.Registrations;
 using EventHub.Organizations;
+using EventHub.Organizations.Memberships;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
@@ -35,6 +36,22 @@ namespace EventHub.EntityFrameworkCore
 
                 b.HasIndex(x => x.Name);
                 b.HasIndex(x => x.DisplayName);
+            });
+            
+            builder.Entity<OrganizationMembership>(b =>
+            {
+                b.ToTable(EventHubConsts.DbTablePrefix + "OrganizationMemberships", EventHubConsts.DbSchema);
+
+                b.ConfigureByConvention();
+
+                b.HasOne<Organization>().WithMany().HasForeignKey(x => x.OrganizationId).IsRequired().OnDelete(DeleteBehavior.NoAction);
+
+                if (isMigrationDbContext)
+                {
+                    b.HasOne<IdentityUser>().WithMany().HasForeignKey(x => x.UserId).IsRequired().OnDelete(DeleteBehavior.NoAction);
+                }
+
+                b.HasIndex(x => new {x.OrganizationId, x.UserId});
             });
 
             builder.Entity<Event>(b =>
