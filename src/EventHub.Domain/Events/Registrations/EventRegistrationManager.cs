@@ -11,14 +11,10 @@ namespace EventHub.Events.Registrations
     public class EventRegistrationManager : DomainService
     {
         private readonly IRepository<EventRegistration, Guid> _eventRegistrationRepository;
-        private readonly IClock _clock;
 
-        public EventRegistrationManager(
-            IRepository<EventRegistration, Guid> eventRegistrationRepository,
-            IClock clock)
+        public EventRegistrationManager(IRepository<EventRegistration, Guid> eventRegistrationRepository)
         {
             _eventRegistrationRepository = eventRegistrationRepository;
-            _clock = clock;
         }
 
         public async Task RegisterAsync(
@@ -62,7 +58,7 @@ namespace EventHub.Events.Registrations
 
         private void CheckEventEndTime(Event @event)
         {
-            if (_clock.Now > @event.EndTime)
+            if (Clock.Now > @event.EndTime)
             {
                 throw new BusinessException(EventHubErrorCodes.CantRegisterOrUnregisterForAPastEvent);
             }
