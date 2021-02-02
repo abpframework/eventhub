@@ -56,70 +56,84 @@ namespace EventHub
 
         private async Task SeedUsersAsync()
         {
-            if (await _userRepository.GetCountAsync() < 2)
+            if (await _userRepository.GetCountAsync() > 1)
             {
-                var users = new List<IdentityUser>
-                {
-                    new IdentityUser(_eventHubSeedData.UserSandraId, "SandraWolf", "sandra_wolf@gmail.com"),
-                    new IdentityUser(_eventHubSeedData.UserSergeyId, "SergeyPolgul", "sergey_polgul@gmail.com"),
-                    new IdentityUser(_eventHubSeedData.UserWellyId, "WellyTambunan", "welly_tambunan@gmail.com"),
-                    new IdentityUser(_eventHubSeedData.UserAlessandroId, "AlessandroMuci", "alessandro_muci@gmail.com"),
-                    new IdentityUser(_eventHubSeedData.UserMarkId, "MarkGodfrey", "mark_godfrey@gmail.com"),
-                    new IdentityUser(_eventHubSeedData.UserTonyId, "TonyBurton", "tony_burton@gmail.com"),
-                    new IdentityUser(_guidGenerator.Create(), "DavidGraus", "david_graus@gmail.com"),
-                    new IdentityUser(_guidGenerator.Create(), "DavidRoss", "david_ross@gmail.com"),
-                    new IdentityUser(_guidGenerator.Create(), "TomLidy", "tom_lidy@gmail.com"),
-                    new IdentityUser(_guidGenerator.Create(), "ShreePatel", "shree_patel@gmail.com"),
-                    new IdentityUser(_guidGenerator.Create(), "JanneSpijkervet", "janne_spijkervet@gmail.com"),
-                    new IdentityUser(_guidGenerator.Create(), "AngieHaynes", "angie_haynes@gmail.com"),
-                    new IdentityUser(_guidGenerator.Create(), "DeanHeasman", "dean_heasman@gmail.com"),
-                    new IdentityUser(_guidGenerator.Create(), "SergeyPerepelkin", "sergey_perepelkin@gmail.com"),
-                    new IdentityUser(_guidGenerator.Create(), "RobertKelleman", "robert_kelleman@gmail.com"),
-                    new IdentityUser(_guidGenerator.Create(), "CarolConlon", "carol_conlon@gmail.com"),
-                    new IdentityUser(_guidGenerator.Create(), "RyanPonder", "ryan_ponder@gmail.com"),
-                    new IdentityUser(_guidGenerator.Create(), "RogerBailey", "roger_bailey@gmail.com"),
-                    new IdentityUser(_guidGenerator.Create(), "LylianPortes", "lylian_portres@gmail.com"),
-                    new IdentityUser(_guidGenerator.Create(), "SimonVendrov", "simon_vendrov@gmail.com"),
-                    new IdentityUser(_guidGenerator.Create(), "NicolaEdwards", "nicola_edwards@gmail.com"),
-                    new IdentityUser(_guidGenerator.Create(), "TonyLee", "tony_lee@gmail.com"),
-                    new IdentityUser(_guidGenerator.Create(), "KellyDixon", "kelly_dixon@gmail.com"),
-                    new IdentityUser(_guidGenerator.Create(), "Maria", "maria_richardson@gmail.com"),
-                    new IdentityUser(_guidGenerator.Create(), "ScottHanselman", "scott_hanselman@gmail.com"),
-                };
+                return;
+            }
 
-                foreach (var user in users)
-                {
-                    await _identityUserManager.CreateAsync(user, "1q2w3E*");
-                }
+            var users = new List<IdentityUser>
+            {
+                new IdentityUser(_eventHubSeedData.UserSandraId, "SandraWolf", "sandra_wolf@gmail.com"),
+                new IdentityUser(_eventHubSeedData.UserSergeyId, "SergeyPolgul", "sergey_polgul@gmail.com"),
+                new IdentityUser(_eventHubSeedData.UserWellyId, "WellyTambunan", "welly_tambunan@gmail.com"),
+                new IdentityUser(_eventHubSeedData.UserAlessandroId, "AlessandroMuci", "alessandro_muci@gmail.com"),
+                new IdentityUser(_eventHubSeedData.UserMarkId, "MarkGodfrey", "mark_godfrey@gmail.com"),
+                new IdentityUser(_eventHubSeedData.UserTonyId, "TonyBurton", "tony_burton@gmail.com"),
+                new IdentityUser(_guidGenerator.Create(), "DavidGraus", "david_graus@gmail.com"),
+                new IdentityUser(_guidGenerator.Create(), "DavidRoss", "david_ross@gmail.com"),
+                new IdentityUser(_guidGenerator.Create(), "TomLidy", "tom_lidy@gmail.com"),
+                new IdentityUser(_guidGenerator.Create(), "ShreePatel", "shree_patel@gmail.com"),
+                new IdentityUser(_guidGenerator.Create(), "JanneSpijkervet", "janne_spijkervet@gmail.com"),
+                new IdentityUser(_guidGenerator.Create(), "AngieHaynes", "angie_haynes@gmail.com"),
+                new IdentityUser(_guidGenerator.Create(), "DeanHeasman", "dean_heasman@gmail.com"),
+                new IdentityUser(_guidGenerator.Create(), "SergeyPerepelkin", "sergey_perepelkin@gmail.com"),
+                new IdentityUser(_guidGenerator.Create(), "RobertKelleman", "robert_kelleman@gmail.com"),
+                new IdentityUser(_guidGenerator.Create(), "CarolConlon", "carol_conlon@gmail.com"),
+                new IdentityUser(_guidGenerator.Create(), "RyanPonder", "ryan_ponder@gmail.com"),
+                new IdentityUser(_guidGenerator.Create(), "RogerBailey", "roger_bailey@gmail.com"),
+                new IdentityUser(_guidGenerator.Create(), "LylianPortes", "lylian_portres@gmail.com"),
+                new IdentityUser(_guidGenerator.Create(), "SimonVendrov", "simon_vendrov@gmail.com"),
+                new IdentityUser(_guidGenerator.Create(), "NicolaEdwards", "nicola_edwards@gmail.com"),
+                new IdentityUser(_guidGenerator.Create(), "TonyLee", "tony_lee@gmail.com"),
+                new IdentityUser(_guidGenerator.Create(), "KellyDixon", "kelly_dixon@gmail.com"),
+                new IdentityUser(_guidGenerator.Create(), "Maria", "maria_richardson@gmail.com"),
+                new IdentityUser(_guidGenerator.Create(), "ScottHanselman", "scott_hanselman@gmail.com"),
+            };
+
+            foreach (var user in users)
+            {
+                await _identityUserManager.CreateAsync(user, "1q2w3E*");
             }
         }
 
         private async Task SeedOrganizationsAsync()
         {
-            if (await _organizationRepository.GetCountAsync() <= 0)
+            if (await _organizationRepository.GetCountAsync() > 0)
             {
-                var organizations = new List<Organization>
-                {
-                    new Organization(_eventHubSeedData.OrganizationVolosoftId, _eventHubSeedData.UserSandraId, "volo", "Volosoft",
-                        "Volosoft is a company that develops community-driven open source projects and commercial projects. In this organization, you'll get the latest information about Volosoft products such as ABP framework, AspNetZero etc."),
-                    new Organization(_eventHubSeedData.OrganizationAbpId, _eventHubSeedData.UserSergeyId, "abp", "ABP",
-                        "This group was created to share common information about the ABP framework."),
-                    new Organization(_eventHubSeedData.OrganizationAngularCoderId, _eventHubSeedData.UserWellyId, "ng-coders", "Angular Coders",
-                        "Angular Coders was created with the goal of sharing Angular knowledge and best-practices as well as providing a space where people can meet up and chat with others working with Angular."),
-                    new Organization(_eventHubSeedData.OrganizationDotnetWorldId, _eventHubSeedData.UserAlessandroId, "dotnet-world", "Dotnet World",
-                        "Dotnet World is a place for local technology enthusiasts to connect and collaborate around the .NET ecosystem. All that's required is an interest in .NET and a willingness to learn and share."),
-                    new Organization(_eventHubSeedData.OrganizationDeveloperDaysId, _eventHubSeedData.UserMarkId, "developer-days", "Developer Days",
-                        "Developer Days is a platform of resources to help you further your application development! It is intended to further expand your application development and DevOps skills through workshops, tech talks, and social engagements."),
-                    new Organization(_eventHubSeedData.OrganizationCSharpLoversId, _eventHubSeedData.UserTonyId, "csharp-lovers", "C# Lovers",
-                        "This group was created with the goal of sharing the latest and best information about C# language. At our monthly meetings you can hear expert speakers who dig 'under the hood' and keep you informed on best practices and future directions.")
-                };
-
-                await _organizationRepository.InsertManyAsync(organizations, autoSave: true);
+                return;
             }
+
+            var organizations = new List<Organization>
+            {
+                new Organization(_eventHubSeedData.OrganizationVolosoftId, _eventHubSeedData.UserSandraId, "volo",
+                    "Volosoft",
+                    "Volosoft is a company that develops community-driven open source projects and commercial projects. In this organization, you'll get the latest information about Volosoft products such as ABP framework, AspNetZero etc."),
+                new Organization(_eventHubSeedData.OrganizationAbpId, _eventHubSeedData.UserSergeyId, "abp", "ABP",
+                    "This group was created to share common information about the ABP framework."),
+                new Organization(_eventHubSeedData.OrganizationAngularCoderId, _eventHubSeedData.UserWellyId,
+                    "ng-coders", "Angular Coders",
+                    "Angular Coders was created with the goal of sharing Angular knowledge and best-practices as well as providing a space where people can meet up and chat with others working with Angular."),
+                new Organization(_eventHubSeedData.OrganizationDotnetWorldId, _eventHubSeedData.UserAlessandroId,
+                    "dotnet-world", "Dotnet World",
+                    "Dotnet World is a place for local technology enthusiasts to connect and collaborate around the .NET ecosystem. All that's required is an interest in .NET and a willingness to learn and share."),
+                new Organization(_eventHubSeedData.OrganizationDeveloperDaysId, _eventHubSeedData.UserMarkId,
+                    "developer-days", "Developer Days",
+                    "Developer Days is a platform of resources to help you further your application development! It is intended to further expand your application development and DevOps skills through workshops, tech talks, and social engagements."),
+                new Organization(_eventHubSeedData.OrganizationCSharpLoversId, _eventHubSeedData.UserTonyId,
+                    "csharp-lovers", "C# Lovers",
+                    "This group was created with the goal of sharing the latest and best information about C# language. At our monthly meetings you can hear expert speakers who dig 'under the hood' and keep you informed on best practices and future directions.")
+            };
+
+            await _organizationRepository.InsertManyAsync(organizations, autoSave: true);
         }
 
         private async Task SeedEventsAsync()
         {
+            if (await _eventRepository.GetCountAsync() > 0)
+            {
+                return;
+            }
+
             var organizationDotnetWorld = await _organizationRepository.GetAsync(_eventHubSeedData.OrganizationDotnetWorldId);
             var organizationDeveloperDays = await _organizationRepository.GetAsync(_eventHubSeedData.OrganizationDeveloperDaysId);
             var organizationCSharpLovers = await _organizationRepository.GetAsync(_eventHubSeedData.OrganizationCSharpLoversId);
