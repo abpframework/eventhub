@@ -33,15 +33,6 @@ namespace EventHub.Organizations.Memberships
             );
         }
 
-        public async Task LeaveAsync(
-            Organization organization,
-            AppUser user)
-        {
-            await _organizationMembershipsRepository.DeleteAsync(
-                x => x.OrganizationId == organization.Id && x.UserId == user.Id
-            );
-        }
-
         public async Task<bool> IsJoinedAsync(
             Organization organization,
             AppUser user)

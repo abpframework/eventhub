@@ -41,9 +41,8 @@ namespace EventHub.Organizations.Memberships
         [Authorize]
         public async Task LeaveAsync(Guid organizationId)
         {
-            await _organizationMembershipManager.LeaveAsync(
-                await _organizationRepository.GetAsync(organizationId),
-                await _userRepository.GetAsync(CurrentUser.GetId())
+            await _organizationMembershipsRepository.DeleteAsync(
+                x => x.OrganizationId == organizationId && x.UserId == CurrentUser.GetId()
             );
         }
 
