@@ -23,7 +23,7 @@ namespace EventHub
         private readonly EventManager _eventManager;
         private readonly EventRegistrationManager _eventRegistrationManager;
         private readonly IRepository<AppUser, Guid> _userRepository;
-        
+
         public EventHubDataSeedContributor(
             IGuidGenerator guidGenerator,
             IdentityUserManager identityUserManager,
@@ -100,7 +100,7 @@ namespace EventHub
             {
                 var organizations = new List<Organization>
                 {
-                    new Organization(_eventHubSeedData.OrganizationVolosoftId, _eventHubSeedData.UserSandraId, "volosoft", "Volosoft",
+                    new Organization(_eventHubSeedData.OrganizationVolosoftId, _eventHubSeedData.UserSandraId, "volo", "Volosoft",
                         "Volosoft is a company that develops community-driven open source projects and commercial projects. In this organization, you'll get the latest information about Volosoft products such as ABP framework, AspNetZero etc."),
                     new Organization(_eventHubSeedData.OrganizationAbpId, _eventHubSeedData.UserSergeyId, "abp", "ABP",
                         "This group was created to share common information about the ABP framework."),
@@ -126,17 +126,17 @@ namespace EventHub
             var organizationAngularCoders = await _organizationRepository.GetAsync(_eventHubSeedData.OrganizationAngularCoderId);
             var organizationVolosoft = await _organizationRepository.GetAsync(_eventHubSeedData.OrganizationVolosoftId);
             var organizationAbp = await _organizationRepository.GetAsync(_eventHubSeedData.OrganizationAbpId);
-            
+
             var userSandra = await _userRepository.GetAsync(_eventHubSeedData.UserSandraId);
             var userTony = await _userRepository.GetAsync(_eventHubSeedData.UserTonyId);
             var userAlessandro = await _userRepository.GetAsync(_eventHubSeedData.UserAlessandroId);
             var userMark = await _userRepository.GetAsync(_eventHubSeedData.UserMarkId);
-            
+
             //10 past events
             var pastEvent1 = await _eventManager.CreateAsync(organizationDotnetWorld,
                 "Identity & Access Control for modern Applications and APIs using ASP.NET Core 5",
-                DateTime.Now.AddDays(-30), 
-                DateTime.Now.AddDays(-1), 
+                DateTime.Now.AddDays(-30),
+                DateTime.Now.AddDays(-1),
                 "Modern application design has changed quite a bit in recent years. \"Mobile-first\" and \"cloud-ready\" are the types of applications you are expected to develop. Also, to keep pace with these demands, Microsoft has revamped their complete web stack with ASP.NET Core to meet these architectural demands."
             );
             await _eventRepository.InsertAsync(pastEvent1);
@@ -168,14 +168,14 @@ namespace EventHub
                 DateTime.Now.AddDays(-10),
                 "GraphQL is a query language for APIs and a runtime for fulfilling those queries with your existing data. That sounds nice, but what is GraphQL and how can we use it in .NET?");
             await _eventRepository.InsertAsync(pastEvent5);
-            
+
             var pastEvent6 = await _eventManager.CreateAsync(organizationDotnetWorld,
                 "A Year Long Journey from .NET Framework to .NET Core",
                 DateTime.Now.AddDays(-35),
                 DateTime.Now.AddDays(-15),
                 "In this session we will walk through a real world example of a year-long modernization journey. We will take a closer look at how you can get started, what obstacles you may face and how to overcome them.");
             await _eventRepository.InsertAsync(pastEvent6);
-            
+
             var pastEvent7 = await _eventManager.CreateAsync(organizationDeveloperDays,
                 "March: Building Realtime Serverless APIs with GraphQL",
                 DateTime.Now.AddDays(-25),
@@ -189,21 +189,21 @@ namespace EventHub
                 DateTime.Now.AddDays(-10),
                 "With the releases of .NET Core 2.x, 3.x and now .NET 5, more developers have now got to grips with the basics of using the default Microsoft Dependency Injection container that comes with .NET Core. However, the story does not end there...");
             await _eventRepository.InsertAsync(pastEvent8);
-            
+
             var pastEvent9 = await _eventManager.CreateAsync(organizationAngularCoders,
                 "[Front End] Real life introduction to unit testing in Angular",
                 DateTime.Now.AddDays(-15),
                 DateTime.Now.AddDays(-2),
                 "How many times have you tried to start writing unit tests and didn’t know where to start? Or the tutorials weren’t clear enough? In our webinar we’ll start with just a bit of theory and then we’ll move on to examples. We’ll show you how to test basic (and a bit more complex) components, services, how to deal with dependencies, asynchronous code, forms, child components etc");
             await _eventRepository.InsertAsync(pastEvent9);
-            
+
             var pastEvent10 = await _eventManager.CreateAsync(organizationAngularCoders,
                 "Introduction to Angular Unit Tests",
                 DateTime.Now.AddDays(-45),
                 DateTime.Now.AddDays(-43),
                 "Introduction to Angular unit tests includes introduction to Jasmin and Angular testing module. You will learn to create unit tests for your Angular project by understanding Jasmin and Angular testing module which provides infrastructure for testing Angular core functionality.");
             await _eventRepository.InsertAsync(pastEvent10);
-            
+
             //15 upcoming events
             var upcomingEvent1 = await _eventManager.CreateAsync(organizationDotnetWorld,
                 "ASP.NET Core Health Checks",
@@ -213,7 +213,7 @@ namespace EventHub
             await _eventRepository.InsertAsync(upcomingEvent1);
             await _eventRegistrationManager.RegisterAsync(upcomingEvent1, userSandra);
             await _eventRegistrationManager.RegisterAsync(upcomingEvent1, userAlessandro);
-            
+
             var upcomingEvent2 = await _eventManager.CreateAsync(organizationDotnetWorld,
                 "GraphQL in a .NET world",
                 DateTime.Now,
@@ -239,7 +239,7 @@ namespace EventHub
                 "Join us for a discussion and live coding session where Jeff Fritz will take us on a tour of a more complex Blazor Static Web App. We'll learn how to take advantage of other Azure Services without breaking the bank while delivering cool features like search, caching, and using event-driven architecture.");
             await _eventRepository.InsertAsync(upcomingEvent4);
             await _eventRegistrationManager.RegisterAsync(upcomingEvent4, userMark);
-            
+
             var upcomingEvent5 = await _eventManager.CreateAsync(organizationVolosoft,
                 "Implementing Domain Driven Design",
                 DateTime.Now,
