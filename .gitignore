@@ -349,6 +349,10 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
+# Rider
+
+.idea
+
 # EventHub
 src/EventHub.DbMigrator/tempkey.jwk
 src/EventHub.HttpApi.Host/tempkey.jwk
