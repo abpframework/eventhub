@@ -1,6 +1,7 @@
 ﻿using EventHub.Events;
 using EventHub.Events.Registrations;
 using EventHub.Organizations;
+using EventHub.Organizations.Memberships;
 using Microsoft.EntityFrameworkCore;
 using EventHub.Users;
 using Volo.Abp.Data;
@@ -25,6 +26,7 @@ namespace EventHub.EntityFrameworkCore
     {
         public DbSet<AppUser> Users { get; set; }
         public DbSet<Organization> Organizations { get; set; }
+        public DbSet<OrganizationMembership> OrganizationMemberships { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<EventRegistration> EventRegistrations { get; set; }
 

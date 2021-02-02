@@ -2,78 +2,89 @@
 @inject IHtmlLocalizer<EventHubResource> L
 @using EventHub.Localization
 @using EventHub.Web.Pages.Events
+@using EventHub.Web.Pages.Organizations.Components.JoinArea
+@using EventHub.Web.Pages.Organizations.Components.MembersArea
 @using Microsoft.AspNetCore.Mvc.Localization
 @model EventHub.Web.Pages.Organizations.ProfilePageModel
+
 <abp-row>
-    <abp-column size-lg="_12">
-        <abp-card class="mb-3">
-            <img abp-card-image="Top" src="https://picsum.photos/seed/@Model.Name/1920/400?blur=8" alt="@Model.Organization.DisplayName"/>
-            <abp-card-body>
-                <abp-card-title>
-                    <h2>@Model.Organization.DisplayName</h2>
-                </abp-card-title>
-                <abp-card-text class="mt-3">
-                    @Model.Organization.Description
-                </abp-card-text>
-            </abp-card-body>
-        </abp-card>
+    <abp-column size-lg="_8" size-md="_6">
+        <abp-row>
+            <abp-column size-lg="_12">
+                <abp-card class="mb-3">
+                    <img abp-card-image="Top" src="https://picsum.photos/seed/@Model.Name/1920/400?blur=8" alt="@Model.Organization.DisplayName"/>
+                    <abp-card-body>
+                        <abp-card-title>
+                            <h2>@Model.Organization.DisplayName</h2>
+                        </abp-card-title>
+                        <abp-card-text class="mt-3">
+                            @Model.Organization.Description
+                        </abp-card-text>
+                    </abp-card-body>
+                </abp-card>
+            </abp-column>
+        </abp-row>
+        
+        @if (Model.UpcomingEvents.Any())
+        {
+            <h3>Events</h3>
+        
+            <abp-tabs tab-style="Pill">
+                <abp-tab title="@($"{L["Upcoming"].Value} ({Model.UpcomingEventTotalCount})")">
+                    <abp-row class="mt-3">
+                        @foreach (var eventItem in Model.UpcomingEvents)
+                        {
+                            <abp-column size-lg="_4" size-md="_6">
+                                <abp-card class="mb-3">
+                                    <img abp-card-image="Top" src="https://picsum.photos/seed/@eventItem.Id.ToString()/400/160?blur=8" alt="@eventItem.Title"/>
+                                    <abp-card-body>
+                                        <abp-card-title>@eventItem.Title</abp-card-title>
+                                        <abp-card-subtitle>
+                                            @EventDateHelper.GetDateRangeText(eventItem.StartTime, eventItem.EndTime)
+                                        </abp-card-subtitle>
+                                        <abp-card-text>
+                                            @eventItem.Description.TruncateWithPostfix(100)
+                                        </abp-card-text>
+                                        <a abp-button="Primary" href="@Url.Page("/Events/Detail", new {url = eventItem.Url})"> @L["SeeEvent"]</a>
+                                    </abp-card-body>
+                                </abp-card>
+                            </abp-column>
+                        }
+                    </abp-row>
+                </abp-tab>
+                <abp-tab title="@($"{L["Past"].Value} ({Model.PastEventTotalCount})")">
+                    <abp-row class="mt-3">
+                        @foreach (var eventItem in Model.PastEvents)
+                        {
+                            <abp-column size-lg="_4" size-md="_6">
+                                <abp-card class="mb-3">
+                                    <img abp-card-image="Top" src="https://picsum.photos/seed/@eventItem.Id.ToString()/400/160?blur=8" alt="@eventItem.Title"/>
+                                    <abp-card-body>
+                                        <abp-card-title>@eventItem.Title</abp-card-title>
+                                        <abp-card-subtitle>
+                                            @EventDateHelper.GetDateRangeText(eventItem.StartTime, eventItem.EndTime)
+                                        </abp-card-subtitle>
+                                        <abp-card-text>
+                                            @eventItem.Description.TruncateWithPostfix(100)
+                                        </abp-card-text>
+                                        <a abp-button="Primary" href="@Url.Page("/Events/Detail", new {url = eventItem.Url})"> @L["SeeEvent"]</a>
+                                    </abp-card-body>
+                                </abp-card>
+                            </abp-column>
+                        }
+                    </abp-row>
+                </abp-tab>
+            </abp-tabs>
+        }
+        else
+        {
+            <abp-alert alert-type="Info">
+                @L["NoEventOrganizedByThisOrganizationYet"]
+            </abp-alert>
+        }
+    </abp-column>
+    <abp-column size-lg="_4" size-md="_6">
+        @await Component.InvokeAsync(typeof(JoinAreaViewComponent), new {organizationId = Model.Organization.Id})
+        @await Component.InvokeAsync(typeof(MembersAreaViewComponent), new {organizationId = Model.Organization.Id})
     </abp-column>
 </abp-row>
-
-@if (Model.UpcomingEvents.Any())
-{
-    <h3>Events</h3>
-
-    <abp-tabs tab-style="Pill">
-        <abp-tab title="@($"{L["Upcoming"].Value} ({Model.UpcomingEventTotalCount})")">
-            <abp-row class="mt-3">
-                @foreach (var eventItem in Model.UpcomingEvents)
-                {
-                    <abp-column size-lg="_4" size-md="_6">
-                        <abp-card class="mb-3">
-                            <img abp-card-image="Top" src="https://picsum.photos/seed/@eventItem.Id.ToString()/400/160?blur=8" alt="@eventItem.Title"/>
-                            <abp-card-body>
-                                <abp-card-title>@eventItem.Title</abp-card-title>
-                                <abp-card-subtitle>
-                                    @EventDateHelper.GetDateRangeText(eventItem.StartTime, eventItem.EndTime)
-                                </abp-card-subtitle>
-                                <abp-card-text>
-                                    @eventItem.Description.TruncateWithPostfix(100)
-                                </abp-card-text>
-                                <a abp-button="Primary" href="@Url.Page("/Events/Detail", new {url = eventItem.Url})"> @L["SeeEvent"]</a>
-                            </abp-card-body>
-                        </abp-card>
-                    </abp-column>
-                }
-            </abp-row>
-        </abp-tab>
-        <abp-tab title="@($"{L["Past"].Value} ({Model.PastEventTotalCount})")">
-            <abp-row class="mt-3">
-                @foreach (var eventItem in Model.PastEvents)
-                {
-                    <abp-column size-lg="_4" size-md="_6">
-                        <abp-card class="mb-3">
-                            <img abp-card-image="Top" src="https://picsum.photos/seed/@eventItem.Id.ToString()/400/160?blur=8" alt="@eventItem.Title"/>
-                            <abp-card-body>
-                                <abp-card-title>@eventItem.Title</abp-card-title>
-                                <abp-card-subtitle>
-                                    @EventDateHelper.GetDateRangeText(eventItem.StartTime, eventItem.EndTime)
-                                </abp-card-subtitle>
-                                <abp-card-text>
-                                    @eventItem.Description.TruncateWithPostfix(100)
-                                </abp-card-text>
-                                <a abp-button="Primary" href="@Url.Page("/Events/Detail", new {url = eventItem.Url})"> @L["SeeEvent"]</a>
-                            </abp-card-body>
-                        </abp-card>
-                    </abp-column>
-                }
-            </abp-row>
-        </abp-tab>
-    </abp-tabs>
-}
-else
-{
-    <abp-alert alert-type="Info">
-        @L["NoEventOrganizedByThisOrganizationYet"]
-    </abp-alert>
-}

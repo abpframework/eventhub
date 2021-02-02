@@ -2,6 +2,7 @@
 using EventHub.Events;
 using EventHub.Events.Registrations;
 using EventHub.Organizations;
+using EventHub.Organizations.Memberships;
 using EventHub.Users;
 using Volo.Abp.AutoMapper;
 
@@ -13,6 +14,8 @@ namespace EventHub
         {
             CreateMap<Organization, OrganizationInListDto>();
             CreateMap<Organization, OrganizationProfileDto>();
+            
+            CreateMap<AppUser, OrganizationMemberDto>();
 
             CreateMap<Event, EventDto>();
             CreateMap<Event, EventInListDto>()

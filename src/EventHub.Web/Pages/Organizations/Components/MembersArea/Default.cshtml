@@ -1,0 +1,14 @@
+@model EventHub.Web.Pages.Organizations.Components.MembersArea.MembersAreaViewComponent.MembersAreaViewComponentModel
+<abp-card class="mb-3" data-organization-id="@Model.OrganizationId">
+    <abp-card-body>
+        <abp-card-title>Members (@Model.TotalCount)</abp-card-title>
+        <abp-card-text>
+            <ul id="OrganizationMemberList">
+                @foreach (var member in Model.Members)
+                {
+                    <li class="border p-2 mb-2"><i class="fas fa-user"></i> @Model.GetMemberName(member)</li>
+                }
+            </ul>
+        </abp-card-text>
+    </abp-card-body>
+</abp-card>
