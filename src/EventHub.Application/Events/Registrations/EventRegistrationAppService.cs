@@ -16,26 +16,31 @@ namespace EventHub.Events.Registrations
         private readonly IRepository<AppUser, Guid> _userRepository;
         private readonly IRepository<Event, Guid> _eventRepository;
         private readonly IRepository<EventRegistration, Guid> _eventRegistrationRepository;
+        private readonly EventRegistrationNotifier _eventRegistrationNotifier;
 
         public EventRegistrationAppService(
             EventRegistrationManager eventRegistrationManager,
             IRepository<AppUser, Guid> userRepository,
             IRepository<Event, Guid> eventRepository,
-            IRepository<EventRegistration, Guid> eventRegistrationRepository)
+            IRepository<EventRegistration, Guid> eventRegistrationRepository, 
+            EventRegistrationNotifier eventRegistrationNotifier)
         {
             _eventRegistrationManager = eventRegistrationManager;
             _userRepository = userRepository;
             _eventRepository = eventRepository;
             _eventRegistrationRepository = eventRegistrationRepository;
+            _eventRegistrationNotifier = eventRegistrationNotifier;
         }
 
         [Authorize]
         public async Task RegisterAsync(Guid eventId)
         {
-            await _eventRegistrationManager.RegisterAsync(
-                await _eventRepository.GetAsync(eventId),
-                await _userRepository.GetAsync(CurrentUser.GetId())
-            );
+            var @event = await _eventRepository.GetAsync(eventId);
+            var user = await _userRepository.GetAsync(CurrentUser.GetId());
+            
+            await _eventRegistrationManager.RegisterAsync(@event, user);
+            
+            await _eventRegistrationNotifier.NotifyAsync(@event, user);
         }
 
         [Authorize]
