@@ -1,7 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using NSubstitute;
 using Shouldly;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Authorization;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.Users;
 using Xunit;
 
 namespace EventHub.Organizations
@@ -10,16 +16,25 @@ namespace EventHub.Organizations
     {
         private readonly IOrganizationAppService _organizationAppService;
         private readonly EventHubTestData _testData;
-
+        private ICurrentUser _currentUser;
+        
         public OrganizationAppServiceTests()
         {
             _organizationAppService = GetRequiredService<IOrganizationAppService>();
             _testData = GetRequiredService<EventHubTestData>();
         }
+        
+        protected override void AfterAddApplication(IServiceCollection services)
+        {
+            _currentUser = Substitute.For<ICurrentUser>();
+            services.AddSingleton(_currentUser);
+        }
 
         [Fact]
         public async Task Should_Create_A_Valid_Organization()
         {
+            Login(_testData.UserAdminId);
+            
             await _organizationAppService.CreateAsync(
                 new CreateOrganizationDto
                 {
@@ -38,6 +53,8 @@ namespace EventHub.Organizations
         [Fact]
         public async Task Should_Not_Create_Organization_With_Existing_Name()
         {
+            Login(_testData.UserAdminId);
+            
             var exception = await Assert.ThrowsAsync<BusinessException>(() =>
                 _organizationAppService.CreateAsync(
                     new CreateOrganizationDto
@@ -67,6 +84,47 @@ namespace EventHub.Organizations
             var result = await _organizationAppService.GetProfileAsync(_testData.OrganizationVolosoftName);
             result.Id.ShouldBe(_testData.OrganizationVolosoftId);
             result.Name.ShouldBe(_testData.OrganizationVolosoftName);
+        }
+
+        [Fact]
+        public async Task Should_Update_Organization_If_User_Is_Owner()
+        {
+            Login(_testData.UserAdminId);
+            
+            await _organizationAppService.UpdateAsync(
+                _testData.OrganizationVolosoftId,
+                new UpdateOrganizationDto
+                {
+                    DisplayName = "VOLOSOFT",
+                    Description = "Test description text that is valid and long enough for updating!",
+                    Website = "https://volosoft.com/",
+                    MediumUsername = "volosoft"
+                });
+        }
+
+        [Fact]
+        public async Task Should_Not_Update_Organization_If_User_Not_Owner()
+        {
+            Login(_testData.UserAdminId);
+
+            var exception = await Assert.ThrowsAsync<AbpAuthorizationException>(() =>
+                _organizationAppService.UpdateAsync(
+                    _testData.OrganizationDotnetEuropeId,
+                    new UpdateOrganizationDto
+                    {
+                        DisplayName = "Dotnet Europe (DE)",
+                        Description = "Test description text that is valid and long enough for updating!",
+                        Website = "https://dotnet-europe.com/"
+                    })
+            );
+            
+            exception.ShouldNotBeNull();
+        }
+        
+        private void Login(Guid userId)
+        {
+            _currentUser.Id.Returns(userId);
+            _currentUser.IsAuthenticated.Returns(true);
         }
     }
 }

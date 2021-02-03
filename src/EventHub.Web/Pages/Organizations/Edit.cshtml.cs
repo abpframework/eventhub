@@ -51,6 +51,7 @@ namespace EventHub.Web.Pages.Organizations
             }
             catch (Exception exception)
             {
+                ShowAlert(exception);
                 return Page();
             }
         }

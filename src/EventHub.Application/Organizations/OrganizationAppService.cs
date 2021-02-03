@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using EventHub.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Authorization;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Users;
 
@@ -81,7 +82,7 @@ namespace EventHub.Organizations
 
             if (organization.OwnerUserId != CurrentUser.GetId())
             {
-                return;
+                throw new AbpAuthorizationException();
             }
 
             organization.SetDisplayName(input.DisplayName);
