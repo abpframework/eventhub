@@ -23,6 +23,15 @@ namespace EventHub.Emailing
                     isInlineLocalized: true
                 )
             );
+            
+            context.Add(
+                new TemplateDefinition(
+                    EmailTemplates.NewEventCreated
+                ).WithVirtualFilePath(
+                    "/Emailing/Templates/NewEventCreated.tpl",
+                    isInlineLocalized: true
+                )
+            );
         }
     }
 }

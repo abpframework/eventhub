@@ -26,6 +26,8 @@ namespace EventHub.Events
 
         public bool IsRemindingEmailSent { get; set; }
 
+        public bool IsEmailSentToMembers { get; set; }
+
         private Event()
         {
 
