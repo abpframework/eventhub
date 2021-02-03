@@ -42,6 +42,10 @@
     "OrganizationJoinSuccessMessage": "See you at the events.",
     "OrganizationMembershipLeaveMessage": "You left your organization membership.",
     "LeaveOrganization": "Leave this organization",
-    "JoinOrganization": "Join the organization"
+    "JoinOrganization": "Join the organization",
+    "Edit": "Edit",
+    "EditOrganization": "Edit Organization",
+    "PersonalWebsite": "Personal Website",
+    "SocialMedia": "Social Media"
   }
 }

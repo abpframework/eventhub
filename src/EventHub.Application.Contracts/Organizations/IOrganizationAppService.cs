@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
@@ -13,5 +14,9 @@ namespace EventHub.Organizations
         Task<OrganizationProfileDto> GetProfileAsync(string name);
 
         Task<ListResultDto<OrganizationInListDto>> GetMyOrganizationsAsync();
+
+        Task<bool> IsOrganizationOwnerAsync(Guid organizationId);
+
+        Task UpdateAsync(Guid id, UpdateOrganizationDto input);
     }
 }

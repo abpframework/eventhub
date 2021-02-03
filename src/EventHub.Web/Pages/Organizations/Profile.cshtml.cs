@@ -18,6 +18,8 @@ namespace EventHub.Web.Pages.Organizations
         public IReadOnlyList<EventInListDto> PastEvents { get; private set; }
         public long PastEventTotalCount { get; private set; }
 
+        public bool IsOrganizationOwner { get; private set; }
+
         private readonly IEventAppService _eventAppService;
         private readonly IOrganizationAppService _organizationAppService;
 
@@ -34,6 +36,8 @@ namespace EventHub.Web.Pages.Organizations
             await GetProfileAsync();
             await GetUpcomingEventsAsync();
             await GetPastEventsAsync();
+
+            IsOrganizationOwner = await _organizationAppService.IsOrganizationOwnerAsync(Organization.Id);
         }
 
         private async Task GetProfileAsync()

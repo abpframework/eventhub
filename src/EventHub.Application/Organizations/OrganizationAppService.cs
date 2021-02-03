@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EventHub.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Repositories;
@@ -66,6 +67,33 @@ namespace EventHub.Organizations
             return new ListResultDto<OrganizationInListDto>(
                 ObjectMapper.Map<List<Organization>, List<OrganizationInListDto>>(organizations)
             );
+        }
+
+        public async Task<bool> IsOrganizationOwnerAsync(Guid organizationId)
+        {
+            return CurrentUser.Id.HasValue && await _organizationRepository.AnyAsync(x => x.Id == organizationId && x.OwnerUserId == CurrentUser.Id.Value);
+        }
+
+        [Authorize]
+        public async Task UpdateAsync(Guid id, UpdateOrganizationDto input)
+        {
+            var organization = await _organizationRepository.GetAsync(id);
+
+            if (organization.OwnerUserId != CurrentUser.GetId())
+            {
+                return;
+            }
+
+            organization.SetDisplayName(input.DisplayName);
+            organization.SetDescription(input.Description);
+            organization.Website = input.Website;
+            organization.TwitterUsername = input.TwitterUsername;
+            organization.GitHubUsername = input.GitHubUsername;
+            organization.InstagramUsername = input.InstagramUsername;
+            organization.FacebookUsername = input.FacebookUsername;
+            organization.MediumUsername = input.MediumUsername;
+            
+            await _organizationRepository.UpdateAsync(organization);
         }
     }
 }
