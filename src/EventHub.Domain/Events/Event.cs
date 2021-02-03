@@ -24,6 +24,8 @@ namespace EventHub.Events
 
         public int? Capacity { get; set; }
 
+        public bool IsRemindingEmailSent { get; set; }
+
         private Event()
         {
 

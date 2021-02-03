@@ -1,5 +1,8 @@
-﻿using Volo.Abp.Account;
+﻿using EventHub.Events;
+using Volo.Abp;
+using Volo.Abp.Account;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
@@ -12,10 +15,16 @@ namespace EventHub
         typeof(AbpAccountApplicationModule),
         typeof(EventHubApplicationContractsModule),
         typeof(AbpIdentityApplicationModule),
-        typeof(AbpPermissionManagementApplicationModule)
+        typeof(AbpPermissionManagementApplicationModule),
+        typeof(AbpBackgroundWorkersModule)
         )]
     public class EventHubApplicationModule : AbpModule
     {
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            context.AddBackgroundWorker<EventReminderWorker>();
+        }
+        
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpAutoMapperOptions>(options =>

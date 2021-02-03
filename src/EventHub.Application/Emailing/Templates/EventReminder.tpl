@@ -54,7 +54,7 @@
                         <!-- START CENTERED WHITE CONTAINER -->
                         <div style="display: flex;">
 
-                            <h1 style="justify-content: center;margin-left: auto;margin-right: auto;align-content: center;">{{model.title}}</h1>
+                            <h1 style="justify-content: center;margin-left: auto;margin-right: auto;align-content: center;">{{model.title}} event will start soon</h1>
 
                         </div>
                         <table class="main" style="background: #ffffff;border-radius: 3px; width: 100%;">
@@ -76,10 +76,10 @@
                                                                                     <tr>
                                                                                         <td width="100%" style="vertical-align: top; font-size: 16px; font-family: Arial, sans-serif; color: #444; margin-top: 20px; margin-bottom: 20px; line-height: 1.75">
                                                                                             <p>
-                                                                                                Hi,
+                                                                                                Hi {{model.user_name}},
                                                                                             </p>
                                                                                             <p>
-                                                                                                Great news! You attended the "{{model.title}}" event.
+                                                                                                See you in 30 minutes at the "{{model.title}}" event
                                                                                             </p>
                                                                                             <div>
                                                                                                 <table border="0" cellpadding="0" cellspacing="0" style=" border-collapse: separate; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;">

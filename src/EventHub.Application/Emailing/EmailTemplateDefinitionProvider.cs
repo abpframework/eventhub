@@ -14,6 +14,15 @@ namespace EventHub.Emailing
                     isInlineLocalized: true
                 )
             );
+            
+            context.Add(
+                new TemplateDefinition(
+                    EmailTemplates.EventReminder
+                ).WithVirtualFilePath(
+                    "/Emailing/Templates/EventReminder.tpl",
+                    isInlineLocalized: true
+                )
+            );
         }
     }
 }
