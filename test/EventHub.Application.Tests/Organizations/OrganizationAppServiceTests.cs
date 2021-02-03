@@ -6,7 +6,6 @@ using Shouldly;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.Users;
 using Xunit;
 
@@ -100,6 +99,11 @@ namespace EventHub.Organizations
                     Website = "https://volosoft.com/",
                     MediumUsername = "volosoft"
                 });
+
+            var organization = await GetOrganizationOrNullAsync(_testData.OrganizationVolosoftName);
+            organization.ShouldNotBeNull();
+            organization.DisplayName.ShouldBe("VOLOSOFT");
+            organization.Description.ShouldBe("Test description text that is valid and long enough for updating!");
         }
 
         [Fact]
