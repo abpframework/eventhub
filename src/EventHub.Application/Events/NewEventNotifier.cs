@@ -1,9 +1,12 @@
 using System;
+using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using EventHub.Emailing;
 using EventHub.Organizations;
 using EventHub.Organizations.Memberships;
 using EventHub.Users;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Emailing;
@@ -39,8 +42,12 @@ namespace EventHub.Events
                 return;
             }
 
-            var organizationMembers = await _organizationMembershipsRepository.GetListAsync();
-            
+            var organizationMemberQueryable = await _organizationMembershipsRepository.GetQueryableAsync();
+
+            var organizationMembers = await organizationMemberQueryable
+                .Where(x => x.OrganizationId == organization.Id)
+                .ToListAsync();
+
             foreach (var member in organizationMembers)
             {
                 var user = await _userRepository.FindAsync(member.UserId);
