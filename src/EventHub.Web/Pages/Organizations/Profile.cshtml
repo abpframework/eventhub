@@ -15,10 +15,83 @@
                     <img abp-card-image="Top" src="https://picsum.photos/seed/@Model.Name/1920/400?blur=8" alt="@Model.Organization.DisplayName"/>
                     <abp-card-body>
                         <abp-card-title>
-                            <h2>@Model.Organization.DisplayName</h2>
+                            @if (Model.IsOrganizationOwner)
+                            {
+                                <div class="row">
+                                    <div class="col-9">
+                                        <h2>@Model.Organization.DisplayName</h2>
+                                    </div>
+                                    <div class="col-3 text-right">
+                                        <a href="/organization/edit/@Model.Organization.Name" class="btn btn-primary text-white">@L["Edit"] <i class="far fa-edit"></i></a>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <h2>@Model.Organization.DisplayName</h2>
+                            }
                         </abp-card-title>
                         <abp-card-text class="mt-3">
                             @Model.Organization.Description
+
+                            @if (!Model.Organization.Website.IsNullOrWhiteSpace() || !Model.Organization.TwitterUsername.IsNullOrWhiteSpace() ||
+                                 !Model.Organization.GitHubUsername.IsNullOrWhiteSpace() || !Model.Organization.InstagramUsername.IsNullOrWhiteSpace() ||
+                                 !Model.Organization.FacebookUsername.IsNullOrWhiteSpace() || !Model.Organization.MediumUsername.IsNullOrWhiteSpace())
+                            {
+                                <hr/>
+                                @if (!Model.Organization.Website.IsNullOrWhiteSpace())
+                                {
+                                    <div class="mt-4 text-center">
+                                        <small class="text-muted text-uppercase">@L["PersonalWebsite"]</small>
+                                        <h5 class="m-0">
+                                            @if (Model.Organization.Website != null)
+                                            {
+                                                <a href="@Model.Organization.Website" class="text-personel-web-site text-decoration-none" target="_blank" style="font-size: 1rem">
+                                                    @Model.Organization.Website
+                                                </a>
+                                            }
+                                        </h5>
+                                    </div>
+                                }
+                                @if (!Model.Organization.TwitterUsername.IsNullOrWhiteSpace() || !Model.Organization.GitHubUsername.IsNullOrWhiteSpace() || 
+                                     !Model.Organization.InstagramUsername.IsNullOrWhiteSpace() || !Model.Organization.FacebookUsername.IsNullOrWhiteSpace() || 
+                                     !Model.Organization.MediumUsername.IsNullOrWhiteSpace())
+                                {
+                                    <div class="profile-icons mt-4 text-center">
+                                        <small class="text-muted text-uppercase">@L["SocialMedia"]</small><br/>
+                                        @if (!Model.Organization.TwitterUsername.IsNullOrWhiteSpace())
+                                        {
+                                            <a href="https://twitter.com/@Model.Organization.TwitterUsername" class="text-twitter text-decoration-none" target="_blank" style="font-size: 1.5rem">
+                                                <i class="fab fa-twitter"></i>
+                                            </a>
+                                        }
+                                        @if (!Model.Organization.GitHubUsername.IsNullOrWhiteSpace())
+                                        {
+                                            <a href="https://github.com/@Model.Organization.GitHubUsername" class="text-github text-decoration-none" target="_blank" style="font-size: 1.5rem">
+                                                <i class="fab fa-github"></i>
+                                            </a>
+                                        }
+                                        @if (!Model.Organization.InstagramUsername.IsNullOrWhiteSpace())
+                                        {
+                                            <a href="https://www.instagram.com/@Model.Organization.InstagramUsername" class="text-instagram text-decoration-none" target="_blank" style="font-size: 1.5rem">
+                                                <i class="fab fa-instagram"></i>
+                                            </a>
+                                        }
+                                        @if (!Model.Organization.FacebookUsername.IsNullOrWhiteSpace())
+                                        {
+                                            <a href="https://www.facebook.com/@Model.Organization.FacebookUsername" class="text-facebook text-decoration-none" target="_blank" style="font-size: 1.5rem">
+                                                <i class="fab fa-facebook"></i>
+                                            </a>
+                                        }
+                                        @if (!Model.Organization.MediumUsername.IsNullOrWhiteSpace())
+                                        {
+                                            <a href="https://medium.com/@Html.Raw("@")@Model.Organization.MediumUsername" class="text-medium text-decoration-none" target="_blank" style="font-size: 1.5rem">
+                                                <i class="fab fa-medium"></i>
+                                            </a>
+                                        }
+                                    </div>
+                                }
+                            }
                         </abp-card-text>
                     </abp-card-body>
                 </abp-card>
