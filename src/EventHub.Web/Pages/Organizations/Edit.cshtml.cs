@@ -23,19 +23,9 @@ namespace EventHub.Web.Pages.Organizations
             _organizationAppService = organizationAppService;
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public async Task OnGetAsync()
         {
-            try
-            {
-                await GetOrganizationAsync();
-            }
-            catch (Exception exception)
-            {
-                ShowAlert(exception);
-                return RedirectToPage("./Index");
-            }
-
-            return Page();
+            await GetOrganizationAsync();
         }
 
         public async Task<IActionResult> OnPostAsync()

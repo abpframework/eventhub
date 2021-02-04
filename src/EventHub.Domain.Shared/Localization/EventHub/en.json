@@ -46,6 +46,7 @@
     "Edit": "Edit",
     "EditOrganization": "Edit Organization",
     "PersonalWebsite": "Personal Website",
-    "SocialMedia": "Social Media"
+    "SocialMedia": "Social Media",
+    "EventHub:NotAuthorizedToUpdateOrganizationProfile": "You are not authorized to update the \"{OrganizationName}\" organization."
   }
 }

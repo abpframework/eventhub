@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using EventHub.Permissions;
 using Microsoft.AspNetCore.Authorization;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Authorization;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Users;
 
@@ -82,7 +81,8 @@ namespace EventHub.Organizations
 
             if (organization.OwnerUserId != CurrentUser.GetId())
             {
-                throw new AbpAuthorizationException();
+                throw new BusinessException(EventHubErrorCodes.NotAuthorizedToUpdateOrganizationProfile)
+                    .WithData("OrganizationName", organization.DisplayName);
             }
 
             organization.SetDisplayName(input.DisplayName);
