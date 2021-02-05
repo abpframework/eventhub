@@ -13,7 +13,7 @@ namespace EventHub.Events
 {
     public class EventReminderWorker : AsyncPeriodicBackgroundWorkerBase
     {
-        public EventReminderWorker(AbpAsyncTimer timer, IServiceScopeFactory serviceScopeFactory) 
+        public EventReminderWorker(AbpAsyncTimer timer, IServiceScopeFactory serviceScopeFactory)
             : base(timer, serviceScopeFactory)
         {
             Timer.Period = 60_000;
@@ -28,14 +28,14 @@ namespace EventHub.Events
 
             var eventQueryable = await eventRepository.GetQueryableAsync();
 
-            var thirtyOneMinutesAfter = DateTime.Now.AddMinutes(30);
+            var thirtyMinutesAfter = DateTime.Now.AddMinutes(30);
             var oneMinutesAfter = DateTime.Now.AddMinutes(1);
 
             var eventQuery = eventQueryable.Where(x =>
                 x.IsRemindingEmailSent == false &&
-                x.StartTime <= thirtyOneMinutesAfter &&
+                x.StartTime <= thirtyMinutesAfter &&
                 x.StartTime >= oneMinutesAfter);
-            
+
             var events = await asyncExecuter.ToListAsync(eventQuery);
 
             foreach (var @event in events)
@@ -48,7 +48,8 @@ namespace EventHub.Events
                 catch (Exception e)
                 {
                     @event.IsRemindingEmailSent = false;
-                    Logger.LogError($"An error occurred while sending reminder mail for {@event.Id} event. Error message: {e.Message}");
+                    Logger.LogError(
+                        $"An error occurred while sending reminder mail for {@event.Id} event. Error message: {e.Message}");
                 }
             }
         }
