@@ -1,13 +1,11 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using EventHub.Events.Registrations;
-using EventHub.Users;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Linq;
 using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 
@@ -25,36 +23,27 @@ namespace EventHub.Events
         protected override async Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
         {
             var eventReminderNotifier = workerContext.ServiceProvider.GetRequiredService<EventReminderNotifier>();
-
             var eventRepository = workerContext.ServiceProvider.GetRequiredService<IRepository<Event, Guid>>();
-            var userRepository = workerContext.ServiceProvider.GetRequiredService<IRepository<AppUser, Guid>>();
-            var eventRegistrationRepository = workerContext.ServiceProvider.GetRequiredService<IRepository<EventRegistration, Guid>>();
-            
+            var asyncExecuter = workerContext.ServiceProvider.GetRequiredService<IAsyncQueryableExecuter>();
+
             var eventQueryable = await eventRepository.GetQueryableAsync();
-            var userQueryable = await userRepository.GetQueryableAsync();
-            var eventRegistrationQueryable = await eventRegistrationRepository.GetQueryableAsync();
 
-            var thirtyOneMinutesAfter = DateTime.Now.AddMinutes(31);
-            var twentyNineMinutesAfter = DateTime.Now.AddMinutes(29);
+            var thirtyOneMinutesAfter = DateTime.Now.AddMinutes(30);
+            var oneMinutesAfter = DateTime.Now.AddMinutes(1);
 
-            var eventsStartingAfterThirtyMinutes = await eventQueryable.Where(x =>
-                x.IsRemindingEmailSent == false && 
-                x.StartTime < thirtyOneMinutesAfter &&
-                x.StartTime > twentyNineMinutesAfter)
-                .ToListAsync();
+            var eventQuery = eventQueryable.Where(x =>
+                x.IsRemindingEmailSent == false &&
+                x.StartTime <= thirtyOneMinutesAfter &&
+                x.StartTime >= oneMinutesAfter);
+            
+            var events = await asyncExecuter.ToListAsync(eventQuery);
 
-            foreach (var @event in eventsStartingAfterThirtyMinutes)
+            foreach (var @event in events)
             {
-                var usersToBeNotified = await (from eventRegistration in eventRegistrationQueryable
-                    join user in userQueryable on eventRegistration.UserId equals user.Id
-                    where eventRegistration.EventId == @event.Id
-                    select user).ToListAsync();
-
-                @event.IsRemindingEmailSent = true;
-
                 try
                 {
-                    await eventReminderNotifier.NotifyAsync(@event, usersToBeNotified);
+                    await eventReminderNotifier.NotifyAsync(@event);
+                    @event.IsRemindingEmailSent = true;
                 }
                 catch (Exception e)
                 {

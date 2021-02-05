@@ -79,7 +79,7 @@
                                                                                                 Hi {{model.user_name}},
                                                                                             </p>
                                                                                             <p>
-                                                                                                See you in 30 minutes at the "{{model.title}}" event
+                                                                                                The "{{model.title}}" event will start very soon.
                                                                                             </p>
                                                                                             <div>
                                                                                                 <table border="0" cellpadding="0" cellspacing="0" style=" border-collapse: separate; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;">

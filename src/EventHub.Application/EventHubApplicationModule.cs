@@ -23,6 +23,7 @@ namespace EventHub
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             context.AddBackgroundWorker<EventReminderWorker>();
+            context.AddBackgroundWorker<NewEventDetectorWorker>();
         }
         
         public override void ConfigureServices(ServiceConfigurationContext context)

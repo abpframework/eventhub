@@ -1,9 +1,13 @@
-using System.Collections.Generic;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Emailing;
+using EventHub.Events.Registrations;
 using EventHub.Users;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Emailing;
+using Volo.Abp.Linq;
 using Volo.Abp.TextTemplating;
 
 namespace EventHub.Events
@@ -12,25 +16,42 @@ namespace EventHub.Events
     {
         private readonly IEmailSender _emailSender;
         private readonly ITemplateRenderer _templateRenderer;
+        private readonly IRepository<AppUser, Guid> _userRepository;
+        private readonly IRepository<EventRegistration, Guid> _eventRegistrationRepository;
+        private readonly IAsyncQueryableExecuter _asyncExecuter;
 
         public EventReminderNotifier(
             IEmailSender emailSender, 
-            ITemplateRenderer templateRenderer)
+            ITemplateRenderer templateRenderer, 
+            IRepository<AppUser, Guid> userRepository, 
+            IRepository<EventRegistration, Guid> eventRegistrationRepository, 
+            IAsyncQueryableExecuter asyncExecuter)
         {
             _emailSender = emailSender;
             _templateRenderer = templateRenderer;
+            _userRepository = userRepository;
+            _eventRegistrationRepository = eventRegistrationRepository;
+            _asyncExecuter = asyncExecuter;
         }
         
-        public async Task NotifyAsync(
-            Event @event, 
-            IEnumerable<AppUser> users)
+        public async Task NotifyAsync(Event @event)
         {
-            if (users is null || @event is null)
+            if (@event is null)
             {
                 return;
             }
+            
+            var userQueryable = await _userRepository.GetQueryableAsync();
+            var eventRegistrationQueryable = await _eventRegistrationRepository.GetQueryableAsync();
+            
+            var userQuery = from eventRegistration in eventRegistrationQueryable
+                join user in userQueryable on eventRegistration.UserId equals user.Id
+                where eventRegistration.EventId == @event.Id
+                select user;
 
-            foreach (var user in users)
+            var usersToBeNotified = await _asyncExecuter.ToListAsync(userQuery);
+
+            foreach (var user in usersToBeNotified)
             {
                 var model = new
                 {

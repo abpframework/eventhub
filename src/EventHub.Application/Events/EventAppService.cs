@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Organizations;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Repositories;
@@ -16,18 +15,15 @@ namespace EventHub.Events
         private readonly EventManager _eventManager;
         private readonly IRepository<Organization, Guid> _organizationRepository;
         private readonly IRepository<Event, Guid> _eventRepository;
-        private readonly NewEventNotifier _newEventNotifier;
 
         public EventAppService(
             EventManager eventManager,
             IRepository<Organization, Guid> organizationRepository,
-            IRepository<Event, Guid> eventRepository, 
-            NewEventNotifier newEventNotifier)
+            IRepository<Event, Guid> eventRepository)
         {
             _eventManager = eventManager;
             _organizationRepository = organizationRepository;
             _eventRepository = eventRepository;
-            _newEventNotifier = newEventNotifier;
         }
 
         [Authorize]
@@ -51,19 +47,8 @@ namespace EventHub.Events
 
             @event.IsOnline = input.IsOnline;
             @event.Capacity = input.Capacity;
-            @event.IsEmailSentToMembers = true;
             
             await _eventRepository.InsertAsync(@event);
-
-            try
-            {
-                await _newEventNotifier.NotifyAsync(organization, @event);
-            }
-            catch (Exception e)
-            {
-                @event.IsEmailSentToMembers = false;
-                Logger.LogError($"An error occurred while sending an email to the members of the {organization.Name} organization after the new event was created. Error message: {e.Message}");
-            }
 
             return ObjectMapper.Map<Event, EventDto>(@event);
         }

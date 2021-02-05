@@ -79,7 +79,7 @@
                                                                                                 Hi {{model.user_name}},
                                                                                             </p>
                                                                                             <p>
-                                                                                                A new event was created by "{{model.organization_name}}" under the title of "{{model.title}}".
+                                                                                                A new event called "{{model.title}}" has been created.
                                                                                             </p>
                                                                                             <div>
                                                                                                 <table border="0" cellpadding="0" cellspacing="0" style=" border-collapse: separate; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;">

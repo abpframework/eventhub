@@ -1,15 +1,13 @@
 using System;
 using System.Linq;
-using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using EventHub.Emailing;
-using EventHub.Organizations;
 using EventHub.Organizations.Memberships;
 using EventHub.Users;
-using Microsoft.EntityFrameworkCore;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Emailing;
+using Volo.Abp.Linq;
 using Volo.Abp.TextTemplating;
 
 namespace EventHub.Events
@@ -20,33 +18,35 @@ namespace EventHub.Events
         private readonly ITemplateRenderer _templateRenderer;
         private readonly IRepository<OrganizationMembership, Guid>  _organizationMembershipsRepository;
         private readonly IRepository<AppUser, Guid> _userRepository;
-        
+        private readonly IAsyncQueryableExecuter _asyncExecuter;
+
         public NewEventNotifier(
             IEmailSender emailSender, 
-            ITemplateRenderer templateRenderer, 
+            ITemplateRenderer templateRenderer,
             IRepository<OrganizationMembership, Guid> organizationMembershipsRepository, 
-            IRepository<AppUser, Guid> userRepository)
+            IRepository<AppUser, Guid> userRepository, 
+            IAsyncQueryableExecuter asyncExecuter)
         {
             _emailSender = emailSender;
             _templateRenderer = templateRenderer;
             _organizationMembershipsRepository = organizationMembershipsRepository;
             _userRepository = userRepository;
+            _asyncExecuter = asyncExecuter;
         }
         
-        public async Task NotifyAsync(
-            Organization organization,
-            Event @event)
+        public async Task NotifyAsync(Event @event)
         {
-            if (organization is null || @event is null)
+            if (@event is null)
             {
                 return;
             }
 
-            var organizationMemberQueryable = await _organizationMembershipsRepository.GetQueryableAsync();
-
-            var organizationMembers = await organizationMemberQueryable
-                .Where(x => x.OrganizationId == organization.Id)
-                .ToListAsync();
+            var organizationMembershipsQueryable = await _organizationMembershipsRepository.GetQueryableAsync();
+            
+            var membershipQuery = organizationMembershipsQueryable
+                .Where(x => x.OrganizationId == @event.OrganizationId);
+            
+            var organizationMembers = await _asyncExecuter.ToListAsync(membershipQuery);
 
             foreach (var member in organizationMembers)
             {
@@ -60,7 +60,6 @@ namespace EventHub.Events
                 var model = new
                 {
                     UserName = user.GetFullNameOrUsername(),
-                    OrganizationName = organization.Name,
                     Title = @event.Title,
                     StartTime = @event.StartTime,
                     EndTime = @event.EndTime,
