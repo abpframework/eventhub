@@ -10,5 +10,7 @@
 
         public const int MinDescriptionNameLength = 50;
         public const int MaxDescriptionNameLength = 1000;
+
+        public const int MaxProfilePictureFileSize = 1048576;
     }
 }

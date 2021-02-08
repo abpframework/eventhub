@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.BlobStoring;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Users;
 
@@ -14,13 +15,17 @@ namespace EventHub.Organizations
     {
         private readonly IRepository<Organization, Guid> _organizationRepository;
         private readonly OrganizationManager _organizationManager;
+        private readonly IBlobContainer<OrganizationProfilePictureContainer> _organizationBlobContainer;
 
         public OrganizationAppService(
             IRepository<Organization, Guid> organizationRepository,
-            OrganizationManager organizationManager)
+            OrganizationManager organizationManager,
+            IBlobContainer<OrganizationProfilePictureContainer> organizationBlobContainer
+            )
         {
             _organizationRepository = organizationRepository;
             _organizationManager = organizationManager;
+            _organizationBlobContainer = organizationBlobContainer;
         }
 
         [Authorize]
@@ -45,16 +50,27 @@ namespace EventHub.Organizations
                 nameof(Organization.DisplayName)
             );
 
+            var organizationDto = ObjectMapper.Map<List<Organization>, List<OrganizationInListDto>>(organizations);
+            
+            foreach (var organization in organizationDto)
+            {
+                organization.ProfilePictureContent = await GetProfilePictureAsync(organization.Id);
+            }
+
             return new PagedResultDto<OrganizationInListDto>(
                 organizationCount,
-                ObjectMapper.Map<List<Organization>, List<OrganizationInListDto>>(organizations)
+                organizationDto
             );
         }
 
         public async Task<OrganizationProfileDto> GetProfileAsync(string name)
         {
             var organization = await _organizationRepository.GetAsync(o => o.Name == name);
-            return ObjectMapper.Map<Organization, OrganizationProfileDto>(organization);
+            var organizationProfileDto = ObjectMapper.Map<Organization, OrganizationProfileDto>(organization);
+           
+            organizationProfileDto.ProfilePictureContent = await GetProfilePictureAsync(organizationProfileDto.Id);
+
+            return organizationProfileDto;
         }
 
         [Authorize]
@@ -64,9 +80,14 @@ namespace EventHub.Organizations
             var query = (await _organizationRepository.GetQueryableAsync()).Where(o => o.OwnerUserId == currentUserId);
             var organizations = await AsyncExecuter.ToListAsync(query);
 
-            return new ListResultDto<OrganizationInListDto>(
-                ObjectMapper.Map<List<Organization>, List<OrganizationInListDto>>(organizations)
-            );
+            var organizationDto = ObjectMapper.Map<List<Organization>, List<OrganizationInListDto>>(organizations);
+
+            foreach (var organization in organizationDto)
+            {
+                organization.ProfilePictureContent = await GetProfilePictureAsync(organization.Id);
+            }
+            
+            return new ListResultDto<OrganizationInListDto>(organizationDto);
         }
 
         public async Task<bool> IsOrganizationOwnerAsync(Guid organizationId)
@@ -95,6 +116,29 @@ namespace EventHub.Organizations
             organization.MediumUsername = input.MediumUsername;
             
             await _organizationRepository.UpdateAsync(organization);
+        }
+
+        [Authorize]
+        public async Task SaveProfilePictureAsync(Guid id, byte[] bytes)
+        {
+            var organization = await _organizationRepository.GetAsync(x => x.Id == id);
+            
+            if (organization.OwnerUserId != CurrentUser.GetId())
+            {
+                throw new BusinessException(EventHubErrorCodes.NotAuthorizedToUpdateOrganizationProfile)
+                    .WithData("Name", organization.DisplayName);
+            }
+            
+            var blobName = id.ToString();
+            
+            await _organizationBlobContainer.SaveAsync(blobName, bytes, overrideExisting: true);
+        }
+
+        private async Task<byte[]> GetProfilePictureAsync(Guid id)
+        {
+            var blobName = id.ToString();
+
+            return await _organizationBlobContainer.GetAllBytesOrNullAsync(blobName);
         }
     }
 }

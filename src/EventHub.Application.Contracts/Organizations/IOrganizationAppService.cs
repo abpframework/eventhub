@@ -18,5 +18,7 @@ namespace EventHub.Organizations
         Task<bool> IsOrganizationOwnerAsync(Guid organizationId);
 
         Task UpdateAsync(Guid id, UpdateOrganizationDto input);
+
+        Task SaveProfilePictureAsync(Guid id, byte[] bytes);
     }
 }

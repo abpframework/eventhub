@@ -2,7 +2,9 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using EventHub.Organizations;
+using EventHub.Web.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventHub.Web.Pages.Organizations
@@ -77,5 +79,17 @@ namespace EventHub.Web.Pages.Organizations
         public string InstagramUsername { get; set; }
 
         public string MediumUsername { get; set; }
+    }
+
+    public class OrganizationProfilePictureInput
+    {
+        [Required]
+        public Guid OrganizationId { get; set; }
+
+        [Required]
+        [DataType(DataType.Upload)]
+        [MaxFileSize(OrganizationConsts.MaxProfilePictureFileSize)] 
+        [AllowedExtensions(new string[] { ".jpg", ".png", ".jpeg" })]
+        public IFormFile ProfilePictureFile { get; set; }
     }
 }

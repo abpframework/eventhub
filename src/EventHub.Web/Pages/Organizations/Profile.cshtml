@@ -12,7 +12,14 @@
         <abp-row>
             <abp-column size-lg="_12">
                 <abp-card class="mb-3">
-                    <img abp-card-image="Top" src="https://picsum.photos/seed/@Model.Name/1920/400?blur=8" alt="@Model.Organization.DisplayName"/>
+                    @if (Model.Organization.ProfilePictureContent == null)
+                    {
+                        <img abp-card-image="Top" src="https://picsum.photos/seed/@Model.Name/1920/400?blur=8" alt="@Model.Organization.DisplayName"/>
+                    }
+                    else
+                    {
+                        <img abp-card-image="Top" src="@($"data:image/png;base64,{Convert.ToBase64String(Model.Organization.ProfilePictureContent)}")" alt="@Model.Organization.DisplayName"/>
+                    }
                     <abp-card-body>
                         <abp-card-title>
                             @if (Model.IsOrganizationOwner)
@@ -53,8 +60,8 @@
                                         </h5>
                                     </div>
                                 }
-                                @if (!Model.Organization.TwitterUsername.IsNullOrWhiteSpace() || !Model.Organization.GitHubUsername.IsNullOrWhiteSpace() || 
-                                     !Model.Organization.InstagramUsername.IsNullOrWhiteSpace() || !Model.Organization.FacebookUsername.IsNullOrWhiteSpace() || 
+                                @if (!Model.Organization.TwitterUsername.IsNullOrWhiteSpace() || !Model.Organization.GitHubUsername.IsNullOrWhiteSpace() ||
+                                     !Model.Organization.InstagramUsername.IsNullOrWhiteSpace() || !Model.Organization.FacebookUsername.IsNullOrWhiteSpace() ||
                                      !Model.Organization.MediumUsername.IsNullOrWhiteSpace())
                                 {
                                     <div class="profile-icons mt-4 text-center">
