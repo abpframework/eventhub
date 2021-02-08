@@ -28,6 +28,8 @@ namespace EventHub.Events
 
         public bool IsEmailSentToMembers { get; set; }
 
+        public string Link { get; set; }
+
         private Event()
         {
 

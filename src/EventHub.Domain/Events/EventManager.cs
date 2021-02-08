@@ -21,8 +21,6 @@ namespace EventHub.Events
             DateTime endTime,
             string description)
         {
-            //TODO: Check capacity and throw business exception!
-
             return new Event(
                 GuidGenerator.Create(),
                 organization.Id,

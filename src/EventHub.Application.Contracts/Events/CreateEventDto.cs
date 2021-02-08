@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using JetBrains.Annotations;
 
 namespace EventHub.Events
 {
@@ -23,6 +24,11 @@ namespace EventHub.Events
         public string Description { get; set; }
 
         public bool IsOnline { get; set; }
+        
+        [CanBeNull]
+        [StringLength(EventConsts.MaxLinkLength, MinimumLength = EventConsts.MinLinkLength)]
+        public string Link { get; set; }
 
+        [Range(0, int.MaxValue)]
         public int? Capacity { get; set; }
     }}

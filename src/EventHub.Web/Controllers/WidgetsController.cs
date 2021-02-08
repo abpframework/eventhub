@@ -1,5 +1,6 @@
 ﻿using System;
 using EventHub.Web.Pages.Events.Components.AttendeesArea;
+using EventHub.Web.Pages.Events.Components.LocationArea;
 using EventHub.Web.Pages.Organizations.Components.MembersArea;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
@@ -23,6 +24,15 @@ namespace EventHub.Web.Controllers
             return ViewComponent(
                 typeof(MembersAreaViewComponent),
                 new {organizationId}
+            );
+        }
+        
+        [HttpGet]
+        public IActionResult EventLocationArea(Guid eventId)
+        {
+            return ViewComponent(
+                typeof(LocationAreaViewComponent),
+                new {eventId}
             );
         }
     }

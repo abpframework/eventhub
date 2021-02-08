@@ -3,6 +3,7 @@
 @using EventHub.Localization
 @using EventHub.Web.Pages.Events
 @using EventHub.Web.Pages.Events.Components.AttendeesArea
+@using EventHub.Web.Pages.Events.Components.LocationArea
 @using EventHub.Web.Pages.Events.Components.RegistrationArea
 @using Microsoft.AspNetCore.Mvc.Localization
 @model EventHub.Web.Pages.Events.DetailPageModel
@@ -27,5 +28,6 @@
     <abp-column size-lg="_4" size-md="_6">
         @await Component.InvokeAsync(typeof(RegistrationAreaViewComponent), new {eventId = Model.Event.Id})
         @await Component.InvokeAsync(typeof(AttendeesAreaViewComponent), new {eventId = Model.Event.Id})
+        @await Component.InvokeAsync(typeof(LocationAreaViewComponent), new {eventId = Model.Event.Id})
     </abp-column>
 </abp-row>

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Events;
 using EventHub.Organizations;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
@@ -94,6 +95,10 @@ namespace EventHub.Web.Pages.Events
             public string Description { get; set; }
 
             public bool IsOnline { get; set; }
+            
+            [CanBeNull]
+            [StringLength(EventConsts.MaxLinkLength, MinimumLength = EventConsts.MinLinkLength)]
+            public string Link { get; set; }
 
             public int? Capacity { get; set; }
         }

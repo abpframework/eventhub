@@ -27,6 +27,8 @@ namespace EventHub
                 .Ignore(x => x.OrganizationDisplayName);
 
             CreateMap<AppUser, EventAttendeeDto>();
+
+            CreateMap<Event, EventLocationDto>();
         }
     }
 }

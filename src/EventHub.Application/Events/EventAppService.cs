@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using EventHub.Events.Registrations;
 using EventHub.Organizations;
+using EventHub.Users;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -13,17 +15,23 @@ namespace EventHub.Events
     public class EventAppService : EventHubAppService, IEventAppService
     {
         private readonly EventManager _eventManager;
+        private readonly EventRegistrationManager _eventRegistrationManager;
         private readonly IRepository<Event, Guid> _eventRepository;
         private readonly IRepository<Organization, Guid> _organizationRepository;
+        private readonly IRepository<AppUser, Guid> _userRepository;
 
         public EventAppService(
             EventManager eventManager,
+            EventRegistrationManager eventRegistrationManager,
             IRepository<Event, Guid> eventRepository,
-            IRepository<Organization, Guid> organizationRepository)
+            IRepository<Organization, Guid> organizationRepository, 
+            IRepository<AppUser, Guid> userRepository)
         {
             _eventManager = eventManager;
+            _eventRegistrationManager = eventRegistrationManager;
             _eventRepository = eventRepository;
             _organizationRepository = organizationRepository;
+            _userRepository = userRepository;
         }
 
         [Authorize]
@@ -46,6 +54,7 @@ namespace EventHub.Events
             );
 
             @event.IsOnline = input.IsOnline;
+            @event.Link = input.Link;
             @event.Capacity = input.Capacity;
 
             await _eventRepository.InsertAsync(@event);
@@ -116,6 +125,24 @@ namespace EventHub.Events
 
             dto.OrganizationName = organization.Name;
             dto.OrganizationDisplayName = organization.DisplayName;
+
+            return dto;
+        }
+
+        [Authorize]
+        public async Task<EventLocationDto> GetLocationAsync(Guid id)
+        {
+            var @event = await _eventRepository.GetAsync(id);
+            var user = await _userRepository.GetAsync(CurrentUser.GetId());
+
+            var dto = ObjectMapper.Map<Event, EventLocationDto>(@event);
+            
+            dto.IsRegistered = await _eventRegistrationManager.IsRegisteredAsync(@event, user);
+            
+            if (!dto.IsRegistered)
+            {
+                dto.Link = null;
+            }
 
             return dto;
         }
