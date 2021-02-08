@@ -28,7 +28,7 @@ namespace EventHub.Web.Helpers
             {
                 if (!_allowedExtensions.Contains(extension.ToLower()))
                 {
-                    return new ValidationResult("This file extension is not allowed. Allowed extensions: png, jpg, jpeg");
+                    return new ValidationResult("This file extension is not allowed. Allowed extensions: " + string.Join(",", _allowedExtensions));
                 }
             }
 

@@ -26,7 +26,7 @@ namespace EventHub.Web.Helpers
             {
                 if (file.Length > _maxFileSize)
                 {
-                    return new ValidationResult("Maximum file size: 1MB");
+                    return new ValidationResult("Maximum file size: " + _maxFileSize);
                 }
             }
 
