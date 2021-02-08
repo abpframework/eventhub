@@ -1,7 +1,7 @@
 $(function () {
     var l = abp.localization.getResource('EventHub');
 
-    var fileInput = document.getElementById("organization_id");
+    var fileInput = document.getElementById("organization-profile-picture");
     var file;
     
     fileInput.addEventListener('change', function () {
@@ -10,7 +10,7 @@ $(function () {
         file = fileInput.files[0];
         
         if(file == undefined) {
-            $("#choose-cover-image").html("Choose a cover image...");
+            $("#choose-cover-image").html(l("ChooseOrganizationProfilePicture"));
             return;
         }
         else {
@@ -22,18 +22,18 @@ $(function () {
 
         if (permittedExtensions.indexOf(fileExtension) === -1) {
             showModal = false;
-            abp.message.error('This Extension Is Not Allowed')
+            abp.message.error(l("OrganizationProfilePictureExtensionNotAllowed"))
                 .then(() =>  {
-                    $("#choose-cover-image").html("Choose a cover image...");
+                    $("#choose-cover-image").html(l("ChooseOrganizationProfilePicture"));
                     file = null;
                 });
         }
         //1mb
         else if(file.size > 1024 * 1024) {
             showModal = false;
-            abp.message.error('The File Is Too Large')
+            abp.message.error(l("OrganizationProfilePictureSizeExceedMessage"))
                 .then(() => {
-                    $("#choose-cover-image").html("Choose a cover image...");
+                    $("#choose-cover-image").html(l("ChooseOrganizationProfilePicture"));
                     file = null;
                 });
         }
@@ -73,10 +73,11 @@ $(function () {
     $("form#EditOrganizationProfileForm").submit(function (e) {
         e.preventDefault();
 
-        var id = document.getElementById("my-id").value;
+        var organizationId = document.getElementById("organization-id").value;
+        var organizationName = document.getElementById("organization-name").value;
 
         var formData = new FormData();
-        formData.append("OrganizationId", id);
+        formData.append("OrganizationId", organizationId);
         formData.append("ProfilePictureFile", file);
 
         $.ajax({
@@ -84,25 +85,25 @@ $(function () {
                 var xhr = new window.XMLHttpRequest();
                 xhr.upload.addEventListener("progress", function(evt) {
                     if (evt.lengthComputable) {
-                        var percentComplete = evt.loaded / evt.total;
-                        percentComplete = parseInt(percentComplete * 100);
-                        if(percentComplete !== 100){
-                            $('#btnSubmit').prop( "disabled", true );
+                        var percentage = evt.loaded / evt.total;
+                        percentage = parseInt(percentage * 100);
+                        if(percentage !== 100){
+                            $('#btnSubmit').prop("disabled", true);
                         }
                     }
                 }, false);
 
                 return xhr;
             },
-            url: `/api/organization`,
+            url: `/api/organization/save-profile-picture`,
             data: formData,
             type: 'POST',
             contentType: false,
             processData: false,
             success: function(data){
                 abp.message
-                    .success("Organization Profile Picture successfully added.")
-                    .then(data => window.location.href = "/");
+                    .success(l("OrganizationProfilePictureEditSuccessMessage"))
+                    .then(data => window.location.href = "/Organizations/" + organizationName);
             },
             error: function (data) {
                 abp.message.error(data.responseJSON.error.message);

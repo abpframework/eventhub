@@ -20,6 +20,7 @@ namespace EventHub.Web.Controllers
         
         [HttpPost]
         [Authorize]
+        [Route("save-profile-picture")]
         public async Task SaveProfilePicture([FromForm] OrganizationProfilePictureInput input)
         {
             byte[] profilePictureContent = new byte[] {};
