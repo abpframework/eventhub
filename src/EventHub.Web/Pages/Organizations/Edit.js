@@ -76,6 +76,10 @@ $(function () {
         var organizationId = document.getElementById("organization-id").value;
         var organizationName = document.getElementById("organization-name").value;
 
+        if(file === undefined) {
+            file = null;
+        }
+        
         var formData = new FormData();
         formData.append("OrganizationId", organizationId);
         formData.append("ProfilePictureFile", file);

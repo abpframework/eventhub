@@ -11,11 +11,11 @@
             <abp-card class="mb-3">
                 @if (organization.ProfilePictureContent == null)
                 {
-                    <img abp-card-image="Top" src="https://picsum.photos/seed/@organization.Name/400/160?blur=8" alt="@organization.DisplayName"/>
+                    <img abp-card-image="Top" style="max-height: 200px; min-height: 150px;" src="https://picsum.photos/seed/@organization.Name/400/160?blur=8" alt="@organization.DisplayName"/>
                 }
                 else
                 {
-                    <img abp-card-image="Top" src="@($"data:image/png;base64,{Convert.ToBase64String(organization.ProfilePictureContent)}")" alt="@organization.DisplayName"/>
+                    <img abp-card-image="Top" style="max-height: 200px; min-height: 150px;" src="@($"data:image/png;base64,{Convert.ToBase64String(organization.ProfilePictureContent)}")" alt="@organization.DisplayName"/>
                 }
                 <abp-card-body>
                     <abp-card-title>@organization.DisplayName</abp-card-title>

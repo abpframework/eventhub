@@ -86,7 +86,6 @@ namespace EventHub.Web.Pages.Organizations
         [Required]
         public Guid OrganizationId { get; set; }
 
-        [Required]
         [DataType(DataType.Upload)]
         [MaxFileSize(OrganizationConsts.MaxProfilePictureFileSize)] 
         [AllowedExtensions(new string[] { ".jpg", ".png", ".jpeg" })]

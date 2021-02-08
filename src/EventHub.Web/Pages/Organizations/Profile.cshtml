@@ -11,14 +11,14 @@
     <abp-column size-lg="_8" size-md="_6">
         <abp-row>
             <abp-column size-lg="_12">
-                <abp-card class="mb-3">
+                <abp-card class="mb-3" >
                     @if (Model.Organization.ProfilePictureContent == null)
                     {
-                        <img abp-card-image="Top" src="https://picsum.photos/seed/@Model.Name/1920/400?blur=8" alt="@Model.Organization.DisplayName"/>
+                        <img abp-card-image="Top" style="max-height: 300px; min-height: 200px;" src="https://picsum.photos/seed/@Model.Name/1920/400?blur=8" alt="@Model.Organization.DisplayName"/>
                     }
                     else
                     {
-                        <img abp-card-image="Top" src="@($"data:image/png;base64,{Convert.ToBase64String(Model.Organization.ProfilePictureContent)}")" alt="@Model.Organization.DisplayName"/>
+                        <img abp-card-image="Top" style="max-height: 300px; min-height: 200px;" src="@($"data:image/png;base64,{Convert.ToBase64String(Model.Organization.ProfilePictureContent)}")" alt="@Model.Organization.DisplayName"/>
                     }
                     <abp-card-body>
                         <abp-card-title>
