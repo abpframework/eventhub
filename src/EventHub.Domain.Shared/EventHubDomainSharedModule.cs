@@ -1,4 +1,4 @@
-﻿using EventHub.Localization;
+using EventHub.Localization;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Identity;
@@ -10,6 +10,7 @@ using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.BlobStoring.Database;
 
 namespace EventHub
 {
@@ -19,7 +20,8 @@ namespace EventHub
         typeof(AbpIdentityDomainSharedModule),
         typeof(AbpIdentityServerDomainSharedModule),
         typeof(AbpPermissionManagementDomainSharedModule),
-        typeof(AbpSettingManagementDomainSharedModule)
+        typeof(AbpSettingManagementDomainSharedModule),
+        typeof(BlobStoringDatabaseDomainSharedModule)
         )]
     public class EventHubDomainSharedModule : AbpModule
     {

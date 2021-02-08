@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
@@ -9,6 +9,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.IdentityServer;
 using Volo.Abp.SettingManagement;
+using Volo.Abp.BlobStoring.Database;
 
 namespace EventHub
 {
@@ -21,7 +22,8 @@ namespace EventHub
         typeof(AbpIdentityServerDomainModule),
         typeof(AbpPermissionManagementDomainIdentityServerModule),
         typeof(AbpSettingManagementDomainModule),
-        typeof(AbpEmailingModule)
+        typeof(AbpEmailingModule),
+        typeof(BlobStoringDatabaseDomainModule)
     )]
     public class EventHubDomainModule : AbpModule
     {
