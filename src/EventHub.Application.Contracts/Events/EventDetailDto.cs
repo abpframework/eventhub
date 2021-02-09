@@ -25,6 +25,8 @@ namespace EventHub.Events
 
         public string Url { get; set; }
 
+        public string Language { get; set; }
+
         public int? Capacity { get; set; }
     }
 }

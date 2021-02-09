@@ -4,15 +4,17 @@ using EventHub.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace EventHub.Migrations
 {
     [DbContext(typeof(EventHubMigrationsDbContext))]
-    partial class EventHubMigrationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210209072715_Added_Language_To_Event")]
+    partial class Added_Language_To_Event
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,7 +118,7 @@ namespace EventHub.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
 
-                    b.Property<string>("OnlineLink")
+                    b.Property<string>("Link")
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 

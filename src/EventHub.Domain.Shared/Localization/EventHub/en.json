@@ -47,6 +47,12 @@
     "EditOrganization": "Edit Organization",
     "PersonalWebsite": "Personal Website",
     "SocialMedia": "Social Media",
-    "EventHub:NotAuthorizedToUpdateOrganizationProfile": "You are not authorized to update the \"{OrganizationName}\" organization."
+    "EventHub:NotAuthorizedToUpdateOrganizationProfile": "You are not authorized to update the \"{OrganizationName}\" organization.",
+    "EventHub:CapacityOfEventFull": "\"{EventTitle}\" event capacity is full!",
+    "GoToEventAddress": "Go to Event Address",
+    "AttendeesCanSeeEventLocation": "Only attendees can see the event's {0}.",
+    "LoginToSeeLocation": "Login to see location",
+    "LocationHasNotSpecifiedYet": "Event {0} has not been specified yet.",
+    "Language": "Language"
   }
 }

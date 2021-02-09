@@ -4,15 +4,17 @@ using EventHub.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace EventHub.Migrations
 {
     [DbContext(typeof(EventHubMigrationsDbContext))]
-    partial class EventHubMigrationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210208073446_Added_Link_To_Event")]
+    partial class Added_Link_To_Event
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,24 +22,6 @@ namespace EventHub.Migrations
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.SqlServer)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.2");
-
-            modelBuilder.Entity("EventHub.Countries.Country", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name");
-
-                    b.ToTable("AppCountries");
-                });
 
             modelBuilder.Entity("EventHub.Events.Event", b =>
                 {
@@ -48,18 +32,11 @@ namespace EventHub.Migrations
                     b.Property<int?>("Capacity")
                         .HasColumnType("int");
 
-                    b.Property<string>("City")
-                        .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
-
-                    b.Property<Guid?>("CountryId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2")
@@ -104,10 +81,6 @@ namespace EventHub.Migrations
                     b.Property<bool>("IsRemindingEmailSent")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Language")
-                        .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)");
-
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("LastModificationTime");
@@ -116,7 +89,7 @@ namespace EventHub.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
 
-                    b.Property<string>("OnlineLink")
+                    b.Property<string>("Link")
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
@@ -142,8 +115,6 @@ namespace EventHub.Migrations
                         .HasColumnType("nvarchar(8)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CountryId");
 
                     b.HasIndex("StartTime");
 
@@ -2135,11 +2106,6 @@ namespace EventHub.Migrations
 
             modelBuilder.Entity("EventHub.Events.Event", b =>
                 {
-                    b.HasOne("EventHub.Countries.Country", null)
-                        .WithMany()
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
                     b.HasOne("EventHub.Organizations.Organization", null)
                         .WithMany()
                         .HasForeignKey("OrganizationId")
