@@ -51,6 +51,7 @@
     "EventHub:CapacityOfEventFull": "\"{EventTitle}\" event capacity is full!",
     "GoToEventAddress": "Go to Event Address",
     "AttendeesCanSeeEventLocation": "Only attendees can see the event's {0}.",
-    "LoginToSeeLocation": "Login to see location"
+    "LoginToSeeLocation": "Login to see location",
+    "LocationHasNotSpecifiedYet": "Event {0} has not been specified yet."
   }
 }

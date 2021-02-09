@@ -37,7 +37,7 @@ namespace EventHub.Web.Pages.Events.Components.LocationArea
             var model = new LocationAreaViewComponentModel
             {
                 EventId = eventId,
-                IsLoggedIn = isLoggedIn,
+                IsRegistered = false
             };
             
             if (isLoggedIn)
@@ -47,6 +47,8 @@ namespace EventHub.Web.Pages.Events.Components.LocationArea
                 model.IsOnline = @event.IsOnline;
                 model.IsRegistered = @event.IsRegistered;
                 model.Link = @event.Link;
+                model.Country = @event.Country;
+                model.City = @event.City;
             }
 
             return View("~/Pages/Events/Components/LocationArea/Default.cshtml", model);
@@ -55,10 +57,11 @@ namespace EventHub.Web.Pages.Events.Components.LocationArea
         public class LocationAreaViewComponentModel
         {
             public Guid EventId { get; set; }
-            public bool IsLoggedIn { get; set; }
             public bool IsRegistered { get; set; }
             public bool IsOnline { get; set; }
             public string Link { get; set; }
+            public string Country { get; set; }
+            public string City { get; set; }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EventHub.Countries;
 using EventHub.Events;
 using EventHub.Events.Registrations;
 using EventHub.Organizations;
@@ -28,7 +29,10 @@ namespace EventHub
 
             CreateMap<AppUser, EventAttendeeDto>();
 
-            CreateMap<Event, EventLocationDto>();
+            CreateMap<Event, EventLocationDto>()
+                .Ignore(x => x.Country);
+            
+            CreateMap<Country, CountryLookupDto>();
         }
     }
 }

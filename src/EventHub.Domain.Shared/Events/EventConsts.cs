@@ -14,5 +14,8 @@
         
         public const int MinLinkLength = 4;
         public const int MaxLinkLength = 2000;
+        
+        public const int MinCityLength = 2;
+        public const int MaxCityLength = 32;
     }
 }

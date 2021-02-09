@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using EventHub.Countries;
 using EventHub.Events;
 using EventHub.Events.Registrations;
 using EventHub.Organizations;
@@ -23,6 +24,7 @@ namespace EventHub
         private readonly EventManager _eventManager;
         private readonly EventRegistrationManager _eventRegistrationManager;
         private readonly IRepository<AppUser, Guid> _userRepository;
+        private readonly IRepository<Country, Guid> _countryRepository;
 
         public EventHubDataSeedContributor(
             IGuidGenerator guidGenerator,
@@ -32,8 +34,8 @@ namespace EventHub
             IRepository<Event, Guid> eventRepository,
             EventManager eventManager,
             EventRegistrationManager eventRegistrationManager,
-            IRepository<AppUser, Guid> userRepository
-        )
+            IRepository<AppUser, Guid> userRepository, 
+            IRepository<Country, Guid> countryRepository)
         {
             _guidGenerator = guidGenerator;
             _identityUserManager = identityUserManager;
@@ -43,6 +45,7 @@ namespace EventHub
             _eventManager = eventManager;
             _eventRegistrationManager = eventRegistrationManager;
             _userRepository = userRepository;
+            _countryRepository = countryRepository;
         }
 
         public async Task SeedAsync(DataSeedContext context)
@@ -52,6 +55,7 @@ namespace EventHub
             await SeedOrganizationsAsync();
             await SeedEventsAsync();
 #endif
+            await SeedCountriesAsync();
         }
 
         private async Task SeedUsersAsync()
@@ -350,5 +354,215 @@ namespace EventHub
             await _eventRegistrationManager.RegisterAsync(upcomingEvent15, userMark);
             await _eventRegistrationManager.RegisterAsync(upcomingEvent15, userSandra);
         }
+        
+        private async Task SeedCountriesAsync()
+        {
+            if (await _countryRepository.GetCountAsync() > 0)
+            {
+                return;
+            }
+
+            var countries = new List<Country>
+            {
+                new Country(Guid.NewGuid(), "Afghanistan"),
+                new Country(Guid.NewGuid(), "Albania"),
+                new Country(Guid.NewGuid(), "Algeria"),
+                new Country(Guid.NewGuid(), "Andorra"),
+                new Country(Guid.NewGuid(), "Angola"),
+                new Country(Guid.NewGuid(), "Antigua and Barbuda"),
+                new Country(Guid.NewGuid(), "Argentina"),
+                new Country(Guid.NewGuid(), "Armenia"),
+                new Country(Guid.NewGuid(), "Australia"),
+                new Country(Guid.NewGuid(), "Austria"),
+                new Country(Guid.NewGuid(), "Azerbaijan"),
+                new Country(Guid.NewGuid(), "Bahamas"),
+                new Country(Guid.NewGuid(), "Bahrain"),
+                new Country(Guid.NewGuid(), "Bangladesh"),
+                new Country(Guid.NewGuid(), "Barbados"),
+                new Country(Guid.NewGuid(), "Belarus"),
+                new Country(Guid.NewGuid(), "Belgium"),
+                new Country(Guid.NewGuid(), "Belize"),
+                new Country(Guid.NewGuid(), "Benin"),
+                new Country(Guid.NewGuid(), "Bhutan"),
+                new Country(Guid.NewGuid(), "Bolivia"),
+                new Country(Guid.NewGuid(), "Bosnia and Herzegovina"),
+                new Country(Guid.NewGuid(), "Botswana"),
+                new Country(Guid.NewGuid(), "Brazil"),
+                new Country(Guid.NewGuid(), "Brunei"),
+                new Country(Guid.NewGuid(), "Bulgaria"),
+                new Country(Guid.NewGuid(), "Burkina Faso"),
+                new Country(Guid.NewGuid(), "Burundi"),
+                new Country(Guid.NewGuid(), "Côte d'Ivoire"),
+                new Country(Guid.NewGuid(), "Cabo Verde"),
+                new Country(Guid.NewGuid(), "Cambodia"),
+                new Country(Guid.NewGuid(), "Cameroon"),
+                new Country(Guid.NewGuid(), "Canada"),
+                new Country(Guid.NewGuid(), "Central African Republic"),
+                new Country(Guid.NewGuid(), "Chad"),
+                new Country(Guid.NewGuid(), "Chile"),
+                new Country(Guid.NewGuid(), "China"),
+                new Country(Guid.NewGuid(), "Colombia"),
+                new Country(Guid.NewGuid(), "Comoros"),
+                new Country(Guid.NewGuid(), "Congo (Congo-Brazzaville)"),
+                new Country(Guid.NewGuid(), "Costa Rica"),
+                new Country(Guid.NewGuid(), "Croatia"),
+                new Country(Guid.NewGuid(), "Cuba"),
+                new Country(Guid.NewGuid(), "Cyprus"),
+                new Country(Guid.NewGuid(), "Czechia (Czech Republic)"),
+                new Country(Guid.NewGuid(), "Democratic Republic of the Congo"),
+                new Country(Guid.NewGuid(), "Denmark"),
+                new Country(Guid.NewGuid(), "Djibouti"),
+                new Country(Guid.NewGuid(), "Dominica"),
+                new Country(Guid.NewGuid(), "Dominican Republic"),
+                new Country(Guid.NewGuid(), "Ecuador"),
+                new Country(Guid.NewGuid(), "Egypt"),
+                new Country(Guid.NewGuid(), "El Salvador"),
+                new Country(Guid.NewGuid(), "Equatorial Guinea"),
+                new Country(Guid.NewGuid(), "Eritrea"),
+                new Country(Guid.NewGuid(), "Estonia"),
+                new Country(Guid.NewGuid(), "Eswatini (formerly Swaziland)"),
+                new Country(Guid.NewGuid(), "Ethiopia"),
+                new Country(Guid.NewGuid(), "Fiji"),
+                new Country(Guid.NewGuid(), "Finland"),
+                new Country(Guid.NewGuid(), "France"),
+                new Country(Guid.NewGuid(), "Gabon"),
+                new Country(Guid.NewGuid(), "Gambia"),
+                new Country(Guid.NewGuid(), "Georgia"),
+                new Country(Guid.NewGuid(), "Germany"),
+                new Country(Guid.NewGuid(), "Ghana"),
+                new Country(Guid.NewGuid(), "Greece"),
+                new Country(Guid.NewGuid(), "Grenada"),
+                new Country(Guid.NewGuid(), "Guatemala	"),
+                new Country(Guid.NewGuid(), "Guinea"),
+                new Country(Guid.NewGuid(), "Guinea-Bissau"),
+                new Country(Guid.NewGuid(), "Guyana"),
+                new Country(Guid.NewGuid(), "Haiti"),
+                new Country(Guid.NewGuid(), "Holy See"),
+                new Country(Guid.NewGuid(), "Honduras"),
+                new Country(Guid.NewGuid(), "Hungary"),
+                new Country(Guid.NewGuid(), "Iceland"),
+                new Country(Guid.NewGuid(), "India"),
+                new Country(Guid.NewGuid(), "Indonesia"),
+                new Country(Guid.NewGuid(), "Iran"),
+                new Country(Guid.NewGuid(), "Iraq"),
+                new Country(Guid.NewGuid(), "Ireland"),
+                new Country(Guid.NewGuid(), "Israel"),
+                new Country(Guid.NewGuid(), "Italy"),
+                new Country(Guid.NewGuid(), "Jamaica"),
+                new Country(Guid.NewGuid(), "Japan"),
+                new Country(Guid.NewGuid(), "Jordan"),
+                new Country(Guid.NewGuid(), "Kazakhstan"),
+                new Country(Guid.NewGuid(), "Kenya"),
+                new Country(Guid.NewGuid(), "Kiribati"),
+                new Country(Guid.NewGuid(), "Kuwait"),
+                new Country(Guid.NewGuid(), "Kyrgyzstan"),
+                new Country(Guid.NewGuid(), "Laos"),
+                new Country(Guid.NewGuid(), "Latvia"),
+                new Country(Guid.NewGuid(), "Lebanon"),
+                new Country(Guid.NewGuid(), "Lesotho"),
+                new Country(Guid.NewGuid(), "Liberia"),
+                new Country(Guid.NewGuid(), "Libya"),
+                new Country(Guid.NewGuid(), "Liechtenstein"),
+                new Country(Guid.NewGuid(), "Lithuania"),
+                new Country(Guid.NewGuid(), "Luxembourg"),
+                new Country(Guid.NewGuid(), "Madagascar"),
+                new Country(Guid.NewGuid(), "Malawi"),
+                new Country(Guid.NewGuid(), "Malaysia"),
+                new Country(Guid.NewGuid(), "Maldives"),
+                new Country(Guid.NewGuid(), "Mali"),
+                new Country(Guid.NewGuid(), "Malta"),
+                new Country(Guid.NewGuid(), "Marshall Islands"),
+                new Country(Guid.NewGuid(), "Mauritania"),
+                new Country(Guid.NewGuid(), "Mauritius"),
+                new Country(Guid.NewGuid(), "Mexico"),
+                new Country(Guid.NewGuid(), "Micronesia"),
+                new Country(Guid.NewGuid(), "Moldova"),
+                new Country(Guid.NewGuid(), "Monaco"),
+                new Country(Guid.NewGuid(), "Mongolia"),
+                new Country(Guid.NewGuid(), "Montenegro	"),
+                new Country(Guid.NewGuid(), "Morocco"),
+                new Country(Guid.NewGuid(), "Mozambique"),
+                new Country(Guid.NewGuid(), "Myanmar (formerly Burma)"),
+                new Country(Guid.NewGuid(), "Namibia"),
+                new Country(Guid.NewGuid(), "Nauru"),
+                new Country(Guid.NewGuid(), "Nepal"),
+                new Country(Guid.NewGuid(), "Netherlands"),
+                new Country(Guid.NewGuid(), "New Zealand"),
+                new Country(Guid.NewGuid(), "Nicaragua"),
+                new Country(Guid.NewGuid(), "Niger"),
+                new Country(Guid.NewGuid(), "Nigeria"),
+                new Country(Guid.NewGuid(), "North Korea"),
+                new Country(Guid.NewGuid(), "North Macedonia"),
+                new Country(Guid.NewGuid(), "Norway"),
+                new Country(Guid.NewGuid(), "Oman"),
+                new Country(Guid.NewGuid(), "Pakistan"),
+                new Country(Guid.NewGuid(), "Palau"),
+                new Country(Guid.NewGuid(), "Palestine State"),
+                new Country(Guid.NewGuid(), "Panama"),
+                new Country(Guid.NewGuid(), "Papua New Guinea"),
+                new Country(Guid.NewGuid(), "Paraguay"),
+                new Country(Guid.NewGuid(), "Peru"),
+                new Country(Guid.NewGuid(), "Philippines"),
+                new Country(Guid.NewGuid(), "Poland"),
+                new Country(Guid.NewGuid(), "Portugal"),
+                new Country(Guid.NewGuid(), "Qatar"),
+                new Country(Guid.NewGuid(), "Romania"),
+                new Country(Guid.NewGuid(), "Russia"),
+                new Country(Guid.NewGuid(), "Rwanda"),
+                new Country(Guid.NewGuid(), "Saint Kitts and Nevis"),
+                new Country(Guid.NewGuid(), "Saint Lucia"),
+                new Country(Guid.NewGuid(), "Saint Vincent and the Grenadines"),
+                new Country(Guid.NewGuid(), "Samoa"),
+                new Country(Guid.NewGuid(), "San Marino"),
+                new Country(Guid.NewGuid(), "Sao Tome and Principe"),
+                new Country(Guid.NewGuid(), "Saudi Arabia"),
+                new Country(Guid.NewGuid(), "Senegal"),
+                new Country(Guid.NewGuid(), "Serbia"),
+                new Country(Guid.NewGuid(), "Seychelles"),
+                new Country(Guid.NewGuid(), "Sierra Leone"),
+                new Country(Guid.NewGuid(), "Singapore"),
+                new Country(Guid.NewGuid(), "Slovakia"),
+                new Country(Guid.NewGuid(), "Slovenia"),
+                new Country(Guid.NewGuid(), "Solomon Islands"),
+                new Country(Guid.NewGuid(), "Somalia"),
+                new Country(Guid.NewGuid(), "South Africa"),
+                new Country(Guid.NewGuid(), "South Korea"),
+                new Country(Guid.NewGuid(), "South Sudan"),
+                new Country(Guid.NewGuid(), "Spain"),
+                new Country(Guid.NewGuid(), "Sri Lanka"),
+                new Country(Guid.NewGuid(), "Sudan"),
+                new Country(Guid.NewGuid(), "Suriname"),
+                new Country(Guid.NewGuid(), "Sweden"),
+                new Country(Guid.NewGuid(), "Switzerland"),
+                new Country(Guid.NewGuid(), "Syria"),
+                new Country(Guid.NewGuid(), "Tajikistan"),
+                new Country(Guid.NewGuid(), "Tanzania"),
+                new Country(Guid.NewGuid(), "Thailand"),
+                new Country(Guid.NewGuid(), "Timor-Leste"),
+                new Country(Guid.NewGuid(), "Togo"),
+                new Country(Guid.NewGuid(), "Tonga"),
+                new Country(Guid.NewGuid(), "Trinidad and Tobago"),
+                new Country(Guid.NewGuid(), "Tunisia"),
+                new Country(Guid.NewGuid(), "Turkey"),
+                new Country(Guid.NewGuid(), "Turkmenistan"),
+                new Country(Guid.NewGuid(), "Tuvalu"),
+                new Country(Guid.NewGuid(), "Uganda"),
+                new Country(Guid.NewGuid(), "Ukraine"),
+                new Country(Guid.NewGuid(), "United Arab Emirates"),
+                new Country(Guid.NewGuid(), "United Kingdom"),
+                new Country(Guid.NewGuid(), "United States of America"),
+                new Country(Guid.NewGuid(), "Uruguay"),
+                new Country(Guid.NewGuid(), "Uzbekistan"),
+                new Country(Guid.NewGuid(), "Vanuatu"),
+                new Country(Guid.NewGuid(), "Venezuela"),
+                new Country(Guid.NewGuid(), "Vietnam"),
+                new Country(Guid.NewGuid(), "Yemen"),
+                new Country(Guid.NewGuid(), "Zambia"),
+                new Country(Guid.NewGuid(), "Zimbabwe")
+            };
+
+            await _countryRepository.InsertManyAsync(countries);
+        }
+
     }
 }

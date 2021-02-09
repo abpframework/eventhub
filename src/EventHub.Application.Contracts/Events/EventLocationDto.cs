@@ -7,8 +7,13 @@ namespace EventHub.Events
     {
         public bool IsOnline { get; set; }
 
+        public bool IsRegistered { get; set; }
+
         public string Link { get; set; }
 
-        public bool IsRegistered { get; set; }
+        public string Country { get; set; }
+
+        public string City { get; set; }
+
     }
 }

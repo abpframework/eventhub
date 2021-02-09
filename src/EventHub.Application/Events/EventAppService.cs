@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EventHub.Countries;
 using EventHub.Events.Registrations;
 using EventHub.Organizations;
 using EventHub.Users;
@@ -19,19 +21,22 @@ namespace EventHub.Events
         private readonly IRepository<Event, Guid> _eventRepository;
         private readonly IRepository<Organization, Guid> _organizationRepository;
         private readonly IRepository<AppUser, Guid> _userRepository;
+        private readonly IRepository<Country, Guid> _countriesRepository;
 
         public EventAppService(
             EventManager eventManager,
             EventRegistrationManager eventRegistrationManager,
             IRepository<Event, Guid> eventRepository,
             IRepository<Organization, Guid> organizationRepository, 
-            IRepository<AppUser, Guid> userRepository)
+            IRepository<AppUser, Guid> userRepository, 
+            IRepository<Country, Guid> countriesRepository)
         {
             _eventManager = eventManager;
             _eventRegistrationManager = eventRegistrationManager;
             _eventRepository = eventRepository;
             _organizationRepository = organizationRepository;
             _userRepository = userRepository;
+            _countriesRepository = countriesRepository;
         }
 
         [Authorize]
@@ -53,8 +58,7 @@ namespace EventHub.Events
                 input.Description
             );
 
-            @event.IsOnline = input.IsOnline;
-            @event.Link = input.Link;
+            @event.SetLocation(input.IsOnline, input.Link, input.CountryId, input.City);
             @event.Capacity = input.Capacity;
 
             await _eventRepository.InsertAsync(@event);
@@ -142,9 +146,29 @@ namespace EventHub.Events
             if (!dto.IsRegistered)
             {
                 dto.Link = null;
+                dto.City = null;
+            }
+             
+            if (dto.IsRegistered && @event.CountryId.HasValue)
+            {
+                dto.Country = (await _countriesRepository.GetAsync(@event.CountryId.Value)).Name;
             }
 
             return dto;
+        }
+        
+        [Authorize]
+        public async Task<List<CountryLookupDto>> GetCountriesLookupAsync()
+        {
+            var countriesQueryable = await _countriesRepository.GetQueryableAsync();
+
+            var query = from country in countriesQueryable
+                orderby country.Name ascending
+                select country;
+
+            var countries = await AsyncExecuter.ToListAsync(query);
+
+            return ObjectMapper.Map<List<Country>, List<CountryLookupDto>>(countries);
         }
     }
 }

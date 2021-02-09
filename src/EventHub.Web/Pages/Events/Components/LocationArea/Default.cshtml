@@ -8,9 +8,26 @@
 
         @if (Model.IsRegistered)
         {
-            if (Model.IsOnline && Model.Link != null)
+            if (Model.IsOnline)
             {
-                <a href="@Model.Link">@L["GoToEventAddress"]</a>
+                if (Model.Link != null)
+                {
+                    <a href="@Model.Link">@L["GoToEventAddress"]</a>
+                }
+                else
+                {
+                    <p>@L["LocationHasNotSpecifiedYet", "URL"]</p>
+                }
+            }else
+            {
+                if (Model.Country != null && Model.City != null)
+                {
+                    <p>@Model.Country/@Model.City</p>
+                }
+                else
+                {
+                    <p>@L["LocationHasNotSpecifiedYet", "location"]</p>
+                }
             }
         }
         else

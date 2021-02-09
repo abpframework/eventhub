@@ -19,6 +19,7 @@ namespace EventHub.Web.Pages.Events
         public NewEventViewModel Event { get; set; }
 
         public List<SelectListItem> Organizations { get; private set; }
+        public List<SelectListItem> Countries { get; private set; }
 
         private readonly IEventAppService _eventAppService;
         private readonly IOrganizationAppService _organizationAppService;
@@ -40,6 +41,7 @@ namespace EventHub.Web.Pages.Events
             };
 
             await FillOrganizationsAsync();
+            await FillCountriesAsync();
         }
 
         private async Task FillOrganizationsAsync()
@@ -50,6 +52,19 @@ namespace EventHub.Web.Pages.Events
                 {
                     Value = organization.Id.ToString(),
                     Text = organization.DisplayName
+                }
+            ).ToList();
+        }
+        
+        private async Task FillCountriesAsync()
+        {
+            var result = await _eventAppService.GetCountriesLookupAsync();
+           
+            Countries = result.Select(
+                country => new SelectListItem
+                {
+                    Value = country.Id.ToString(),
+                    Text = country.Name
                 }
             ).ToList();
         }
@@ -69,6 +84,7 @@ namespace EventHub.Web.Pages.Events
             {
                 ShowAlert(exception);
                 await FillOrganizationsAsync();
+                await FillCountriesAsync();
                 return Page();
             }
         }
@@ -99,6 +115,14 @@ namespace EventHub.Web.Pages.Events
             [CanBeNull]
             [StringLength(EventConsts.MaxLinkLength, MinimumLength = EventConsts.MinLinkLength)]
             public string Link { get; set; }
+            
+            [SelectItems(nameof(Countries))]
+            [DisplayName("Country")]
+            public Guid? CountryId { get; set; }
+        
+            [CanBeNull]
+            [StringLength(EventConsts.MaxCityLength, MinimumLength = EventConsts.MinCityLength)]
+            public string City { get; set; }
 
             public int? Capacity { get; set; }
         }

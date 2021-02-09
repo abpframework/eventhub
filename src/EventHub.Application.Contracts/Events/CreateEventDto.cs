@@ -28,6 +28,12 @@ namespace EventHub.Events
         [CanBeNull]
         [StringLength(EventConsts.MaxLinkLength, MinimumLength = EventConsts.MinLinkLength)]
         public string Link { get; set; }
+        
+        public Guid? CountryId { get; set; }
+        
+        [CanBeNull]
+        [StringLength(EventConsts.MaxCityLength, MinimumLength = EventConsts.MinCityLength)]
+        public string City { get; set; }
 
         [Range(0, int.MaxValue)]
         public int? Capacity { get; set; }
