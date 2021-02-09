@@ -3,6 +3,11 @@
 @using EventHub.Localization
 @using Microsoft.AspNetCore.Mvc.Localization
 @model EventHub.Web.Pages.Events.NewPageModel
+
+@section scripts {
+        <abp-script src="/Pages/Events/New.js"/>
+}
+
 <h1>@L["NewEvent"]</h1>
 @if (!Model.Organizations.Any())
 {
@@ -20,6 +25,14 @@ else
         <abp-input asp-for="Event.EndTime" />
         <abp-input asp-for="Event.Description" />
         <abp-input asp-for="Event.IsOnline" />
+        <div id="event-link-group" style="display: none">
+            <abp-input asp-for="Event.OnlineLink" />
+        </div>
+        <div id="event-location-group">
+            <abp-select asp-for="Event.CountryId" />
+            <abp-input asp-for="Event.City" />
+        </div>
+        <abp-select asp-for="Event.Language" />
         <abp-input asp-for="Event.Capacity" />
         <abp-button size="Large" button-type="Primary" type="submit" text="@L["Submit"].Value" />
     </form>

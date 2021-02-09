@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EventHub.Countries;
+using EventHub.Events.Registrations;
 using EventHub.Organizations;
+using EventHub.Users;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -13,17 +17,26 @@ namespace EventHub.Events
     public class EventAppService : EventHubAppService, IEventAppService
     {
         private readonly EventManager _eventManager;
-        private readonly IRepository<Organization, Guid> _organizationRepository;
+        private readonly EventRegistrationManager _eventRegistrationManager;
         private readonly IRepository<Event, Guid> _eventRepository;
+        private readonly IRepository<Organization, Guid> _organizationRepository;
+        private readonly IRepository<AppUser, Guid> _userRepository;
+        private readonly IRepository<Country, Guid> _countriesRepository;
 
         public EventAppService(
             EventManager eventManager,
-            IRepository<Organization, Guid> organizationRepository,
-            IRepository<Event, Guid> eventRepository)
+            EventRegistrationManager eventRegistrationManager,
+            IRepository<Event, Guid> eventRepository,
+            IRepository<Organization, Guid> organizationRepository, 
+            IRepository<AppUser, Guid> userRepository, 
+            IRepository<Country, Guid> countriesRepository)
         {
             _eventManager = eventManager;
-            _organizationRepository = organizationRepository;
+            _eventRegistrationManager = eventRegistrationManager;
             _eventRepository = eventRepository;
+            _organizationRepository = organizationRepository;
+            _userRepository = userRepository;
+            _countriesRepository = countriesRepository;
         }
 
         [Authorize]
@@ -45,7 +58,8 @@ namespace EventHub.Events
                 input.Description
             );
 
-            @event.IsOnline = input.IsOnline;
+            @event.SetLocation(input.IsOnline, input.OnlineLink, input.CountryId, input.City);
+            @event.Language = input.Language;
             @event.Capacity = input.Capacity;
 
             await _eventRepository.InsertAsync(@event);
@@ -118,6 +132,44 @@ namespace EventHub.Events
             dto.OrganizationDisplayName = organization.DisplayName;
 
             return dto;
+        }
+
+        [Authorize]
+        public async Task<EventLocationDto> GetLocationAsync(Guid id)
+        {
+            var @event = await _eventRepository.GetAsync(id);
+            var user = await _userRepository.GetAsync(CurrentUser.GetId());
+
+            var dto = ObjectMapper.Map<Event, EventLocationDto>(@event);
+            
+            dto.IsRegistered = await _eventRegistrationManager.IsRegisteredAsync(@event, user);
+            
+            if (!dto.IsRegistered)
+            {
+                dto.OnlineLink = null;
+                dto.City = null;
+            }
+             
+            if (dto.IsRegistered && @event.CountryId.HasValue)
+            {
+                dto.Country = (await _countriesRepository.GetAsync(@event.CountryId.Value)).Name;
+            }
+
+            return dto;
+        }
+        
+        [Authorize]
+        public async Task<List<CountryLookupDto>> GetCountriesLookupAsync()
+        {
+            var countriesQueryable = await _countriesRepository.GetQueryableAsync();
+
+            var query = from country in countriesQueryable
+                orderby country.Name ascending
+                select country;
+
+            var countries = await AsyncExecuter.ToListAsync(query);
+
+            return ObjectMapper.Map<List<Country>, List<CountryLookupDto>>(countries);
         }
     }
 }

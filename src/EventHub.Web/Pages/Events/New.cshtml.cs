@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Events;
 using EventHub.Organizations;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using NUglify.Helpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 
 namespace EventHub.Web.Pages.Events
@@ -18,6 +21,8 @@ namespace EventHub.Web.Pages.Events
         public NewEventViewModel Event { get; set; }
 
         public List<SelectListItem> Organizations { get; private set; }
+        public List<SelectListItem> Countries { get; private set; }
+        public List<SelectListItem> Languages { get; private set; }
 
         private readonly IEventAppService _eventAppService;
         private readonly IOrganizationAppService _organizationAppService;
@@ -39,6 +44,8 @@ namespace EventHub.Web.Pages.Events
             };
 
             await FillOrganizationsAsync();
+            await FillCountriesAsync();
+            FillLanguages();
         }
 
         private async Task FillOrganizationsAsync()
@@ -52,7 +59,36 @@ namespace EventHub.Web.Pages.Events
                 }
             ).ToList();
         }
+        
+        private async Task FillCountriesAsync()
+        {
+            var result = await _eventAppService.GetCountriesLookupAsync();
+           
+            Countries = result.Select(
+                country => new SelectListItem
+                {
+                    Value = country.Id.ToString(),
+                    Text = country.Name
+                }
+            ).ToList();
+        }
 
+        private void FillLanguages()
+        {
+            var result = CultureInfo.GetCultures(CultureTypes.NeutralCultures)
+                .DistinctBy(x => x.EnglishName)
+                .OrderBy(x => x.EnglishName)
+                .ToList();
+            result.Remove(result.Single(x => x.TwoLetterISOLanguageName == "iv")); // Invariant Language
+
+            Languages = result.Select(
+                cultureInfo => new SelectListItem
+                {
+                    Value = cultureInfo.TwoLetterISOLanguageName,
+                    Text = cultureInfo.EnglishName
+                }
+            ).ToList();
+        }
         public async Task<IActionResult> OnPostAsync()
         {
             try
@@ -68,6 +104,8 @@ namespace EventHub.Web.Pages.Events
             {
                 ShowAlert(exception);
                 await FillOrganizationsAsync();
+                await FillCountriesAsync();
+                FillLanguages();
                 return Page();
             }
         }
@@ -94,7 +132,24 @@ namespace EventHub.Web.Pages.Events
             public string Description { get; set; }
 
             public bool IsOnline { get; set; }
+            
+            [CanBeNull]
+            [StringLength(EventConsts.MaxOnlineLinkLength, MinimumLength = EventConsts.MinOnlineLinkLength)]
+            public string OnlineLink { get; set; }
+            
+            [SelectItems(nameof(Countries))]
+            [DisplayName("Country")]
+            public Guid? CountryId { get; set; }
 
+            [SelectItems(nameof(Languages))]
+            [DisplayName("Language")]
+            public string Language { get; set; }
+        
+            [CanBeNull]
+            [StringLength(EventConsts.MaxCityLength, MinimumLength = EventConsts.MinCityLength)]
+            public string City { get; set; }
+
+            [Range(1, int.MaxValue)]
             public int? Capacity { get; set; }
         }
     }

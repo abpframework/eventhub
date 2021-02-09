@@ -1,8 +1,10 @@
 ﻿@page "/events/{url}"
 @inject IHtmlLocalizer<EventHubResource> L
+@using System.Globalization
 @using EventHub.Localization
 @using EventHub.Web.Pages.Events
 @using EventHub.Web.Pages.Events.Components.AttendeesArea
+@using EventHub.Web.Pages.Events.Components.LocationArea
 @using EventHub.Web.Pages.Events.Components.RegistrationArea
 @using Microsoft.AspNetCore.Mvc.Localization
 @model EventHub.Web.Pages.Events.DetailPageModel
@@ -17,6 +19,10 @@
                 <abp-card-subtitle>
                     @EventDateHelper.GetDateRangeText(Model.Event.StartTime, Model.Event.EndTime) <br/>
                     <span class="text-muted">@L["OrganizedBy"]</span> <a href="@Url.Page("/Organizations/Profile", new {name = Model.Event.OrganizationName})">@Model.Event.OrganizationDisplayName</a>
+                    @if (!Model.Event.Language.IsNullOrWhiteSpace())
+                    {
+                        <p>@L["Language"]: <span class="text-muted"> @CultureInfo.GetCultureInfo(Model.Event.Language).EnglishName</span></p>
+                    }
                 </abp-card-subtitle>
                 <abp-card-text class="mt-3">
                     @Model.Event.Description
@@ -27,5 +33,6 @@
     <abp-column size-lg="_4" size-md="_6">
         @await Component.InvokeAsync(typeof(RegistrationAreaViewComponent), new {eventId = Model.Event.Id})
         @await Component.InvokeAsync(typeof(AttendeesAreaViewComponent), new {eventId = Model.Event.Id})
+        @await Component.InvokeAsync(typeof(LocationAreaViewComponent), new {eventId = Model.Event.Id})
     </abp-column>
 </abp-row>

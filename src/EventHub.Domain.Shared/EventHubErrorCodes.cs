@@ -7,5 +7,6 @@
         public const string EventEndTimeCantBeEarlierThanStartTime = "EventHub:EventEndTimeCantBeEarlierThanStartTime";
         public const string CantRegisterOrUnregisterForAPastEvent = "EventHub:CantRegisterOrUnregisterForAPastEvent";
         public const string NotAuthorizedToUpdateOrganizationProfile = "EventHub:NotAuthorizedToUpdateOrganizationProfile";
+        public const string CapacityOfEventFull = "EventHub:CapacityOfEventFull";
     }
 }

@@ -1,4 +1,5 @@
-﻿using EventHub.Events;
+﻿using EventHub.Countries;
+using EventHub.Events;
 using EventHub.Events.Registrations;
 using EventHub.Organizations;
 using EventHub.Organizations.Memberships;
@@ -29,7 +30,8 @@ namespace EventHub.EntityFrameworkCore
         public DbSet<OrganizationMembership> OrganizationMemberships { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<EventRegistration> EventRegistrations { get; set; }
-
+        public DbSet<Country> Countries { get; set; }
+        
         public EventHubDbContext(DbContextOptions<EventHubDbContext> options)
             : base(options)
         {

@@ -20,9 +20,21 @@ namespace EventHub.Events
 
         public string Description { get; private set; }
 
-        public bool IsOnline { get; set; }
+        public bool IsOnline { get; private set; }
+        
+        public string OnlineLink { get; private set; }
+
+        public Guid? CountryId { get; private set; }
+        
+        public string City { get; private set; }
+
+        public string Language { get; set; }
 
         public int? Capacity { get; set; }
+
+        public bool IsRemindingEmailSent { get; set; }
+
+        public bool IsEmailSentToMembers { get; set; }
 
         private Event()
         {
@@ -68,6 +80,29 @@ namespace EventHub.Events
 
             StartTime = startTime;
             EndTime = endTime;
+            return this;
+        }
+
+        public Event SetLocation(bool isOnline, string onlineLink, Guid? countryId, string city)
+        {
+            IsOnline = isOnline;
+            
+            if (isOnline)
+            {
+                if (!onlineLink.IsNullOrWhiteSpace())
+                {
+                    OnlineLink = onlineLink;
+                }
+
+                return this;
+            }
+            
+            if (countryId.HasValue && !city.IsNullOrWhiteSpace())
+            {
+                CountryId = countryId;
+                City = city;
+            }
+
             return this;
         }
     }

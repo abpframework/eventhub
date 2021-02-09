@@ -1,0 +1,45 @@
+@using EventHub.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IHtmlLocalizer<EventHubResource> L
+@model EventHub.Web.Pages.Events.Components.LocationArea.LocationAreaViewComponent.LocationAreaViewComponentModel
+<abp-card class="mb-3" data-event-id="@Model.EventId">
+    <abp-card-body>
+        <abp-card-title>@L["Location"] <i class="fas fa-map-marker-alt"></i></abp-card-title>
+
+        @if (Model.IsRegistered)
+        {
+            if (Model.IsOnline)
+            {
+                if (Model.OnlineLink != null)
+                {
+                    <a href="@Model.OnlineLink">@L["GoToEventAddress"]</a>
+                }
+                else
+                {
+                    <p>@L["LocationHasNotSpecifiedYet", "URL"]</p>
+                }
+            }else
+            {
+                if (Model.Country != null && Model.City != null)
+                {
+                    <p>@Model.Country/@Model.City</p>
+                }
+                else
+                {
+                    <p>@L["LocationHasNotSpecifiedYet", "location"]</p>
+                }
+            }
+        }
+        else
+        {
+            if (Model.IsOnline)
+            {
+                <p>@L["AttendeesCanSeeEventLocation", "URL"]</p>
+            }
+            else
+            {
+                <p>@L["AttendeesCanSeeEventLocation", "location"]</p>
+            }
+        }
+    </abp-card-body>
+</abp-card>

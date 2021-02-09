@@ -1,4 +1,5 @@
-﻿using EventHub.Events;
+﻿using EventHub.Countries;
+using EventHub.Events;
 using EventHub.Events.Registrations;
 using EventHub.Organizations;
 using EventHub.Organizations.Memberships;
@@ -64,8 +65,13 @@ namespace EventHub.EntityFrameworkCore
                 b.Property(x => x.Description).IsRequired().HasMaxLength(EventConsts.MaxDescriptionLength);
                 b.Property(x => x.UrlCode).IsRequired().HasMaxLength(EventConsts.UrlCodeLength);
                 b.Property(x => x.Url).IsRequired().HasMaxLength(EventConsts.MaxUrlLength);
+                b.Property(x => x.OnlineLink).HasMaxLength(EventConsts.MaxOnlineLinkLength);
+                b.Property(x => x.City).HasMaxLength(EventConsts.MaxCityLength);
+                b.Property(x => x.Language).HasMaxLength(EventConsts.MaxLanguageLength);
 
                 b.HasOne<Organization>().WithMany().HasForeignKey(x => x.OrganizationId).IsRequired().OnDelete(DeleteBehavior.NoAction);
+               
+                b.HasOne<Country>().WithMany().HasForeignKey(x => x.CountryId).OnDelete(DeleteBehavior.NoAction);
 
                 b.HasIndex(x => new {x.OrganizationId, x.StartTime});
                 b.HasIndex(x => x.StartTime);
@@ -86,6 +92,17 @@ namespace EventHub.EntityFrameworkCore
                 }
 
                 b.HasIndex(x => new {x.EventId, x.UserId});
+            });
+            
+            builder.Entity<Country>(b =>
+            {
+                b.ToTable(EventHubConsts.DbTablePrefix + "Countries", EventHubConsts.DbSchema);
+
+                b.ConfigureByConvention();
+
+                b.Property(x => x.Name).IsRequired().HasMaxLength(CountryConsts.MaxNameLength);
+
+                b.HasIndex(x => new {x.Name});
             });
         }
     }
