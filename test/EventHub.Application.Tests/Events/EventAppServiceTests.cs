@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using EventHub.Events.Registrations;
+using JetBrains.Annotations;
 using Shouldly;
 using Volo.Abp;
 using Volo.Abp.Timing;
@@ -10,11 +12,13 @@ namespace EventHub.Events
     public class EventAppServiceTests : EventHubApplicationTestBase
     {
         private readonly IEventAppService _eventAppService;
+        private readonly IEventRegistrationAppService _eventRegistrationAppService;
         private readonly EventHubTestData _testData;
 
         public EventAppServiceTests()
         {
             _eventAppService = GetRequiredService<IEventAppService>();
+            _eventRegistrationAppService = GetRequiredService<IEventRegistrationAppService>();
             _testData = GetRequiredService<EventHubTestData>();
         }
 
@@ -29,7 +33,9 @@ namespace EventHub.Events
                     Description = "In this event, we will introduce the ABP Framework and explore the fundamental features.",
                     StartTime = DateTime.Now.AddDays(1),
                     EndTime = DateTime.Now.AddDays(1).AddHours(3),
-                    IsOnline = true
+                    IsOnline = true,
+                    Capacity = 2,
+                    Language = "en"
                 }
             );
 
@@ -38,6 +44,8 @@ namespace EventHub.Events
             eventDto.Description.ShouldBe("In this event, we will introduce the ABP Framework and explore the fundamental features.");
             eventDto.IsOnline.ShouldBeTrue();
             eventDto.UrlCode.ShouldNotBeNullOrWhiteSpace();
+            eventDto.Capacity.ShouldBe(2);
+            eventDto.Language.ShouldBe("en");
         }
 
         [Fact]
@@ -111,6 +119,43 @@ namespace EventHub.Events
             eventDetailDto.Id.ShouldBe(_testData.AbpBlazorPastEventId);
             eventDetailDto.Title.ShouldBe(_testData.AbpBlazorPastEventTitle);
             eventDetailDto.UrlCode.ShouldBe(_testData.AbpBlazorPastEventUrlCode);
+        }
+
+        [Fact]
+        public async Task Should_Get_Location()
+        {
+            var eventDto = await _eventAppService.CreateAsync(
+                new CreateEventDto
+                {
+                    OrganizationId = _testData.OrganizationVolosoftId,
+                    Title = "Introduction to the ABP Framework",
+                    Description = "In this event, we will introduce the ABP Framework and explore the fundamental features.",
+                    StartTime = DateTime.Now.AddDays(2),
+                    EndTime = DateTime.Now.AddDays(2).AddHours(3),
+                    IsOnline = true,
+                    Capacity = 2,
+                    Language = "en",
+                    City = "Istanbul",
+                    OnlineLink = "http://abp.io"
+                }
+            );
+
+            await _eventRegistrationAppService.RegisterAsync(eventDto.Id);
+            
+            var result = await _eventAppService.GetLocationAsync(eventDto.Id);
+
+            result.ShouldNotBeNull();
+            result.IsOnline.ShouldBeTrue();
+            result.OnlineLink.ShouldBe("http://abp.io");
+            result.City.ShouldBeNull();
+        }
+        [Fact]
+        public async Task Should_Get_All_Countries()
+        {
+            var result = await _eventAppService.GetCountriesLookupAsync();
+
+            result.ShouldNotBeNull();
+            result.Count.ShouldBeGreaterThan(1);
         }
     }
 }

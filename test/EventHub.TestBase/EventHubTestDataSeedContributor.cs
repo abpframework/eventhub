@@ -100,6 +100,9 @@ namespace EventHub
                     _clock.Now.ClearTime().AddDays(1).AddHours(17),
                     "This is a future event about the ABP Framework and Microservices that is set for tomorrow."
                 )
+                {
+                    Capacity = 1
+                }
             );
         }
     }

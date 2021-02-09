@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using NSubstitute;
 using Shouldly;
+using Volo.Abp;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Users;
 using Xunit;
@@ -12,19 +15,26 @@ namespace EventHub.Events.Registrations
         private readonly IEventRegistrationAppService _eventRegistrationAppService;
         private readonly IRepository<EventRegistration, Guid> _eventRegistrationRepository;
         private readonly EventHubTestData _testData;
-        private readonly ICurrentUser _currentUser;
+        private ICurrentUser _currentUser;
 
         public EventRegistrationAppServiceTests()
         {
             _eventRegistrationAppService = GetRequiredService<IEventRegistrationAppService>();
             _eventRegistrationRepository = GetRequiredService<IRepository<EventRegistration, Guid>>();
             _testData = GetRequiredService<EventHubTestData>();
-            _currentUser = GetRequiredService<ICurrentUser>();
+        }
+        
+        protected override void AfterAddApplication(IServiceCollection services)
+        {
+            _currentUser = Substitute.For<ICurrentUser>();
+            services.AddSingleton(_currentUser);
         }
 
         [Fact]
         public async Task Should_Register_To_An_Event()
         {
+            Login(_testData.UserAdminId);
+
             await _eventRegistrationAppService.RegisterAsync(
                 _testData.AbpMicroservicesFutureEventId
             );
@@ -38,6 +48,8 @@ namespace EventHub.Events.Registrations
         [Fact]
         public async Task Should_Unregister_From_An_Event()
         {
+            Login(_testData.UserAdminId);
+
             await WithUnitOfWorkAsync(async () =>
             {
                 await _eventRegistrationRepository.InsertAsync(
@@ -57,6 +69,27 @@ namespace EventHub.Events.Registrations
                 _testData.AbpMicroservicesFutureEventId,
                 _currentUser.GetId())
             ).ShouldBeNull();
+        }
+
+        [Fact]
+        public async Task Should_Not_Be_Registered_For_Capacity_Is_Full()
+        {
+            Login(_testData.UserAdminId);
+
+            await _eventRegistrationAppService.RegisterAsync(
+                _testData.AbpMicroservicesFutureEventId
+            );
+            
+            Login(_testData.UserJohnId);
+            
+            var exception = await Assert.ThrowsAsync<BusinessException>(async () =>
+            {
+                await _eventRegistrationAppService.RegisterAsync(
+                    _testData.AbpMicroservicesFutureEventId
+                );
+            });
+            
+            exception.Code.ShouldBe(EventHubErrorCodes.CapacityOfEventFull);
         }
 
         [Fact]
@@ -98,6 +131,12 @@ namespace EventHub.Events.Registrations
                     x => x.EventId == eventId && x.UserId == userId
                 );
             });
+        }
+        
+        private void Login(Guid userId)
+        {
+            _currentUser.Id.Returns(userId);
+            _currentUser.IsAuthenticated.Returns(true);
         }
     }
 }
