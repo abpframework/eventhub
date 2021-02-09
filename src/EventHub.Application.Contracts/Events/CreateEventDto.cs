@@ -34,7 +34,11 @@ namespace EventHub.Events
         [CanBeNull]
         [StringLength(EventConsts.MaxCityLength, MinimumLength = EventConsts.MinCityLength)]
         public string City { get; set; }
+        
+        [CanBeNull]
+        [StringLength(EventConsts.MaxLanguageLength, MinimumLength = EventConsts.MinLanguageLength)]
+        public string Language { get; set; }
 
-        [Range(0, int.MaxValue)]
+        [Range(1, int.MaxValue)]
         public int? Capacity { get; set; }
     }}

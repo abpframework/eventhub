@@ -67,6 +67,7 @@ namespace EventHub.EntityFrameworkCore
                 b.Property(x => x.Url).IsRequired().HasMaxLength(EventConsts.MaxUrlLength);
                 b.Property(x => x.Link).HasMaxLength(EventConsts.MaxLinkLength);
                 b.Property(x => x.City).HasMaxLength(EventConsts.MaxCityLength);
+                b.Property(x => x.Language).HasMaxLength(EventConsts.MaxLanguageLength);
 
                 b.HasOne<Organization>().WithMany().HasForeignKey(x => x.OrganizationId).IsRequired().OnDelete(DeleteBehavior.NoAction);
                

@@ -17,5 +17,8 @@
         
         public const int MinCityLength = 2;
         public const int MaxCityLength = 32;
+        
+        public const int MinLanguageLength = 2;
+        public const int MaxLanguageLength = 16;
     }
 }

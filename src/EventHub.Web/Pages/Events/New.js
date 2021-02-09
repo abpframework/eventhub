@@ -1,5 +1,6 @@
 $(function () {
     $("#Event_CountryId").prepend("<option value='' selected='selected'></option>");
+    $("#Event_Language").prepend("<option value='' selected='selected'></option>");
 
     $('#Event_IsOnline').click(function() {
         if ($(this).is(':checked')) {

@@ -28,12 +28,14 @@ namespace EventHub.Events
         
         public string City { get; private set; }
 
+        public string Language { get; set; }
+
         public int? Capacity { get; set; }
 
         public bool IsRemindingEmailSent { get; set; }
 
         public bool IsEmailSentToMembers { get; set; }
-        
+
         private Event()
         {
 

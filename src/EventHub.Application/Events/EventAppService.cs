@@ -59,6 +59,7 @@ namespace EventHub.Events
             );
 
             @event.SetLocation(input.IsOnline, input.Link, input.CountryId, input.City);
+            @event.Language = input.Language;
             @event.Capacity = input.Capacity;
 
             await _eventRepository.InsertAsync(@event);

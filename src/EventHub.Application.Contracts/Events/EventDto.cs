@@ -21,6 +21,8 @@ namespace EventHub.Events
 
         public bool IsOnline { get; set; }
 
+        public string Language { get; set; }
+
         public int? Capacity { get; set; }
     }
 }
