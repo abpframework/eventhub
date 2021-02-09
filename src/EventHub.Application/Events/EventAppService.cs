@@ -13,17 +13,17 @@ namespace EventHub.Events
     public class EventAppService : EventHubAppService, IEventAppService
     {
         private readonly EventManager _eventManager;
-        private readonly IRepository<Organization, Guid> _organizationRepository;
         private readonly IRepository<Event, Guid> _eventRepository;
+        private readonly IRepository<Organization, Guid> _organizationRepository;
 
         public EventAppService(
             EventManager eventManager,
-            IRepository<Organization, Guid> organizationRepository,
-            IRepository<Event, Guid> eventRepository)
+            IRepository<Event, Guid> eventRepository,
+            IRepository<Organization, Guid> organizationRepository)
         {
             _eventManager = eventManager;
-            _organizationRepository = organizationRepository;
             _eventRepository = eventRepository;
+            _organizationRepository = organizationRepository;
         }
 
         [Authorize]

@@ -59,5 +59,20 @@ namespace EventHub.Users
         {
             
         }
+        
+        public string GetFullNameOrUsername()
+        {
+            if (!string.IsNullOrWhiteSpace(Name) && !string.IsNullOrWhiteSpace(Surname))
+            {
+                return Name + " " + Surname;
+            }
+
+            if (!string.IsNullOrWhiteSpace(Name))
+            {
+                return Name;
+            }
+
+            return UserName;
+        }
     }
 }
