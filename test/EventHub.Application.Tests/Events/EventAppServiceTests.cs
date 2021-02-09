@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using EventHub.Events.Registrations;
-using JetBrains.Annotations;
 using Shouldly;
 using Volo.Abp;
 using Volo.Abp.Timing;
@@ -149,6 +148,7 @@ namespace EventHub.Events
             result.OnlineLink.ShouldBe("http://abp.io");
             result.City.ShouldBeNull();
         }
+        
         [Fact]
         public async Task Should_Get_All_Countries()
         {
