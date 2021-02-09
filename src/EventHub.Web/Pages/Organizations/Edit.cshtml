@@ -4,7 +4,59 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @model EventHub.Web.Pages.Organizations.EditPageModel
 
+@section scripts {
+    <abp-script-bundle>
+        <abp-script src="/Pages/Organizations/Edit.js"/>
+    </abp-script-bundle>
+}
+
 <div class="container mb-4">
     <h1>@L["EditOrganization"]</h1>
-    <abp-dynamic-form abp-model="Organization" submit-button="true"/>
+
+    <ul class="nav nav-pills mt-3 mb-3" id="pills-tab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="profile-info-tab" data-toggle="pill" href="#profile-info" role="tab" aria-controls="profile-info" aria-selected="true">@L["ProfileInfo"]</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="profile-picture-tab" data-toggle="pill" href="#profile-picture" role="tab" aria-controls="profile-picture" aria-selected="false">@L["ProfilePicture"]</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="profile-info" role="tabpanel" aria-labelledby="profile-info-tab">
+            <abp-dynamic-form abp-model="Organization" submit-button="true"/>
+        </div>
+        <div class="tab-pane fade" id="profile-picture" role="tabpanel" aria-labelledby="profile-picture-tab">
+            <form method="post" id="EditOrganizationProfileForm" enctype="multipart/form-data">
+                <input type="hidden" id="organization-id" value="@Model.Organization.Id"/>
+                <input type="hidden" id="organization-name" value="@Model.Name" />
+                <abp-row>
+                    <abp-column size="_12" v-align="Center">
+                        <div class="form-group">
+                            <label>@L["ProfilePicture"]</label>
+                            <div class="custom-file">
+                                <input id="organization-profile-picture" type="file" class="custom-file-input form-control">
+                                <label id="choose-cover-image" class="custom-file-label" for="customFile">@L["ChooseOrganizationProfilePicture"]</label>
+                                <small id="Organization_ProfilePictureInfoText" class="form-text text-muted mt-2">@L["OrganizationProfilePictureInfo"]</small>
+                            </div>
+                        </div>
+                    </abp-column>
+                </abp-row>
+                <button id="btnSubmit" type="submit" class="btn btn-primary btn-block">
+                    @L["Submit"]
+                </button>
+            </form>
+            <div class="modal fade" id="picturePreviewModal" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <img class="img-fluid" id="img-upload" alt=""/>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary btn-block" data-dismiss="modal">@L["Close"]</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

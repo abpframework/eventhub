@@ -111,7 +111,7 @@ namespace EventHub.Organizations
         {
             Login(_testData.UserAdminId);
 
-            var exception = await Assert.ThrowsAsync<AbpAuthorizationException>(() =>
+            var exception = await Assert.ThrowsAsync<BusinessException>(() =>
                 _organizationAppService.UpdateAsync(
                     _testData.OrganizationDotnetEuropeId,
                     new UpdateOrganizationDto

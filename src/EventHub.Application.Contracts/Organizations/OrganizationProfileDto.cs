@@ -22,5 +22,7 @@ namespace EventHub.Organizations
         public string InstagramUsername { get; set; }
 
         public string MediumUsername { get; set; }
+        
+        public byte[] ProfilePictureContent { get; set; }
     }
 }
