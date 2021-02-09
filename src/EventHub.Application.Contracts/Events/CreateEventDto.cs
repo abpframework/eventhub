@@ -26,8 +26,8 @@ namespace EventHub.Events
         public bool IsOnline { get; set; }
         
         [CanBeNull]
-        [StringLength(EventConsts.MaxLinkLength, MinimumLength = EventConsts.MinLinkLength)]
-        public string Link { get; set; }
+        [StringLength(EventConsts.MaxOnlineLinkLength, MinimumLength = EventConsts.MinOnlineLinkLength)]
+        public string OnlineLink { get; set; }
         
         public Guid? CountryId { get; set; }
         

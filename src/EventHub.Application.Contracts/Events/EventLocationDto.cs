@@ -9,7 +9,7 @@ namespace EventHub.Events
 
         public bool IsRegistered { get; set; }
 
-        public string Link { get; set; }
+        public string OnlineLink { get; set; }
 
         public string Country { get; set; }
 

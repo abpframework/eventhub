@@ -65,7 +65,7 @@ namespace EventHub.EntityFrameworkCore
                 b.Property(x => x.Description).IsRequired().HasMaxLength(EventConsts.MaxDescriptionLength);
                 b.Property(x => x.UrlCode).IsRequired().HasMaxLength(EventConsts.UrlCodeLength);
                 b.Property(x => x.Url).IsRequired().HasMaxLength(EventConsts.MaxUrlLength);
-                b.Property(x => x.Link).HasMaxLength(EventConsts.MaxLinkLength);
+                b.Property(x => x.OnlineLink).HasMaxLength(EventConsts.MaxOnlineLinkLength);
                 b.Property(x => x.City).HasMaxLength(EventConsts.MaxCityLength);
                 b.Property(x => x.Language).HasMaxLength(EventConsts.MaxLanguageLength);
 

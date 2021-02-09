@@ -46,7 +46,7 @@ namespace EventHub.Web.Pages.Events.Components.LocationArea
                 
                 model.IsOnline = @event.IsOnline;
                 model.IsRegistered = @event.IsRegistered;
-                model.Link = @event.Link;
+                model.OnlineLink = @event.OnlineLink;
                 model.Country = @event.Country;
                 model.City = @event.City;
             }
@@ -59,7 +59,7 @@ namespace EventHub.Web.Pages.Events.Components.LocationArea
             public Guid EventId { get; set; }
             public bool IsRegistered { get; set; }
             public bool IsOnline { get; set; }
-            public string Link { get; set; }
+            public string OnlineLink { get; set; }
             public string Country { get; set; }
             public string City { get; set; }
         }

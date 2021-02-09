@@ -58,7 +58,7 @@ namespace EventHub.Events
                 input.Description
             );
 
-            @event.SetLocation(input.IsOnline, input.Link, input.CountryId, input.City);
+            @event.SetLocation(input.IsOnline, input.OnlineLink, input.CountryId, input.City);
             @event.Language = input.Language;
             @event.Capacity = input.Capacity;
 
@@ -146,7 +146,7 @@ namespace EventHub.Events
             
             if (!dto.IsRegistered)
             {
-                dto.Link = null;
+                dto.OnlineLink = null;
                 dto.City = null;
             }
              

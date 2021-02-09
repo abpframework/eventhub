@@ -22,7 +22,7 @@ namespace EventHub.Events
 
         public bool IsOnline { get; private set; }
         
-        public string Link { get; private set; }
+        public string OnlineLink { get; private set; }
 
         public Guid? CountryId { get; private set; }
         
@@ -83,15 +83,15 @@ namespace EventHub.Events
             return this;
         }
 
-        public Event SetLocation(bool isOnline, string link, Guid? countryId, string city)
+        public Event SetLocation(bool isOnline, string onlineLink, Guid? countryId, string city)
         {
             IsOnline = isOnline;
             
             if (isOnline)
             {
-                if (!link.IsNullOrWhiteSpace())
+                if (!onlineLink.IsNullOrWhiteSpace())
                 {
-                    Link = link;
+                    OnlineLink = onlineLink;
                 }
 
                 return this;
