@@ -8,6 +8,7 @@
     <abp-script src="/Pages/Events/Edit.js"/>
 }
 
+<input type="hidden" value="@Model.Url" id="event-detail-url"/>
 <div class="container mb-4">
     <h1>Edit Event</h1>
 
@@ -43,7 +44,19 @@
             </form>
         </div>
         <div class="tab-pane fade" id="event-timing" role="tabpanel" aria-labelledby="event-timing-tab">
-            //TODO
+            <div class="alert alert-info" role="alert">
+                Note: You can not change the event timing more than two times.
+            </div>
+            <div class="alert alert-warning mt-3" role="alert">
+                Note: If you change the event times, an informational email will be sent to all attendees
+            </div>
+            <form method="post" id="Event_Timing_Form">
+                <abp-input asp-for="EventTiming.Id"/>
+                <abp-input asp-for="EventTiming.StartTime"/>
+                <abp-input asp-for="EventTiming.EndTime"/>
+
+                <abp-button size="Large" button-type="Primary" type="submit" text="@L["Submit"].Value"/>
+            </form>
         </div>
     </div>
 </div>

@@ -20,5 +20,7 @@
         
         public const int MinLanguageLength = 2;
         public const int MaxLanguageLength = 16;
+
+        public const int MaxTimingChangeCountForUser = 2;
     }
 }

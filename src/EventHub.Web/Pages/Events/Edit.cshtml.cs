@@ -22,6 +22,9 @@ namespace EventHub.Web.Pages.Events
         [BindProperty] 
         public EditEventViewModel Event { get; set; }
         
+        [BindProperty] 
+        public EditEventTimingViewModel EventTiming { get; set; }
+        
         public List<SelectListItem> Countries { get; private set; }
         public List<SelectListItem> Languages { get; private set; }
 
@@ -38,6 +41,7 @@ namespace EventHub.Web.Pages.Events
 
             var eventDetailDto = await _eventAppService.GetByUrlCodeAsync(urlCode);
             Event = ObjectMapper.Map<EventDetailDto, EditEventViewModel>(eventDetailDto);
+            EventTiming = ObjectMapper.Map<EventDetailDto, EditEventTimingViewModel>(eventDetailDto);
             
             FillLanguages();
             await FillCountriesAsync();
@@ -142,6 +146,16 @@ namespace EventHub.Web.Pages.Events
 
             [Range(1, int.MaxValue)]
             public int? Capacity { get; set; }
+        }
+
+        public class EditEventTimingViewModel
+        {
+            [HiddenInput]
+            public Guid Id { get; set; }
+            
+            public DateTime StartTime { get; set; }
+
+            public DateTime EndTime { get; set; }
         }
     }
 }

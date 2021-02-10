@@ -16,4 +16,33 @@ $(function () {
             $("#event-location-group").show();
         }
     });
+    
+    $("#Event_Timing_Form").submit(function (e) {
+        e.preventDefault();
+        
+        if(!$(this).valid()) {
+            return false;
+        }
+        
+        var data = {
+            id: $('#EventTiming_Id').val(),
+            startTime: $('#EventTiming_StartTime').val(),
+            endTime: $('#EventTiming_EndTime').val()
+        };
+        
+        $.ajax({
+            url: abp.appPath + `api/event/update-timing`,
+            type: 'POST',
+            dataType: 'json',
+            data: data,
+            success: function (data) {
+                abp.message
+                    .success("Timing changed successfully!") //TODO: localize it!
+                    .then(data => window.location.href = "/events/" + $("#event-detail-url").val());
+            },
+            error: function (data) {
+                abp.message.error(data.responseJSON.error.message);
+            }
+        });
+    })
 });

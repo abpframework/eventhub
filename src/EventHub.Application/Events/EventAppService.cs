@@ -205,5 +205,21 @@ namespace EventHub.Events
 
             await _eventRepository.UpdateAsync(updatedEvent);
         }
+
+        public async Task UpdateEventTimingAsync(Guid id, UpdateEventTimingDto input)
+        {
+            var @event = await _eventRepository.GetAsync(id);
+
+            if (@event.TimingChangeCount >= EventConsts.MaxTimingChangeCountForUser)
+            {
+                throw new BusinessException(EventHubErrorCodes.CantChangeEventTiming)
+                    .WithData("MaxTimingChangeLimit", EventConsts.MaxTimingChangeCountForUser);
+            }
+
+            @event.SetTime(input.StartTime, input.EndTime);
+            @event.TimingChangeCount = @event.TimingChangeCount + 1;
+
+            await _eventRepository.UpdateAsync(@event);
+        }
     }
 }

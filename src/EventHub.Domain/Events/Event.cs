@@ -35,7 +35,9 @@ namespace EventHub.Events
         public bool IsRemindingEmailSent { get; set; }
 
         public bool IsEmailSentToMembers { get; set; }
-
+        
+        public int TimingChangeCount  { get; set; }
+        
         private Event()
         {
 
