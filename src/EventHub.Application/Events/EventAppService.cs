@@ -171,5 +171,39 @@ namespace EventHub.Events
 
             return ObjectMapper.Map<List<Country>, List<CountryLookupDto>>(countries);
         }
+
+        public async Task<bool> IsEventOwnerAsync(Guid id)
+        {
+            var @event = await _eventRepository.GetAsync(id);
+            var organization = await _organizationRepository.GetAsync(@event.OrganizationId);
+
+            return CurrentUser.Id.HasValue && organization.OwnerUserId == CurrentUser.GetId();
+        }
+
+        public async Task UpdateAsync(Guid id, UpdateEventDto input)
+        {
+            var @event = await _eventRepository.GetAsync(id);
+            var organization = await _organizationRepository.GetAsync(@event.OrganizationId);
+
+            if (organization.OwnerUserId != CurrentUser.GetId())
+            {
+                throw new BusinessException(EventHubErrorCodes.NotAuthorizedToUpdateEventProfile)
+                    .WithData("EventTitle", @event.Title);
+            }
+            
+            var updatedEvent = await _eventManager.UpdateAsync(
+                id,
+                input.CountryId,
+                input.Title,
+                input.Description,
+                input.Language,
+                input.IsOnline,
+                input.OnlineLink,
+                input.City,
+                input.Capacity
+            );
+
+            await _eventRepository.UpdateAsync(updatedEvent);
+        }
     }
 }

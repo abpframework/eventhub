@@ -1,0 +1,49 @@
+@page "/event/edit/{url}"
+@inject IHtmlLocalizer<EventHubResource> L
+@using EventHub.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@model EventHub.Web.Pages.Events.EditPageModel
+
+@section scripts {
+    <abp-script src="/Pages/Events/Edit.js"/>
+}
+
+<div class="container mb-4">
+    <h1>Edit Event</h1>
+
+    <ul class="nav nav-pills mt-3 mb-3" id="pills-tab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="event-info-tab" data-toggle="pill" href="#event-info" role="tab" aria-controls="event-info" aria-selected="true">Event Information</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="event-timing-tab" data-toggle="pill" href="#event-timing" role="tab" aria-controls="event-timing" aria-selected="false">Event Timing</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="event-info" role="tabpanel" aria-labelledby="event-info-tab">
+            <form method="post">
+                <abp-input asp-for="Event.Id" />
+                <abp-input asp-for="Event.Title"/>
+                <abp-input asp-for="Event.Description"/>
+                <abp-input asp-for="Event.IsOnline"/>
+
+                <div id="event-link-group" style="display: none">
+                    <abp-input asp-for="Event.OnlineLink"/>
+                </div>
+
+                <div id="event-location-group">
+                    <abp-select asp-for="Event.CountryId"/>
+                    <abp-input asp-for="Event.City"/>
+                </div>
+
+                <abp-select asp-for="Event.Language"/>
+                <abp-input asp-for="Event.Capacity"/>
+
+                <abp-button size="Large" button-type="Primary" type="submit" text="@L["Submit"].Value"/>
+            </form>
+        </div>
+        <div class="tab-pane fade" id="event-timing" role="tabpanel" aria-labelledby="event-timing-tab">
+            //TODO
+        </div>
+    </div>
+</div>

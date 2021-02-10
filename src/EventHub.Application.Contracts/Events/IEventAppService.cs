@@ -17,5 +17,9 @@ namespace EventHub.Events
         Task<EventLocationDto> GetLocationAsync(Guid id);
 
         Task<List<CountryLookupDto>> GetCountriesLookupAsync();
+
+        Task<bool> IsEventOwnerAsync(Guid id);
+
+        Task UpdateAsync(Guid id, UpdateEventDto input);
     }
 }

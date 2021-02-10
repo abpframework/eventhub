@@ -61,6 +61,8 @@
     "AttendeesCanSeeEventLocation": "Only attendees can see the event's {0}.",
     "LoginToSeeLocation": "Login to see location",
     "LocationHasNotSpecifiedYet": "Event {0} has not been specified yet.",
-    "Language": "Language"
+    "Language": "Language",
+    "EventHub:CapacityCantBeLowerThanRegisteredUserCount": "Capacity can not be lower than the currently registered user count.",
+    "EventHub:NotAuthorizedToUpdateEventProfile": "You are not authorized to update the \"{EventTitle}\" event."
   }
 }
