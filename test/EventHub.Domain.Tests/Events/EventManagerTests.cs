@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using EventHub.Events.Registrations;
 using EventHub.Organizations;
+using NSubstitute;
 using Shouldly;
 using Volo.Abp.Domain.Repositories;
 using Xunit;
@@ -12,12 +14,14 @@ namespace EventHub.Events
         private readonly EventHubTestData _testData;
         private readonly EventManager _eventManager;
         private readonly IRepository<Organization, Guid> _organizationRepository;
+        private readonly IRepository<Event, Guid> _eventRepository;
 
         public EventManagerTests()
         {
             _testData = GetRequiredService<EventHubTestData>();
             _eventManager = GetRequiredService<EventManager>();
             _organizationRepository = GetRequiredService<IRepository<Organization, Guid>>();
+            _eventRepository = GetRequiredService<IRepository<Event, Guid>>();
         }
 
         [Fact]
@@ -39,6 +43,30 @@ namespace EventHub.Events
 
                 @event.OrganizationId.ShouldBe(volosoftOrganization.Id);
                 @event.Title.ShouldBe("Introduction to the ABP Framework");
+            });
+        }
+
+        [Fact]
+        public async Task Should_Update_The_Event()
+        {
+            await WithUnitOfWorkAsync(async () =>
+            {
+                var @event = await _eventRepository.GetAsync(_testData.AbpMicroservicesFutureEventId);
+
+                var updatedEvent = await _eventManager.UpdateAsync(
+                    @event.Id,
+                    null,
+                    "Updated_Microservice_Event_Title",
+                    "Updated_Microservice_Event_Description" + @event.Description,
+                    "en",
+                    true,
+                    "online_link",
+                    null,
+                    null
+                );
+                
+                @event.Title.ShouldBe(updatedEvent.Title);
+                @event.Description.ShouldBe(updatedEvent.Description);
             });
         }
     }
