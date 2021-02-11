@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Events;
+using EventHub.Events.Registrations;
 using EventHub.Web.Helpers;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
@@ -26,15 +27,19 @@ namespace EventHub.Web.Pages.Events
         
         [BindProperty] 
         public EditEventTimingViewModel EventTiming { get; set; }
+
+        public int AttendeeCount { get; set; }
         
         public List<SelectListItem> Countries { get; private set; }
         public List<SelectListItem> Languages { get; private set; }
 
         private readonly IEventAppService _eventAppService;
+        private readonly IEventRegistrationAppService _eventRegistrationAppService;
 
-        public EditPageModel(IEventAppService eventAppService)
+        public EditPageModel(IEventAppService eventAppService, IEventRegistrationAppService eventRegistrationAppService)
         {
             _eventAppService = eventAppService;
+            _eventRegistrationAppService = eventRegistrationAppService;
         }
         
         public async Task OnGetAsync()
@@ -48,6 +53,8 @@ namespace EventHub.Web.Pages.Events
             FillLanguages();
             await FillCountriesAsync();
             await GetLocationInfoAsync();
+
+            AttendeeCount = await _eventRegistrationAppService.GetAttendeeCountAsync(Event.Id);
         }
 
         public async Task<IActionResult> OnPostAsync()

@@ -48,7 +48,7 @@ $(function () {
             data: data,
             success: function (data) {
                 abp.message
-                    .success("Timing changed successfully!") //TODO: localize it!
+                    .success(l("EventTimingChangeSuccessMessage"))
                     .then(data => window.location.href = "/events/" + $("#event-detail-url").val());
             },
             error: function (data) {

@@ -80,5 +80,14 @@ namespace EventHub.Events.Registrations
                 ObjectMapper.Map<List<AppUser>, List<EventAttendeeDto>>(users)
             );
         }
+
+        public async Task<int> GetAttendeeCountAsync(Guid eventId)
+        {
+            var eventRegistrationQueryable = await _eventRegistrationRepository.GetQueryableAsync();
+
+            var query = eventRegistrationQueryable.Where(x => x.EventId == eventId);
+
+            return await AsyncExecuter.CountAsync(query);
+        }
     }
 }

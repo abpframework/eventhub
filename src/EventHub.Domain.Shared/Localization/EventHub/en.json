@@ -70,6 +70,19 @@
     "ChooseEventCoverImage": "Choose event cover image...",
     "EventCoverImageSizeExceedMessage": "The image is too large to upload. Max image size: 1MB.",
     "EventCoverImageExtensionNotAllowed": "This image extension is not allowed. Allowed extensions: png, jpg, jpeg",
-    "ChooseEventCoverImageInfo": "Maximum image size: 1MB."
+    "ChooseEventCoverImageInfo": "Maximum image size: 1MB.",
+    "ProfilePicturePreview": "Profile Picture Preview",
+    "EditEvent": "Edit Event",
+    "EventInformation": "Event Information",
+    "EventCapacityLabel": "Capacity (Optional)",
+    "EventCapacityInfo": "Capacity can not be lower than the currently registered user count : {0}",
+    "EventTiming": "Event Timing",
+    "Note": "Note",
+    "EventTimingChangeCountWarningMessage": "You can not change the event timing more than two times.",
+    "EventTimingChangeEmailNotificationMessage": "If you change the event times, an informational email will be sent to all attendees.",
+    "EventCoverImage": "Event Cover Image",
+    "EventTimingPreview": "Event Timing Preview",
+    "CoverImagePreview": "Cover Image Preview",
+    "EventTimingChangeSuccessMessage": "The time of the event has been changed successfully!"
   }
 }

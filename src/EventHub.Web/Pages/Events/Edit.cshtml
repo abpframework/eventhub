@@ -11,10 +11,10 @@
 
 <input type="hidden" value="@Model.Url" id="event-detail-url"/>
 <div class="container mb-4">
-    <h1>Edit Event</h1>
+    <h1>@L["EditEvent"]</h1>
     <abp-tabs tab-style="Pill">
-        <abp-tab title="Event Information">
-            <form method="post" class="mt-3">
+        <abp-tab title="@(L["EventInformation"].Value)">
+            <form method="post" class="mt-3" id="Event_Information_Form">
                 <abp-input asp-for="Event.Id"/>
                 <abp-input asp-for="Event.Title"/>
                 <abp-input asp-for="Event.Description"/>
@@ -30,17 +30,17 @@
                 </div>
 
                 <abp-select asp-for="Event.Language"/>
-                <abp-input asp-for="Event.Capacity"/>
+                <abp-input label="@(L["EventCapacityLabel"].Value)" info="@(L["EventCapacityInfo", Model.AttendeeCount].Value)" asp-for="Event.Capacity" name="capacity" min="@Model.AttendeeCount"/>
 
                 <abp-button size="Large" button-type="Primary" type="submit" text="@L["Submit"].Value"/>
             </form>
         </abp-tab>
-        <abp-tab title="Event Timing">
+        <abp-tab title="@(L["EventTiming"].Value)">
             <div class="alert alert-info mt-3" role="alert" >
-                Note: You can not change the event timing more than two times.
+                <b>@L["Note"]</b> : @L["EventTimingChangeCountWarningMessage"]
             </div>
             <div class="alert alert-warning mt-3" role="alert">
-                Note: If you change the event times, an informational email will be sent to all attendees
+                <b>@L["Note"]</b> : @L["EventTimingChangeEmailNotificationMessage"]
             </div>
             <form method="post" id="Event_Timing_Form">
                 <abp-input asp-for="EventTiming.Id"/>
@@ -50,7 +50,7 @@
                 <abp-button size="Large" button-type="Primary" type="button" id="btn-event-timing" text="@L["Submit"].Value"/>
             </form>   
         </abp-tab>
-        <abp-tab title="Event Cover Image">
+        <abp-tab title="@(L["EventCoverImage"])">
             <form method="post" id="cover-image-form" class="mt-3">
                 <input type="hidden" id="event-id" value="@Model.Event.Id"/>
                 <abp-row>
@@ -71,9 +71,9 @@
         </abp-tab>
     </abp-tabs>
     <abp-modal centered="true" scrollable="true" size="Large" id="event-timing-preview-modal">
-        <abp-modal-header title="Event Timing Preview"></abp-modal-header>
+        <abp-modal-header title="@(L["EventTimingPreview"].Value)"></abp-modal-header>
         <abp-modal-body>
-            If you change the event times, an informational email will be sent to all attendees.
+            @L["EventTimingChangeEmailNotificationMessage"]
         </abp-modal-body>
         <abp-modal-footer>
             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -82,7 +82,7 @@
     </abp-modal>
 
     <abp-modal centered="true" scrollable="true" size="Small" id="cover-image-preview-modal">
-        <abp-modal-header title="Cover Image Preview"></abp-modal-header>
+        <abp-modal-header title="@L["CoverImagePreview"]"></abp-modal-header>
         <abp-modal-body>
             <img class="img-fluid" id="img-upload" alt="event-cover-image-preview"/>
         </abp-modal-body>
