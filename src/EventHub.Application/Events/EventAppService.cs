@@ -24,6 +24,7 @@ namespace EventHub.Events
         private readonly IRepository<AppUser, Guid> _userRepository;
         private readonly IRepository<Country, Guid> _countriesRepository;
         private readonly IBlobContainer<EventCoverImageContainer> _eventBlobContainer;
+        private readonly IRepository<EventRegistration, Guid> _eventRegistrationRepository;
 
         public EventAppService(
             EventManager eventManager,
@@ -32,7 +33,8 @@ namespace EventHub.Events
             IRepository<Organization, Guid> organizationRepository, 
             IRepository<AppUser, Guid> userRepository, 
             IRepository<Country, Guid> countriesRepository, 
-            IBlobContainer<EventCoverImageContainer> eventBlobContainer)
+            IBlobContainer<EventCoverImageContainer> eventBlobContainer,
+            IRepository<EventRegistration, Guid> eventRegistrationRepository)
         {
             _eventManager = eventManager;
             _eventRegistrationManager = eventRegistrationManager;
@@ -41,6 +43,7 @@ namespace EventHub.Events
             _userRepository = userRepository;
             _countriesRepository = countriesRepository;
             _eventBlobContainer = eventBlobContainer;
+            _eventRegistrationRepository = eventRegistrationRepository;
         }
 
         [Authorize]
@@ -234,6 +237,7 @@ namespace EventHub.Events
             @event.SetTime(input.StartTime, input.EndTime);
             @event.TimingChangeCount = @event.TimingChangeCount + 1;
 
+            await UpdateEventRegistrationForTimingChangeAsync(@event);
             await _eventRepository.UpdateAsync(@event);
         }
 
@@ -250,6 +254,23 @@ namespace EventHub.Events
             var blobName = id.ToString();
 
             return await _eventBlobContainer.GetAllBytesOrNullAsync(blobName);
+        }
+
+        private async Task UpdateEventRegistrationForTimingChangeAsync(Event @event)
+        {
+            var eventRegistrationQueryable = await _eventRegistrationRepository.GetQueryableAsync();
+            var query = eventRegistrationQueryable.Where(x => x.EventId == @event.Id);
+            var eventRegistrations = await AsyncExecuter.ToListAsync(query);
+
+            foreach (var eventRegistration in eventRegistrations)
+            {
+                if (eventRegistration.IsTimingChangeEmailSent)
+                {
+                    eventRegistration.IsTimingChangeEmailSent = false;
+                }
+            }
+
+            await _eventRegistrationRepository.UpdateManyAsync(eventRegistrations, true);
         }
     }
 }

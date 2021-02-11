@@ -32,6 +32,15 @@ namespace EventHub.Emailing
                     isInlineLocalized: true
                 )
             );
+
+            context.Add(
+                new TemplateDefinition(
+                        EmailTemplates.EventTimingChanged)
+                    .WithVirtualFilePath(
+                        "/Emailing/Templates/EventTimingChanged.tpl",
+                        isInlineLocalized: true
+                    )
+            );
         }
     }
 }

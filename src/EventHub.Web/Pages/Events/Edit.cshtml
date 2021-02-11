@@ -50,7 +50,7 @@
                 <abp-button size="Large" button-type="Primary" type="button" id="btn-event-timing" text="@L["Submit"].Value"/>
             </form>   
         </abp-tab>
-        <abp-tab title="@(L["EventCoverImage"])">
+        <abp-tab title="@(L["EventCoverImage"].Value)">
             <form method="post" id="cover-image-form" class="mt-3">
                 <input type="hidden" id="event-id" value="@Model.Event.Id"/>
                 <abp-row>
@@ -82,7 +82,7 @@
     </abp-modal>
 
     <abp-modal centered="true" scrollable="true" size="Small" id="cover-image-preview-modal">
-        <abp-modal-header title="@L["CoverImagePreview"]"></abp-modal-header>
+        <abp-modal-header title="@(L["CoverImagePreview"].Value)"></abp-modal-header>
         <abp-modal-body>
             <img class="img-fluid" id="img-upload" alt="event-cover-image-preview"/>
         </abp-modal-body>

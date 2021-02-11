@@ -84,6 +84,9 @@ namespace EventHub.EntityFrameworkCore
 
                 b.ConfigureByConvention();
 
+                b.Property(x => x.IsTimingChangeEmailSent).HasDefaultValue(true)
+                    .HasColumnName(nameof(EventRegistration.IsTimingChangeEmailSent));
+
                 b.HasOne<Event>().WithMany().HasForeignKey(x => x.EventId).IsRequired().OnDelete(DeleteBehavior.NoAction);
 
                 if (isMigrationDbContext)
