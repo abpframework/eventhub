@@ -198,6 +198,7 @@ namespace EventHub.Events
             return CurrentUser.Id.HasValue && organization.OwnerUserId == CurrentUser.GetId();
         }
 
+        [Authorize]
         public async Task UpdateAsync(Guid id, UpdateEventDto input)
         {
             var @event = await _eventRepository.GetAsync(id);
@@ -224,6 +225,7 @@ namespace EventHub.Events
             await _eventRepository.UpdateAsync(updatedEvent);
         }
 
+        [Authorize]
         public async Task UpdateEventTimingAsync(Guid id, UpdateEventTimingDto input)
         {
             var @event = await _eventRepository.GetAsync(id);
