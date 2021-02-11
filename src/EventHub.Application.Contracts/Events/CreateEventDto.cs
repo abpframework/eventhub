@@ -22,6 +22,9 @@ namespace EventHub.Events
         [Required]
         [StringLength(EventConsts.MaxDescriptionLength, MinimumLength = EventConsts.MinDescriptionLength)]
         public string Description { get; set; }
+        
+        [CanBeNull] 
+        public byte[] CoverImageContent { get; set; }
 
         public bool IsOnline { get; set; }
         

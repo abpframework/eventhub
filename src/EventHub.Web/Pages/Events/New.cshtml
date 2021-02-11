@@ -2,6 +2,7 @@
 @inject IHtmlLocalizer<EventHubResource> L
 @using EventHub.Localization
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @model EventHub.Web.Pages.Events.NewPageModel
 
 @section scripts {
@@ -18,12 +19,13 @@
 }
 else
 {
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         <abp-select asp-for="Event.OrganizationId" />
         <abp-input asp-for="Event.Title" />
         <abp-input asp-for="Event.StartTime" />
         <abp-input asp-for="Event.EndTime" />
         <abp-input asp-for="Event.Description" />
+        <abp-input asp-for="Event.CoverImageFile" />
         <abp-input asp-for="Event.IsOnline" />
         <div id="event-link-group" style="display: none">
             <abp-input asp-for="Event.OnlineLink" />
@@ -36,4 +38,12 @@ else
         <abp-input asp-for="Event.Capacity" />
         <abp-button size="Large" button-type="Primary" type="submit" text="@L["Submit"].Value" />
     </form>
+    
+    <abp-modal centered="true" scrollable="true" size="Small" id="cover-image-preview-modal">
+        <abp-modal-header title="Cover Image Preview"></abp-modal-header>
+        <abp-modal-body>
+            <img class="img-fluid" id="img-upload" alt="event-cover-image-preview"/>
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Close)"></abp-modal-footer>
+    </abp-modal>
 }

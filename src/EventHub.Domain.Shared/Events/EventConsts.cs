@@ -22,5 +22,7 @@
         public const int MaxLanguageLength = 16;
 
         public const int MaxTimingChangeCountForUser = 2;
+        
+        public const int MaxCoverImageFileSize = 1024 * 1024;
     }
 }

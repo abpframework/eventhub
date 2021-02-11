@@ -9,6 +9,7 @@ using EventHub.Users;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.BlobStoring;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Users;
 
@@ -22,6 +23,7 @@ namespace EventHub.Events
         private readonly IRepository<Organization, Guid> _organizationRepository;
         private readonly IRepository<AppUser, Guid> _userRepository;
         private readonly IRepository<Country, Guid> _countriesRepository;
+        private readonly IBlobContainer<EventCoverImageContainer> _eventBlobContainer;
 
         public EventAppService(
             EventManager eventManager,
@@ -29,7 +31,8 @@ namespace EventHub.Events
             IRepository<Event, Guid> eventRepository,
             IRepository<Organization, Guid> organizationRepository, 
             IRepository<AppUser, Guid> userRepository, 
-            IRepository<Country, Guid> countriesRepository)
+            IRepository<Country, Guid> countriesRepository, 
+            IBlobContainer<EventCoverImageContainer> eventBlobContainer)
         {
             _eventManager = eventManager;
             _eventRegistrationManager = eventRegistrationManager;
@@ -37,6 +40,7 @@ namespace EventHub.Events
             _organizationRepository = organizationRepository;
             _userRepository = userRepository;
             _countriesRepository = countriesRepository;
+            _eventBlobContainer = eventBlobContainer;
         }
 
         [Authorize]
@@ -62,6 +66,11 @@ namespace EventHub.Events
             @event.Language = input.Language;
             @event.Capacity = input.Capacity;
 
+            if (input.CoverImageContent != null && input.CoverImageContent.Length > 0)
+            {
+                await SaveCoverImageAsync(@event.Id, input.CoverImageContent);
+            }
+            
             await _eventRepository.InsertAsync(@event);
 
             return ObjectMapper.Map<Event, EventDto>(@event);
@@ -107,7 +116,7 @@ namespace EventHub.Events
             var items = await AsyncExecuter.ToListAsync(query);
             var now = Clock.Now;
 
-            var dtos = items.Select(
+            var events = items.Select(
                 i =>
                 {
                     var dto = ObjectMapper.Map<Event, EventInListDto>(i.@event);
@@ -118,7 +127,12 @@ namespace EventHub.Events
                 }
             ).ToList();
 
-            return new PagedResultDto<EventInListDto>(totalCount, dtos);
+            foreach (var @event in events)
+            {
+                @event.CoverImageContent = await GetCoverImageAsync(@event.Id);
+            }
+
+            return new PagedResultDto<EventInListDto>(totalCount, events);
         }
 
         public async Task<EventDetailDto> GetByUrlCodeAsync(string urlCode)
@@ -130,6 +144,7 @@ namespace EventHub.Events
 
             dto.OrganizationName = organization.Name;
             dto.OrganizationDisplayName = organization.DisplayName;
+            dto.CoverImageContent = await GetCoverImageAsync(dto.Id);
 
             return dto;
         }
@@ -220,6 +235,21 @@ namespace EventHub.Events
             @event.TimingChangeCount = @event.TimingChangeCount + 1;
 
             await _eventRepository.UpdateAsync(@event);
+        }
+
+        [Authorize]
+        public async Task SaveCoverImageAsync(Guid id, byte[] coverImageContent)
+        {
+            var blobName = id.ToString();
+            
+            await _eventBlobContainer.SaveAsync(blobName, coverImageContent, overrideExisting: true);
+        }
+        
+        private async Task<byte[]> GetCoverImageAsync(Guid id)
+        {
+            var blobName = id.ToString();
+
+            return await _eventBlobContainer.GetAllBytesOrNullAsync(blobName);
         }
     }
 }

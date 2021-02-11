@@ -23,18 +23,18 @@ namespace EventHub.Web.Controllers
         [Route("save-profile-picture")]
         public async Task SaveProfilePicture([FromForm] OrganizationProfilePictureInput input)
         {
-            byte[] profilePictureContent = new byte[] {};
+            var profilePictureContent = new byte[] {};
             
-            if (input.ProfilePictureFile != null && input.ProfilePictureFile.Length > 0)
+            if (input.ProfilePictureFile.Length > 0)
             {
                 using (var memoryStream = new MemoryStream())
                 {
                     await input.ProfilePictureFile.CopyToAsync(memoryStream);
                     profilePictureContent = memoryStream.ToArray();
                 }
-            }
 
-            await _organizationAppService.SaveProfilePictureAsync(input.OrganizationId, profilePictureContent);
+                await _organizationAppService.SaveProfilePictureAsync(input.OrganizationId, profilePictureContent);
+            }
         }
     }
 }

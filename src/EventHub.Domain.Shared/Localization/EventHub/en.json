@@ -64,6 +64,12 @@
     "Language": "Language",
     "EventHub:CapacityCantBeLowerThanRegisteredUserCount": "Capacity can not be lower than the currently registered user count.",
     "EventHub:NotAuthorizedToUpdateEventProfile": "You are not authorized to update the \"{EventTitle}\" event.",
-    "EventHub:CantChangeEventTiming": "Can not change the event timing more than {MaxTimingChangeLimit} times."
+    "CoverImage": "Cover Image",
+    "EventHub:CantChangeEventTiming": "Can not change the event timing more than {MaxTimingChangeLimit} times.",
+    "EventCoverImageEditSuccessMessage": "The event's cover image has been changed successfully.",
+    "ChooseEventCoverImage": "Choose event cover image...",
+    "EventCoverImageSizeExceedMessage": "The image is too large to upload. Max image size: 1MB.",
+    "EventCoverImageExtensionNotAllowed": "This image extension is not allowed. Allowed extensions: png, jpg, jpeg",
+    "ChooseEventCoverImageInfo": "Maximum image size: 1MB."
   }
 }

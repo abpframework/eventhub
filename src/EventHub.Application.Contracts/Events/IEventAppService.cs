@@ -23,5 +23,7 @@ namespace EventHub.Events
         Task UpdateAsync(Guid id, UpdateEventDto input);
 
         Task UpdateEventTimingAsync(Guid id, UpdateEventTimingDto input);
+        
+        Task SaveCoverImageAsync(Guid id, byte[] coverImageContent);
     }
 }
