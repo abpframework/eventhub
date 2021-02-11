@@ -19,6 +19,15 @@ $(function () {
         }
     });
     
+    $("#btn-event-timing").click(function () {
+        $("#event-timing-preview-modal").modal("show");
+    });
+    
+    $("#event-timing-confirm").click(function () {
+        $("#Event_Timing_Form").submit();
+        $("#event-timing-preview-modal").modal("hide");
+    })
+    
     $("#Event_Timing_Form").submit(function (e) {
         e.preventDefault();
         

@@ -76,6 +76,10 @@ $(function () {
         var organizationId = document.getElementById("organization-id").value;
         var organizationName = document.getElementById("organization-name").value;
 
+        if(!$(this).valid()) {
+            return false;
+        }
+        
         if(file === undefined) {
             file = null;
         }

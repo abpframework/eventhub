@@ -168,7 +168,7 @@ namespace EventHub.Web.Pages.Events
 
         [Required]
         [DataType(DataType.Upload)]
-        [MaxFileSize(EventConsts.MaxCoverImageFileSize)] 
+        // [MaxFileSize(EventConsts.MaxCoverImageFileSize)] 
         [AllowedExtensions(new string[] { ".jpg", ".png", ".jpeg" })]
         public IFormFile CoverImageFile { get; set; }
     }

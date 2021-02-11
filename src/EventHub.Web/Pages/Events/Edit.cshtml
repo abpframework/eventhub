@@ -12,22 +12,10 @@
 <input type="hidden" value="@Model.Url" id="event-detail-url"/>
 <div class="container mb-4">
     <h1>Edit Event</h1>
-
-    <ul class="nav nav-pills mt-3 mb-3" id="pills-tab" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link active" id="event-info-tab" data-toggle="pill" href="#event-info" role="tab" aria-controls="event-info" aria-selected="true">Event Information</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="event-timing-tab" data-toggle="pill" href="#event-timing" role="tab" aria-controls="event-timing" aria-selected="false">Event Timing</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="event-cover-image-tab" data-toggle="pill" href="#event-cover-image" role="tab" aria-controls="event-cover-image" aria-selected="false">Event Cover Image</a>
-        </li>
-    </ul>
-    <div class="tab-content" id="pills-tabContent">
-        <div class="tab-pane fade show active" id="event-info" role="tabpanel" aria-labelledby="event-info-tab">
-            <form method="post">
-                <abp-input asp-for="Event.Id" />
+    <abp-tabs tab-style="Pill">
+        <abp-tab title="Event Information">
+            <form method="post" class="mt-3">
+                <abp-input asp-for="Event.Id"/>
                 <abp-input asp-for="Event.Title"/>
                 <abp-input asp-for="Event.Description"/>
                 <abp-input asp-for="Event.IsOnline"/>
@@ -46,9 +34,9 @@
 
                 <abp-button size="Large" button-type="Primary" type="submit" text="@L["Submit"].Value"/>
             </form>
-        </div>
-        <div class="tab-pane fade" id="event-timing" role="tabpanel" aria-labelledby="event-timing-tab">
-            <div class="alert alert-info" role="alert">
+        </abp-tab>
+        <abp-tab title="Event Timing">
+            <div class="alert alert-info mt-3" role="alert" >
                 Note: You can not change the event timing more than two times.
             </div>
             <div class="alert alert-warning mt-3" role="alert">
@@ -59,11 +47,11 @@
                 <abp-input asp-for="EventTiming.StartTime"/>
                 <abp-input asp-for="EventTiming.EndTime"/>
 
-                <abp-button size="Large" button-type="Primary" type="submit" text="@L["Submit"].Value"/>
-            </form>
-        </div>
-        <div class="tab-pane fade" id="event-cover-image" role="tabpanel" aria-labelledby="event-cover-image-tab">
-            <form method="post" id="cover-image-form">
+                <abp-button size="Large" button-type="Primary" type="button" id="btn-event-timing" text="@L["Submit"].Value"/>
+            </form>   
+        </abp-tab>
+        <abp-tab title="Event Cover Image">
+            <form method="post" id="cover-image-form" class="mt-3">
                 <input type="hidden" id="event-id" value="@Model.Event.Id"/>
                 <abp-row>
                     <abp-column size="_12" v-align="Center">
@@ -77,16 +65,27 @@
                         </div>
                     </abp-column>
                 </abp-row>
-                
+                                
                 <abp-button class="btn-block" id="event-cover-image-btnSubmit" button-type="Primary" type="submit" text="@L["Submit"].Value" />
             </form>
-        </div>
-        <abp-modal centered="true" scrollable="true" size="Small" id="cover-image-preview-modal">
-            <abp-modal-header title="Cover Image Preview"></abp-modal-header>
-            <abp-modal-body>
-                <img class="img-fluid" id="img-upload" alt="event-cover-image-preview"/>
-            </abp-modal-body>
-            <abp-modal-footer buttons="@(AbpModalButtons.Close)"></abp-modal-footer>
-        </abp-modal>
-    </div>
+        </abp-tab>
+    </abp-tabs>
+    <abp-modal centered="true" scrollable="true" size="Large" id="event-timing-preview-modal">
+        <abp-modal-header title="Event Timing Preview"></abp-modal-header>
+        <abp-modal-body>
+            If you change the event times, an informational email will be sent to all attendees.
+        </abp-modal-body>
+        <abp-modal-footer>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            <button type="button" id="event-timing-confirm" class="btn btn-success">Confirm</button>
+        </abp-modal-footer>
+    </abp-modal>
+
+    <abp-modal centered="true" scrollable="true" size="Small" id="cover-image-preview-modal">
+        <abp-modal-header title="Cover Image Preview"></abp-modal-header>
+        <abp-modal-body>
+            <img class="img-fluid" id="img-upload" alt="event-cover-image-preview"/>
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Close)"></abp-modal-footer>
+    </abp-modal>
 </div>
