@@ -6,7 +6,9 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Events;
+using EventHub.Web.Helpers;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NUglify.Helpers;
@@ -157,5 +159,17 @@ namespace EventHub.Web.Pages.Events
 
             public DateTime EndTime { get; set; }
         }
+    }
+    
+    public class EventCoverImageInput
+    {
+        [Required]
+        public Guid EventId { get; set; }
+
+        [Required]
+        [DataType(DataType.Upload)]
+        [MaxFileSize(EventConsts.MaxCoverImageFileSize)] 
+        [AllowedExtensions(new string[] { ".jpg", ".png", ".jpeg" })]
+        public IFormFile CoverImageFile { get; set; }
     }
 }

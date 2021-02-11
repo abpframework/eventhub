@@ -2,6 +2,7 @@
 @inject IHtmlLocalizer<EventHubResource> L
 @using EventHub.Localization
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @model EventHub.Web.Pages.Events.EditPageModel
 
 @section scripts {
@@ -18,6 +19,9 @@
         </li>
         <li class="nav-item">
             <a class="nav-link" id="event-timing-tab" data-toggle="pill" href="#event-timing" role="tab" aria-controls="event-timing" aria-selected="false">Event Timing</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="event-cover-image-tab" data-toggle="pill" href="#event-cover-image" role="tab" aria-controls="event-cover-image" aria-selected="false">Event Cover Image</a>
         </li>
     </ul>
     <div class="tab-content" id="pills-tabContent">
@@ -58,5 +62,31 @@
                 <abp-button size="Large" button-type="Primary" type="submit" text="@L["Submit"].Value"/>
             </form>
         </div>
+        <div class="tab-pane fade" id="event-cover-image" role="tabpanel" aria-labelledby="event-cover-image-tab">
+            <form method="post" id="cover-image-form">
+                <input type="hidden" id="event-id" value="@Model.Event.Id"/>
+                <abp-row>
+                    <abp-column size="_12" v-align="Center">
+                        <div class="form-group">
+                            <label>@L["CoverImage"]</label>
+                            <div class="custom-file">
+                                <input id="event-cover-image-input" type="file" class="custom-file-input form-control">
+                                <label id="choose-cover-image" class="custom-file-label" for="customFile">@L["ChooseEventCoverImage"]</label>
+                                <small id="event-cover-image-info-text" class="form-text text-muted mt-2">@L["ChooseEventCoverImageInfo"]</small>
+                            </div>
+                        </div>
+                    </abp-column>
+                </abp-row>
+                
+                <abp-button class="btn-block" id="event-cover-image-btnSubmit" button-type="Primary" type="submit" text="@L["Submit"].Value" />
+            </form>
+        </div>
+        <abp-modal centered="true" scrollable="true" size="Small" id="cover-image-preview-modal">
+            <abp-modal-header title="Cover Image Preview"></abp-modal-header>
+            <abp-modal-body>
+                <img class="img-fluid" id="img-upload" alt="event-cover-image-preview"/>
+            </abp-modal-body>
+            <abp-modal-footer buttons="@(AbpModalButtons.Close)"></abp-modal-footer>
+        </abp-modal>
     </div>
 </div>
