@@ -1,0 +1,91 @@
+@page "/event/edit/{url}"
+@inject IHtmlLocalizer<EventHubResource> L
+@using EventHub.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@model EventHub.Web.Pages.Events.EditPageModel
+
+@section scripts {
+    <abp-script src="/Pages/Events/Edit.js"/>
+}
+
+<input type="hidden" value="@Model.Url" id="event-detail-url"/>
+<div class="container mb-4">
+    <h1>@L["EditEvent"]</h1>
+    <abp-tabs tab-style="Pill">
+        <abp-tab title="@(L["EventInformation"].Value)">
+            <form method="post" class="mt-3" id="Event_Information_Form">
+                <abp-input asp-for="Event.Id"/>
+                <abp-input asp-for="Event.Title"/>
+                <abp-input asp-for="Event.Description"/>
+                <abp-input asp-for="Event.IsOnline"/>
+
+                <div id="event-link-group" style="display: none">
+                    <abp-input asp-for="Event.OnlineLink"/>
+                </div>
+
+                <div id="event-location-group">
+                    <abp-select asp-for="Event.CountryId"/>
+                    <abp-input asp-for="Event.City"/>
+                </div>
+
+                <abp-select asp-for="Event.Language"/>
+                <abp-input label="@(L["EventCapacityLabel"].Value)" info="@(L["EventCapacityInfo", Model.AttendeeCount].Value)" asp-for="Event.Capacity" name="capacity" min="@Model.AttendeeCount"/>
+
+                <abp-button size="Large" button-type="Primary" type="submit" text="@L["Submit"].Value"/>
+            </form>
+        </abp-tab>
+        <abp-tab title="@(L["EventTiming"].Value)">
+            <div class="alert alert-info mt-3" role="alert" >
+                <b>@L["Note"]</b> : @L["EventTimingChangeCountWarningMessage"]
+            </div>
+            <div class="alert alert-warning mt-3" role="alert">
+                <b>@L["Note"]</b> : @L["EventTimingChangeEmailNotificationMessage"]
+            </div>
+            <form method="post" id="Event_Timing_Form">
+                <abp-input asp-for="EventTiming.Id"/>
+                <abp-input asp-for="EventTiming.StartTime"/>
+                <abp-input asp-for="EventTiming.EndTime"/>
+
+                <abp-button size="Large" button-type="Primary" type="button" id="btn-event-timing" text="@L["Submit"].Value"/>
+            </form>   
+        </abp-tab>
+        <abp-tab title="@(L["EventCoverImage"].Value)">
+            <form method="post" id="cover-image-form" class="mt-3">
+                <input type="hidden" id="event-id" value="@Model.Event.Id"/>
+                <abp-row>
+                    <abp-column size="_12" v-align="Center">
+                        <div class="form-group">
+                            <label>@L["CoverImage"]</label>
+                            <div class="custom-file">
+                                <input id="event-cover-image-input" type="file" class="custom-file-input form-control">
+                                <label id="choose-cover-image" class="custom-file-label" for="customFile">@L["ChooseEventCoverImage"]</label>
+                                <small id="event-cover-image-info-text" class="form-text text-muted mt-2">@L["ChooseEventCoverImageInfo"]</small>
+                            </div>
+                        </div>
+                    </abp-column>
+                </abp-row>
+                                
+                <abp-button class="btn-block" id="event-cover-image-btnSubmit" button-type="Primary" type="submit" text="@L["Submit"].Value" />
+            </form>
+        </abp-tab>
+    </abp-tabs>
+    <abp-modal centered="true" scrollable="true" size="Large" id="event-timing-preview-modal">
+        <abp-modal-header title="@(L["EventTimingPreview"].Value)"></abp-modal-header>
+        <abp-modal-body>
+            @L["EventTimingChangeEmailNotificationMessage"]
+        </abp-modal-body>
+        <abp-modal-footer>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            <button type="button" id="event-timing-confirm" class="btn btn-success">Confirm</button>
+        </abp-modal-footer>
+    </abp-modal>
+
+    <abp-modal centered="true" scrollable="true" size="Small" id="cover-image-preview-modal">
+        <abp-modal-header title="@(L["CoverImagePreview"].Value)"></abp-modal-header>
+        <abp-modal-body>
+            <img class="img-fluid" id="img-upload" alt="event-cover-image-preview"/>
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Close)"></abp-modal-footer>
+    </abp-modal>
+</div>

@@ -24,6 +24,7 @@ namespace EventHub
         {
             context.AddBackgroundWorker<EventReminderWorker>();
             context.AddBackgroundWorker<NewEventDetectorWorker>();
+            context.AddBackgroundWorker<EventTimingChangeWorker>();
         }
         
         public override void ConfigureServices(ServiceConfigurationContext context)

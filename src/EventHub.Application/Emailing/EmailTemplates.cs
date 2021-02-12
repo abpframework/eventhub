@@ -7,5 +7,7 @@ namespace EventHub.Emailing
         public const string EventReminder = "EventHub.Event.Reminder";
         
         public const string NewEventCreated = "EventHub.Event.NewEventCreated";
+
+        public const string EventTimingChanged = "EventHub.Event.EventTimingChanged";
     }
 }

@@ -24,7 +24,14 @@
     {
         <abp-column size-lg="_4" size-md="_6">
             <abp-card class="mb-3">
-                <img abp-card-image="Top" src="https://picsum.photos/seed/@eventItem.Id.ToString()/400/160?blur=8" alt="@eventItem.Title"/>
+                @if (eventItem.CoverImageContent is null)
+                {
+                    <img abp-card-image="Top" src="https://picsum.photos/seed/@eventItem.Id.ToString()/400/160?blur=8" alt="@eventItem.Title"/>
+                }
+                else
+                {
+                    <img abp-card-image="Top" style="max-height: 400px; min-height: 160px;" src="@($"data:image/png;base64,{Convert.ToBase64String(eventItem.CoverImageContent)}")" alt="@eventItem.Title"/>
+                }
                 <abp-card-body>
                     <abp-card-title>@eventItem.Title</abp-card-title>
                     <abp-card-subtitle>

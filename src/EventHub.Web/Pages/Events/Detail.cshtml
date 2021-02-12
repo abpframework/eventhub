@@ -11,10 +11,31 @@
 <abp-row>
     <abp-column size-lg="_8" size-md="_6">
         <abp-card class="mb-3">
-            <img abp-card-image="Top" src="https://picsum.photos/seed/@Model.Event.Id.ToString()/400/160?blur=8" alt="@Model.Event.Title"/>
+              @if (Model.Event.CoverImageContent is null)
+              {
+                  <img abp-card-image="Top" src="https://picsum.photos/seed/@Model.Event.Id.ToString()/400/160?blur=8" alt="@Model.Event.Title"/>
+              }
+              else
+              {
+                  <img abp-card-image="Top" style="max-height: 400px; min-height: 160px;" src="@($"data:image/png;base64,{Convert.ToBase64String(Model.Event.CoverImageContent)}")" alt="@Model.Event.Title"/>
+              }
             <abp-card-body>
                 <abp-card-title>
-                    <h2>@Model.Event.Title</h2>
+                    @if (Model.IsEventOwner)
+                    {
+                        <div class="row">
+                            <div class="col-9">
+                                <h2>@Model.Event.Title</h2>
+                            </div>
+                            <div class="col-3 text-right">
+                                <a href="/event/edit/@Model.Event.Url" class="btn btn-primary text-white">@L["Edit"] <i class="far fa-edit"></i></a>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <h2>@Model.Event.Title</h2>
+                    }
                 </abp-card-title>
                 <abp-card-subtitle>
                     @EventDateHelper.GetDateRangeText(Model.Event.StartTime, Model.Event.EndTime) <br/>

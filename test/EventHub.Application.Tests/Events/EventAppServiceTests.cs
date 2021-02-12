@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Events.Registrations;
 using Shouldly;
 using Volo.Abp;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Timing;
 using Xunit;
 
@@ -13,12 +15,14 @@ namespace EventHub.Events
         private readonly IEventAppService _eventAppService;
         private readonly IEventRegistrationAppService _eventRegistrationAppService;
         private readonly EventHubTestData _testData;
+        private readonly IRepository<Event, Guid> _eventRepository;
 
         public EventAppServiceTests()
         {
             _eventAppService = GetRequiredService<IEventAppService>();
             _eventRegistrationAppService = GetRequiredService<IEventRegistrationAppService>();
             _testData = GetRequiredService<EventHubTestData>();
+            _eventRepository = GetRequiredService<IRepository<Event, Guid>>();
         }
 
         [Fact]
@@ -156,6 +160,31 @@ namespace EventHub.Events
 
             result.ShouldNotBeNull();
             result.Count.ShouldBeGreaterThan(1);
+        }
+
+        [Fact]
+        public async Task Should_Update_The_Event()
+        {
+            await _eventAppService.UpdateAsync(
+                _testData.AbpMicroservicesFutureEventId,
+                new UpdateEventDto
+                {
+                    Title = "Updated_Microservices_Event_Title",
+                    Description = "Updated_Microservices_Event_Description-Updated_Microservices_Event_Description-Updated_Blazor_Microservices_Description",
+                    IsOnline = true,
+                    Capacity = 100,
+                    City = null,
+                    CountryId = null,
+                    Language = "en",
+                    OnlineLink = null
+                });
+
+            var updatedEvent = await _eventRepository.GetAsync(_testData.AbpMicroservicesFutureEventId);
+            
+            updatedEvent.ShouldNotBeNull();
+            updatedEvent.Title.ShouldBe("Updated_Microservices_Event_Title");
+            updatedEvent.Description.ShouldBe("Updated_Microservices_Event_Description-Updated_Microservices_Event_Description-Updated_Blazor_Microservices_Description");
+            updatedEvent.IsOnline.ShouldBeTrue();
         }
     }
 }

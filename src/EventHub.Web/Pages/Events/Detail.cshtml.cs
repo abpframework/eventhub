@@ -11,6 +11,8 @@ namespace EventHub.Web.Pages.Events
         [BindProperty(SupportsGet = true)]
         public string Url { get; set; }
 
+        public bool IsEventOwner { get; set; }
+
         public EventDetailDto Event { get; set; }
 
         private readonly IEventAppService _eventAppService;
@@ -42,6 +44,8 @@ namespace EventHub.Web.Pages.Events
                     )
                 );
             }
+
+            IsEventOwner = await _eventAppService.IsEventOwnerAsync(Event.Id);
 
             return Page();
         }

@@ -35,7 +35,9 @@ namespace EventHub.Events
         public bool IsRemindingEmailSent { get; set; }
 
         public bool IsEmailSentToMembers { get; set; }
-
+        
+        public int TimingChangeCount  { get; set; }
+        
         private Event()
         {
 
@@ -94,6 +96,8 @@ namespace EventHub.Events
                     OnlineLink = onlineLink;
                 }
 
+                CountryId = null;
+                City = null;
                 return this;
             }
             
@@ -103,6 +107,7 @@ namespace EventHub.Events
                 City = city;
             }
 
+            OnlineLink = null;
             return this;
         }
     }

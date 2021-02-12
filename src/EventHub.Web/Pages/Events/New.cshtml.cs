@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Events;
 using EventHub.Organizations;
+using EventHub.Web.Helpers;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NUglify.Helpers;
@@ -96,6 +99,16 @@ namespace EventHub.Web.Pages.Events
                 ValidateModel();
 
                 var input = ObjectMapper.Map<NewEventViewModel, CreateEventDto>(Event);
+
+                if (Event.CoverImageFile != null && Event.CoverImageFile.Length > 0)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await Event.CoverImageFile.CopyToAsync(memoryStream);
+                        input.CoverImageContent = memoryStream.ToArray();
+                    }
+                }
+
                 var eventDto = await _eventAppService.CreateAsync(input);
 
                 return RedirectToPage("/Events/Detail", new {url = eventDto.UrlCode});
@@ -130,6 +143,13 @@ namespace EventHub.Web.Pages.Events
             [StringLength(EventConsts.MaxDescriptionLength, MinimumLength = EventConsts.MinDescriptionLength)]
             [TextArea]
             public string Description { get; set; }
+            
+            [CanBeNull]
+            [Display(Name = "Cover Image")]
+            [DataType(DataType.Upload)]
+            [MaxFileSize(EventConsts.MaxCoverImageFileSize)] 
+            [AllowedExtensions(new string[] { ".jpg", ".png", ".jpeg" })]
+            public IFormFile CoverImageFile { get; set; }
 
             public bool IsOnline { get; set; }
             
