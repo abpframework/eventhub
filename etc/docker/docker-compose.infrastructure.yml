@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+  redis:
+    image: redis:6.0.10-alpine
+    networks:
+      - eventhub-network      
+      
+networks:
+  eventhub-network:
+    external: true
