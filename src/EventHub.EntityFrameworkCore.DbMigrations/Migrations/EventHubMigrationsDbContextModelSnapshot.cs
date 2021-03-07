@@ -29,14 +29,14 @@ namespace EventHub.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)");
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Name");
 
-                    b.ToTable("AppCountries");
+                    b.ToTable("EhCountries");
                 });
 
             modelBuilder.Entity("EventHub.Events.Event", b =>
@@ -154,7 +154,7 @@ namespace EventHub.Migrations
 
                     b.HasIndex("OrganizationId", "StartTime");
 
-                    b.ToTable("AppEvents");
+                    b.ToTable("EhEvents");
                 });
 
             modelBuilder.Entity("EventHub.Events.Registrations.EventRegistration", b =>
@@ -199,7 +199,7 @@ namespace EventHub.Migrations
 
                     b.HasIndex("EventId", "UserId");
 
-                    b.ToTable("AppEventRegistrations");
+                    b.ToTable("EhEventRegistrations");
                 });
 
             modelBuilder.Entity("EventHub.Organizations.Memberships.OrganizationMembership", b =>
@@ -238,7 +238,7 @@ namespace EventHub.Migrations
 
                     b.HasIndex("OrganizationId", "UserId");
 
-                    b.ToTable("AppOrganizationMemberships");
+                    b.ToTable("EhOrganizationMemberships");
                 });
 
             modelBuilder.Entity("EventHub.Organizations.Organization", b =>
@@ -331,7 +331,7 @@ namespace EventHub.Migrations
 
                     b.HasIndex("OwnerUserId");
 
-                    b.ToTable("AppOrganizations");
+                    b.ToTable("EhOrganizations");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>

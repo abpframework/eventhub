@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.MultiTenancy;
 
 namespace EventHub.Data
 {
@@ -19,16 +18,13 @@ namespace EventHub.Data
 
         private readonly IDataSeeder _dataSeeder;
         private readonly IEnumerable<IEventHubDbSchemaMigrator> _dbSchemaMigrators;
-        private readonly ICurrentTenant _currentTenant;
 
         public EventHubDbMigrationService(
             IDataSeeder dataSeeder,
-            IEnumerable<IEventHubDbSchemaMigrator> dbSchemaMigrators,
-            ICurrentTenant currentTenant)
+            IEnumerable<IEventHubDbSchemaMigrator> dbSchemaMigrators)
         {
             _dataSeeder = dataSeeder;
             _dbSchemaMigrators = dbSchemaMigrators;
-            _currentTenant = currentTenant;
 
             Logger = NullLogger<EventHubDbMigrationService>.Instance;
         }

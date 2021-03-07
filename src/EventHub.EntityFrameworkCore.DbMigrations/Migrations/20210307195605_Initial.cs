@@ -61,6 +61,21 @@ namespace EventHub.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AbpBlobContainers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpBlobContainers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AbpClaimTypes",
                 columns: table => new
                 {
@@ -78,21 +93,6 @@ namespace EventHub.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpClaimTypes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AbpFeatureValues",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    ProviderName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
-                    ProviderKey = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AbpFeatureValues", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -215,27 +215,6 @@ namespace EventHub.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AbpTenants",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
-                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AbpTenants", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AbpUsers",
                 columns: table => new
                 {
@@ -270,6 +249,18 @@ namespace EventHub.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EhCountries",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EhCountries", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -508,6 +499,29 @@ namespace EventHub.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AbpBlobs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ContainerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Content = table.Column<byte[]>(type: "varbinary(max)", maxLength: 2147483647, nullable: true),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpBlobs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AbpBlobs_AbpBlobContainers_ContainerId",
+                        column: x => x.ContainerId,
+                        principalTable: "AbpBlobContainers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AbpOrganizationUnitRoles",
                 columns: table => new
                 {
@@ -551,25 +565,6 @@ namespace EventHub.Migrations
                         name: "FK_AbpRoleClaims_AbpRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AbpRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AbpTenantConnectionStrings",
-                columns: table => new
-                {
-                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AbpTenantConnectionStrings", x => new { x.TenantId, x.Name });
-                    table.ForeignKey(
-                        name: "FK_AbpTenantConnectionStrings_AbpTenants_TenantId",
-                        column: x => x.TenantId,
-                        principalTable: "AbpTenants",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -687,6 +682,41 @@ namespace EventHub.Migrations
                         principalTable: "AbpUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EhOrganizations",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OwnerUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    Website = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TwitterUsername = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GitHubUsername = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FacebookUsername = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InstagramUsername = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MediumUsername = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EhOrganizations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EhOrganizations_AbpUsers_OwnerUserId",
+                        column: x => x.OwnerUserId,
+                        principalTable: "AbpUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -1029,6 +1059,107 @@ namespace EventHub.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "EhEvents",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OrganizationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UrlCode = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
+                    Url = table.Column<string>(type: "nvarchar(69)", maxLength: 69, nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
+                    IsOnline = table.Column<bool>(type: "bit", nullable: false),
+                    OnlineLink = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
+                    CountryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    City = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: true),
+                    Language = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: true),
+                    Capacity = table.Column<int>(type: "int", nullable: true),
+                    IsRemindingEmailSent = table.Column<bool>(type: "bit", nullable: false),
+                    IsEmailSentToMembers = table.Column<bool>(type: "bit", nullable: false),
+                    TimingChangeCount = table.Column<int>(type: "int", nullable: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EhEvents", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EhEvents_EhCountries_CountryId",
+                        column: x => x.CountryId,
+                        principalTable: "EhCountries",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_EhEvents_EhOrganizations_OrganizationId",
+                        column: x => x.OrganizationId,
+                        principalTable: "EhOrganizations",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EhOrganizationMemberships",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OrganizationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EhOrganizationMemberships", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EhOrganizationMemberships_AbpUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AbpUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_EhOrganizationMemberships_EhOrganizations_OrganizationId",
+                        column: x => x.OrganizationId,
+                        principalTable: "EhOrganizations",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EhEventRegistrations",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EventId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsTimingChangeEmailSent = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EhEventRegistrations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EhEventRegistrations_AbpUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AbpUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_EhEventRegistrations_EhEvents_EventId",
+                        column: x => x.EventId,
+                        principalTable: "EhEvents",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AbpAuditLogActions_AuditLogId",
                 table: "AbpAuditLogActions",
@@ -1055,6 +1186,21 @@ namespace EventHub.Migrations
                 columns: new[] { "IsAbandoned", "NextTryTime" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AbpBlobContainers_TenantId_Name",
+                table: "AbpBlobContainers",
+                columns: new[] { "TenantId", "Name" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpBlobs_ContainerId",
+                table: "AbpBlobs",
+                column: "ContainerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpBlobs_TenantId_ContainerId_Name",
+                table: "AbpBlobs",
+                columns: new[] { "TenantId", "ContainerId", "Name" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AbpEntityChanges_AuditLogId",
                 table: "AbpEntityChanges",
                 column: "AuditLogId");
@@ -1068,11 +1214,6 @@ namespace EventHub.Migrations
                 name: "IX_AbpEntityPropertyChanges_EntityChangeId",
                 table: "AbpEntityPropertyChanges",
                 column: "EntityChangeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AbpFeatureValues_Name_ProviderName_ProviderKey",
-                table: "AbpFeatureValues",
-                columns: new[] { "Name", "ProviderName", "ProviderKey" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpLinkUsers_SourceUserId_SourceTenantId_TargetUserId_TargetTenantId",
@@ -1137,11 +1278,6 @@ namespace EventHub.Migrations
                 columns: new[] { "Name", "ProviderName", "ProviderKey" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpTenants_Name",
-                table: "AbpTenants",
-                column: "Name");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AbpUserClaims_UserId",
                 table: "AbpUserClaims",
                 column: "UserId");
@@ -1180,6 +1316,66 @@ namespace EventHub.Migrations
                 name: "IX_AbpUsers_UserName",
                 table: "AbpUsers",
                 column: "UserName");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EhCountries_Name",
+                table: "EhCountries",
+                column: "Name");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EhEventRegistrations_EventId_UserId",
+                table: "EhEventRegistrations",
+                columns: new[] { "EventId", "UserId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EhEventRegistrations_UserId",
+                table: "EhEventRegistrations",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EhEvents_CountryId",
+                table: "EhEvents",
+                column: "CountryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EhEvents_OrganizationId_StartTime",
+                table: "EhEvents",
+                columns: new[] { "OrganizationId", "StartTime" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EhEvents_StartTime",
+                table: "EhEvents",
+                column: "StartTime");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EhEvents_UrlCode",
+                table: "EhEvents",
+                column: "UrlCode");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EhOrganizationMemberships_OrganizationId_UserId",
+                table: "EhOrganizationMemberships",
+                columns: new[] { "OrganizationId", "UserId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EhOrganizationMemberships_UserId",
+                table: "EhOrganizationMemberships",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EhOrganizations_DisplayName",
+                table: "EhOrganizations",
+                column: "DisplayName");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EhOrganizations_Name",
+                table: "EhOrganizations",
+                column: "Name");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EhOrganizations_OwnerUserId",
+                table: "EhOrganizations",
+                column: "OwnerUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityServerClients_ClientId",
@@ -1227,13 +1423,13 @@ namespace EventHub.Migrations
                 name: "AbpBackgroundJobs");
 
             migrationBuilder.DropTable(
+                name: "AbpBlobs");
+
+            migrationBuilder.DropTable(
                 name: "AbpClaimTypes");
 
             migrationBuilder.DropTable(
                 name: "AbpEntityPropertyChanges");
-
-            migrationBuilder.DropTable(
-                name: "AbpFeatureValues");
 
             migrationBuilder.DropTable(
                 name: "AbpLinkUsers");
@@ -1254,9 +1450,6 @@ namespace EventHub.Migrations
                 name: "AbpSettings");
 
             migrationBuilder.DropTable(
-                name: "AbpTenantConnectionStrings");
-
-            migrationBuilder.DropTable(
                 name: "AbpUserClaims");
 
             migrationBuilder.DropTable(
@@ -1270,6 +1463,12 @@ namespace EventHub.Migrations
 
             migrationBuilder.DropTable(
                 name: "AbpUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "EhEventRegistrations");
+
+            migrationBuilder.DropTable(
+                name: "EhOrganizationMemberships");
 
             migrationBuilder.DropTable(
                 name: "IdentityServerApiResourceClaims");
@@ -1329,10 +1528,10 @@ namespace EventHub.Migrations
                 name: "IdentityServerPersistedGrants");
 
             migrationBuilder.DropTable(
-                name: "AbpEntityChanges");
+                name: "AbpBlobContainers");
 
             migrationBuilder.DropTable(
-                name: "AbpTenants");
+                name: "AbpEntityChanges");
 
             migrationBuilder.DropTable(
                 name: "AbpOrganizationUnits");
@@ -1341,7 +1540,7 @@ namespace EventHub.Migrations
                 name: "AbpRoles");
 
             migrationBuilder.DropTable(
-                name: "AbpUsers");
+                name: "EhEvents");
 
             migrationBuilder.DropTable(
                 name: "IdentityServerApiResources");
@@ -1357,6 +1556,15 @@ namespace EventHub.Migrations
 
             migrationBuilder.DropTable(
                 name: "AbpAuditLogs");
+
+            migrationBuilder.DropTable(
+                name: "EhCountries");
+
+            migrationBuilder.DropTable(
+                name: "EhOrganizations");
+
+            migrationBuilder.DropTable(
+                name: "AbpUsers");
         }
     }
 }
