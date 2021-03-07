@@ -4,7 +4,7 @@ namespace EventHub
 {
     public static class EventHubGlobalFeatureConfigurator
     {
-        private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+        private static readonly OneTimeRunner OneTimeRunner = new();
 
         public static void Configure()
         {

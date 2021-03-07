@@ -2,6 +2,6 @@ namespace EventHub.Countries
 {
     public static class CountryConsts
     {
-        public const int MaxNameLength = 32;
+        public const int MaxNameLength = 64;
     }
 }
