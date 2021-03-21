@@ -54,8 +54,10 @@ namespace EventHub.Events
 
             if (organization.OwnerUserId != CurrentUser.GetId())
             {
-                throw new BusinessException(EventHubErrorCodes.NotAuthorizedToCreateEventInThisOrganization)
-                    .WithData("OrganizationName", organization.DisplayName);
+                throw new AbpAuthorizationException(
+                    L["EventHub:NotAuthorizedToCreateEventInThisOrganization", organization.DisplayName],
+                    EventHubErrorCodes.NotAuthorizedToCreateEventInThisOrganization
+                );
             }
 
             var @event = await _eventManager.CreateAsync(
@@ -184,7 +186,7 @@ namespace EventHub.Events
             var countriesQueryable = await _countriesRepository.GetQueryableAsync();
 
             var query = from country in countriesQueryable
-                orderby country.Name ascending
+                orderby country.Name
                 select country;
 
             var countries = await AsyncExecuter.ToListAsync(query);
@@ -209,7 +211,7 @@ namespace EventHub.Events
             if (organization.OwnerUserId != CurrentUser.GetId())
             {
                 throw new AbpAuthorizationException(
-                    L["EventHub:NotAuthorizedToUpdateEvent"].Value.Replace("{EventTitle}", @event.Title),
+                    L["EventHub:NotAuthorizedToUpdateEvent", @event.Title],
                     EventHubErrorCodes.NotAuthorizedToUpdateEvent
                 );
             }

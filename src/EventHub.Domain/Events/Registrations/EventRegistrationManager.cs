@@ -4,7 +4,6 @@ using EventHub.Users;
 using Volo.Abp;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
-using Volo.Abp.Timing;
 
 namespace EventHub.Events.Registrations
 {
