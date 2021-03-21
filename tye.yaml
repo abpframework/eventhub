@@ -11,7 +11,7 @@ services:
     - protocol: https
       port: 44313
   env:
-    - Kestrel__Certificates__Default__Path=../../dev-cert/localhost.pfx
+    - Kestrel__Certificates__Default__Path=../../etc/dev-cert/localhost.pfx
     - Kestrel__Certificates__Default__Password=e8202f07-66e5-4619-be07-72ba76fde97f
 - name: api
   project: src/EventHub.HttpApi.Host/EventHub.HttpApi.Host.csproj
@@ -19,7 +19,7 @@ services:
     - protocol: https
       port: 44362
   env:
-    - Kestrel__Certificates__Default__Path=../../dev-cert/localhost.pfx
+    - Kestrel__Certificates__Default__Path=../../etc/dev-cert/localhost.pfx
     - Kestrel__Certificates__Default__Password=e8202f07-66e5-4619-be07-72ba76fde97f  
 - name: web
   project: src/EventHub.Web/EventHub.Web.csproj
@@ -27,7 +27,7 @@ services:
     - protocol: https
       port: 44308
   env:
-    - Kestrel__Certificates__Default__Path=../../dev-cert/localhost.pfx
+    - Kestrel__Certificates__Default__Path=../../etc/dev-cert/localhost.pfx
     - Kestrel__Certificates__Default__Password=e8202f07-66e5-4619-be07-72ba76fde97f  
 - name: web-admin
   project: src/EventHub.Admin.Web/EventHub.Admin.Web.csproj
@@ -35,7 +35,7 @@ services:
     - protocol: https
       port: 44307
   env:
-    - Kestrel__Certificates__Default__Path=../../dev-cert/localhost.pfx
+    - Kestrel__Certificates__Default__Path=../../etc/dev-cert/localhost.pfx
     - Kestrel__Certificates__Default__Password=e8202f07-66e5-4619-be07-72ba76fde97f  
 - name: background-services
   project: src/EventHub.BackgroundServices/EventHub.BackgroundServices.csproj
