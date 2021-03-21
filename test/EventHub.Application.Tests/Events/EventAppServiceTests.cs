@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using EventHub.Events.Registrations;
 using Shouldly;
 using Volo.Abp;
+using Volo.Abp.Authorization;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Timing;
 using Xunit;
@@ -54,7 +55,7 @@ namespace EventHub.Events
         [Fact]
         public async Task Should_Not_Create_Event_For_Not_Authorized_Organization()
         {
-            var exception = await Assert.ThrowsAsync<BusinessException>(async () =>
+            var exception = await Assert.ThrowsAsync<AbpAuthorizationException>(async () =>
             {
                 await _eventAppService.CreateAsync(
                     new CreateEventDto

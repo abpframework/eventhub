@@ -57,7 +57,7 @@ namespace EventHub.Events
             UrlCode = Check.NotNullOrWhiteSpace(urlCode, urlCode, EventConsts.UrlCodeLength, EventConsts.UrlCodeLength);
             SetTitle(title);
             SetDescription(description);
-            SetTime(startTime, endTime);
+            SetTimeInternal(startTime, endTime);
         }
 
         public Event SetTitle(string title)
@@ -75,14 +75,8 @@ namespace EventHub.Events
 
         public Event SetTime(DateTime startTime, DateTime endTime)
         {
-            if (startTime > endTime)
-            {
-                throw new BusinessException(EventHubErrorCodes.EventEndTimeCantBeEarlierThanStartTime);
-            }
-
-            StartTime = startTime;
-            EndTime = endTime;
-            return this;
+            AddLocalEvent(new EventTimeChangingEventData(this, StartTime, EndTime));
+            return SetTimeInternal(startTime, endTime);
         }
 
         public Event SetLocation(
@@ -106,6 +100,18 @@ namespace EventHub.Events
                 City = city;
             }
 
+            return this;
+        }
+        
+        private Event SetTimeInternal(DateTime startTime, DateTime endTime)
+        {
+            if (startTime > endTime)
+            {
+                throw new BusinessException(EventHubErrorCodes.EventEndTimeCantBeEarlierThanStartTime);
+            }
+
+            StartTime = startTime;
+            EndTime = endTime;
             return this;
         }
     }

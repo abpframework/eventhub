@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Events.Registrations;
 using EventHub.Organizations;
