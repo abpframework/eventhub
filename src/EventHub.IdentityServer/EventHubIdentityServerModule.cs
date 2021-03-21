@@ -113,13 +113,10 @@ namespace EventHub
                 options.KeyPrefix = "EventHub:";
             });
 
-            if (!hostingEnvironment.IsDevelopment())
-            {
-                var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
-                context.Services
-                    .AddDataProtection()
-                    .PersistKeysToStackExchangeRedis(redis, "EventHub-Protection-Keys");
-            }
+            var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
+            context.Services
+                .AddDataProtection()
+                .PersistKeysToStackExchangeRedis(redis, "EventHub-Protection-Keys");
 
             context.Services.AddCors(options =>
             {

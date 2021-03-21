@@ -1,16 +1,23 @@
 ﻿using EventHub.Events;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using StackExchange.Redis;
 using Volo.Abp;
 using Volo.Abp.Autofac;
 using Volo.Abp.BackgroundWorkers;
+using Volo.Abp.Caching;
+using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Modularity;
 
 namespace EventHub
 {
 
     [DependsOn(
-        typeof(AbpAutofacModule)
+        typeof(AbpAutofacModule),
+        typeof(AbpBackgroundWorkersModule),
+        typeof(EventHubDomainModule),
+        typeof(AbpCachingStackExchangeRedisModule)
     )]
     public class EventHubBackgroundServicesModule : AbpModule
     {
@@ -20,6 +27,16 @@ namespace EventHub
             var hostEnvironment = context.Services.GetSingletonInstance<IHostEnvironment>();
 
             context.Services.AddHostedService<EventHubBackgroundServicesHostedService>();
+            
+            Configure<AbpDistributedCacheOptions>(options =>
+            {
+                options.KeyPrefix = "EventHub:";
+            });
+            
+            var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
+            context.Services
+                .AddDataProtection()
+                .PersistKeysToStackExchangeRedis(redis, "EventHub-Protection-Keys");
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

@@ -69,7 +69,7 @@ namespace EventHub.Web
 
             ConfigureBundles();
             ConfigureCache(configuration);
-            ConfigureRedis(context, configuration, hostingEnvironment);
+            ConfigureRedis(context, configuration);
             ConfigureUrls(configuration);
             ConfigureAuthentication(context, configuration);
             ConfigureAutoMapper();
@@ -186,16 +186,12 @@ namespace EventHub.Web
 
         private void ConfigureRedis(
             ServiceConfigurationContext context,
-            IConfiguration configuration,
-            IWebHostEnvironment hostingEnvironment)
+            IConfiguration configuration)
         {
-            if (!hostingEnvironment.IsDevelopment())
-            {
-                var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
-                context.Services
-                    .AddDataProtection()
-                    .PersistKeysToStackExchangeRedis(redis, "EventHub-Protection-Keys");
-            }
+            var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
+            context.Services
+                .AddDataProtection()
+                .PersistKeysToStackExchangeRedis(redis, "EventHub-Protection-Keys");
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
