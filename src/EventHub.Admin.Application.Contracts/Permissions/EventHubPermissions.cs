@@ -1,4 +1,4 @@
-﻿namespace EventHub.Permissions
+﻿namespace EventHub.Admin.Permissions
 {
     public static class EventHubPermissions
     {

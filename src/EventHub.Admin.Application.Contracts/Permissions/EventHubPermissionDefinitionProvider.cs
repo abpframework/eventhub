@@ -2,7 +2,7 @@
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
 
-namespace EventHub.Permissions
+namespace EventHub.Admin.Permissions
 {
     public class EventHubPermissionDefinitionProvider : PermissionDefinitionProvider
     {

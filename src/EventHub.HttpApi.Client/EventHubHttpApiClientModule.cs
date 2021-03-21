@@ -1,16 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Account;
-using Volo.Abp.Identity;
+using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
-using Volo.Abp.PermissionManagement;
 
 namespace EventHub
 {
     [DependsOn(
         typeof(EventHubApplicationContractsModule),
-        typeof(AbpAccountHttpApiClientModule),
-        typeof(AbpIdentityHttpApiClientModule),
-        typeof(AbpPermissionManagementHttpApiClientModule)
+        typeof(AbpHttpClientModule)
     )]
     public class EventHubHttpApiClientModule : AbpModule
     {

@@ -364,3 +364,4 @@ src/EventHub.HttpApi.Host/Logs/*
 src/EventHub.HttpApi.HostWithIds/Logs/*
 src/EventHub.DbMigrator/Logs/*
 .tye/
+tempkey.jwk
