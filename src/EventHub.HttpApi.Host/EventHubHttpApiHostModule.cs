@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using EventHub.Admin;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
@@ -30,11 +31,13 @@ using Volo.Abp.VirtualFileSystem;
 namespace EventHub
 {
     [DependsOn(
+        typeof(EventHubApplicationModule),
         typeof(EventHubHttpApiModule),
+        typeof(EventHubAdminApplicationModule),
+        typeof(EventHubAdminHttpApiModule),
+        typeof(EventHubEntityFrameworkCoreDbMigrationsModule),
         typeof(AbpAutofacModule),
         typeof(AbpCachingStackExchangeRedisModule),
-        typeof(EventHubApplicationModule),
-        typeof(EventHubEntityFrameworkCoreDbMigrationsModule),
         typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpSwashbuckleModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule)
@@ -127,6 +130,7 @@ namespace EventHub
                 {
                     options.SwaggerDoc("v1", new OpenApiInfo {Title = "EventHub API", Version = "v1"});
                     options.DocInclusionPredicate((docName, description) => true);
+                    options.CustomSchemaIds(type => type.FullName);
                 });
         }
 

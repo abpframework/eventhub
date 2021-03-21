@@ -1,17 +1,13 @@
-﻿using Volo.Abp.Account;
+﻿using Volo.Abp.Application;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
-using Volo.Abp.PermissionManagement;
 
 namespace EventHub
 {
     [DependsOn(
         typeof(EventHubDomainModule),
-        typeof(AbpAccountApplicationModule),
         typeof(EventHubApplicationContractsModule),
-        typeof(AbpIdentityApplicationModule),
-        typeof(AbpPermissionManagementApplicationModule)
+        typeof(AbpDddApplicationModule)
     )]
     public class EventHubApplicationModule : AbpModule
     {

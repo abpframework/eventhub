@@ -20,7 +20,7 @@ namespace EventHub.Admin.Web
 {
     [DependsOn(
         typeof(AbpAutofacWebAssemblyModule),
-        typeof(EventHubHttpApiClientModule),
+        typeof(EventHubAdminHttpApiClientModule),
         typeof(AbpAspNetCoreComponentsWebAssemblyBasicThemeModule),
         typeof(AbpIdentityBlazorModule)
     )]
