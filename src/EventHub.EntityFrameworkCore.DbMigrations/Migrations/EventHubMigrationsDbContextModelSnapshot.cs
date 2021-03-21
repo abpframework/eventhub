@@ -18,7 +18,7 @@ namespace EventHub.Migrations
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.SqlServer)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.3")
+                .HasAnnotation("ProductVersion", "5.0.4")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("EventHub.Countries.Country", b =>
@@ -148,9 +148,13 @@ namespace EventHub.Migrations
 
                     b.HasIndex("CountryId");
 
+                    b.HasIndex("IsEmailSentToMembers");
+
                     b.HasIndex("StartTime");
 
                     b.HasIndex("UrlCode");
+
+                    b.HasIndex("IsRemindingEmailSent", "StartTime");
 
                     b.HasIndex("OrganizationId", "StartTime");
 

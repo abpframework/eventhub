@@ -76,6 +76,8 @@ namespace EventHub.EntityFrameworkCore
                 b.HasIndex(x => new {x.OrganizationId, x.StartTime});
                 b.HasIndex(x => x.StartTime);
                 b.HasIndex(x => x.UrlCode);
+                b.HasIndex(x => new {x.IsRemindingEmailSent, x.StartTime});
+                b.HasIndex(x => x.IsEmailSentToMembers);
             });
 
             builder.Entity<EventRegistration>(b =>

@@ -40,6 +40,8 @@ namespace EventHub.Events
             {
                 return;
             }
+            
+            //TODO: It will be more performant if we join to users instead of individually query (already done for EventReminderNotifier)
 
             var queryable = await _eventRegistrationRepository.GetQueryableAsync();
             var registrations = await _asyncExecuter.ToListAsync(

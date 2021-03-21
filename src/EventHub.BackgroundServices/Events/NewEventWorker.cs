@@ -7,6 +7,7 @@ using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Linq;
 using Volo.Abp.Threading;
+using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 
 namespace EventHub.Events
@@ -29,17 +30,23 @@ namespace EventHub.Events
             var newEventNotifier = workerContext.ServiceProvider.GetRequiredService<NewEventNotifier>();
             var eventRepository = workerContext.ServiceProvider.GetRequiredService<IRepository<Event, Guid>>();
             var asyncExecuter = workerContext.ServiceProvider.GetRequiredService<IAsyncQueryableExecuter>();
+            var clock = workerContext.ServiceProvider.GetRequiredService<IClock>();
 
             var queryable = await eventRepository.GetQueryableAsync();
             var newEvents = await asyncExecuter.ToListAsync(
                 queryable.Where(x => x.IsEmailSentToMembers == false)
             );
-            
+
+            var fiveMinutesLater = clock.Now.AddMinutes(5);
             foreach (var @event in newEvents)
             {
                 try
                 {
-                    await newEventNotifier.NotifyAsync(@event);
+                    if (@event.StartTime >= fiveMinutesLater)
+                    {
+                        await newEventNotifier.NotifyAsync(@event);
+                    }
+                    
                     @event.IsEmailSentToMembers = true;
                     await eventRepository.UpdateAsync(@event);
                 }

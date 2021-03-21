@@ -36,6 +36,8 @@ namespace EventHub.Events
 
         public async Task NotifyAsync(Event @event)
         {
+            //TODO: It will be more performant if we join to users instead of individually query (already done for EventReminderNotifier)
+            
             var queryable = await _organizationMembershipsRepository.GetQueryableAsync();
             var organizationMembers = await _asyncExecuter.ToListAsync(
                 queryable.Where(x => x.OrganizationId == @event.OrganizationId)
