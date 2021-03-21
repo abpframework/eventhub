@@ -25,7 +25,7 @@ namespace EventHub
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             context.AddBackgroundWorker<EventReminderWorker>();
-            context.AddBackgroundWorker<NewEventDetectorWorker>();
+            context.AddBackgroundWorker<NewEventWorker>();
             context.AddBackgroundWorker<EventTimingChangeWorker>();
         }
     }

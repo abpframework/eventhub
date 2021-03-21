@@ -11,9 +11,9 @@ using Volo.Abp.Uow;
 
 namespace EventHub.Events
 {
-    public class NewEventDetectorWorker : AsyncPeriodicBackgroundWorkerBase
+    public class NewEventWorker : AsyncPeriodicBackgroundWorkerBase
     {
-        public NewEventDetectorWorker(
+        public NewEventWorker(
             AbpAsyncTimer timer,
             IServiceScopeFactory serviceScopeFactory) 
             : base(
