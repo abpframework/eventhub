@@ -27,8 +27,8 @@ namespace EventHub.Events
             var eventRegistrationRepository = workerContext.ServiceProvider.GetRequiredService<IRepository<EventRegistration, Guid>>();
             var asyncExecuter = workerContext.ServiceProvider.GetRequiredService<IAsyncQueryableExecuter>();
 
-            var eventRegistrationQueryable = await eventRegistrationRepository.GetQueryableAsync();
-            var query = eventRegistrationQueryable
+            var queryable = await eventRegistrationRepository.GetQueryableAsync();
+            var query = queryable
                 .Where(x => !x.IsTimingChangeEmailSent)
                 .Select(x => x.EventId)
                 .Distinct();

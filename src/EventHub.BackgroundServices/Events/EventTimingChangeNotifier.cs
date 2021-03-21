@@ -25,8 +25,7 @@ namespace EventHub.Events
             ITemplateRenderer templateRenderer,
             IRepository<EventRegistration, Guid> eventRegistrationRepository,
             IAsyncQueryableExecuter asyncExecuter,
-            IRepository<AppUser, Guid> userRepository
-        )
+            IRepository<AppUser, Guid> userRepository)
         {
             _emailSender = emailSender;
             _templateRenderer = templateRenderer;
@@ -42,22 +41,20 @@ namespace EventHub.Events
                 return;
             }
 
-            var eventRegistrationQueryable = await _eventRegistrationRepository.GetQueryableAsync();
-            var query = eventRegistrationQueryable
-                .Where(x => x.EventId == @event.Id && !x.IsTimingChangeEmailSent);
-            
-            var eventRegistrations = await _asyncExecuter.ToListAsync(query);
+            var queryable = await _eventRegistrationRepository.GetQueryableAsync();
+            var registrations = await _asyncExecuter.ToListAsync(
+                queryable.Where(x => x.EventId == @event.Id && !x.IsTimingChangeEmailSent)
+            );
 
-            foreach (var eventRegistration in eventRegistrations)
+            foreach (var registration in registrations)
             {
-                var user = await _userRepository.FindAsync(eventRegistration.UserId);
-
+                var user = await _userRepository.FindAsync(registration.UserId);
                 if (user is null)
                 {
                     continue;
                 }
 
-                var model = new
+                var templateModel = new
                 {
                     UserName = user.GetFullNameOrUsername(),
                     Title = @event.Title,
@@ -69,13 +66,13 @@ namespace EventHub.Events
                 await _emailSender.QueueAsync(
                     user.Email,
                     "Event time has been changed!",
-                    await _templateRenderer.RenderAsync(EmailTemplates.EventTimingChanged, model)
+                    await _templateRenderer.RenderAsync(EmailTemplates.EventTimingChanged, templateModel)
                 );
 
-                eventRegistration.IsTimingChangeEmailSent = true;
+                registration.IsTimingChangeEmailSent = true;
             }
 
-            await _eventRegistrationRepository.UpdateManyAsync(eventRegistrations, autoSave: true);
+            await _eventRegistrationRepository.UpdateManyAsync(registrations, autoSave: true);
         }
     }
 }

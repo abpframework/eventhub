@@ -36,24 +36,19 @@ namespace EventHub.Events
         
         public async Task NotifyAsync(Event @event)
         {
-            if (@event is null)
-            {
-                return;
-            }
-            
             var userQueryable = await _userRepository.GetQueryableAsync();
-            var eventRegistrationQueryable = await _eventRegistrationRepository.GetQueryableAsync();
+            var registrationQueryable = await _eventRegistrationRepository.GetQueryableAsync();
             
-            var userQuery = from eventRegistration in eventRegistrationQueryable
+            var userQuery = from eventRegistration in registrationQueryable
                 join user in userQueryable on eventRegistration.UserId equals user.Id
                 where eventRegistration.EventId == @event.Id
                 select user;
 
-            var usersToBeNotified = await _asyncExecuter.ToListAsync(userQuery);
+            var users = await _asyncExecuter.ToListAsync(userQuery);
 
-            foreach (var user in usersToBeNotified)
+            foreach (var user in users)
             {
-                var model = new
+                var templateModel = new
                 {
                     UserName = user.GetFullNameOrUsername(),
                     Title = @event.Title,
@@ -65,7 +60,7 @@ namespace EventHub.Events
                 await _emailSender.QueueAsync(
                     user.Email,
                     "The event has last thirty minutes to start!",
-                    await _templateRenderer.RenderAsync(EmailTemplates.EventReminder, model)
+                    await _templateRenderer.RenderAsync(EmailTemplates.EventReminder, templateModel)
                 );   
             }
         }

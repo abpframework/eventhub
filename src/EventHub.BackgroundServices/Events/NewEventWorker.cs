@@ -23,7 +23,7 @@ namespace EventHub.Events
             Timer.Period = 60_000;
         }
 
-        [UnitOfWork]
+        [UnitOfWork(isTransactional: false)]
         protected override async Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
         {
             var newEventNotifier = workerContext.ServiceProvider.GetRequiredService<NewEventNotifier>();
