@@ -2,7 +2,7 @@ using Volo.Abp.BlobStoring;
 
 namespace EventHub.Organizations
 {
-    [BlobContainerName("organization-profile-pictures")]
+    [BlobContainerName("eventhub-organization-profile-pictures")]
     public class OrganizationProfilePictureContainer
     {
         

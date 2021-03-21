@@ -85,29 +85,27 @@ namespace EventHub.Events
             return this;
         }
 
-        public Event SetLocation(bool isOnline, string onlineLink, Guid? countryId, string city)
+        public Event SetLocation(
+            bool isOnline,
+            string onlineLink,
+            Guid? countryId,
+            string city)
         {
             IsOnline = isOnline;
             
-            if (isOnline)
+            if (IsOnline)
             {
-                if (!onlineLink.IsNullOrWhiteSpace())
-                {
-                    OnlineLink = onlineLink;
-                }
-
+                OnlineLink = onlineLink;
                 CountryId = null;
                 City = null;
-                return this;
             }
-            
-            if (countryId.HasValue && !city.IsNullOrWhiteSpace())
+            else
             {
+                OnlineLink = null;
                 CountryId = countryId;
                 City = city;
             }
 
-            OnlineLink = null;
             return this;
         }
     }

@@ -18,7 +18,7 @@ using ApiResource = Volo.Abp.IdentityServer.ApiResources.ApiResource;
 using ApiScope = Volo.Abp.IdentityServer.ApiScopes.ApiScope;
 using Client = Volo.Abp.IdentityServer.Clients.Client;
 
-namespace EventHub.IdentityServer
+namespace EventHub.Data
 {
     public class IdentityServerDataSeedContributor : IDataSeedContributor, ITransientDependency
     {

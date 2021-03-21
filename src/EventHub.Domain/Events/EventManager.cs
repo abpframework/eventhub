@@ -53,8 +53,7 @@ namespace EventHub.Events
             bool isOnline,
             string onlineLink,
             string city,
-            int? capacity
-            )
+            int? capacity)
         {
             var @event = await _eventRepository.GetAsync(id);
             var registeredUserCount = await _eventRegistrationRepository.CountAsync(x => x.EventId == @event.Id);

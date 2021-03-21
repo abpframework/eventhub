@@ -6,7 +6,7 @@ namespace EventHub.Organizations
 {
     public class Organization : FullAuditedAggregateRoot<Guid>
     {
-        public Guid OwnerUserId { get; set; }
+        public Guid OwnerUserId { get; private set; }
 
         public string Name { get; private set; }
 
