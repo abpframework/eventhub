@@ -10,7 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\EventHub.Domain\EventHub.Domain.csproj" />
+        <ProjectReference Include="..\EventHub.EntityFrameworkCore\EventHub.EntityFrameworkCore.csproj" />
     </ItemGroup>
 
     <ItemGroup>

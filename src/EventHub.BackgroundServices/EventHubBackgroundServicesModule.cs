@@ -1,4 +1,5 @@
-﻿using EventHub.Events;
+﻿using EventHub.EntityFrameworkCore;
+using EventHub.Events;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -16,7 +17,7 @@ namespace EventHub
     [DependsOn(
         typeof(AbpAutofacModule),
         typeof(AbpBackgroundWorkersModule),
-        typeof(EventHubDomainModule),
+        typeof(EventHubEntityFrameworkCoreModule),
         typeof(AbpCachingStackExchangeRedisModule)
     )]
     public class EventHubBackgroundServicesModule : AbpModule
