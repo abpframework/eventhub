@@ -5,7 +5,6 @@ using NSubstitute;
 using Shouldly;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Authorization;
 using Volo.Abp.Users;
 using Xunit;
 

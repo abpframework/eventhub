@@ -20,8 +20,7 @@ namespace EventHub.Organizations
         public OrganizationAppService(
             IRepository<Organization, Guid> organizationRepository,
             OrganizationManager organizationManager,
-            IBlobContainer<OrganizationProfilePictureContainer> organizationBlobContainer
-            )
+            IBlobContainer<OrganizationProfilePictureContainer> organizationBlobContainer)
         {
             _organizationRepository = organizationRepository;
             _organizationManager = organizationManager;
