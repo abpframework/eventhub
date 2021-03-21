@@ -9,7 +9,7 @@
         public const string NotAuthorizedToUpdateOrganizationProfile = "EventHub:NotAuthorizedToUpdateOrganizationProfile";
         public const string CapacityOfEventFull = "EventHub:CapacityOfEventFull";
         public const string CapacityCantBeLowerThanRegisteredUserCount = "EventHub:CapacityCantBeLowerThanRegisteredUserCount";
-        public const string NotAuthorizedToUpdateEventProfile = "EventHub:NotAuthorizedToUpdateEventProfile";
+        public const string NotAuthorizedToUpdateEvent = "EventHub:NotAuthorizedToUpdateEvent";
         public const string CantChangeEventTiming = "EventHub:CantChangeEventTiming";
     }
 }

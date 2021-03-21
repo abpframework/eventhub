@@ -47,26 +47,19 @@ namespace EventHub.Events
         }
 
         [Fact]
-        public async Task Should_Update_The_Event()
+        public async Task Should_Update_The_Event_Capacity()
         {
             await WithUnitOfWorkAsync(async () =>
             {
                 var @event = await _eventRepository.GetAsync(_testData.AbpMicroservicesFutureEventId);
+                var newCapacity = @event.Capacity.HasValue ? @event.Capacity.Value + 1 : 42;
 
-                var updatedEvent = await _eventManager.UpdateAsync(
-                    @event.Id,
-                    null,
-                    "Updated_Microservice_Event_Title",
-                    "Updated_Microservice_Event_Description" + @event.Description,
-                    "en",
-                    true,
-                    "online_link",
-                    null,
-                    null
+                await _eventManager.SetCapacityAsync(
+                    @event,
+                    newCapacity
                 );
                 
-                @event.Title.ShouldBe(updatedEvent.Title);
-                @event.Description.ShouldBe(updatedEvent.Description);
+                @event.Capacity.ShouldBe(newCapacity);
             });
         }
     }

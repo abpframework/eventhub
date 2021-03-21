@@ -44,32 +44,20 @@ namespace EventHub.Events
             );
         }
 
-        public async Task<Event> UpdateAsync(
-            Guid id,
-            Guid? countryId,
-            string title,
-            string description,
-            string language,
-            bool isOnline,
-            string onlineLink,
-            string city,
+        public async Task SetCapacityAsync(
+            Event @event,
             int? capacity)
         {
-            var @event = await _eventRepository.GetAsync(id);
-            var registeredUserCount = await _eventRegistrationRepository.CountAsync(x => x.EventId == @event.Id);
-
-            if (capacity < registeredUserCount)
+            if (capacity.HasValue)
             {
-                throw new BusinessException(EventHubErrorCodes.CapacityCantBeLowerThanRegisteredUserCount);
+                var registeredUserCount = await _eventRegistrationRepository.CountAsync(x => x.EventId == @event.Id);
+                if (capacity.Value < registeredUserCount)
+                {
+                    throw new BusinessException(EventHubErrorCodes.CapacityCantBeLowerThanRegisteredUserCount);
+                }
             }
 
-            @event.SetTitle(title);
-            @event.SetDescription(description);
-            @event.SetLocation(isOnline, onlineLink, countryId, city);
             @event.Capacity = capacity;
-            @event.Language = language;
-
-            return @event;
         }
     }
 }

@@ -9,6 +9,7 @@ using EventHub.Users;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Authorization;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Users;
@@ -67,7 +68,8 @@ namespace EventHub.Events
 
             @event.SetLocation(input.IsOnline, input.OnlineLink, input.CountryId, input.City);
             @event.Language = input.Language;
-            @event.Capacity = input.Capacity;
+
+            await _eventManager.SetCapacityAsync(@event, input.Capacity);
 
             if (input.CoverImageContent != null && input.CoverImageContent.Length > 0)
             {
@@ -206,23 +208,20 @@ namespace EventHub.Events
 
             if (organization.OwnerUserId != CurrentUser.GetId())
             {
-                throw new BusinessException(EventHubErrorCodes.NotAuthorizedToUpdateEventProfile)
-                    .WithData("EventTitle", @event.Title);
+                throw new AbpAuthorizationException(
+                    L["EventHub:NotAuthorizedToUpdateEvent"].Value.Replace("{EventTitle}", @event.Title),
+                    EventHubErrorCodes.NotAuthorizedToUpdateEvent
+                );
             }
-            
-            var updatedEvent = await _eventManager.UpdateAsync(
-                id,
-                input.CountryId,
-                input.Title,
-                input.Description,
-                input.Language,
-                input.IsOnline,
-                input.OnlineLink,
-                input.City,
-                input.Capacity
-            );
 
-            await _eventRepository.UpdateAsync(updatedEvent);
+            @event.SetLocation(input.IsOnline, input.OnlineLink, input.CountryId, input.City);
+            @event.SetTitle(input.Title);
+            @event.SetDescription(input.Description);
+            @event.Language = input.Language;
+            
+            await _eventManager.SetCapacityAsync(@event, input.Capacity);
+
+            await _eventRepository.UpdateAsync(@event);
         }
 
         [Authorize]

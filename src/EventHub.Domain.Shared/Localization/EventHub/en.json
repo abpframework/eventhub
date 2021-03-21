@@ -63,7 +63,7 @@
     "LocationHasNotSpecifiedYet": "Event {0} has not been specified yet.",
     "Language": "Language",
     "EventHub:CapacityCantBeLowerThanRegisteredUserCount": "Capacity can not be lower than the currently registered user count.",
-    "EventHub:NotAuthorizedToUpdateEventProfile": "You are not authorized to update the \"{EventTitle}\" event.",
+    "EventHub:NotAuthorizedToUpdateEvent": "You are not authorized to update the \"{EventTitle}\" event.",
     "CoverImage": "Cover Image",
     "EventHub:CantChangeEventTiming": "Can not change the event timing more than {MaxTimingChangeLimit} times.",
     "EventCoverImageEditSuccessMessage": "The event's cover image has been changed successfully.",

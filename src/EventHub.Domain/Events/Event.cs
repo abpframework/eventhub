@@ -30,7 +30,7 @@ namespace EventHub.Events
 
         public string Language { get; set; }
 
-        public int? Capacity { get; set; }
+        public int? Capacity { get; internal set; }
 
         public bool IsRemindingEmailSent { get; set; }
 
