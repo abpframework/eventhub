@@ -57,6 +57,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{BBD743
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "www", "www", "{6A874270-A81C-4D32-B841-40DE0CB3D135}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventHub.Admin.Application.Contracts", "src\EventHub.Admin.Application.Contracts\EventHub.Admin.Application.Contracts.csproj", "{354AB806-7A90-4646-8263-FF34B812D9EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -135,6 +137,10 @@ Global
 		{7A16923F-06FA-40B4-8A54-69E7828B1D69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A16923F-06FA-40B4-8A54-69E7828B1D69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A16923F-06FA-40B4-8A54-69E7828B1D69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{354AB806-7A90-4646-8263-FF34B812D9EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{354AB806-7A90-4646-8263-FF34B812D9EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{354AB806-7A90-4646-8263-FF34B812D9EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{354AB806-7A90-4646-8263-FF34B812D9EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -165,6 +171,7 @@ Global
 		{91853F21-9CD9-4132-BC29-A7D5D84FFFE7} = {BBD74390-60B3-4AE4-80B4-956565C3E612}
 		{6A874270-A81C-4D32-B841-40DE0CB3D135} = {04DBDB01-70F4-4E06-B468-8F87850B22BE}
 		{50B2631D-129C-47B3-A587-029CCD6099BC} = {6A874270-A81C-4D32-B841-40DE0CB3D135}
+		{354AB806-7A90-4646-8263-FF34B812D9EE} = {7016C0D2-D0D5-498B-9FA7-8ABA8F5C39EF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6AAFA1C6-603E-13FA-45E5-7910AA9F661D}
