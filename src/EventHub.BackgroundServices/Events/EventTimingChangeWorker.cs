@@ -14,7 +14,12 @@ namespace EventHub.Events
 {
     public class EventTimingChangeWorker : AsyncPeriodicBackgroundWorkerBase
     {
-        public EventTimingChangeWorker(AbpAsyncTimer timer, IServiceScopeFactory serviceScopeFactory) : base(timer, serviceScopeFactory)
+        public EventTimingChangeWorker(
+            AbpAsyncTimer timer,
+            IServiceScopeFactory serviceScopeFactory
+            ) : base(
+            timer,
+            serviceScopeFactory)
         {
             Timer.Period = 60000; //1 minute
         }
