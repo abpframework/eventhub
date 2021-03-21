@@ -10,6 +10,7 @@ using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.IdentityServer;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.BlobStoring.Database;
+using Volo.Abp.VirtualFileSystem;
 
 namespace EventHub
 {
@@ -29,6 +30,11 @@ namespace EventHub
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<EventHubDomainModule>();
+            });
+            
 #if DEBUG
             context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
 #endif

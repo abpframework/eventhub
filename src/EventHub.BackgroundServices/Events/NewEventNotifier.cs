@@ -16,15 +16,15 @@ namespace EventHub.Events
     {
         private readonly IEmailSender _emailSender;
         private readonly ITemplateRenderer _templateRenderer;
-        private readonly IRepository<OrganizationMembership, Guid>  _organizationMembershipsRepository;
+        private readonly IRepository<OrganizationMembership, Guid> _organizationMembershipsRepository;
         private readonly IRepository<AppUser, Guid> _userRepository;
         private readonly IAsyncQueryableExecuter _asyncExecuter;
 
         public NewEventNotifier(
-            IEmailSender emailSender, 
+            IEmailSender emailSender,
             ITemplateRenderer templateRenderer,
-            IRepository<OrganizationMembership, Guid> organizationMembershipsRepository, 
-            IRepository<AppUser, Guid> userRepository, 
+            IRepository<OrganizationMembership, Guid> organizationMembershipsRepository,
+            IRepository<AppUser, Guid> userRepository,
             IAsyncQueryableExecuter asyncExecuter)
         {
             _emailSender = emailSender;
@@ -33,31 +33,23 @@ namespace EventHub.Events
             _userRepository = userRepository;
             _asyncExecuter = asyncExecuter;
         }
-        
+
         public async Task NotifyAsync(Event @event)
         {
-            if (@event is null)
-            {
-                return;
-            }
-
-            var organizationMembershipsQueryable = await _organizationMembershipsRepository.GetQueryableAsync();
-            
-            var membershipQuery = organizationMembershipsQueryable
-                .Where(x => x.OrganizationId == @event.OrganizationId);
-            
-            var organizationMembers = await _asyncExecuter.ToListAsync(membershipQuery);
+            var queryable = await _organizationMembershipsRepository.GetQueryableAsync();
+            var organizationMembers = await _asyncExecuter.ToListAsync(
+                queryable.Where(x => x.OrganizationId == @event.OrganizationId)
+            );
 
             foreach (var member in organizationMembers)
             {
                 var user = await _userRepository.FindAsync(member.UserId);
-                
                 if (user is null)
                 {
                     continue;
                 }
 
-                var model = new
+                var templateModel = new
                 {
                     UserName = user.GetFullNameOrUsername(),
                     Title = @event.Title,
@@ -65,12 +57,12 @@ namespace EventHub.Events
                     EndTime = @event.EndTime,
                     Url = @event.Url
                 };
-                
+
                 await _emailSender.QueueAsync(
                     user.Email,
                     $"Do you attend the {@event.Title} event?",
-                    await _templateRenderer.RenderAsync(EmailTemplates.NewEventCreated, model)
-                );      
+                    await _templateRenderer.RenderAsync(EmailTemplates.NewEventCreated, templateModel)
+                );
             }
         }
     }

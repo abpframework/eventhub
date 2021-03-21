@@ -13,8 +13,12 @@ namespace EventHub.Events
 {
     public class NewEventDetectorWorker : AsyncPeriodicBackgroundWorkerBase
     {
-        public NewEventDetectorWorker(AbpAsyncTimer timer, IServiceScopeFactory serviceScopeFactory) 
-            : base(timer, serviceScopeFactory)
+        public NewEventDetectorWorker(
+            AbpAsyncTimer timer,
+            IServiceScopeFactory serviceScopeFactory) 
+            : base(
+                timer,
+                serviceScopeFactory)
         {
             Timer.Period = 60_000;
         }
@@ -26,23 +30,22 @@ namespace EventHub.Events
             var eventRepository = workerContext.ServiceProvider.GetRequiredService<IRepository<Event, Guid>>();
             var asyncExecuter = workerContext.ServiceProvider.GetRequiredService<IAsyncQueryableExecuter>();
 
-            var eventQueryable = await eventRepository.GetQueryableAsync();
-
-            var eventQuery = eventQueryable.Where(x => x.IsEmailSentToMembers == false);
+            var queryable = await eventRepository.GetQueryableAsync();
+            var newEvents = await asyncExecuter.ToListAsync(
+                queryable.Where(x => x.IsEmailSentToMembers == false)
+            );
             
-            var newEvents = await asyncExecuter.ToListAsync(eventQuery);
-
             foreach (var @event in newEvents)
             {
                 try
                 {
                     await newEventNotifier.NotifyAsync(@event);
                     @event.IsEmailSentToMembers = true;
+                    await eventRepository.UpdateAsync(@event);
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    @event.IsEmailSentToMembers = false;
-                    Logger.LogError($"An error occurred while sending an email to the members of the organization after the new event was created. Error message: {e.Message}");
+                    Logger.LogException(ex);
                 }
             }
         }
