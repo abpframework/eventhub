@@ -83,11 +83,7 @@ namespace EventHub.Events.Registrations
 
         public async Task<int> GetAttendeeCountAsync(Guid eventId)
         {
-            var eventRegistrationQueryable = await _eventRegistrationRepository.GetQueryableAsync();
-
-            var query = eventRegistrationQueryable.Where(x => x.EventId == eventId);
-
-            return await AsyncExecuter.CountAsync(query);
+            return await _eventRegistrationRepository.CountAsync(x => x.EventId == eventId);
         }
     }
 }

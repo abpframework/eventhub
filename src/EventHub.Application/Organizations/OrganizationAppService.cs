@@ -102,6 +102,7 @@ namespace EventHub.Organizations
 
             if (organization.OwnerUserId != CurrentUser.GetId())
             {
+                //TODO: throw AbpAuthorizationException instead 
                 throw new BusinessException(EventHubErrorCodes.NotAuthorizedToUpdateOrganizationProfile)
                     .WithData("OrganizationName", organization.DisplayName);
             }
@@ -125,6 +126,7 @@ namespace EventHub.Organizations
             
             if (organization.OwnerUserId != CurrentUser.GetId())
             {
+                //TODO: throw AbpAuthorizationException instead
                 throw new BusinessException(EventHubErrorCodes.NotAuthorizedToUpdateOrganizationProfile)
                     .WithData("Name", organization.DisplayName);
             }
