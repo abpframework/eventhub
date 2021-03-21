@@ -1,4 +1,4 @@
-﻿namespace EventHub.Web.Admin.Menus
+﻿namespace EventHub.Admin.Web.Menus
 {
     public class EventHubMenus
     {

@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventHub.Domain.Tests", "te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventHub.DbMigrator", "src\EventHub.DbMigrator\EventHub.DbMigrator.csproj", "{AA94D832-1CCC-4715-95A9-A483F23A1A5D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventHub.Web.Admin", "src\EventHub.Web.Admin\EventHub.Web.Admin.csproj", "{27B2DDC7-8B75-4322-A312-25419C15D9D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventHub.Admin.Web", "src\EventHub.Admin.Web\EventHub.Admin.Web.csproj", "{27B2DDC7-8B75-4322-A312-25419C15D9D8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventHub.Web", "src\EventHub.Web\EventHub.Web.csproj", "{19F3FAD2-740F-4933-A394-4B030E2ABE6A}"
 EndProject

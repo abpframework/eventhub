@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace EventHub.Web.Admin
+namespace EventHub.Admin.Web
 {
     public class EventHubBlazorAutoMapperProfile : Profile
     {

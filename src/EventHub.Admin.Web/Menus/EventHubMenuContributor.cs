@@ -7,7 +7,7 @@ using Volo.Abp.Account.Localization;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.Users;
 
-namespace EventHub.Web.Admin.Menus
+namespace EventHub.Admin.Web.Menus
 {
     public class EventHubMenuContributor : IMenuContributor
     {

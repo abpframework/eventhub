@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
-namespace EventHub.Web.Admin
+namespace EventHub.Admin.Web
 {
     public class Program
     {

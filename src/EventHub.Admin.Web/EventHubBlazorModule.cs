@@ -2,7 +2,7 @@
 using System.Net.Http;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
-using EventHub.Web.Admin.Menus;
+using EventHub.Admin.Web.Menus;
 using IdentityModel;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -16,7 +16,7 @@ using Volo.Abp.Identity.Blazor;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 
-namespace EventHub.Web.Admin
+namespace EventHub.Admin.Web
 {
     [DependsOn(
         typeof(AbpAutofacWebAssemblyModule),
