@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Events.Registrations;
 using EventHub.Organizations;
@@ -12,17 +11,13 @@ namespace EventHub.Events
     public class EventManager : DomainService
     {
         private readonly EventUrlCodeGenerator _eventUrlCodeGenerator;
-        private readonly IRepository<Event, Guid> _eventRepository;
         private readonly IRepository<EventRegistration, Guid> _eventRegistrationRepository;
 
         public EventManager(
             EventUrlCodeGenerator eventUrlCodeGenerator, 
-            IRepository<Event, Guid> eventRepository,
-            IRepository<EventRegistration, Guid> eventRegistrationRepository
-            )
+            IRepository<EventRegistration, Guid> eventRegistrationRepository)
         {
             _eventUrlCodeGenerator = eventUrlCodeGenerator;
-            _eventRepository = eventRepository;
             _eventRegistrationRepository = eventRegistrationRepository;
         }
 
