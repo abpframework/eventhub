@@ -2,9 +2,17 @@ name: .NET
 
 on:
   push:
-    branches: [ main ]
+    paths:
+      - '*.cs'
+      - '*.cshtml'
+      - '*.razor'
+      - '*.csproj'
   pull_request:
-    branches: [ main ]
+    paths:
+      - '*.cs'
+      - '*.cshtml'
+      - '*.razor'
+      - '*.csproj'
 
 jobs:
   build:
