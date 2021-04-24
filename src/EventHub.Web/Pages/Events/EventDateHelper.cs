@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using EventHub.Events;
 
 namespace EventHub.Web.Pages.Events
 {
@@ -21,6 +22,18 @@ namespace EventHub.Web.Pages.Events
             sb.Append(endTime.ToString("hh:mm"));
 
             return sb.ToString();
+        }
+        
+        public static string GetLocationInfo(EventInListDto eventItem)
+        {
+            if (eventItem.IsOnline)
+            {
+                return "online";
+            }
+            else
+            {
+                return "???";
+            }
         }
     }
 }

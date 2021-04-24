@@ -81,262 +81,44 @@
     <div class="col-md">
         <h2>Upcoming Events</h2>
     </div>
-    <div class="col-md-auto">
-        <div class="row filter-select">
-            <div class="col-4 pr-0">
-                <select class="form-select" aria-label="Default select example">
-                    <option selected>When</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                </select>
-            </div>
-            <div class="col-4 pr-0">
-                <select class="form-select" aria-label="Default select example">
-                    <option selected>Event Type</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                </select>
-            </div>
-            <div class="col-4">
-                <select class="form-select" aria-label="Default select example">
-                    <option selected>Category</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                </select>
-            </div>
-        </div>
-    </div>
 </div>
 
 <div class="row">
-<div class="col-lg-4 col-md-6">
-    <div class="card">
-        <img src="/assets/card-img.png" class="card-img-top" alt="...">
-        <div class="card-body">
-            <div class="event-container">
-                <div class="form-row">
-                    <div class="col-2">
-                        <div class="event-date text-center">
-                            <small>Mar</small>
-                            <span>9</span>
+        @foreach (var eventItem in Model.Events)
+        {
+            <div class="col-lg-4 col-md-6">
+                <div class="card">
+                    @if (eventItem.CoverImageContent is null)
+                    {
+                        <img abp-card-image="Top" src="/assets/card-img.png" alt="@eventItem.Title"/>
+                    }
+                    else
+                    {
+                        <img abp-card-image="Top" style="max-height: 400px; min-height: 160px;" src="@($"data:image/png;base64,{Convert.ToBase64String(eventItem.CoverImageContent)}")" alt="@eventItem.Title"/>
+                    }
+                    <div class="card-body">
+                        <div class="event-container">
+                            <div class="form-row">
+                                <div class="col-2">
+                                    <div class="event-date text-center">
+                                        <small>@eventItem.StartTime.ToString("MMM")</small>
+                                        <span>@eventItem.StartTime.Day</span>
+                                    </div>
+                                </div>
+                                <div class="col-10">
+                                    <div class="event-info">
+                                        <h5>@eventItem.Title</h5>
+                                        <small>@eventItem.StartTime.ToString("hh:mm") | @EventDateHelper.GetLocationInfo(eventItem)</small>
+                                        <p>@eventItem.Description.TruncateWithPostfix(100)</p>
+                                    </div>
+                                    <a href="@Url.Page("/Events/Detail", new {url = eventItem.Url})" class="btn btn-link p-0">Learn More <img src="/assets/more-btn.svg"></a>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-10">
-                        <div class="event-info">
-                            <h5>Lorem Connected</h5>
-                            <small>7 pm - 9 pm | Ankara , Çankaya</small>
-                            <p>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                        <a href="#" class="btn btn-link p-0">Learn More <img src="/assets/more-btn.svg"></a>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-<div class="col-lg-4 col-md-6">
-    <div class="card">
-        <img src="/assets/card-img.png" class="card-img-top" alt="...">
-        <div class="card-body">
-            <div class="event-container">
-                <div class="form-row">
-                    <div class="col-2">
-                        <div class="event-date text-center">
-                            <small>Mar</small>
-                            <span>9</span>
-                        </div>
-                    </div>
-                    <div class="col-10">
-                        <div class="event-info">
-                            <h5>Chainlink Connected Smart Contracts Lorem Ipsum</h5>
-                            <small>7 pm - 9 pm | Ankara , Çankaya</small>
-                            <p>Some quick example text to build on th content.</p>
-                        </div>
-                        <a href="#" class="btn btn-link p-0">Learn More <img src="/assets/more-btn.svg"></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="col-lg-4 col-md-6">
-    <div class="card">
-        <img src="/assets/card-img.png" class="card-img-top" alt="...">
-        <div class="card-body">
-            <div class="event-container">
-                <div class="form-row">
-                    <div class="col-2">
-                        <div class="event-date text-center">
-                            <small>Mar</small>
-                            <span>9</span>
-                        </div>
-                    </div>
-                    <div class="col-10">
-                        <div class="event-info">
-                            <h5>Chainlink Connected Smart Contracts</h5>
-                            <small>7 pm - 9 pm | Ankara , Çankaya</small>
-                            <p>Some quick example text to build on the card title and make up the bud title and make up e card's content.</p>
-                        </div>
-                        <a href="#" class="btn btn-link p-0">Learn More <img src="/assets/more-btn.svg"></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="col-lg-4 col-md-6">
-    <div class="card">
-        <img src="/assets/card-img.png" class="card-img-top" alt="...">
-        <div class="card-body">
-            <div class="event-container">
-                <div class="form-row">
-                    <div class="col-2">
-                        <div class="event-date text-center">
-                            <small>Mar</small>
-                            <span>9</span>
-                        </div>
-                    </div>
-                    <div class="col-10">
-                        <div class="event-info">
-                            <h5>Lorem Connected</h5>
-                            <small>7 pm - 9 pm | Ankara , Çankaya</small>
-                            <p>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                        <a href="#" class="btn btn-link p-0">Learn More <img src="/assets/more-btn.svg"></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="col-lg-4 col-md-6">
-    <div class="card">
-        <img src="/assets/card-img.png" class="card-img-top" alt="...">
-        <div class="card-body">
-            <div class="event-container">
-                <div class="form-row">
-                    <div class="col-2">
-                        <div class="event-date text-center">
-                            <small>Mar</small>
-                            <span>9</span>
-                        </div>
-                    </div>
-                    <div class="col-10">
-                        <div class="event-info">
-                            <h5>Chainlink Connected Smart Contracts Lorem Ipsum</h5>
-                            <small>7 pm - 9 pm | Ankara , Çankaya</small>
-                            <p>Some quick example text to build on th content.</p>
-                        </div>
-                        <a href="#" class="btn btn-link p-0">Learn More <img src="/assets/more-btn.svg"></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="col-lg-4 col-md-6">
-    <div class="card">
-        <img src="/assets/card-img.png" class="card-img-top" alt="...">
-        <div class="card-body">
-            <div class="event-container">
-                <div class="form-row">
-                    <div class="col-2">
-                        <div class="event-date text-center">
-                            <small>Mar</small>
-                            <span>9</span>
-                        </div>
-                    </div>
-                    <div class="col-10">
-                        <div class="event-info">
-                            <h5>Chainlink Connected Smart Contracts</h5>
-                            <small>7 pm - 9 pm | Ankara , Çankaya</small>
-                            <p>Some quick example text to build on the card title and make up the bud title and make up e card's content.</p>
-                        </div>
-                        <a href="#" class="btn btn-link p-0">Learn More <img src="/assets/more-btn.svg"></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="col-lg-4 col-md-6">
-    <div class="card">
-        <img src="/assets/card-img.png" class="card-img-top" alt="...">
-        <div class="card-body">
-            <div class="event-container">
-                <div class="form-row">
-                    <div class="col-2">
-                        <div class="event-date text-center">
-                            <small>Mar</small>
-                            <span>9</span>
-                        </div>
-                    </div>
-                    <div class="col-10">
-                        <div class="event-info">
-                            <h5>Lorem Connected</h5>
-                            <small>7 pm - 9 pm | Ankara , Çankaya</small>
-                            <p>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                        <a href="#" class="btn btn-link p-0">Learn More <img src="/assets/more-btn.svg"></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="col-lg-4 col-md-6">
-    <div class="card">
-        <img src="/assets/card-img.png" class="card-img-top" alt="...">
-        <div class="card-body">
-            <div class="event-container">
-                <div class="form-row">
-                    <div class="col-2">
-                        <div class="event-date text-center">
-                            <small>Mar</small>
-                            <span>9</span>
-                        </div>
-                    </div>
-                    <div class="col-10">
-                        <div class="event-info">
-                            <h5>Chainlink Connected Smart Contracts Lorem Ipsum</h5>
-                            <small>7 pm - 9 pm | Ankara , Çankaya</small>
-                            <p>Some quick example text to build on th content.</p>
-                        </div>
-                        <a href="#" class="btn btn-link p-0">Learn More <img src="/assets/more-btn.svg"></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="col-lg-4 col-md-6">
-    <div class="card">
-        <img src="/assets/card-img.png" class="card-img-top" alt="...">
-        <div class="card-body">
-            <div class="event-container">
-                <div class="form-row">
-                    <div class="col-2">
-                        <div class="event-date text-center">
-                            <small>Mar</small>
-                            <span>9</span>
-                        </div>
-                    </div>
-                    <div class="col-10">
-                        <div class="event-info">
-                            <h5>Chainlink Connected Smart Contracts</h5>
-                            <small>7 pm - 9 pm | Ankara , Çankaya</small>
-                            <p>Some quick example text to build on the card title and make up the bud title and make up e card's content.</p>
-                        </div>
-                        <a href="#" class="btn btn-link p-0">Learn More <img src="/assets/more-btn.svg"></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+        }
 </div>
 
 <div class="row">
@@ -502,37 +284,3 @@
         </div>
     </div>
 </div>
-
-
-@*
-<h2>Upcoming Events</h2>
-
-<abp-row>
-    @foreach (var eventItem in Model.Events)
-    {
-        <abp-column size-lg="_4" size-md="_6">
-            <abp-card class="mb-3">
-                @if (eventItem.CoverImageContent is null)
-                {
-                    <img abp-card-image="Top" src="https://picsum.photos/seed/@eventItem.Id.ToString()/400/160?blur=8" alt="@eventItem.Title"/>
-                }
-                else
-                {
-                    <img abp-card-image="Top" style="max-height: 400px; min-height: 160px;" src="@($"data:image/png;base64,{Convert.ToBase64String(eventItem.CoverImageContent)}")" alt="@eventItem.Title"/>
-                }
-                <abp-card-body>
-                    <abp-card-title>@eventItem.Title</abp-card-title>
-                    <abp-card-subtitle>
-                        @EventDateHelper.GetDateRangeText(eventItem.StartTime, eventItem.EndTime) <br/>
-                        <span class="text-muted">@L["OrganizedBy"]</span> <a href="@Url.Page("/Organizations/Profile", new {name = eventItem.OrganizationName})">@eventItem.OrganizationDisplayName</a>
-                    </abp-card-subtitle>
-                    <abp-card-text class="mt-2">
-                        @eventItem.Description.TruncateWithPostfix(100)
-                    </abp-card-text>
-                    <a abp-button="Primary" href="@Url.Page("/Events/Detail", new { url = eventItem.Url })"> @L["SeeEvent"]</a>
-                </abp-card-body>
-            </abp-card>
-        </abp-column>
-    }
-</abp-row>
-*@
