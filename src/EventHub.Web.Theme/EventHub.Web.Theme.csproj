@@ -20,6 +20,9 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\**\*.*" />
+    <Content Include="wwwroot\themes\eventhub\floating-labels.css" />
+    <Content Include="wwwroot\themes\eventhub\owl-edit.css" />
+    <Content Include="wwwroot\themes\eventhub\style.css" />
   </ItemGroup>
 
   <ItemGroup>

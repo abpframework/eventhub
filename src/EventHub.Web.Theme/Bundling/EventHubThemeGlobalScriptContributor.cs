@@ -6,7 +6,6 @@ namespace EventHub.Web.Theme.Bundling
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.Add("/themes/eventhub/layout.js");
         }
     }
 }

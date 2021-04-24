@@ -6,15 +6,14 @@
 @using Volo.Abp.Localization
 @using Volo.Abp.Ui.Branding
 @using EventHub.Web.Theme.Bundling
+@using EventHub.Web.Theme.Themes.EventHub.Components.Footer
 @using EventHub.Web.Theme.Themes.EventHub.Components.MainNavbar
 @using EventHub.Web.Theme.Themes.EventHub.Components.PageAlerts
 @inject IBrandingProvider BrandingProvider
 @inject IPageLayout PageLayout
 @{
     Layout = null;
-    var containerClass = ViewBag.FluidLayout == true ? "container-fluid" : "container"; //TODO: Better and type-safe options
-
-    var pageTitle = ViewBag.Title == null ? BrandingProvider.AppName : ViewBag.Title; //TODO: Discard to get from Title
+    var pageTitle = ViewBag.Title == null ? "EventHub" : ViewBag.Title;
 
     if (PageLayout.Content.Title != null)
     {
@@ -41,7 +40,13 @@
 
     <title>@pageTitle</title>
 
-    <abp-style-bundle name="@EventHubThemeBundles.Styles.Global" />
+    <!-- TODO: Include into the solution and use as packages! -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g==" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css" integrity="sha512-OTcub78R3msOCtY3Tc6FzeDJ8N9qvQn1Ph49ou13xgA9VsH9+LRxoFU6EqLhW4+PKRfU+/HReXmSZXHEkpYoOA==" crossorigin="anonymous"/>
+
+    <abp-style-bundle name="@EventHubThemeBundles.Styles.Global"/>
 
     @await Component.InvokeAsync(typeof(WidgetStylesViewComponent))
 
@@ -49,32 +54,20 @@
 
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.Last, StandardLayouts.Application)
 </head>
-<body class="abp-application-layout bg-light @rtl">
+<body class="abp-application-layout @rtl">
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.First, StandardLayouts.Application)
-
     @(await Component.InvokeAsync<MainNavbarViewComponent>())
-
-    <div class="@containerClass">
-        @(await Component.InvokeAsync<PageAlertsViewComponent>())
-        <div id="AbpContentToolbar">
-            <div class="text-right mb-2">
-                @RenderSection("content_toolbar", false)
-            </div>
-        </div>
-        @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.First, StandardLayouts.Application)
-        @RenderBody()
-        @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.Last, StandardLayouts.Application)
-    </div>
-
-    <abp-script-bundle name="@EventHubThemeBundles.Scripts.Global" />
-
+    @(await Component.InvokeAsync<PageAlertsViewComponent>())
+    @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.First, StandardLayouts.Application)
+    @RenderBody()
+    @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.Last, StandardLayouts.Application)
+    @(await Component.InvokeAsync<FooterViewComponent>())
+    <abp-script-bundle name="@EventHubThemeBundles.Scripts.Global"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous"></script>
     <script src="~/Abp/ApplicationConfigurationScript"></script>
     <script src="~/Abp/ServiceProxyScript"></script>
-
     @await Component.InvokeAsync(typeof(WidgetScriptsViewComponent))
-
     @await RenderSectionAsync("scripts", false)
-
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.Last, StandardLayouts.Application)
 </body>
 </html>
