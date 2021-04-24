@@ -1,0 +1,19 @@
+FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+WORKDIR /app
+EXPOSE 5002
+
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+WORKDIR /src
+COPY ["src/EventHub.HttpApi.Host/EventHub.HttpApi.Host.csproj", "src/EventHub.HttpApi.Host/"]
+RUN dotnet restore "src/EventHub.HttpApi.Host/EventHub.HttpApi.Host.csproj"
+COPY . .
+WORKDIR "/src/src/EventHub.HttpApi.Host"
+RUN dotnet build "EventHub.HttpApi.Host.csproj" -c Release -o /app
+
+FROM build AS publish
+RUN dotnet publish "EventHub.HttpApi.Host.csproj" -c Release -o /app
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app .
+ENTRYPOINT ["dotnet", "EventHub.HttpApi.Host.dll"]
