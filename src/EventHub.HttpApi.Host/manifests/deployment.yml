@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: volosoft-eventhub-httpapi-host-deployment
+spec:
+  selector:
+    matchLabels:
+      app: volosoft-eventhub-httpapi-host-pod
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: volosoft-eventhub-httpapi-host-pod
+    spec:
+      containers:
+      - name: volosoft-eventhub-httpapi-host-container
+        image: voloeventhubhttpapihost.azurecr.io/voloeventhubhttpapihost:v1
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 5002
