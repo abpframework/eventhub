@@ -1,0 +1,19 @@
+FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+WORKDIR /app
+EXPOSE 5001
+
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+WORKDIR /src
+COPY ["src/EventHub.IdentityServer/EventHub.IdentityServer.csproj", "src/EventHub.IdentityServer/"]
+RUN dotnet restore "src/EventHub.IdentityServer/EventHub.IdentityServer.csproj"
+COPY . .
+WORKDIR "/src/src/EventHub.IdentityServer"
+RUN dotnet build "EventHub.IdentityServer.csproj" -c Release -o /app
+
+FROM build AS publish
+RUN dotnet publish "EventHub.IdentityServer.csproj" -c Release -o /app
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app .
+ENTRYPOINT ["dotnet", "EventHub.IdentityServer.dll"]
