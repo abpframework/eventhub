@@ -6,11 +6,6 @@ trigger:
   branches:
     include:
     - master
-    - releases/*
-    - feature/*
-    exclude:
-    - releases/old*
-    - feature/*-working
 
 variables:
 
