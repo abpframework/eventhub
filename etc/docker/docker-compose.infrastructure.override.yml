@@ -4,3 +4,6 @@ services:
   redis:
     ports:
       - "6379:6379"
+  postgresql:
+    ports: 
+      - "5432:5432"
