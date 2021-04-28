@@ -1,17 +1,25 @@
-﻿<footer>
+﻿@using EventHub.Web
+@using Microsoft.AspNetCore.Http.Extensions
+@using Volo.Abp.Users
+@inject ICurrentUser CurrentUser
+
+<footer>
     <div class="container">
         <div class="row">
             <div class="col-md">
-                <a href="index.html" class="footer-logo">
+                <a href="@Url.Page("/Index")" class="footer-logo">
                     EventHub
                 </a>
             </div>
             <div class="col-md">
                 <h5>Account</h5>
                 <div class="footer-links">
-                    <a href="#" class="d-block">Sign Up</a>
-                    <a href="#" class="d-block">Log In</a>
-                    <a href="#" class="d-block">Help</a>
+                    @if (!CurrentUser.IsAuthenticated)
+                    {
+                        <a href="@EventHubExternalUrls.EhAccount/Account/Register?returnUrl=@EventHubExternalUrls.EhWww@(System.Net.WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery()))" class="d-block">Sign Up</a>
+                        <a href="/Account/Login?returnUrl=@(System.Net.WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery()))" class="d-block">Log In</a>
+                    }
+                    <a href="@Url.Page("/Help")" class="d-block">Help</a>
                 </div>
             </div>
             <div class="col-md">
@@ -23,6 +31,7 @@
             </div>
             <div class="col-md">
                 <h5>Follow Us</h5>
+                @* ToDo: Social platform links *@
                 <div class="footer-links">
                     <a href="#">
                         <img src="assets/facebook.svg">
@@ -51,19 +60,15 @@
                 <span class="copyright">© 2021 EventHub</span>
             </div>
             <div class="col-md text-center text-md-right">
-                <a href="#">
-                    Kişisel Verilerin Korunması Kanunu (KVKK)
-                </a>
-                <span>
-                    <img src="assets/seperator2.svg" class="mx-3">
-                </span>
-                <a href="#">
+                <a href="@Url.Page("/TermsService")">
+                    @* ToDo: The content of the page will be edited *@
                     Terms of Service
                 </a>
                 <span>
                     <img src="assets/seperator2.svg" class="mx-3">
                 </span>
-                <a href="#">
+                <a href="@Url.Page("/PrivacyPolicy")">
+                    @* ToDo: The content of the page will be edited *@
                     Privacy Policy
                 </a>
             </div>
