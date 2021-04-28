@@ -1,19 +1,22 @@
-apiVersion : apps/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: voloeventhub 
+  name: volosoft-eventhub-web-deployment
 spec:
-  replicas: 1
   selector:
     matchLabels:
-      app: voloeventhub
+      app: volosoft-eventhub-web-pod
   template:
     metadata:
       labels:
-        app: voloeventhub 
+        app: volosoft-eventhub-web-pod
     spec:
       containers:
-        - name: voloeventhub 
-          image: voloeventhub.azurecr.io/voloeventhub
-          ports:
-          - containerPort: 80
+      - name: volosoft-eventhub-web-container
+        image: voloeventhub.azurecr.io/voloeventhub:v1
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80

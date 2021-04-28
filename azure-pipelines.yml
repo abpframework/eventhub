@@ -3,7 +3,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-- main
+- dev
 
 
 variables:
@@ -14,10 +14,6 @@ variables:
   containerRegistry: 'voloeventhub.azurecr.io'
   dockerfilePath: '**/Dockerfile'
   tag: '$(Build.BuildNumber)'
-<<<<<<< HEAD
-=======
-
->>>>>>> main
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -51,7 +47,7 @@ stages:
 
   jobs:
   - deployment: Deploy
-    displayName: Deploy
+    displayName: Deploy-EventHub.Web
     pool:
       vmImage: $(vmImageName)
     environment: 'volosofteventhub-5982.default'
