@@ -3,7 +3,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-- dev
+- test
 
 
 variables:
@@ -12,7 +12,7 @@ variables:
   dockerRegistryServiceConnection: '9a6341b6-70a5-4ee7-b7a2-5efa6d4f0fe3'
   imageRepository: 'volosofteventhub'
   containerRegistry: 'voloeventhub.azurecr.io'
-  dockerfilePath: '**/Dockerfile'
+  dockerfilePath: '**/DockerFiles/Dockerfile.EventHub.Web'
   tag: '$(Build.BuildNumber)'
 
   # Agent VM image name
@@ -62,8 +62,8 @@ stages:
             inputs:
               action: deploy
               manifests: |
-                $(Pipeline.Workspace)/manifests/deployment.yml
-                $(Pipeline.Workspace)/manifests/service.yml
+                $(Pipeline.Workspace)/manifests/deployment.eventhub.web.yml
+                $(Pipeline.Workspace)/manifests/service.eventhub.web.yml
               containers: |
                 $(containerRegistry)/$(imageRepository):$(tag)
 
