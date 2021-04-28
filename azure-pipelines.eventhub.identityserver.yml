@@ -50,7 +50,7 @@ stages:
     displayName: Deploy-IdentityServer
     pool:
       vmImage: $(vmImageName)
-    environment: 'volosofteventhub-3480.default'
+    environment: 'eventhub.default'
     strategy:
       runOnce:
         deploy:

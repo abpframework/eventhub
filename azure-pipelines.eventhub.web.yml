@@ -9,7 +9,7 @@ trigger:
 variables:
 
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: 'caf95370-9589-43b8-9ed0-5f72985160ad'
+  dockerRegistryServiceConnection: 'ba41e703-3335-4f8b-aacf-6da11b9c9b43'
   imageRepository: 'volosofteventhub'
   containerRegistry: 'voloeventhub.azurecr.io'
   dockerfilePath: '**/Dockerfile.EventHub.Web'
@@ -50,7 +50,7 @@ stages:
     displayName: Deploy-EventHub.Web
     pool:
       vmImage: $(vmImageName)
-    environment: 'volosofteventhub-5982.default'
+    environment: 'eventhub.default'
     strategy:
       runOnce:
         deploy:
