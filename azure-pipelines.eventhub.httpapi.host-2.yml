@@ -9,7 +9,7 @@ trigger:
 variables:
 
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '9a6341b6-70a5-4ee7-b7a2-5efa6d4f0fe3'
+  dockerRegistryServiceConnection: '6e711767-783e-49d4-a0c2-16456b30f2c3'
   imageRepository: 'voloeventhubhttpapihost'
   containerRegistry: 'voloeventhubhttpapihost.azurecr.io'
   dockerfilePath: '**/Dockerfile.EventHub.HttpApi.Host'
@@ -50,7 +50,7 @@ stages:
     displayName: Deploy-HttpApi.Host
     pool:
       vmImage: $(vmImageName)
-    environment: 'volosofteventhub-5982.default'
+    environment: 'volosofteventhub-1094.default'
     strategy:
       runOnce:
         deploy:
