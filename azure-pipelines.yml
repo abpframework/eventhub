@@ -3,19 +3,25 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-- dev
+- main
+
 
 variables:
 
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '0648130a-0d3e-41f3-b92e-fc7f620264e8'
-  imageRepository: 'voloeventhub'
+  dockerRegistryServiceConnection: '9a6341b6-70a5-4ee7-b7a2-5efa6d4f0fe3'
+  imageRepository: 'volosofteventhub'
   containerRegistry: 'voloeventhub.azurecr.io'
   dockerfilePath: '**/Dockerfile'
   tag: '$(Build.BuildNumber)'
+<<<<<<< HEAD
+=======
+
+>>>>>>> main
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
+
 
 stages:
 - stage: Build
@@ -48,11 +54,13 @@ stages:
     displayName: Deploy
     pool:
       vmImage: $(vmImageName)
-    environment: 'volosofteventhub.default'
+    environment: 'volosofteventhub-5982.default'
     strategy:
       runOnce:
         deploy:
           steps:
+
+
           - task: KubernetesManifest@0
             displayName: Deploy to Kubernetes cluster
             inputs:
