@@ -9,7 +9,7 @@ trigger:
 variables:
 
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '5264380b-5a1d-4cb5-a759-695ad2c15bf0'
+  dockerRegistryServiceConnection: '4d719202-57fa-4664-ba60-5170a4b4c6c9'
   imageRepository: 'voloeventhubhttpapihost'
   containerRegistry: 'voloeventhubhttpapihost.azurecr.io'
   dockerfilePath: '**/Dockerfile.EventHub.HttpApi.Host'
