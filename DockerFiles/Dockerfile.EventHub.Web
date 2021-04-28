@@ -5,7 +5,7 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
 COPY ["../../eventhub/src/EventHub.Web/EventHub.Web.csproj", "src/EventHub.Web/"]
-RUN dotnet restore "../../eventhub/src/EventHub.Web/EventHub.Web.csproj"
+RUN dotnet restore "src/EventHub.Web/EventHub.Web.csproj"
 COPY . .
 WORKDIR "/src/src/EventHub.Web"
 RUN dotnet build "EventHub.Web.csproj" -c Release -o /app
