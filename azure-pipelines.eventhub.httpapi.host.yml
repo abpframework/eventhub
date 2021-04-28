@@ -61,6 +61,7 @@ stages:
             displayName: Deploy to Kubernetes cluster
             inputs:
               action: deploy
+              namespace: default
               manifests: |
                 $(Pipeline.Workspace)/manifests/deployment.eventhub.httpapi.host.yml
                 $(Pipeline.Workspace)/manifests/service.eventhub.httpapi.host.yml
