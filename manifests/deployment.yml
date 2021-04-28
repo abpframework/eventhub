@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: volosofteventhub 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: volosofteventhub
+  template:
+    metadata:
+      labels:
+        app: volosofteventhub 
+    spec:
+      containers:
+        - name: volosofteventhub 
+          image: voloeventhub.azurecr.io/volosofteventhub
+          ports:
+          - containerPort: 80
