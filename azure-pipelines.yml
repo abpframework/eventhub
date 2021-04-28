@@ -14,7 +14,10 @@ variables:
   containerRegistry: 'voloeventhub.azurecr.io'
   dockerfilePath: '**/Dockerfile'
   tag: '$(Build.BuildNumber)'
+<<<<<<< HEAD
+=======
 
+>>>>>>> main
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
