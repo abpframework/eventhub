@@ -14,6 +14,7 @@ spec:
       containers:
       - name: volosoft-eventhub-web-container
         image: voloeventhub.azurecr.io/voloeventhub:v1
+        imagePullPolicy: Always
         resources:
           limits:
             memory: "128Mi"
