@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,6 +15,8 @@ namespace EventHub.Web.Pages
         public IReadOnlyList<EventInListDto> Events { get; private set; }
         
         public IReadOnlyList<EventInListDto> OnlineEvents { get; private set; }
+        
+        public List<CultureInfo> Languages { get; private set; }
 
         public List<CountryLookupDto> Countries { get; private set; }
 
@@ -42,7 +45,18 @@ namespace EventHub.Web.Pages
                 }
             )).Items;
             
+            Languages = CultureInfo.GetCultures(CultureTypes.NeutralCultures)
+                .DistinctBy(x => x.EnglishName)
+                .OrderBy(x => x.EnglishName)
+                .ToList();
+            Languages.Remove(Languages.Single(x => x.TwoLetterISOLanguageName == "iv")); // Invariant Language
+
             Countries = await _eventAppService.GetCountriesLookupAsync();
+            Countries.Insert(0, new CountryLookupDto
+            {
+                Id = Guid.Empty,
+                Name = "Online"
+            });
         }
 
         public async Task OnPostLoginAsync()

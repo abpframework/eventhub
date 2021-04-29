@@ -9,11 +9,14 @@
 @section styles {
     <abp-style-bundle>
         <abp-style src="/Pages/Index.css"/>
+        <abp-style src="/libs/date-range-picker/daterangepicker.css"/>
     </abp-style-bundle>
 }
 
 @section scripts {
     <abp-script-bundle>
+        <abp-script src="/libs/date-range-picker/moment.min.js"/>
+        <abp-script src="/libs/date-range-picker/daterangepicker.js"/>
         <abp-script src="/Pages/Index.js"/>
     </abp-script-bundle>
 }
@@ -47,23 +50,30 @@
         <div class="card-body">
             <div class="form-row search-form">
                 <div class="col-md mb-3 mb-md-0">
-                    <select class="form-select" aria-label="Default select example">
+                    <select class="form-select" aria-label="language">
                         <option selected>Looking for</option>
-                        @foreach (var country in Model.Countries)
+                        @foreach (var language in Model.Languages)
                         {
-                            <option value=@country.Id>@country.Name</option>
+                            <option value=@language.TwoLetterISOLanguageName>@language.EnglishName</option>
                         }
                     </select>
                 </div>
                 <div class="col-md mb-3 mb-md-0">
-                    <div class="form-label-group">
-                        <input type="location" id="inputLocation" class="form-control" placeholder="Location" required>
-                        <label for="inputLocation">Location</label>
+                    <div class="form-label-group locationGroup">
+                        <select id="inputLocation" class="form-select" aria-label="location">
+                            <option selected>Location</option>
+                            @foreach (var country in Model.Countries)
+                            {
+                                <option value=@country.Id>@country.Name</option>
+                            }
+                        </select>
+                        <input type="hidden" id="inputCity" class="form-control" placeholder="City" aria-describedby="backToLocation">
+                        <button style="visibility: hidden" class="backToLocation">Back</button>
                     </div>
                 </div>
                 <div class="col-md mb-3 mb-md-0">
                     <div class="form-label-group">
-                        <input type="when" id="inputWhen" class="form-control" placeholder="When" required>
+                        <input type="text" id="inputWhen" class="form-control" placeholder="When" required>
                         <label for="inputWhen">When</label>
                     </div>
                 </div>

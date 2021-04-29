@@ -1,3 +1,19 @@
-﻿body {
-    
+﻿.inputLocation {
+    width: 300px;
+    position: relative;
+}
+
+.backToLocation {
+    position: absolute;
+    top: 0;
+    border-radius: 5px;
+    right: 10px;
+    z-index: 2;
+    border: none;
+    top: 10px;
+    height: 30px;
+    cursor: pointer;
+    color: white;
+    background-color: #D64560;
+    transform: translateX(2px);
 }
