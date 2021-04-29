@@ -37,7 +37,19 @@ namespace EventHub.Organizations
                 input.Description
             );
 
-            await _organizationRepository.InsertAsync(organization);
+            organization.Website = input.Website;
+            organization.TwitterUsername = input.TwitterUsername;
+            organization.GitHubUsername = input.GitHubUsername;
+            organization.FacebookUsername = input.FacebookUsername;
+            organization.InstagramUsername = input.InstagramUsername;
+            organization.MediumUsername = input.MediumUsername;
+            
+            await _organizationRepository.InsertAsync(organization, true);
+            
+            if (input.ProfilePictureContent != null && input.ProfilePictureContent.Length > 0)
+            {
+                await SaveProfilePictureAsync(organization.Id, input.ProfilePictureContent);
+            }
         }
 
         public async Task<PagedResultDto<OrganizationInListDto>> GetListAsync(PagedResultRequestDto input)

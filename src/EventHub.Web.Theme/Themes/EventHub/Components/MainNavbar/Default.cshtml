@@ -39,8 +39,7 @@
                             @* ToDo: Emoji or Gravatar? *@
                             @if (!string.IsNullOrWhiteSpace(CurrentUser.Name) && !string.IsNullOrWhiteSpace(CurrentUser.SurName))
                             {
-                                {@CurrentUser.Name}
-                                {@CurrentUser.SurName}
+                                @(CurrentUser.Name + " " + CurrentUser.SurName)
                             }
                             else
                             {
@@ -59,6 +58,7 @@
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            @* ToDo: Write language specific code find solution here (if block) *@
                             @if (CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "en")
                             {
                                 <span class="flag-icon flag-icon flag-icon-gb" data-toggle="tooltip" title="" data-original-title="@CultureInfo.CurrentUICulture.DisplayName"></span>

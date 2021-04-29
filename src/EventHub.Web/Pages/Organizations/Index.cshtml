@@ -4,27 +4,62 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @model EventHub.Web.Pages.Organizations.IndexPageModel
 
-<abp-row>
-    @foreach (var organization in Model.Organizations)
-    {
-        <abp-column size-lg="_4" size-md="_6">
-            <abp-card class="mb-3">
-                @if (organization.ProfilePictureContent == null)
-                {
-                    <img abp-card-image="Top" style="max-height: 200px; min-height: 150px;" src="https://picsum.photos/seed/@organization.Name/400/160?blur=8" alt="@organization.DisplayName"/>
-                }
-                else
-                {
-                    <img abp-card-image="Top" style="max-height: 200px; min-height: 150px;" src="@($"data:image/png;base64,{Convert.ToBase64String(organization.ProfilePictureContent)}")" alt="@organization.DisplayName"/>
-                }
-                <abp-card-body>
-                    <abp-card-title>@organization.DisplayName</abp-card-title>
-                    <abp-card-text>
-                        @organization.Description.TruncateWithPostfix(100)
-                    </abp-card-text>
-                    <a abp-button="Primary" href="@Url.Page("/Organizations/Profile", new {name = organization.Name})"> @L["SeeOrganization"]</a>
-                </abp-card-body>
-            </abp-card>
-        </abp-column>
-    }
-</abp-row>
+<div class="container-fluid p-0">
+    <div class="inner-banner inner-banner-2">
+        <div class="container">
+            <div class="row align-items-center" style="min-height: 250px;">
+                <div class="col">
+                    <h1>Organizations</h1>
+                    <nav aria-label="breadcrumb" class="breadcrumb-container">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="@Url.Page("/Index")">Home</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Organizations</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="row">
+        @foreach (var organization in Model.Organizations)
+        {
+            <div class="col-lg-4 col-md-6">
+                <div class="card">
+                     @if (organization.ProfilePictureContent == null)
+                     {
+                        <img src="assets/card-img.png" class="card-img-top" alt="@organization.Name">
+                     }
+                     else
+                     {
+                         <img src="@($"data:image/png;base64,{Convert.ToBase64String(organization.ProfilePictureContent)}")" class="card-img-top" alt="@organization.Name">
+                     }
+                    <div class="card-body">
+                        <div class="event-container">
+                            <div class="event-info">
+                                <h5>@organization.DisplayName</h5>
+                                <p>
+                                    @organization.Description
+                                </p>
+                            </div>
+                            <a href="@Url.Page("/Organizations/Profile", new {name = organization.Name})" class="btn btn-link p-0">Details <img src="assets/more-btn.svg"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="row">
+        <div class="col text-center">
+            <button class="btn btn-secondary btn-lg ">
+                Load More
+            </button>
+        </div>
+    </div>
+</div>
