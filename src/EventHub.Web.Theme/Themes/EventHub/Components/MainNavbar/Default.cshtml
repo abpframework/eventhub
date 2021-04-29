@@ -59,8 +59,16 @@
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            <span class="flag-icon flag-icon flag-icon-gb-eng" data-toggle="tooltip" title="" data-original-title="@CultureInfo.CurrentUICulture.DisplayName">@CultureInfo.CurrentUICulture</span>
-                            <span class="current-language-name">@CultureInfo.CurrentUICulture.DisplayName</span>
+                            @if (CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "en")
+                            {
+                                <span class="flag-icon flag-icon flag-icon-gb" data-toggle="tooltip" title="" data-original-title="@CultureInfo.CurrentUICulture.DisplayName"></span>
+                                <span class="current-language-name">@CultureInfo.CurrentUICulture.DisplayName</span>   
+                            }
+                            else
+                            {
+                                <span class="flag-icon flag-icon flag-icon-@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName" data-toggle="tooltip" title="" data-original-title="@CultureInfo.CurrentUICulture.DisplayName"></span>
+                                <span class="current-language-name">@CultureInfo.CurrentUICulture.DisplayName</span>
+                            }
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
                             @{
@@ -69,7 +77,7 @@
                             @foreach (var language in languages)
                             {
                                 <a class="dropdown-item" href="/Abp/Languages/Switch?culture=@language.CultureName&uiCulture=@language.UiCultureName&returnUrl=@(System.Net.WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery()))">
-                                    <span class="flag-icon flag-icon mr-2 flag-icon-tr"></span>@language.DisplayName
+                                    <span class="flag-icon flag-icon mr-2 flag-icon-@language.FlagIcon"></span>@language.DisplayName
                                 </a>
                             }
                         </div>
