@@ -48,9 +48,11 @@ stages:
   jobs:
   - deployment: Deploy
     displayName: Deploy-IdentityServer
+    timeoutInMinutes: 60 # how long to run the job before automatically cancelling
+    cancelTimeoutInMinutes: 30 # how much time to give 'run always even if cancelled tasks' before stopping them
     pool:
       vmImage: $(vmImageName)
-    environment: 'eventhub.default'
+    environment: 'voloeventhubidentityserver.default'
     strategy:
       runOnce:
         deploy:
