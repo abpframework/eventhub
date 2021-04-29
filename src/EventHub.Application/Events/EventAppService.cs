@@ -65,7 +65,7 @@ namespace EventHub.Events
                 input.Description
             );
 
-            @event.SetLocation(input.IsOnline, input.OnlineLink, input.CountryId, input.City);
+            await _eventManager.SetLocationAsync(@event, input.IsOnline, input.OnlineLink, input.CountryId, input.City);
             @event.Language = input.Language;
 
             await _eventManager.SetCapacityAsync(@event, input.Capacity);
@@ -103,6 +103,11 @@ namespace EventHub.Events
             {
                 query = query.Where(i => i.@event.OrganizationId == input.OrganizationId.Value);
             }
+            
+            if (input.IsOnline.HasValue)
+            {
+                query = query.Where(i => i.@event.IsOnline == input.IsOnline);
+            }
 
             var totalCount = await AsyncExecuter.CountAsync(query);
 
@@ -127,6 +132,7 @@ namespace EventHub.Events
                     dto.OrganizationName = i.organization.Name;
                     dto.OrganizationDisplayName = i.organization.DisplayName;
                     dto.IsLiveNow = now.IsBetween(i.@event.StartTime, i.@event.EndTime);
+                    dto.Country = i.@event.CountryName;
                     return dto;
                 }
             ).ToList();
@@ -177,7 +183,6 @@ namespace EventHub.Events
             return dto;
         }
         
-        [Authorize]
         public async Task<List<CountryLookupDto>> GetCountriesLookupAsync()
         {
             var countriesQueryable = await _countriesRepository.GetQueryableAsync();
@@ -213,7 +218,7 @@ namespace EventHub.Events
                 );
             }
 
-            @event.SetLocation(input.IsOnline, input.OnlineLink, input.CountryId, input.City);
+            await _eventManager.SetLocationAsync(@event, input.IsOnline, input.OnlineLink, input.CountryId, input.City);
             @event.SetTitle(input.Title);
             @event.SetDescription(input.Description);
             @event.Language = input.Language;

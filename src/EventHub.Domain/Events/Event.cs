@@ -20,13 +20,15 @@ namespace EventHub.Events
 
         public string Description { get; private set; }
 
-        public bool IsOnline { get; private set; }
+        public bool IsOnline { get; internal set; }
         
-        public string OnlineLink { get; private set; }
+        public string OnlineLink { get; internal set; }
 
-        public Guid? CountryId { get; private set; }
+        public Guid? CountryId { get; internal set; }
         
-        public string City { get; private set; }
+        public string CountryName { get; internal set; }
+
+        public string City { get; internal set; }
 
         public string Language { get; set; }
 
@@ -79,30 +81,6 @@ namespace EventHub.Events
             return SetTimeInternal(startTime, endTime);
         }
 
-        public Event SetLocation(
-            bool isOnline,
-            string onlineLink,
-            Guid? countryId,
-            string city)
-        {
-            IsOnline = isOnline;
-            
-            if (IsOnline)
-            {
-                OnlineLink = onlineLink;
-                CountryId = null;
-                City = null;
-            }
-            else
-            {
-                OnlineLink = null;
-                CountryId = countryId;
-                City = city;
-            }
-
-            return this;
-        }
-        
         private Event SetTimeInternal(DateTime startTime, DateTime endTime)
         {
             if (startTime > endTime)

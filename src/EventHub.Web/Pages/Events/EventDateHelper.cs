@@ -32,7 +32,11 @@ namespace EventHub.Web.Pages.Events
             }
             else
             {
-                return "???";
+                var sb = new StringBuilder();
+                sb.Append(eventItem.City);
+                sb.Append('/');
+                sb.Append(eventItem.Country);
+                return sb.ToString();
             }
         }
     }

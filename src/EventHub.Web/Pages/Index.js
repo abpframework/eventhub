@@ -15,6 +15,7 @@
         margin:30,
         padding:0,
         nav:true,
+        slideBy: 2,
         responsive:{
             0:{
                 items:1,

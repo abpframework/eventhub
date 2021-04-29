@@ -20,6 +20,10 @@ namespace EventHub.Events
         public byte[] CoverImageContent { get; set; }
 
         public bool IsOnline { get; set; }
+        
+        public string Country { get; set; }
+
+        public string City { get; set; }
 
         public int? Capacity { get; set; }
 

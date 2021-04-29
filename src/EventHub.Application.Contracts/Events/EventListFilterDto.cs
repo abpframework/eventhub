@@ -11,6 +11,8 @@ namespace EventHub.Events
 
         public Guid? OrganizationId { get; set; }
 
+        public bool? IsOnline { get; set; }
+
         public EventListFilterDto()
         {
             MaxResultCount = 20;
