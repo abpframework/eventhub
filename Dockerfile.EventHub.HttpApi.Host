@@ -9,6 +9,8 @@ COPY ["src/EventHub.HttpApi.Host/EventHub.HttpApi.Host.csproj", "src/EventHub.Ht
 RUN dotnet restore "src/EventHub.HttpApi.Host/EventHub.HttpApi.Host.csproj"
 COPY . .
 WORKDIR "/src/src/EventHub.HttpApi.Host"
+
+RUN dotnet dev-certs https --trust
 RUN dotnet build "EventHub.HttpApi.Host.csproj" -c Release -o /app
 
 FROM build AS publish
