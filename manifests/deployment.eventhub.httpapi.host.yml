@@ -6,7 +6,6 @@ spec:
   selector:
     matchLabels:
       app: volosoft-eventhub-httpapi-host-pod
-  replicas: 2
   template:
     metadata:
       labels:
@@ -21,4 +20,4 @@ spec:
             memory: "128Mi"
             cpu: "500m"
         ports:
-        - containerPort: 5002
+        - containerPort: 80
