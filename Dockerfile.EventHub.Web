@@ -10,7 +10,6 @@ RUN dotnet restore "src/EventHub.Web/EventHub.Web.csproj"
 COPY . .
 WORKDIR "/src/src/EventHub.Web"
 
-RUN dotnet dev-certs https --trust
 RUN dotnet build "EventHub.Web.csproj" -c Release -o /app
 
 FROM build AS publish
