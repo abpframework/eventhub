@@ -1,0 +1,71 @@
+# Deploy to Azure Kubernetes Service
+# Build and push image to Azure Container Registry; Deploy to Azure Kubernetes Service
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- main
+
+
+variables:
+
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: '1ae4ab3c-b39a-4860-b6dc-683cc524d1e4'
+  imageRepository: 'volosofteventhub'
+  containerRegistry: 'voloeventhub.azurecr.io'
+  dockerfilePath: '**/Dockerfile.EventHub.Web'
+  tag: '$(Build.BuildNumber)'
+
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+
+
+stages:
+- stage: Build
+  displayName: Build stage
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+    - publish: manifests
+      artifact: manifests
+
+- stage: Deploy
+  displayName: Deploy stage
+  dependsOn: Build
+
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy-EventHub.Web
+    timeoutInMinutes: 60 # how long to run the job before automatically cancelling
+    cancelTimeoutInMinutes: 30 # how much time to give 'run always even if cancelled tasks' before stopping them
+    pool:
+      vmImage: $(vmImageName)
+    environment: 'voloeventhub.default'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+
+
+          - task: KubernetesManifest@0
+            displayName: Deploy to Kubernetes cluster
+            inputs:
+              action: deploy
+              manifests: |
+                $(Pipeline.Workspace)/manifests/deployment.eventhub.web.yml
+                $(Pipeline.Workspace)/manifests/service.eventhub.web.yml
+              containers: |
+                $(containerRegistry)/$(imageRepository):$(tag)
+
