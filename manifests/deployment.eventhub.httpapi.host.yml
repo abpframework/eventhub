@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: volosoft-eventhub-httpapi-host-container
-        image: voloeventhubhttpapihost.azurecr.io/voloeventhubhttpapihost
+        image: voloeventhubhttpapihost.azurecr.io/voloeventhubhttpapihost:latest
         imagePullPolicy: Always
         resources:
           limits:
