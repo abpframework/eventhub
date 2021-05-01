@@ -6,7 +6,7 @@ variables:
   dockerRegistryServiceConnection: 'b46a670b-6940-4de5-b6b1-b06f9dd1c849'
   imageRepository: 'voloeventhubhttpapihost'
   containerRegistry: 'voloeventhubhttpapihost.azurecr.io'
-  dockerfilePath: '**/Dockerfile'
+  dockerfilePath: '**/Dockerfile.EventHub.HttpApi.Host'
   tag: '$(Build.BuildNumber)'
 
   # Agent VM image name
