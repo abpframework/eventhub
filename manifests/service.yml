@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+    name: voloeventhubhttpapihost
+spec:
+    type: LoadBalancer
+    ports:
+    - port: 5002 
+    selector:
+        app: voloeventhubhttpapihost

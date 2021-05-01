@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: voloeventhubhttpapihost 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: voloeventhubhttpapihost
+  template:
+    metadata:
+      labels:
+        app: voloeventhubhttpapihost 
+    spec:
+      containers:
+        - name: voloeventhubhttpapihost 
+          image: voloeventhubhttpapihost.azurecr.io/voloeventhubhttpapihost
+          ports:
+          - containerPort: 5002
