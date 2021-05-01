@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: volosoft-eventhub-web-container
-        image: voloeventhub.azurecr.io/voloeventhub:v1
+        image: voloeventhub.azurecr.io/voloeventhub
         imagePullPolicy: Always
         resources:
           limits:

@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: volosoft-eventhub-identityserver-container
-        image: voloeventhubidentityserver.azurecr.io/voloeventhubidentityserver:v1
+        image: voloeventhubidentityserver.azurecr.io/voloeventhubidentityserver
         imagePullPolicy: Always
         resources:
           limits:

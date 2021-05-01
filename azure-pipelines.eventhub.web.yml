@@ -10,7 +10,7 @@ variables:
 
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: '1ae4ab3c-b39a-4860-b6dc-683cc524d1e4'
-  imageRepository: 'volosofteventhub'
+  imageRepository: 'voloeventhub'
   containerRegistry: 'voloeventhub.azurecr.io'
   dockerfilePath: '**/Dockerfile.EventHub.Web'
   tag: '$(Build.BuildNumber)'
