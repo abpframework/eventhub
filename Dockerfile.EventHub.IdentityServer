@@ -10,6 +10,7 @@ RUN dotnet restore "src/EventHub.IdentityServer/EventHub.IdentityServer.csproj"
 COPY . .
 WORKDIR "/src/src/EventHub.IdentityServer"
 
+RUN dotnet dev-certs https --trust 
 RUN dotnet build "EventHub.IdentityServer.csproj" -c Release -o /app
 
 FROM build AS publish
