@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: voloeventhubidentityserver 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: voloeventhubidentityserver
+  template:
+    metadata:
+      labels:
+        app: voloeventhubidentityserver 
+    spec:
+      containers:
+        - name: voloeventhubidentityserver 
+          image: voloeventhubidentityserver.azurecr.io/voloeventhubidentityserver
+          ports:
+          - containerPort: 5001
