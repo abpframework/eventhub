@@ -10,7 +10,10 @@ RUN dotnet restore "src/EventHub.IdentityServer/EventHub.IdentityServer.csproj"
 COPY . .
 WORKDIR "/src/src/EventHub.IdentityServer"
 
-RUN dotnet dev-certs https -v -ep localhost.pfx -p e8202f07-66e5-4619-be07-72ba76fde97f
+RUN dotnet dev-certs https -ep aspnetapp.pfx -p mypassword123
+RUN dotnet dev-certs https --trust
+RUN dotnet dev-certs https -ep $env:USERPROFILE\.aspnet\https\aspnetapp.pfx -p mypassword123
+RUN dotnet dev-certs https -ep %USERPROFILE%\.aspnet\https\aspnetapp.pfx -p mypassword123
 
 RUN dotnet build "EventHub.IdentityServer.csproj" -c Release -o /app
 
