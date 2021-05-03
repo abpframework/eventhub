@@ -32,19 +32,24 @@
                 <li class="nav-item">
                     <a class="nav-link event-link" href="@Url.Page("/Events/New")">+ Create an Event</a>
                 </li>
+            </ul>
+                    <ul class="navbar-nav">
+
                 @if (CurrentUser.IsAuthenticated)
                 {
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle user-dropdown" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                            @* ToDo: Emoji or Gravatar? *@
-                            @if (!string.IsNullOrWhiteSpace(CurrentUser.Name) && !string.IsNullOrWhiteSpace(CurrentUser.SurName))
-                            {
-                                @(CurrentUser.Name + " " + CurrentUser.SurName)
-                            }
-                            else
-                            {
-                                {@CurrentUser.UserName}
-                            }
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="user-avatar"><img gravatar-email="@CurrentUser.Email" default-image="Wavatar" gravatar-size="40" width="40" height="40" class="nav-avatar avatar rounded-circle"/></span>
+                            <span class="ml-2">
+                                @if (!string.IsNullOrWhiteSpace(CurrentUser.Name) && !string.IsNullOrWhiteSpace(CurrentUser.SurName))
+                                {
+                                    @(CurrentUser.Name + " " + CurrentUser.SurName)
+                                }
+                                else
+                                {
+                                    {@CurrentUser.UserName}
+                                }
+                            </span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <a class="dropdown-item" href="@(EventHubExternalUrls.EhAccount.EnsureEndsWith('/') + "Account/Manage")" target="_blank" title="@L["Settings"]">
