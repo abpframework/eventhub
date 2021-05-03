@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Events;
 using EventHub.Organizations;
+using EventHub.Organizations.Memberships;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventHub.Web.Pages.Organizations
@@ -11,31 +13,27 @@ namespace EventHub.Web.Pages.Organizations
         [BindProperty(SupportsGet = true)]
         public string Name { get; set; }
 
-        public OrganizationProfileDto Organization { get; set; }
-        public IReadOnlyList<EventInListDto> UpcomingEvents { get; private set; }
-        public long UpcomingEventTotalCount { get; private set; }
-
-        public IReadOnlyList<EventInListDto> PastEvents { get; private set; }
-        public long PastEventTotalCount { get; private set; }
+        public OrganizationProfileDto Organization { get; private set; }
 
         public bool IsOrganizationOwner { get; private set; }
+        
+        public List<OrganizationMemberDto> Members { get; private set; }
 
-        private readonly IEventAppService _eventAppService;
         private readonly IOrganizationAppService _organizationAppService;
+        private readonly IOrganizationMembershipAppService _organizationMembershipAppService;
 
         public ProfilePageModel(
             IOrganizationAppService organizationAppService,
-            IEventAppService eventAppService)
+            IOrganizationMembershipAppService organizationMembershipAppService)
         {
             _organizationAppService = organizationAppService;
-            _eventAppService = eventAppService;
+            _organizationMembershipAppService = organizationMembershipAppService;
         }
 
         public async Task OnGetAsync()
         {
             await GetProfileAsync();
-            await GetUpcomingEventsAsync();
-            await GetPastEventsAsync();
+            await GetMembersAsync();
 
             IsOrganizationOwner = await _organizationAppService.IsOrganizationOwnerAsync(Organization.Id);
         }
@@ -44,31 +42,10 @@ namespace EventHub.Web.Pages.Organizations
         {
             Organization = await _organizationAppService.GetProfileAsync(Name);
         }
-
-        private async Task GetUpcomingEventsAsync()
+        
+        private async Task GetMembersAsync()
         {
-            var result = await _eventAppService.GetListAsync(
-                new EventListFilterDto
-                {
-                    MinDate = Clock.Now,
-                    OrganizationId = Organization.Id
-                }
-            );
-            UpcomingEvents = result.Items;
-            UpcomingEventTotalCount = result.TotalCount;
-        }
-
-        private async Task GetPastEventsAsync()
-        {
-            var result = await _eventAppService.GetListAsync(
-                new EventListFilterDto
-                {
-                    MaxDate = Clock.Now,
-                    OrganizationId = Organization.Id
-                }
-            );
-            PastEvents = result.Items;
-            PastEventTotalCount = result.TotalCount;
+            Members = (await _organizationMembershipAppService.GetMembersAsync(Organization.Id)).Items.ToList();
         }
     }
 }

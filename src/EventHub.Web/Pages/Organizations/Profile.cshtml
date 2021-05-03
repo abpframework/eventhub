@@ -1,184 +1,150 @@
 ﻿@page "/organizations/{name}"
 @inject IHtmlLocalizer<EventHubResource> L
 @using EventHub.Localization
-@using EventHub.Web.Pages.Events
+@using EventHub.Web.Pages.Events.Components.ListArea
 @using EventHub.Web.Pages.Organizations.Components.JoinArea
 @using EventHub.Web.Pages.Organizations.Components.MembersArea
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Timing
 @model EventHub.Web.Pages.Organizations.ProfilePageModel
+@inject IClock Clock
 
-<abp-row>
-    <abp-column size-lg="_8" size-md="_6">
-        <abp-row>
-            <abp-column size-lg="_12">
-                <abp-card class="mb-3" >
+@section scripts {
+    <abp-script src="/Pages/Organizations/Profile.js"/>
+}
+
+<div class="bg-white py-5">
+    <div class="container detail-page pb-4">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="detail-image">
                     @if (Model.Organization.ProfilePictureContent == null)
                     {
-                        <img abp-card-image="Top" style="max-height: 300px; min-height: 200px;" src="https://picsum.photos/seed/@Model.Name/1920/400?blur=8" alt="@Model.Organization.DisplayName"/>
+                        <img src="/assets/org-detail-top.png" alt="@Model.Organization.Name">
                     }
                     else
                     {
-                        <img abp-card-image="Top" style="max-height: 300px; min-height: 200px;" src="@($"data:image/png;base64,{Convert.ToBase64String(Model.Organization.ProfilePictureContent)}")" alt="@Model.Organization.DisplayName"/>
+                        <img src="@($"data:image/png;base64,{Convert.ToBase64String(Model.Organization.ProfilePictureContent)}")" alt="@Model.Organization.Name">
                     }
-                    <abp-card-body>
-                        <abp-card-title>
-                            @if (Model.IsOrganizationOwner)
+                </div>
+            </div>
+
+
+            <div class="col-12 mt-4">
+                <ul class="nav nav-tabs profile-nav" id="myTab">
+                    <li class="nav-item">
+                        <a href="#about-organization-section" class="nav-link active" data-toggle="tab">About the Organization</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#events-section" class="nav-link" data-toggle="tab">Events</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#members-section" class="nav-link" data-toggle="tab">Members</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content py-4">
+                    <div id="about-organization-section" class="tab-pane fade show active">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <h5 class="detail-head mt-3 font-weight-bold">@Model.Organization.DisplayName</h5>
+                                <p>
+                                    @Model.Organization.Description
+                                </p>
+                            </div>
+                            <div class="col-md-5">
+                                <h5 class="detail-head mt-3 font-weight-bold">Owners</h5>
+                                <div>
+                                    <img gravatar-email="@Model.Organization.OwnerEmail" default-image="Wavatar" gravatar-size="60" class="org-avatar avatar rounded-circle" data-toggle="tooltip" title="" data-original-title="@Model.Organization.OwnerUserName"/>
+                                </div>
+
+                                @await Component.InvokeAsync(typeof(JoinAreaViewComponent), new {organizationId = Model.Organization.Id})
+                                @await Component.InvokeAsync(typeof(MembersAreaViewComponent), new {organizationId = Model.Organization.Id})
+
+                                <h5 class="detail-head mt-5 font-weight-bold">Share Organizations</h5>
+                                <div class="share-container">
+                                    <a href="https://twitter.com/@Model.Organization.TwitterUsername">
+                                        <img src="/assets/twitter2.svg">
+                                    </a>
+                                    @* ToDo: Social Links *@
+                                    <a href="https://www.linkedin.com/in/@Model.Organization.Website">
+                                        <img src="/assets/in2.svg">
+                                    </a>
+                                    <a href="https://www.facebook.com/@Model.Organization.FacebookUsername">
+                                        <img src="/assets/facebook2.png">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="events-section" class="tab-pane fade">
+                        <div class="row mb-4">
+                            <div class="col-md">
+                            </div>
+                            <div class="col-md-auto">
+                                <div class="list-style">
+                                    <ul class="nav nav-pills events" role="tablist">
+                                        <li class="nav-item">
+                                            <a href="#PastEvent" class="selected" data-toggle="tab"><img src="/assets/past.svg"> Past</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#UpcomingEvent" data-toggle="tab"><img src="/assets/now.svg"> Upcoming</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-content">
+                            <div id="PastEvent" class="tab-pane active">
+                                @await Component.InvokeAsync(typeof(ListAreaViewComponent), new
+                                {
+                                    organizationId = Model.Organization.Id,
+                                    maxDate = Clock.Now
+                                })
+                            </div>
+                            <div id="UpcomingEvent" class="tab-pane">
+                                @await Component.InvokeAsync(typeof(ListAreaViewComponent), new
+                                {
+                                    organizationId = Model.Organization.Id,
+                                    minDate = Clock.Now
+                                })
+                            </div>
+                        </div>
+                    </div>
+                    <div id="members-section" class="tab-pane fade">
+                        <h4 class="mb-5 mt-3">Members <span class="badge badge-primary">@Model.Members.Count</span></h4>
+                        <div class="row">
+                            @foreach (var member in Model.Members)
                             {
-                                <div class="row">
-                                    <div class="col-9">
-                                        <h2>@Model.Organization.DisplayName</h2>
-                                    </div>
-                                    <div class="col-3 text-right">
-                                        <a href="/organization/edit/@Model.Organization.Name" class="btn btn-primary text-white">@L["Edit"] <i class="far fa-edit"></i></a>
+                                <div class="col-6 col-md-4 col-lg-2">
+                                    <div class="member-container text-center">
+                                        <img gravatar-email="@member.Email" default-image="Wavatar" gravatar-size="60" class="org-avatar avatar rounded-circle" data-toggle="tooltip" title="" data-original-title="@member.UserName"/>
+                                        <span class="member-name">
+                                            @if (!string.IsNullOrWhiteSpace(member.Name) && !string.IsNullOrWhiteSpace(member.Surname))
+                                            {
+                                                @(member.Name + " " + member.Surname)
+                                            }
+                                            else
+                                            {
+                                                {
+                                                    @member.UserName
+                                                }
+                                            }
+                                        </span>
                                     </div>
                                 </div>
                             }
-                            else
-                            {
-                                <h2>@Model.Organization.DisplayName</h2>
-                            }
-                        </abp-card-title>
-                        <abp-card-text class="mt-3">
-                            @Model.Organization.Description
+                        </div>
+                        <div class="text-center mt-3">
+                            @* ToDo: Implement show more!!! *@
+                            <button class="btn btn-secondary btn-lg mt-3">
+                                Load More
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-                            @if (!Model.Organization.Website.IsNullOrWhiteSpace() || !Model.Organization.TwitterUsername.IsNullOrWhiteSpace() ||
-                                 !Model.Organization.GitHubUsername.IsNullOrWhiteSpace() || !Model.Organization.InstagramUsername.IsNullOrWhiteSpace() ||
-                                 !Model.Organization.FacebookUsername.IsNullOrWhiteSpace() || !Model.Organization.MediumUsername.IsNullOrWhiteSpace())
-                            {
-                                <hr/>
-                                @if (!Model.Organization.Website.IsNullOrWhiteSpace())
-                                {
-                                    <div class="mt-4 text-center">
-                                        <small class="text-muted text-uppercase">@L["PersonalWebsite"]</small>
-                                        <h5 class="m-0">
-                                            @if (Model.Organization.Website != null)
-                                            {
-                                                <a href="@Model.Organization.Website" class="text-personel-web-site text-decoration-none" target="_blank" style="font-size: 1rem">
-                                                    @Model.Organization.Website
-                                                </a>
-                                            }
-                                        </h5>
-                                    </div>
-                                }
-                                @if (!Model.Organization.TwitterUsername.IsNullOrWhiteSpace() || !Model.Organization.GitHubUsername.IsNullOrWhiteSpace() ||
-                                     !Model.Organization.InstagramUsername.IsNullOrWhiteSpace() || !Model.Organization.FacebookUsername.IsNullOrWhiteSpace() ||
-                                     !Model.Organization.MediumUsername.IsNullOrWhiteSpace())
-                                {
-                                    <div class="profile-icons mt-4 text-center">
-                                        <small class="text-muted text-uppercase">@L["SocialMedia"]</small><br/>
-                                        @if (!Model.Organization.TwitterUsername.IsNullOrWhiteSpace())
-                                        {
-                                            <a href="https://twitter.com/@Model.Organization.TwitterUsername" class="text-twitter text-decoration-none" target="_blank" style="font-size: 1.5rem">
-                                                <i class="fab fa-twitter"></i>
-                                            </a>
-                                        }
-                                        @if (!Model.Organization.GitHubUsername.IsNullOrWhiteSpace())
-                                        {
-                                            <a href="https://github.com/@Model.Organization.GitHubUsername" class="text-github text-decoration-none" target="_blank" style="font-size: 1.5rem">
-                                                <i class="fab fa-github"></i>
-                                            </a>
-                                        }
-                                        @if (!Model.Organization.InstagramUsername.IsNullOrWhiteSpace())
-                                        {
-                                            <a href="https://www.instagram.com/@Model.Organization.InstagramUsername" class="text-instagram text-decoration-none" target="_blank" style="font-size: 1.5rem">
-                                                <i class="fab fa-instagram"></i>
-                                            </a>
-                                        }
-                                        @if (!Model.Organization.FacebookUsername.IsNullOrWhiteSpace())
-                                        {
-                                            <a href="https://www.facebook.com/@Model.Organization.FacebookUsername" class="text-facebook text-decoration-none" target="_blank" style="font-size: 1.5rem">
-                                                <i class="fab fa-facebook"></i>
-                                            </a>
-                                        }
-                                        @if (!Model.Organization.MediumUsername.IsNullOrWhiteSpace())
-                                        {
-                                            <a href="https://medium.com/@Html.Raw("@")@Model.Organization.MediumUsername" class="text-medium text-decoration-none" target="_blank" style="font-size: 1.5rem">
-                                                <i class="fab fa-medium"></i>
-                                            </a>
-                                        }
-                                    </div>
-                                }
-                            }
-                        </abp-card-text>
-                    </abp-card-body>
-                </abp-card>
-            </abp-column>
-        </abp-row>
-        
-        @if (Model.UpcomingEvents.Any())
-        {
-            <h3>Events</h3>
-        
-            <abp-tabs tab-style="Pill">
-                <abp-tab title="@($"{L["Upcoming"].Value} ({Model.UpcomingEventTotalCount})")">
-                    <abp-row class="mt-3">
-                        @foreach (var eventItem in Model.UpcomingEvents)
-                        {
-                            <abp-column size-lg="_4" size-md="_6">
-                                <abp-card class="mb-3">
-                                    @if (eventItem.CoverImageContent is null)
-                                    {
-                                        <img abp-card-image="Top" src="https://picsum.photos/seed/@eventItem.Id.ToString()/400/160?blur=8" alt="@eventItem.Title"/>
-                                    }
-                                    else
-                                    {
-                                        <img abp-card-image="Top" style="max-height: 400px; min-height: 160px;" src="@($"data:image/png;base64,{Convert.ToBase64String(eventItem.CoverImageContent)}")" alt="@eventItem.Title"/>
-                                    }
-                                    <abp-card-body>
-                                        <abp-card-title>@eventItem.Title</abp-card-title>
-                                        <abp-card-subtitle>
-                                            @EventDateHelper.GetDateRangeText(eventItem.StartTime, eventItem.EndTime)
-                                        </abp-card-subtitle>
-                                        <abp-card-text>
-                                            @eventItem.Description.TruncateWithPostfix(100)
-                                        </abp-card-text>
-                                        <a abp-button="Primary" href="@Url.Page("/Events/Detail", new {url = eventItem.Url})"> @L["SeeEvent"]</a>
-                                    </abp-card-body>
-                                </abp-card>
-                            </abp-column>
-                        }
-                    </abp-row>
-                </abp-tab>
-                <abp-tab title="@($"{L["Past"].Value} ({Model.PastEventTotalCount})")">
-                    <abp-row class="mt-3">
-                        @foreach (var eventItem in Model.PastEvents)
-                        {
-                            <abp-column size-lg="_4" size-md="_6">
-                                <abp-card class="mb-3">
-                                    @if (eventItem.CoverImageContent is null)
-                                    {
-                                        <img abp-card-image="Top" src="https://picsum.photos/seed/@eventItem.Id.ToString()/400/160?blur=8" alt="@eventItem.Title"/>
-                                    }
-                                    else
-                                    {
-                                        <img abp-card-image="Top" style="max-height: 400px; min-height: 160px;" src="@($"data:image/png;base64,{Convert.ToBase64String(eventItem.CoverImageContent)}")" alt="@eventItem.Title"/>
-                                    }
-                                    <abp-card-body>
-                                        <abp-card-title>@eventItem.Title</abp-card-title>
-                                        <abp-card-subtitle>
-                                            @EventDateHelper.GetDateRangeText(eventItem.StartTime, eventItem.EndTime)
-                                        </abp-card-subtitle>
-                                        <abp-card-text>
-                                            @eventItem.Description.TruncateWithPostfix(100)
-                                        </abp-card-text>
-                                        <a abp-button="Primary" href="@Url.Page("/Events/Detail", new {url = eventItem.Url})"> @L["SeeEvent"]</a>
-                                    </abp-card-body>
-                                </abp-card>
-                            </abp-column>
-                        }
-                    </abp-row>
-                </abp-tab>
-            </abp-tabs>
-        }
-        else
-        {
-            <abp-alert alert-type="Info">
-                @L["NoEventOrganizedByThisOrganizationYet"]
-            </abp-alert>
-        }
-    </abp-column>
-    <abp-column size-lg="_4" size-md="_6">
-        @await Component.InvokeAsync(typeof(JoinAreaViewComponent), new {organizationId = Model.Organization.Id})
-        @await Component.InvokeAsync(typeof(MembersAreaViewComponent), new {organizationId = Model.Organization.Id})
-    </abp-column>
-</abp-row>
+            </div>
+        </div>
+    </div>
+</div>
