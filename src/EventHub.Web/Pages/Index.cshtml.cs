@@ -5,15 +5,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Events;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using NUglify.Helpers;
 
 namespace EventHub.Web.Pages
 {
     public class IndexModel : EventHubPageModel
     {
-        public IReadOnlyList<EventInListDto> Events { get; private set; }
-        
         public IReadOnlyList<EventInListDto> OnlineEvents { get; private set; }
         
         public List<CultureInfo> Languages { get; private set; }
@@ -29,13 +26,6 @@ namespace EventHub.Web.Pages
 
         public async Task OnGetAsync()
         {
-            Events = (await _eventAppService.GetListAsync(
-                new EventListFilterDto
-                {
-                    MinDate = Clock.Now
-                }
-            )).Items;
-
             OnlineEvents = (await _eventAppService.GetListAsync(
                 new EventListFilterDto
                 {

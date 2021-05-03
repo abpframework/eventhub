@@ -3,7 +3,12 @@
 @using System.Globalization
 @using Microsoft.AspNetCore.Mvc.Localization
 @using EventHub.Localization
-@using EventHub.Web.Pages.Events
+@using EventHub.Web
+@using EventHub.Web.Pages.Events.Components.ListArea
+@using Volo.Abp.Timing
+@using Volo.Abp.Users
+@inject ICurrentUser CurrentUser
+@inject IClock Clock
 @inject IHtmlLocalizer<EventHubResource> L
 
 @section styles {
@@ -67,8 +72,6 @@
                                 <option value=@country.Id>@country.Name</option>
                             }
                         </select>
-                        <input type="hidden" id="inputCity" class="form-control" placeholder="City" aria-describedby="backToLocation">
-                        <button style="visibility: hidden" class="backToLocation">Back</button>
                     </div>
                 </div>
                 <div class="col-md mb-3 mb-md-0">
@@ -89,57 +92,24 @@
 </div>
 
 <div class="container">
-<div class="row mb-4">
-    <div class="col-md">
-        <h2>Upcoming Events</h2>
+    <div class="row mb-4">
+        <div class="col-md">
+            <h2>Upcoming Events</h2>
+        </div>
     </div>
-</div>
 
-<div class="row">
-        @foreach (var eventItem in Model.Events)
-        {
-            <div class="col-lg-4 col-md-6">
-                <div class="card">
-                    @if (eventItem.CoverImageContent is null)
-                    {
-                        <img abp-card-image="Top" src="/assets/card-img.png" alt="@eventItem.Title"/>
-                    }
-                    else
-                    {
-                        <img abp-card-image="Top" style="max-height: 400px; min-height: 160px;" src="@($"data:image/png;base64,{Convert.ToBase64String(eventItem.CoverImageContent)}")" alt="@eventItem.Title"/>
-                    }
-                    <div class="card-body">
-                        <div class="event-container">
-                            <div class="form-row">
-                                <div class="col-3">
-                                    <div class="event-date text-center">
-                                        <small>@eventItem.StartTime.ToString("MMM")</small>
-                                        <span>@eventItem.StartTime.Day</span>
-                                    </div>
-                                </div>
-                                <div class="col-9">
-                                    <div class="event-info">
-                                        <h5>@eventItem.Title</h5>
-                                        <small>@eventItem.StartTime.ToString("hh:mm") | @EventDateHelper.GetLocationInfo(eventItem)</small>
-                                        <p>@eventItem.Description.TruncateWithPostfix(100)</p>
-                                    </div>
-                                    <a href="@Url.Page("/Events/Detail", new {url = eventItem.Url})" class="btn btn-link p-0">Learn More <img src="/assets/more-btn.svg"></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-</div>
+    @await Component.InvokeAsync(typeof(ListAreaViewComponent), new 
+    {
+        minDate = Clock.Now, 
+        MaxResultCount = 15
+        
+    })
 
-<div class="row">
-    <div class="col text-center">
-        <button class="btn btn-secondary btn-lg ">
-            Load More
-        </button>
+    <div class="row">
+        <div class="col text-center">
+            <a href="@Url.Page("/Events/Index")" class="btn btn-secondary btn-lg">See All Events</a>
+        </div>
     </div>
-</div>
 </div>
 
 
@@ -155,7 +125,14 @@
                         <div class="card mb-3">
                             <div class="row no-gutters">
                                 <div class="col-md-5">
-                                    <img src="/assets/card-left-image.png" class="card-img-left">
+                                    @if (Model.OnlineEvents[i].CoverImageContent is null)
+                                    {
+                                        <img src="/assets/card-left-image.png" class="card-img-left" alt="@Model.OnlineEvents[i].Title">
+                                    }
+                                    else
+                                    {
+                                         <img class="card-img-left" src="@($"data:image/png;base64,{Convert.ToBase64String(Model.OnlineEvents[i].CoverImageContent)}")" alt="@Model.OnlineEvents[i].Title"/>
+                                    }
                                 </div>
                                 <div class="col-md-7">
                                     <div class="card-body">
@@ -174,7 +151,14 @@
                         <div class="card mb-3">
                             <div class="row no-gutters">
                                 <div class="col-md-5">
-                                    <img src="/assets/card-left-image.png" class="card-img-left">
+                                     @if (Model.OnlineEvents[i + 1].CoverImageContent is null)
+                                     {
+                                         <img src="/assets/card-left-image.png" class="card-img-left" alt="@Model.OnlineEvents[i + 1].Title">
+                                     }
+                                     else
+                                     {
+                                         <img class="card-img-left" src="@($"data:image/png;base64,{Convert.ToBase64String(Model.OnlineEvents[i + 1].CoverImageContent)}")" alt="@Model.OnlineEvents[i + 1].Title"/>
+                                     }
                                 </div>
                                 <div class="col-md-7">
                                     <div class="card-body">
@@ -207,14 +191,17 @@
                     List who is organizing local events
                     with one click.
                 </p>
-                <a href="#" class="btn btn-link btn-lg">Join EventHub</a>
+                @if (!CurrentUser.IsAuthenticated)
+                {
+                    <a href="@EventHubExternalUrls.EhAccount/Account/Register?returnUrl=@EventHubExternalUrls.EhWww" class="btn btn-link btn-lg">Join EventHub</a>
+                }
             </div>
         </div>
         <div class="col-md-5 mr-auto border-left">
             <div class="px-5">
                 <h3>Start an Event</h3>
                 <p class="lead">Create your own Eventhub group and benefit from a community of millions.</p>
-                <a href="#" class="btn btn-link btn-lg">Start</a>
+                <a href="@Url.Page("/Events/New")" class="btn btn-link btn-lg">Start</a>
             </div>
         </div>
     </div>
