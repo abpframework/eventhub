@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EventHub.Users;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -16,15 +17,18 @@ namespace EventHub.Organizations
         private readonly IRepository<Organization, Guid> _organizationRepository;
         private readonly OrganizationManager _organizationManager;
         private readonly IBlobContainer<OrganizationProfilePictureContainer> _organizationBlobContainer;
+        private readonly IRepository<AppUser, Guid> _userRepository;
 
         public OrganizationAppService(
             IRepository<Organization, Guid> organizationRepository,
             OrganizationManager organizationManager,
-            IBlobContainer<OrganizationProfilePictureContainer> organizationBlobContainer)
+            IBlobContainer<OrganizationProfilePictureContainer> organizationBlobContainer, 
+            IRepository<AppUser, Guid> userRepository)
         {
             _organizationRepository = organizationRepository;
             _organizationManager = organizationManager;
             _organizationBlobContainer = organizationBlobContainer;
+            _userRepository = userRepository;
         }
 
         [Authorize]
@@ -78,7 +82,10 @@ namespace EventHub.Organizations
         {
             var organization = await _organizationRepository.GetAsync(o => o.Name == name);
             var organizationProfileDto = ObjectMapper.Map<Organization, OrganizationProfileDto>(organization);
-           
+
+            var owner = await _userRepository.GetAsync(u => u.Id == organization.OwnerUserId);
+            organizationProfileDto.OwnerUserName = owner.UserName;
+            organizationProfileDto.OwnerEmail = owner.Email;
             organizationProfileDto.ProfilePictureContent = await GetProfilePictureAsync(organizationProfileDto.Id);
 
             return organizationProfileDto;
