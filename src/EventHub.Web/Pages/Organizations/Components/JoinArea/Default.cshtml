@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IHtmlLocalizer<EventHubResource> L
 @model EventHub.Web.Pages.Organizations.Components.JoinArea.JoinAreaViewComponent.MembershipAreaViewComponentModel
-<abp-card class="mb-3" data-organization-id="@Model.OrganizationId">
+<abp-card class="detail-head mt-5 font-weight-bold" data-organization-id="@Model.OrganizationId">
     <abp-card-body>
         @if (Model.IsLoggedIn)
         {

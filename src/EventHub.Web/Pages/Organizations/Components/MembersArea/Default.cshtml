@@ -1,14 +1,15 @@
 @model EventHub.Web.Pages.Organizations.Components.MembersArea.MembersAreaViewComponent.MembersAreaViewComponentModel
-<abp-card class="mb-3" data-organization-id="@Model.OrganizationId">
-    <abp-card-body>
-        <abp-card-title>Members (@Model.TotalCount)</abp-card-title>
-        <abp-card-text>
-            <ul id="OrganizationMemberList">
-                @foreach (var member in Model.Members)
-                {
-                    <li class="border p-2 mb-2"><i class="fas fa-user"></i> @Model.GetMemberName(member)</li>
-                }
-            </ul>
-        </abp-card-text>
-    </abp-card-body>
-</abp-card>
+<h5 class="detail-head mt-5 font-weight-bold" data-organization-id="@Model.OrganizationId">Members (@Model.TotalCount)</h5> 
+<div>
+    @foreach (var member in Model.Members)
+    {
+        <img gravatar-email="@member.Email" default-image="Wavatar" gravatar-size="60" class="org-avatar avatar rounded-circle"/>
+    }
+</div> 
+@if (Model.TotalCount > 10)
+{
+    // ToDo: Implement show more!!!
+    <button class="btn btn-secondary btn-lg mt-3">
+        Show More
+    </button>
+}
