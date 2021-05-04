@@ -99,14 +99,14 @@
                                 @await Component.InvokeAsync(typeof(EventsAreaViewComponent), new
                                 {
                                     organizationId = Model.Organization.Id,
-                                    maxDate = Clock.Now
+                                    maxDate = Clock.Now.ClearTime()
                                 })
                             </div>
                             <div id="UpcomingEvent" class="tab-pane">
                                 @await Component.InvokeAsync(typeof(EventsAreaViewComponent), new
                                 {
                                     organizationId = Model.Organization.Id,
-                                    minDate = Clock.Now
+                                    minDate = Clock.Now.ClearTime()
                                 })
                             </div>
                         </div>

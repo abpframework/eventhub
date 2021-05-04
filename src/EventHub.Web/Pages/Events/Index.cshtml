@@ -43,15 +43,15 @@
                 <div class="row filter-select">
                     <div class="col-4 pr-0">
                         <div class="form-label-group">
-                            <input type="text" id="inputWhen" class="form-control" placeholder="When">
-                            <label for="inputWhen">When</label>
+                            <input type="text" id="WhenInput" class="form-control" placeholder="When">
+                            <label for="WhenInput">When</label>
                             <input type="hidden" asp-for="MinDate" value="">
                             <input type="hidden" asp-for="MaxDate" value="">
                         </div>
                     </div>
                     <div class="col-4 pr-0">
                         <select id="EventType" class="form-select" asp-for="@Model.IsOnline" aria-label="true">
-                            <option selected>Event Type</option>
+                            <option value="" selected>Event Type</option>
                             <option value="true">Online</option>
                             <option value="false">In Person</option>
                         </select>
@@ -59,7 +59,7 @@
                     <div class="col-4">
                         @* ToDo: System of tags or categories needs to be implemented *@
                         <select class="form-select" aria-label="Software">
-                            <option selected>Category</option>
+                            <option value="" selected>Category</option>
                             <option value="1">One</option>
                             <option value="2">Two</option>
                             <option value="3">Three</option>

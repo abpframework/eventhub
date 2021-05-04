@@ -19,12 +19,12 @@ $(function () {
         $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
     }
     
-    var $inputWhen = $("#inputWhen");
+    var when = $("#WhenInput");
     if (minDate !== null && maxDate !== null && minDate.length > 0 && maxDate.length > 0){
-        $inputWhen.val(minDate + ' - ' + maxDate);
+        when.val(minDate + ' - ' + maxDate);
         $("#MinDate").val(minDate);
         $("#MaxDate").val(maxDate);
-        $inputWhen.daterangepicker({
+        when.daterangepicker({
             startDate: minDate,
             endDate: maxDate,
             autoUpdateInput: false,
@@ -40,7 +40,7 @@ $(function () {
             }
         }, cb);
     }else {
-        $inputWhen.daterangepicker({
+        when.daterangepicker({
             autoUpdateInput: false,
             locale: {
                 cancelLabel: 'Clear'
@@ -56,14 +56,14 @@ $(function () {
         }, cb);
     }
     
-    $inputWhen.on('apply.daterangepicker', function(ev, picker) {
+    when.on('apply.daterangepicker', function(ev, picker) {
         $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
         $("#MinDate").val(picker.startDate.format('MM/DD/YYYY'));
         $("#MaxDate").val(picker.endDate.format('MM/DD/YYYY'));
         $('#EventListFilterForm').submit()
     });
     
-    $inputWhen.on('cancel.daterangepicker', function(ev, picker) {
+    when.on('cancel.daterangepicker', function(ev, picker) {
         $(this).val('');
         $("#MinDate").val('');
         $("#MaxDate").val('');

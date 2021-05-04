@@ -57,6 +57,8 @@ namespace EventHub.Web.Pages.Events.Components.EventsArea
                    MinDate = minDate,
                    MaxDate = maxDate,
                    IsOnline = isOnline,
+                   Language = language,
+                   CountryId = countryId,
                    SkipCount = skipCount.GetValueOrDefault(),
                    MaxResultCount = maxResultCount,
                    IsPagination = isPagination
@@ -77,6 +79,10 @@ namespace EventHub.Web.Pages.Events.Components.EventsArea
             public DateTime? MaxDate { get; set; }
 
             public bool? IsOnline { get; set; }
+            
+            public string Language { get; set; }
+        
+            public Guid? CountryId { get; set; }
             
             public int SkipCount { get; set; }
             

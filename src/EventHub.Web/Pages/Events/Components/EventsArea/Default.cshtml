@@ -6,7 +6,7 @@
         <partial name="~/Pages/Events/Components/EventsArea/_eventListSection.cshtml" model="@Model.Events"/>
     </div>
 
-    @if (Model.IsPagination && Model.TotalCount >= 10)
+    @if (Model.IsPagination && Model.TotalCount >= 10 && Model.TotalCount > Model.Events.Count)
     {
         <div class="row load-more-section">
             <div class="col text-center">
@@ -19,6 +19,8 @@
                                   maxDate = Model.MaxDate,
                                   organizationId = Model.OrganizationId,
                                   isOnline = Model.IsOnline,
+                                  language = Model.Language,
+                                  countryId = Model.CountryId,
                                   maxResultCount = Model.MaxResultCount
                               })">
                     Load More
