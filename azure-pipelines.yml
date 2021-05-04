@@ -1,5 +1,5 @@
 trigger:
-- main
+- test
 
 variables:
 
@@ -34,6 +34,7 @@ stages:
 
     - upload: manifests
       artifact: manifests
+
 
 - stage: Deploy
   displayName: Deploy stage
