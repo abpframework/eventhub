@@ -1,10 +1,9 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EventHub.Web.Pages.Events
 {
-    public class IndexModel : PageModel
+    public class IndexModel : EventHubPageModel
     {
         [BindProperty(SupportsGet = true)]
         public Guid? OrganizationId { get; set; }

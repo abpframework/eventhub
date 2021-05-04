@@ -1,8 +1,6 @@
-using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
-
 namespace EventHub.Web.Pages
 {
-    public class TermsService : AbpPageModel
+    public class TermsService : EventHubPageModel
     {
         public void OnGet()
         {

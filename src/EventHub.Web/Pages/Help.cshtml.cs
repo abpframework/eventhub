@@ -1,8 +1,6 @@
-using Microsoft.AspNetCore.Mvc.RazorPages;
-
 namespace EventHub.Web.Pages
 {
-    public class Help : PageModel
+    public class Help : EventHubPageModel
     {
         public void OnGet()
         {
