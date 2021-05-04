@@ -55,8 +55,8 @@
         <div class="card-body">
             <div class="form-row search-form">
                 <div class="col-md mb-3 mb-md-0">
-                    <select class="form-select" aria-label="language">
-                        <option selected>Looking for</option>
+                    <select id="LanguageSelect" class="form-select" aria-label="en">
+                        <option value="" selected>Looking for</option>
                         @foreach (var language in Model.Languages)
                         {
                             <option value=@language.TwoLetterISOLanguageName>@language.EnglishName</option>
@@ -65,8 +65,8 @@
                 </div>
                 <div class="col-md mb-3 mb-md-0">
                     <div class="form-label-group locationGroup">
-                        <select id="inputLocation" class="form-select" aria-label="location">
-                            <option selected>Location</option>
+                        <select id="CountrySelect" class="form-select" aria-label="Turkey">
+                            <option value="" selected>Location</option>
                             @foreach (var country in Model.Countries)
                             {
                                 <option value=@country.Id>@country.Name</option>
@@ -81,7 +81,7 @@
                     </div>
                 </div>
                 <div class="col-md-auto">
-                    <button class="btn btn-primary btn-lg btn-block ">
+                    <button id="SearchButton" class="btn btn-primary btn-lg btn-block ">
                         <img src="/assets/search.svg">
                         Search
                     </button>
@@ -131,7 +131,7 @@
                                     }
                                     else
                                     {
-                                         <img class="card-img-left" src="@($"data:image/png;base64,{Convert.ToBase64String(Model.OnlineEvents[i].CoverImageContent)}")" alt="@Model.OnlineEvents[i].Title"/>
+                                        <img class="card-img-left" src="@($"data:image/png;base64,{Convert.ToBase64String(Model.OnlineEvents[i].CoverImageContent)}")" alt="@Model.OnlineEvents[i].Title"/>
                                     }
                                 </div>
                                 <div class="col-md-7">
@@ -148,32 +148,36 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card mb-3">
-                            <div class="row no-gutters">
-                                <div class="col-md-5">
-                                     @if (Model.OnlineEvents[i + 1].CoverImageContent is null)
-                                     {
-                                         <img src="/assets/card-left-image.png" class="card-img-left" alt="@Model.OnlineEvents[i + 1].Title">
-                                     }
-                                     else
-                                     {
-                                         <img class="card-img-left" src="@($"data:image/png;base64,{Convert.ToBase64String(Model.OnlineEvents[i + 1].CoverImageContent)}")" alt="@Model.OnlineEvents[i + 1].Title"/>
-                                     }
-                                </div>
-                                <div class="col-md-7">
-                                    <div class="card-body">
-                                        <div class="event-container online-event">
-                                            <div class="event-info">
-                                                <h5>@Model.OnlineEvents[i + 1].Title</h5>
-                                                <small>@Model.OnlineEvents[i + 1].StartTime.ToString("MMMM dd, yyyy dddd") | @Model.OnlineEvents[i + 1].StartTime.ToString("hh tt", CultureInfo.InvariantCulture) - @Model.OnlineEvents[i + 1].EndTime.ToString("hh tt", CultureInfo.InvariantCulture) | Online</small>
-                                                <p>@Model.OnlineEvents[i + 1].Description</p>
-                                            </div>
-                                            <a href="@Url.Page("/Events/Detail", new {url = @Model.OnlineEvents[i + 1].Url})" class="btn btn-link p-0">Learn More <img src="/assets/more-btn.svg"></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                         @if (i + 1 <= Model.OnlineEvents.Count - 1)
+                         {
+                             <div class="card mb-3">
+                                 <div class="row no-gutters">
+                                     <div class="col-md-5">
+                                         @if (Model.OnlineEvents[i + 1].CoverImageContent is null)
+                                         {
+                                             <img src="/assets/card-left-image.png" class="card-img-left" alt="@Model.OnlineEvents[i + 1].Title">
+                                         }
+                                         else
+                                         {
+                                             <img class="card-img-left" src="@($"data:image/png;base64,{Convert.ToBase64String(Model.OnlineEvents[i + 1].CoverImageContent)}")" alt="@Model.OnlineEvents[i + 1].Title"/>
+                                         }
+                                     </div>
+                                     <div class="col-md-7">
+                                         <div class="card-body">
+                                             <div class="event-container online-event">
+                                                 <div class="event-info">
+                                                     <h5>@Model.OnlineEvents[i + 1].Title</h5>
+                                                     <small>@Model.OnlineEvents[i + 1].StartTime.ToString("MMMM dd, yyyy dddd") | @Model.OnlineEvents[i + 1].StartTime.ToString("hh tt", CultureInfo.InvariantCulture) - @Model.OnlineEvents[i + 1].EndTime.ToString("hh tt", CultureInfo.InvariantCulture) | Online</small>
+                                                     <p>@Model.OnlineEvents[i + 1].Description</p>
+                                                 </div>
+                                                 <a href="@Url.Page("/Events/Detail", new {url = @Model.OnlineEvents[i + 1].Url})" class="btn btn-link p-0">Learn More <img src="/assets/more-btn.svg"></a>
+                                             </div>
+                                         </div>
+                                     </div>
+
+                                 </div>
+                             </div>
+                         }
                     </div>
                 }
             </div>

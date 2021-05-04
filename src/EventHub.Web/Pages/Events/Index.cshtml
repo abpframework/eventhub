@@ -2,6 +2,20 @@
 @using EventHub.Web.Pages.Events.Components.EventsArea
 @model EventHub.Web.Pages.Events.IndexModel
 
+@section styles {
+    <abp-style-bundle>
+        <abp-style src="/libs/date-range-picker/daterangepicker.css"/>
+    </abp-style-bundle>
+}
+
+@section scripts {
+    <abp-script-bundle>
+        <abp-script src="/libs/date-range-picker/moment.min.js"/>
+        <abp-script src="/libs/date-range-picker/daterangepicker.js"/>
+        <abp-script src="/Pages/Events/Index.js"/>
+    </abp-script-bundle>
+}
+
 <div class="container-fluid p-0">
     <div class="inner-banner">
         <div class="container">
@@ -24,39 +38,51 @@
 
 <div class="container">
     <div class="row mb-4">
-        <div class="col-md-auto">
-            <div class="row filter-select">
-                <div class="col-4 pr-0">
-                    <select class="form-select" aria-label="Default select example">
-                        <option selected>When</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
-                </div>
-                <div class="col-4 pr-0">
-                    <select class="form-select" aria-label="Default select example">
-                        <option selected>Event Type</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
-                </div>
-                <div class="col-4">
-                    <select class="form-select" aria-label="Default select example">
-                        <option selected>Category</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
+        <form method="get" id="EventListFilterForm">
+            <div class="col-md-auto">
+                <div class="row filter-select">
+                    <div class="col-4 pr-0">
+                        <div class="form-label-group">
+                            <input type="text" id="inputWhen" class="form-control" placeholder="When">
+                            <label for="inputWhen">When</label>
+                            <input type="hidden" asp-for="MinDate" value="">
+                            <input type="hidden" asp-for="MaxDate" value="">
+                        </div>
+                    </div>
+                    <div class="col-4 pr-0">
+                        <select id="EventType" class="form-select" asp-for="@Model.IsOnline" aria-label="true">
+                            <option selected>Event Type</option>
+                            <option value="true">Online</option>
+                            <option value="false">In Person</option>
+                        </select>
+                    </div>
+                    <div class="col-4">
+                        @* ToDo: System of tags or categories needs to be implemented *@
+                        <select class="form-select" aria-label="Software">
+                            <option selected>Category</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
+
     </div>
 
-    @await Component.InvokeAsync(typeof(EventsAreaViewComponent), new
-    {
-        maxResultCount = 9,
-        skipCount = 0
-    })
+    <div id="EventsAreaViewComponent" data-widget-filter="#EventListFilterForm">
+        @await Component.InvokeAsync(typeof(EventsAreaViewComponent), new
+        {
+            organizationId = Model.OrganizationId,
+            minDate = Model.MinDate,
+            maxDate = Model.MaxDate,
+            isOnline = Model.IsOnline,
+            language = Model.Language,
+            countryId = Model.CountryId,
+            maxResultCount = 9,
+            skipCount = 0
+        })
+    </div>
+
 </div>

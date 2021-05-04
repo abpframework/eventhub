@@ -108,6 +108,16 @@ namespace EventHub.Events
             {
                 query = query.Where(i => i.@event.IsOnline == input.IsOnline);
             }
+            
+            if (!input.Language.IsNullOrWhiteSpace())
+            {
+                query = query.Where(i => i.@event.Language == input.Language);
+            }
+            
+            if (input.CountryId.HasValue && input.CountryId != Guid.Empty)
+            {
+                query = query.Where(i => i.@event.CountryId == input.CountryId);
+            }
 
             var totalCount = await AsyncExecuter.CountAsync(query);
 
