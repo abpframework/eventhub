@@ -33,13 +33,15 @@
                     <a class="nav-link event-link" href="@Url.Page("/Events/New")">+ Create an Event</a>
                 </li>
             </ul>
-                    <ul class="navbar-nav">
+            <ul class="navbar-nav">
 
                 @if (CurrentUser.IsAuthenticated)
                 {
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="user-avatar"><img gravatar-email="@CurrentUser.Email" default-image="Wavatar" gravatar-size="40" width="40" height="40" class="nav-avatar avatar rounded-circle"/></span>
+                            <span class="user-avatar">
+                                <img gravatar-email="@CurrentUser.Email" default-image="Wavatar" gravatar-size="40" width="40" height="40" class="nav-avatar avatar rounded-circle"/>
+                            </span>
                             <span class="ml-2">
                                 @if (!string.IsNullOrWhiteSpace(CurrentUser.Name) && !string.IsNullOrWhiteSpace(CurrentUser.SurName))
                                 {
@@ -47,7 +49,9 @@
                                 }
                                 else
                                 {
-                                    {@CurrentUser.UserName}
+                                    {
+                                        @CurrentUser.UserName
+                                    }
                                 }
                             </span>
                         </a>
@@ -67,7 +71,7 @@
                             @if (CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "en")
                             {
                                 <span class="flag-icon flag-icon flag-icon-gb" data-toggle="tooltip" title="" data-original-title="@CultureInfo.CurrentUICulture.DisplayName"></span>
-                                <span class="current-language-name">@CultureInfo.CurrentUICulture.DisplayName</span>   
+                                <span class="current-language-name">@CultureInfo.CurrentUICulture.DisplayName</span>
                             }
                             else
                             {
@@ -103,10 +107,34 @@
 </nav>
 
 @functions{
-
     public string GetPageActiveClassOrEmpty(ViewContext viewContext, string pageUrl)
     {
-        return (viewContext?.RouteData?.Values["page"]?.ToString()?.ToLowerInvariant() == pageUrl.ToLowerInvariant()) ? "active" : viewContext?.RouteData?.Values["page"]?.ToString().ToLowerInvariant();
+        var activeRoute = viewContext?.RouteData.Values["page"]?.ToString()?.ToLowerInvariant();
+        pageUrl = pageUrl.ToLowerInvariant();
+
+        if (activeRoute is null)
+        {
+            return "";
+        }
+
+        switch (pageUrl)
+        {
+            case "/index" when activeRoute == "/index":
+                return activeRoute == pageUrl ? "active" : activeRoute;
+            case "/index":
+                return "";
+        }
+
+        pageUrl = pageUrl.Replace("/index", "");
+        var highLevelActiveRoute = GetHighLevelRoute(activeRoute); // "/organizations/ng-coders" => "organizations"
+        
+        return highLevelActiveRoute.Contains(pageUrl) ? "active" : highLevelActiveRoute;
+    }
+
+    private string GetHighLevelRoute(string route)
+    {
+        route.EnsureStartsWith('/');
+        return route.Split("/")[1].EnsureStartsWith('/').EnsureEndsWith('/');
     }
 
 }
