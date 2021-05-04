@@ -4,7 +4,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @using EventHub.Localization
 @using EventHub.Web
-@using EventHub.Web.Pages.Events.Components.ListArea
+@using EventHub.Web.Pages.Events.Components.EventsArea
 @using Volo.Abp.Timing
 @using Volo.Abp.Users
 @inject ICurrentUser CurrentUser
@@ -98,11 +98,11 @@
         </div>
     </div>
 
-    @await Component.InvokeAsync(typeof(ListAreaViewComponent), new 
+    @await Component.InvokeAsync(typeof(EventsAreaViewComponent), new 
     {
         minDate = Clock.Now, 
-        MaxResultCount = 15
-        
+        MaxResultCount = 15,
+        isPagination = false
     })
 
     <div class="row">

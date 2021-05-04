@@ -1,0 +1,29 @@
+@model EventHub.Web.Pages.Events.Components.EventsArea.EventsAreaViewComponent.ListAreaViewComponentModel
+
+@if (Model.Events != null && Model.Events.Count > 0)
+{
+    <div id="EventList" class="row" data-total-count="@Model.TotalCount" data-skip-count="@Model.SkipCount" data-max-result-count="@Model.MaxResultCount">
+        <partial name="~/Pages/Events/Components/EventsArea/_eventListSection.cshtml" model="@Model.Events"/>
+    </div>
+
+    @if (Model.IsPagination && Model.TotalCount >= 10)
+    {
+        <div class="row load-more-section">
+            <div class="col text-center">
+            <button
+                id="LoadMoreButton"
+                class="btn btn-secondary btn-lg"
+                data-url="@Url.Action("GetList","Event", 
+                              new {
+                                  minDate = Model.MinDate,
+                                  maxDate = Model.MaxDate,
+                                  organizationId = Model.OrganizationId,
+                                  isOnline = Model.IsOnline,
+                                  maxResultCount = Model.MaxResultCount
+                              })">
+                    Load More
+                </button>
+            </div>
+        </div>
+    }
+}

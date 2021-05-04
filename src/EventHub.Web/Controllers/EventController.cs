@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Events;
 using EventHub.Web.Pages.Events;
@@ -17,6 +18,19 @@ namespace EventHub.Web.Controllers
         public EventController(IEventAppService eventAppService)
         {
             _eventAppService = eventAppService;
+        }
+        
+        [HttpGet]
+        [Route("get-list")]
+        public async Task<IActionResult> GetList(EventListFilterDto input)
+        {
+            ViewData.Model = (await _eventAppService.GetListAsync(input)).Items.ToList();
+            
+            return new PartialViewResult
+            {
+                ViewName = "~/Pages/Events/Components/EventsArea/_eventListSection.cshtml",
+                ViewData = ViewData
+            };
         }
         
         [Authorize]

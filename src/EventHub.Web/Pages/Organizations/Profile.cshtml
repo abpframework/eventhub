@@ -1,7 +1,7 @@
 ﻿@page "/organizations/{name}"
 @inject IHtmlLocalizer<EventHubResource> L
 @using EventHub.Localization
-@using EventHub.Web.Pages.Events.Components.ListArea
+@using EventHub.Web.Pages.Events.Components.EventsArea
 @using EventHub.Web.Pages.Organizations.Components.JoinArea
 @using EventHub.Web.Pages.Organizations.Components.MembersArea
 @using Microsoft.AspNetCore.Mvc.Localization
@@ -96,14 +96,14 @@
                         </div>
                         <div class="tab-content">
                             <div id="PastEvent" class="tab-pane active">
-                                @await Component.InvokeAsync(typeof(ListAreaViewComponent), new
+                                @await Component.InvokeAsync(typeof(EventsAreaViewComponent), new
                                 {
                                     organizationId = Model.Organization.Id,
                                     maxDate = Clock.Now
                                 })
                             </div>
                             <div id="UpcomingEvent" class="tab-pane">
-                                @await Component.InvokeAsync(typeof(ListAreaViewComponent), new
+                                @await Component.InvokeAsync(typeof(EventsAreaViewComponent), new
                                 {
                                     organizationId = Model.Organization.Id,
                                     minDate = Clock.Now
