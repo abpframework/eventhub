@@ -164,6 +164,7 @@ namespace EventHub.Events
 
             dto.OrganizationName = organization.Name;
             dto.OrganizationDisplayName = organization.DisplayName;
+            dto.OwnerEmail = (await _userRepository.GetAsync(organization.OwnerUserId)).Email;
             dto.CoverImageContent = await GetCoverImageAsync(dto.Id);
 
             return dto;

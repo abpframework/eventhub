@@ -56,7 +56,7 @@
     "OrganizationProfilePictureInfo": "Upload 16:9 aspect ratio pictures for the best view. Maximum file size: 1MB.",
     "Close": "Close",
     "EventHub:CapacityOfEventFull": "\"{EventTitle}\" event capacity is full!",
-    "GoToEventAddress": "Go to Event Address",
+    "GoToOnlineAddress": "Go to Online Address",
     "AttendeesCanSeeEventLocation": "Only attendees can see the event's {0}.",
     "LoginToSeeLocation": "Login to see location",
     "LocationHasNotSpecifiedYet": "Event {0} has not been specified yet.",

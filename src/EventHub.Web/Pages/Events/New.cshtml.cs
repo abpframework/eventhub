@@ -50,7 +50,38 @@ namespace EventHub.Web.Pages.Events
             await FillCountriesAsync();
             FillLanguages();
         }
+        
+        public async Task<IActionResult> OnPostAsync()
+        {
+            try
+            {
+                ValidateModel();
 
+                var input = ObjectMapper.Map<NewEventViewModel, CreateEventDto>(Event);
+
+                if (Event.CoverImageFile != null && Event.CoverImageFile.Length > 0)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await Event.CoverImageFile.CopyToAsync(memoryStream);
+                        input.CoverImageContent = memoryStream.ToArray();
+                    }
+                }
+
+                var eventDto = await _eventAppService.CreateAsync(input);
+
+                return RedirectToPage("/Events/Detail", new {url = eventDto.UrlCode});
+            }
+            catch (Exception exception)
+            {
+                ShowAlert(exception);
+                await FillOrganizationsAsync();
+                await FillCountriesAsync();
+                FillLanguages();
+                return Page();
+            }
+        }
+        
         private async Task FillOrganizationsAsync()
         {
             var result = await _organizationAppService.GetMyOrganizationsAsync();
@@ -92,36 +123,6 @@ namespace EventHub.Web.Pages.Events
                 }
             ).ToList();
         }
-        public async Task<IActionResult> OnPostAsync()
-        {
-            try
-            {
-                ValidateModel();
-
-                var input = ObjectMapper.Map<NewEventViewModel, CreateEventDto>(Event);
-
-                if (Event.CoverImageFile != null && Event.CoverImageFile.Length > 0)
-                {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        await Event.CoverImageFile.CopyToAsync(memoryStream);
-                        input.CoverImageContent = memoryStream.ToArray();
-                    }
-                }
-
-                var eventDto = await _eventAppService.CreateAsync(input);
-
-                return RedirectToPage("/Events/Detail", new {url = eventDto.UrlCode});
-            }
-            catch (Exception exception)
-            {
-                ShowAlert(exception);
-                await FillOrganizationsAsync();
-                await FillCountriesAsync();
-                FillLanguages();
-                return Page();
-            }
-        }
 
         public class NewEventViewModel
         {
@@ -134,10 +135,12 @@ namespace EventHub.Web.Pages.Events
             public string Title { get; set; }
 
             [Required]
-            public DateTime StartTime { get; set; }
+            [DataType(DataType.DateTime)]
+            public DateTime StartTime { get; set; } = DateTime.Now;
 
             [Required]
-            public DateTime EndTime { get; set; }
+            [DataType(DataType.DateTime)]
+            public DateTime EndTime { get; set; } = DateTime.Now;
 
             [Required]
             [StringLength(EventConsts.MaxDescriptionLength, MinimumLength = EventConsts.MinDescriptionLength)]
@@ -151,7 +154,8 @@ namespace EventHub.Web.Pages.Events
             [AllowedExtensions(new string[] { ".jpg", ".png", ".jpeg" })]
             public IFormFile CoverImageFile { get; set; }
 
-            public bool IsOnline { get; set; }
+            [Required]
+            public bool? IsOnline { get; set; }
             
             [CanBeNull]
             [StringLength(EventConsts.MaxOnlineLinkLength, MinimumLength = EventConsts.MinOnlineLinkLength)]

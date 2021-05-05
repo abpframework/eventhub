@@ -33,7 +33,7 @@
                 {
                     <h1 class="mt-4 mt-md-0">
                         @Model.Event.Title
-                        <a href="/event/edit/@Model.Event.Url" class="btn btn-primary text-white">
+                        <a href="/event/edit/@Model.Event.Url" class="btn btn-primary btn-xs text-white">
                             <i class="far fa-edit"></i>
                         </a>
                     </h1>
@@ -44,11 +44,9 @@
                 }
                 @await Component.InvokeAsync(typeof(LocationAreaViewComponent), new {eventId = Model.Event.Id})
 
-                <h5 class="detail-head mt-4">Organizers</h5>
+                <h5 class="detail-head mt-4">Owner</h5>
                 <div>
-                    <img src="/assets/avatar2.png" class="org-avatar">
-                    <img src="/assets/avatar3.png" class="org-avatar">
-                    <img src="/assets/avatar4.png" class="org-avatar">
+                    <img gravatar-email="@Model.Event.OwnerEmail" default-image="Wavatar" gravatar-size="60" class="org-avatar avatar rounded-circle"/>
                 </div>
                 @await Component.InvokeAsync(typeof(RegistrationAreaViewComponent), new {eventId = Model.Event.Id})
             </div>

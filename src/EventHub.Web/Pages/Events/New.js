@@ -1,48 +1,63 @@
 $(function () {
     var l = abp.localization.getResource('EventHub');
-
-    $("#Event_CountryId").prepend("<option value='' selected='selected'></option>");
-    $("#Event_Language").prepend("<option value='' selected='selected'></option>");
-
-    $('#Event_IsOnline').click(function() {
-        if ($(this).is(':checked')) {
-            $("#event-link-group").show();
-            $("#event-location-group").hide();
+    
+    var isOnline = $("#Event_IsOnline option:selected").val()
+    if (isOnline === "True") {
+        $(".event-link-group").show();
+        $(".event-location-group").hide();
+    }else{
+        $(".event-link-group").hide();
+        $(".event-location-group").show();
+    }
+    
+    $('#Event_IsOnline').on('change', '', function() {
+        var isOnline = $("#Event_IsOnline option:selected").val()
+        if (isOnline === "True") {
+            $(".event-link-group").show();
+            $(".event-location-group").hide();
         }else{
-            $("#event-link-group").hide();
-            $("#event-location-group").show();
+            $(".event-link-group").hide();
+            $(".event-location-group").show();
         }
     });
 
+    var infoArea = document.getElementById( 'upload-label' );
     var fileInput = document.getElementById('Event_CoverImageFile');
     var file;
 
     fileInput.addEventListener('change', function () {
-        var showModal = true;
+        var showFile = true;
 
         file = fileInput.files[0];
+
+        if (file === undefined){
+            $('#Event_CoverImageFile').val('');
+            $('#imageResult').attr('src', '#');
+            infoArea.textContent = 'Choose file'
+            return;
+        }
 
         var permittedExtensions = ["jpg", "jpeg", "png"]
         var fileExtension = $(this).val().split('.').pop();
         if (permittedExtensions.indexOf(fileExtension) === -1) {
-            showModal = false;
+            showFile = false;
             abp.message.error(l('EventCoverImageExtensionNotAllowed'))
-                .then(() =>  {
+                .then(() => {
                     $('#Event_CoverImageFile').val('');
                     file = null;
                 });
         }
         else if(file.size > 1024*1024) {
-            showModal = false;
+            showFile = false;
             abp.message.error(l('EventCoverImageSizeExceedMessage'))
-                .then(() =>  {
+                .then(() => {
                     $('#Event_CoverImageFile').val('');
                     file = null;
                 });
         }
 
         var img = new Image();
-        img.onload = function() {
+        img.onload = function () {
             var imageError = true;
             var sizes = {
                 width: this.width,
@@ -50,22 +65,22 @@ $(function () {
             };
             URL.revokeObjectURL(this.src);
 
-            if(showModal && imageError) {
+            if(showFile && imageError) {
                 readURL(file);
-                $('#cover-image-preview-modal').modal('show');
             }
         }
 
         var objectURL = URL.createObjectURL(file);
         img.src = objectURL;
     });
-
+    
     function readURL(input) {
         if (input) {
             var reader = new FileReader();
 
             reader.onload = function (e) {
-                $('#img-upload').attr('src', e.target.result);
+                $('#imageResult').attr('src', e.target.result);
+                infoArea.textContent = 'File name: ' + input.name;
             }
 
             reader.readAsDataURL(input);

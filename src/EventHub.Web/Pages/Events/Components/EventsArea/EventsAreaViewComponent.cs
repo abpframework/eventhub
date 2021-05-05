@@ -14,8 +14,6 @@ namespace EventHub.Web.Pages.Events.Components.EventsArea
     public class EventsAreaViewComponent : AbpViewComponent
     {
         private readonly IEventAppService _eventAppService;
-
-        public List<EventInListDto> Events { get; set; }
         
         public EventsAreaViewComponent(IEventAppService eventAppService)
         {
