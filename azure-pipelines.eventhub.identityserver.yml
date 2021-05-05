@@ -15,7 +15,7 @@ variables:
 
 stages:
 - stage: Build
-  displayName: Build stage
+  displayName: Build stage Identity-Server
   jobs:
   - job: Build
     displayName: Build
