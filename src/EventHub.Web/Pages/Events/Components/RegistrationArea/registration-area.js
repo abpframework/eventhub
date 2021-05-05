@@ -21,7 +21,7 @@
                 }).then(function (){
                     widgetManager.refresh();
                     abp.event.trigger('EventHub.Event.RegistrationStatusChanged');
-                    abp.message.success(l('EventRegisterSuccessMessage'), l('EventRegisterSuccessMessageTitle'));
+                    abp.message.success(l('EventRegisterSuccessMessage'));
                 }).always(function (){
                     $registerButton.buttonBusy(false);
                 });

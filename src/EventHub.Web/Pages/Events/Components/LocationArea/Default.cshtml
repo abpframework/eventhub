@@ -1,45 +1,42 @@
 @using EventHub.Localization
+@using EventHub.Web.Pages.Events
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IHtmlLocalizer<EventHubResource> L
 @model EventHub.Web.Pages.Events.Components.LocationArea.LocationAreaViewComponent.LocationAreaViewComponentModel
-<abp-card class="mb-3" data-event-id="@Model.EventId">
-    <abp-card-body>
-        <abp-card-title>@L["Location"] <i class="fas fa-map-marker-alt"></i></abp-card-title>
-
-        @if (Model.IsRegistered)
+<div data-event-id="@Model.EventId">
+    @if (Model.IsRegistered)
+    {
+        if (Model.IsOnline)
         {
-            if (Model.IsOnline)
+            if (Model.OnlineLink != null)
             {
-                if (Model.OnlineLink != null)
-                {
-                    <a href="@Model.OnlineLink">@L["GoToEventAddress"]</a>
-                }
-                else
-                {
-                    <p>@L["LocationHasNotSpecifiedYet", "URL"]</p>
-                }
-            }else
-            {
-                if (Model.Country != null && Model.City != null)
-                {
-                    <p>@Model.Country/@Model.City</p>
-                }
-                else
-                {
-                    <p>@L["LocationHasNotSpecifiedYet", "location"]</p>
-                }
-            }
-        }
-        else
-        {
-            if (Model.IsOnline)
-            {
-                <p>@L["AttendeesCanSeeEventLocation", "URL"]</p>
+                <a class="detail-pin" href="@Model.OnlineLink"><img src="/assets/pin.svg"> @L["GoToEventAddress"]</a>
             }
             else
             {
-                <p>@L["AttendeesCanSeeEventLocation", "location"]</p>
+                <span>@L["LocationHasNotSpecifiedYet", "URL"]</span>
+            }
+        }else
+        {
+            if (Model.Country != null && Model.City != null)
+            {
+                <span class="detail-pin"><img src="/assets/pin.svg"> @EventDateHelper.GetLocationInfo(Model.IsOnline, Model.City, Model.Country, ", ")</span>
+            }
+            else
+            {
+                <span class="detail-pin">@L["LocationHasNotSpecifiedYet", "location"]</span>
             }
         }
-    </abp-card-body>
-</abp-card>
+    }
+    else
+    {
+        if (Model.IsOnline)
+        {
+            <span class="detail-pin">@L["AttendeesCanSeeEventLocation", "URL"]</span>
+        }
+        else
+        {
+            <span class="detail-pin">@L["AttendeesCanSeeEventLocation", "location"]</span>
+        }
+    }
+</div>

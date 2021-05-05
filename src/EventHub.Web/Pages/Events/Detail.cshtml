@@ -1,59 +1,104 @@
 ﻿@page "/events/{url}"
 @inject IHtmlLocalizer<EventHubResource> L
-@using System.Globalization
 @using EventHub.Localization
 @using EventHub.Web.Pages.Events
 @using EventHub.Web.Pages.Events.Components.AttendeesArea
+@using EventHub.Web.Pages.Events.Components.EventsArea
 @using EventHub.Web.Pages.Events.Components.LocationArea
 @using EventHub.Web.Pages.Events.Components.RegistrationArea
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Timing
+@using Volo.Abp.Users
+@inject ICurrentUser CurrentUser
+@inject IClock Clock
 @model EventHub.Web.Pages.Events.DetailPageModel
-<abp-row>
-    <abp-column size-lg="_8" size-md="_6">
-        <abp-card class="mb-3">
-              @if (Model.Event.CoverImageContent is null)
-              {
-                  <img abp-card-image="Top" src="https://picsum.photos/seed/@Model.Event.Id.ToString()/400/160?blur=8" alt="@Model.Event.Title"/>
-              }
-              else
-              {
-                  <img abp-card-image="Top" style="max-height: 400px; min-height: 160px;" src="@($"data:image/png;base64,{Convert.ToBase64String(Model.Event.CoverImageContent)}")" alt="@Model.Event.Title"/>
-              }
-            <abp-card-body>
-                <abp-card-title>
-                    @if (Model.IsEventOwner)
+<div class="bg-white py-5">
+    <div class="container detail-page pb-4">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="detail-image">
+                    @if (Model.Event.CoverImageContent == null)
                     {
-                        <div class="row">
-                            <div class="col-9">
-                                <h2>@Model.Event.Title</h2>
-                            </div>
-                            <div class="col-3 text-right">
-                                <a href="/event/edit/@Model.Event.Url" class="btn btn-primary text-white">@L["Edit"] <i class="far fa-edit"></i></a>
-                            </div>
-                        </div>
+                        <img src="/assets/detail.png" alt="@Model.Event.Title">
                     }
                     else
                     {
-                        <h2>@Model.Event.Title</h2>
+                        <img src="@($"data:image/png;base64,{Convert.ToBase64String(Model.Event.CoverImageContent)}")" alt="@Model.Event.Title">
                     }
-                </abp-card-title>
-                <abp-card-subtitle>
-                    @EventDateHelper.GetDateRangeText(Model.Event.StartTime, Model.Event.EndTime) <br/>
-                    <span class="text-muted">@L["OrganizedBy"]</span> <a href="@Url.Page("/Organizations/Profile", new {name = Model.Event.OrganizationName})">@Model.Event.OrganizationDisplayName</a>
-                    @if (!Model.Event.Language.IsNullOrWhiteSpace())
-                    {
-                        <p>@L["Language"]: <span class="text-muted"> @CultureInfo.GetCultureInfo(Model.Event.Language).EnglishName</span></p>
-                    }
-                </abp-card-subtitle>
-                <abp-card-text class="mt-3">
+                </div>
+            </div>
+
+            <div class="col-md-5 pl-md-5">
+                @if (Model.IsEventOwner)
+                {
+                    <h1 class="mt-4 mt-md-0">
+                        @Model.Event.Title
+                        <a href="/event/edit/@Model.Event.Url" class="btn btn-primary text-white">
+                            <i class="far fa-edit"></i>
+                        </a>
+                    </h1>
+                }
+                else
+                {
+                    <h1 class="mt-4 mt-md-0">@Model.Event.Title</h1>
+                }
+                @await Component.InvokeAsync(typeof(LocationAreaViewComponent), new {eventId = Model.Event.Id})
+
+                <h5 class="detail-head mt-4">Organizers</h5>
+                <div>
+                    <img src="/assets/avatar2.png" class="org-avatar">
+                    <img src="/assets/avatar3.png" class="org-avatar">
+                    <img src="/assets/avatar4.png" class="org-avatar">
+                </div>
+                @await Component.InvokeAsync(typeof(RegistrationAreaViewComponent), new {eventId = Model.Event.Id})
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-7">
+                <h5 class="detail-head mt-5 font-weight-bold">Event Description</h5>
+                <p>
                     @Model.Event.Description
-                </abp-card-text>
-            </abp-card-body>
-        </abp-card>
-    </abp-column>
-    <abp-column size-lg="_4" size-md="_6">
-        @await Component.InvokeAsync(typeof(RegistrationAreaViewComponent), new {eventId = Model.Event.Id})
-        @await Component.InvokeAsync(typeof(AttendeesAreaViewComponent), new {eventId = Model.Event.Id})
-        @await Component.InvokeAsync(typeof(LocationAreaViewComponent), new {eventId = Model.Event.Id})
-    </abp-column>
-</abp-row>
+                </p>
+
+                <h5 class="detail-head mt-5 font-weight-bold">Date</h5>
+                <p>
+                    @EventDateHelper.GetDateRangeText(Model.Event.StartTime, Model.Event.EndTime)
+                </p>
+
+                @await Component.InvokeAsync(typeof(AttendeesAreaViewComponent), new {eventId = Model.Event.Id})
+
+            </div>
+
+            <div class="col-md-5 pl-md-5">
+                <h5 class="detail-head mt-5 font-weight-bold">Share Event</h5>
+                <div class="share-container">
+                    <a href="#">
+                        <img src="/assets/twitter2.svg">
+                    </a>
+                    <a href="#">
+                        <img src="/assets/in2.svg">
+                    </a>
+                    <a href="#">
+                        <img src="/assets/facebook2.png">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container pt-5">
+    <div class="row py-4">
+        <div class="col-md">
+            <h2>Events You Will Enjoy</h2>
+        </div>
+    </div>
+
+    @await Component.InvokeAsync(typeof(EventsAreaViewComponent), new
+    {
+        minDate = Clock.Now.ClearTime(),
+        MaxResultCount = 6,
+        isPagination = false
+    })
+</div>

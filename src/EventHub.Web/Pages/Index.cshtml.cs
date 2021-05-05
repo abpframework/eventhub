@@ -26,6 +26,18 @@ namespace EventHub.Web.Pages
 
         public async Task OnGetAsync()
         {
+            await FillOnlineEventsAsync();
+            await FillCountriesAsync();
+            FillLanguages();
+        }
+
+        public async Task OnPostLoginAsync()
+        {
+            await HttpContext.ChallengeAsync("oidc");
+        }
+        
+        private async Task FillOnlineEventsAsync()
+        {
             OnlineEvents = (await _eventAppService.GetListAsync(
                 new EventListFilterDto
                 {
@@ -34,13 +46,10 @@ namespace EventHub.Web.Pages
                     MaxResultCount = 8
                 }
             )).Items;
-            
-            Languages = CultureInfo.GetCultures(CultureTypes.NeutralCultures)
-                .DistinctBy(x => x.EnglishName)
-                .OrderBy(x => x.EnglishName)
-                .ToList();
-            Languages.Remove(Languages.Single(x => x.TwoLetterISOLanguageName == "iv")); // Invariant Language
+        }
 
+        private async Task FillCountriesAsync()
+        {
             Countries = await _eventAppService.GetCountriesLookupAsync();
             Countries.Insert(0, new CountryLookupDto
             {
@@ -49,9 +58,13 @@ namespace EventHub.Web.Pages
             });
         }
 
-        public async Task OnPostLoginAsync()
+        private void FillLanguages()
         {
-            await HttpContext.ChallengeAsync("oidc");
+            Languages = CultureInfo.GetCultures(CultureTypes.NeutralCultures)
+                .DistinctBy(x => x.EnglishName)
+                .OrderBy(x => x.EnglishName)
+                .ToList();
+            Languages.Remove(Languages.Single(x => x.TwoLetterISOLanguageName == "iv")); // Invariant Language
         }
     }
 }

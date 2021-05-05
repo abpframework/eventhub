@@ -1,14 +1,8 @@
 ﻿@model EventHub.Web.Pages.Events.Components.AttendeesArea.AttendeesAreaViewComponent.AttendeesAreaViewComponentModel
-<abp-card class="mb-3" data-event-id="@Model.EventId">
-    <abp-card-body>
-        <abp-card-title>Attendees (@Model.TotalCount)</abp-card-title>
-        <abp-card-text>
-            <ul id="EventAttendeeList">
-                @foreach (var attendee in Model.Attendees)
-                {
-                    <li class="border p-2 mb-2"><i class="fas fa-user"></i> @Model.GetAttendeeName(attendee)</li>
-                }
-            </ul>
-        </abp-card-text>
-    </abp-card-body>
-</abp-card>
+<h5 class="detail-head mt-5 font-weight-bold" data-event-id="@Model.EventId">Attendees (@Model.TotalCount)</h5> 
+<div>
+    @foreach (var attendee in Model.Attendees)
+    {
+        <img gravatar-email="@attendee.Email" default-image="Wavatar" gravatar-size="60" class="org-avatar rounded-circle"/>
+    }
+</div>

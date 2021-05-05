@@ -2,24 +2,23 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IHtmlLocalizer<EventHubResource> L
 @model EventHub.Web.Pages.Events.Components.RegistrationArea.RegistrationAreaViewComponent.RegistrationAreaViewComponentModel
-<abp-card class="mb-3" data-event-id="@Model.EventId">
-    <abp-card-body>
+<div data-event-id="@Model.EventId">
         @if (Model.IsLoggedIn)
         {
             if (Model.IsRegistered)
             {
-                <abp-button id="EventCancelRegistrationButton"
-                            button-type="Secondary"
-                            size="Block"
+                <abp-button class="mt-4" id="EventCancelRegistrationButton"
+                            button-type="Primary"
+                            size="Large"
                             icon="fas fa-times"
                             text="@L["CancelRegistration"].Value"
-                            data-url="@Url.Action("Unregister","EventRegistration", new { eventId = Model.EventId })" />
+                            data-url="@Url.Action("Unregister", "EventRegistration", new {eventId = Model.EventId})"/>
             }
             else
             {
-                <abp-button id="EventRegisterButton"
+                <abp-button class="mt-4" id="EventRegisterButton"
                             button-type="Primary"
-                            size="Block"
+                            size="Large"
                             icon="fas fa-plus"
                             text="@L["RegisterNow"].Value"
                             data-url="@Url.Action("Register","EventRegistration", new { eventId = Model.EventId })"/>
@@ -27,8 +26,7 @@
         }
         else
         {
-            <a abp-button="Primary"
+            <a abp-button="Primary" class="btn btn-primary btn-lg mt-4"
                href="@Url.Action("Login", "Account", new { returnUrl = Context.Request.Path.Value })"> @L["LoginToRegister"]</a>
         }
-    </abp-card-body>
-</abp-card>
+</div>

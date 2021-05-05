@@ -39,5 +39,21 @@ namespace EventHub.Web.Pages.Events
                 return sb.ToString();
             }
         }
+        
+        public static string GetLocationInfo(bool isOnline, string city, string country, string separator)
+        {
+            if (isOnline)
+            {
+                return "online";
+            }
+            else
+            {
+                var sb = new StringBuilder();
+                sb.Append(city);
+                sb.Append(separator);
+                sb.Append(country);
+                return sb.ToString();
+            }
+        }
     }
 }
