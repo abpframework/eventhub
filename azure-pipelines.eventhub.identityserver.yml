@@ -1,14 +1,15 @@
 trigger:
-- dev
+- test
 
 variables:
 
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '60b77638-6f87-431e-bf44-619404bd3935'
+  dockerRegistryServiceConnection: '18b12bb9-87a3-4539-a769-7a1e371886cf'
   imageRepository: 'voloeventhubidentityserver'
   containerRegistry: 'voloeventhubidentityserver.azurecr.io'
   dockerfilePath: '**/Dockerfile.EventHub.IdentityServer'
   tag: '$(Build.BuildNumber)'
+  
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
@@ -32,11 +33,11 @@ stages:
         tags: |
           $(tag)
 
-    - upload: manifests
+    - publish: manifests
       artifact: manifests
 
 - stage: Deploy
-  displayName: Deploy-Identity-Server
+  displayName: Deploy stage
   dependsOn: Build
 
   jobs:
@@ -44,13 +45,11 @@ stages:
     displayName: Deploy
     pool:
       vmImage: $(vmImageName)
-    environment: 'volosofteventhub-1068.default'
+    environment: 'volosofteventhub-1359.default'
     strategy:
       runOnce:
         deploy:
           steps:
-      
-
           - task: KubernetesManifest@0
             displayName: Deploy to Kubernetes cluster
             inputs:
