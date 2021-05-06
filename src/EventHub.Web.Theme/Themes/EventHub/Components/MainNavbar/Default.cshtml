@@ -56,7 +56,7 @@
                             </span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="@(EventHubExternalUrls.EhAccount.EnsureEndsWith('/') + "Account/Manage")" target="_blank" title="@L["Settings"]">
+                            <a class="dropdown-item" href="@Url.Page("/Profile")" title="@L["Settings"]">
                                 <i class="fas fa-cog"></i> @L["Settings"]
                             </a>
                             <a class="dropdown-item" href="/Account/Logout?returnUrl=@EventHubExternalUrls.EhWww" title="@L["Logout"]">

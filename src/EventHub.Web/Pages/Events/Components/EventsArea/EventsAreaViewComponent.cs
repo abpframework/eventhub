@@ -22,6 +22,7 @@ namespace EventHub.Web.Pages.Events.Components.EventsArea
 
         public async Task<IViewComponentResult> InvokeAsync(
             Guid? organizationId,
+            Guid? registeredUserId,
             DateTime? minDate, 
             DateTime? maxDate,
             bool? isOnline,
@@ -35,6 +36,7 @@ namespace EventHub.Web.Pages.Events.Components.EventsArea
                 new EventListFilterDto
                 {
                     OrganizationId = organizationId,
+                    RegisteredUserId = registeredUserId,
                     MinDate = minDate,
                     MaxDate = maxDate,
                     IsOnline = isOnline,
@@ -52,6 +54,7 @@ namespace EventHub.Web.Pages.Events.Components.EventsArea
                    Events = result.Items,
                    TotalCount = result.TotalCount,
                    OrganizationId = organizationId,
+                   RegisteredUserId = registeredUserId,
                    MinDate = minDate,
                    MaxDate = maxDate,
                    IsOnline = isOnline,
@@ -71,6 +74,8 @@ namespace EventHub.Web.Pages.Events.Components.EventsArea
             public long TotalCount { get; set; }
 
             public Guid? OrganizationId { get; set; }
+
+            public Guid? RegisteredUserId { get; set; }
 
             public DateTime? MinDate { get; set; }
 

@@ -2,22 +2,23 @@
 
 @if (Model.Events != null && Model.Events.Count > 0)
 {
-    <div id="EventList" class="row" data-total-count="@Model.TotalCount" data-skip-count="@Model.SkipCount" data-max-result-count="@Model.MaxResultCount">
+    <div id="EventList" class="row" data-hash-code="@Model.GetHashCode()" data-total-count="@Model.TotalCount" data-skip-count="@Model.SkipCount" data-max-result-count="@Model.MaxResultCount">
         <partial name="~/Pages/Events/Components/EventsArea/_eventListSection.cshtml" model="@Model.Events"/>
     </div>
 
     @if (Model.IsPagination && Model.TotalCount > Model.MaxResultCount && Model.TotalCount > Model.Events.Count)
     {
-        <div class="row load-more-section">
+        <div class="row load-more-section-@Model.GetHashCode()">
             <div class="col text-center">
             <button
-                id="LoadMoreButton"
+                id="LoadMoreButton-@Model.GetHashCode()"
                 class="btn btn-secondary btn-lg"
                 data-url="@Url.Action("GetList","Event", 
                               new {
                                   minDate = Model.MinDate,
                                   maxDate = Model.MaxDate,
                                   organizationId = Model.OrganizationId,
+                                  registeredUserId = Model.RegisteredUserId,
                                   isOnline = Model.IsOnline,
                                   language = Model.Language,
                                   countryId = Model.CountryId,

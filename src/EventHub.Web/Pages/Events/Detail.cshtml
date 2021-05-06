@@ -29,25 +29,19 @@
             </div>
 
             <div class="col-md-5 pl-md-5">
-                @if (Model.IsEventOwner)
-                {
-                    <h1 class="mt-4 mt-md-0">
-                        @Model.Event.Title
-                        <a href="/event/edit/@Model.Event.Url" class="btn btn-primary btn-xs text-white">
-                            <i class="far fa-edit"></i>
-                        </a>
-                    </h1>
-                }
-                else
-                {
-                    <h1 class="mt-4 mt-md-0">@Model.Event.Title</h1>
-                }
+                <h1 class="mt-4 mt-md-0">@Model.Event.Title</h1>
                 @await Component.InvokeAsync(typeof(LocationAreaViewComponent), new {eventId = Model.Event.Id})
 
                 <h5 class="detail-head mt-4">Owner</h5>
                 <div>
                     <img gravatar-email="@Model.Event.OwnerEmail" default-image="Wavatar" gravatar-size="60" class="org-avatar avatar rounded-circle"/>
                 </div>
+                @if (Model.IsEventOwner)
+                {
+                    <a href="/event/edit/@Model.Event.Url" class="btn btn-primary mt-4 text-white">
+                        <i class="far fa-edit"></i> Edit
+                    </a>
+                }
                 @await Component.InvokeAsync(typeof(RegistrationAreaViewComponent), new {eventId = Model.Event.Id})
             </div>
         </div>

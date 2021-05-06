@@ -20,6 +20,7 @@ namespace EventHub.Events
     {
         private readonly EventManager _eventManager;
         private readonly EventRegistrationManager _eventRegistrationManager;
+        private readonly IRepository<EventRegistration, Guid> _eventRegistrationRepository;
         private readonly IRepository<Event, Guid> _eventRepository;
         private readonly IRepository<Organization, Guid> _organizationRepository;
         private readonly IRepository<AppUser, Guid> _userRepository;
@@ -29,14 +30,16 @@ namespace EventHub.Events
         public EventAppService(
             EventManager eventManager,
             EventRegistrationManager eventRegistrationManager,
+            IRepository<EventRegistration, Guid> eventRegistrationRepository,
             IRepository<Event, Guid> eventRepository,
-            IRepository<Organization, Guid> organizationRepository, 
-            IRepository<AppUser, Guid> userRepository, 
-            IRepository<Country, Guid> countriesRepository, 
+            IRepository<Organization, Guid> organizationRepository,
+            IRepository<AppUser, Guid> userRepository,
+            IRepository<Country, Guid> countriesRepository,
             IBlobContainer<EventCoverImageContainer> eventBlobContainer)
         {
             _eventManager = eventManager;
             _eventRegistrationManager = eventRegistrationManager;
+            _eventRegistrationRepository = eventRegistrationRepository;
             _eventRepository = eventRepository;
             _organizationRepository = organizationRepository;
             _userRepository = userRepository;
@@ -74,7 +77,7 @@ namespace EventHub.Events
             {
                 await SaveCoverImageAsync(@event.Id, input.CoverImageContent);
             }
-            
+
             await _eventRepository.InsertAsync(@event);
 
             return ObjectMapper.Map<Event, EventDto>(@event);
@@ -83,11 +86,22 @@ namespace EventHub.Events
         public async Task<PagedResultDto<EventInListDto>> GetListAsync(EventListFilterDto input)
         {
             var eventQueryable = await _eventRepository.GetQueryableAsync();
+            var eventRegistrationQueryable = await _eventRegistrationRepository.GetQueryableAsync();
             var organizationQueryable = await _organizationRepository.GetQueryableAsync();
 
             var query = from @event in eventQueryable
                 join organization in organizationQueryable on @event.OrganizationId equals organization.Id
                 select new {@event, organization};
+
+            if (input.RegisteredUserId.HasValue)
+            {
+                var registeredEvent = _eventRegistrationRepository
+                    .Where(x => x.UserId == input.RegisteredUserId)
+                    .Select(s => s.EventId);
+
+                var eventIds = await AsyncExecuter.ToListAsync(registeredEvent);
+                query = query.Where(x => eventIds.Contains(x.@event.Id));
+            }
 
             if (input.MinDate.HasValue)
             {
@@ -103,17 +117,17 @@ namespace EventHub.Events
             {
                 query = query.Where(i => i.@event.OrganizationId == input.OrganizationId.Value);
             }
-            
+
             if (input.IsOnline.HasValue)
             {
                 query = query.Where(i => i.@event.IsOnline == input.IsOnline);
             }
-            
+
             if (!input.Language.IsNullOrWhiteSpace())
             {
                 query = query.Where(i => i.@event.Language == input.Language);
             }
-            
+
             if (input.CountryId.HasValue && input.CountryId != Guid.Empty)
             {
                 query = query.Where(i => i.@event.CountryId == input.CountryId);
@@ -177,15 +191,15 @@ namespace EventHub.Events
             var user = await _userRepository.GetAsync(CurrentUser.GetId());
 
             var dto = ObjectMapper.Map<Event, EventLocationDto>(@event);
-            
+
             dto.IsRegistered = await _eventRegistrationManager.IsRegisteredAsync(@event, user);
-            
+
             if (!dto.IsRegistered)
             {
                 dto.OnlineLink = null;
                 dto.City = null;
             }
-             
+
             if (dto.IsRegistered && @event.CountryId.HasValue)
             {
                 dto.Country = (await _countriesRepository.GetAsync(@event.CountryId.Value)).Name;
@@ -193,7 +207,7 @@ namespace EventHub.Events
 
             return dto;
         }
-        
+
         public async Task<List<CountryLookupDto>> GetCountriesLookupAsync()
         {
             var countriesQueryable = await _countriesRepository.GetQueryableAsync();
@@ -233,7 +247,7 @@ namespace EventHub.Events
             @event.SetTitle(input.Title);
             @event.SetDescription(input.Description);
             @event.Language = input.Language;
-            
+
             await _eventManager.SetCapacityAsync(@event, input.Capacity);
 
             await _eventRepository.UpdateAsync(@event);
@@ -252,7 +266,7 @@ namespace EventHub.Events
 
             @event.SetTime(input.StartTime, input.EndTime);
             @event.TimingChangeCount++;
-            
+
             await _eventRepository.UpdateAsync(@event);
         }
 
@@ -260,10 +274,10 @@ namespace EventHub.Events
         public async Task SaveCoverImageAsync(Guid id, byte[] coverImageContent)
         {
             var blobName = id.ToString();
-            
+
             await _eventBlobContainer.SaveAsync(blobName, coverImageContent, overrideExisting: true);
         }
-        
+
         private async Task<byte[]> GetCoverImageAsync(Guid id)
         {
             var blobName = id.ToString();
