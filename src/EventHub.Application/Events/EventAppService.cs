@@ -95,7 +95,7 @@ namespace EventHub.Events
 
             if (input.RegisteredUserId.HasValue)
             {
-                var registeredEvent = _eventRegistrationRepository
+                var registeredEvent = eventRegistrationQueryable
                     .Where(x => x.UserId == input.RegisteredUserId)
                     .Select(s => s.EventId);
 
