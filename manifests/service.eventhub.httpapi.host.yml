@@ -6,6 +6,6 @@ spec:
   selector:
     app: volosoft-eventhub-httpapi-host-pod
   ports:
-  - port: 5002
-    targetPort: 80
-  type: LoadBalancer
+   - port: 80
+     targetPort: 80
+  type: ClusterIP

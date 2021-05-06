@@ -6,12 +6,6 @@ spec:
   selector:
     app: volosoft-eventhub-identityserver-pod
   ports:
-  - name: http
-    port: 5001
-    protocol: TCP
+  - port: 80
     targetPort: 80
-  - name: https
-    port: 5000
-    targetPort: 443
-    protocol: TCP 
-  type: LoadBalancer
+  type: ClusterIP

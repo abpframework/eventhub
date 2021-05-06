@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: volosoft-eventhub-identityserver-ingress
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    #nginx.ingress.kubernetes.io/ssl-redirect: "false"
+   
+spec:
+  rules:
+  - host: web.eventhub.identityserver.gokhansengun.com
+    http:
+      paths:
+      - backend:
+          serviceName: volosoft-eventhub-identityserver-service
+          servicePort: 80
+        path: /
