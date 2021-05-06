@@ -1,9 +1,11 @@
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Organizations;
 using EventHub.Web.Pages.Organizations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 
 namespace EventHub.Web.Controllers
@@ -16,6 +18,19 @@ namespace EventHub.Web.Controllers
         public OrganizationController(IOrganizationAppService organizationAppService)
         {
             _organizationAppService = organizationAppService;
+        }
+        
+        [HttpGet]
+        [Route("get-list")]
+        public async Task<IActionResult> GetList(PagedResultRequestDto input)
+        {
+            ViewData.Model = (await _organizationAppService.GetListAsync(input)).Items.ToList();
+            
+            return new PartialViewResult
+            {
+                ViewName = "~/Pages/Organizations/Components/OrganizationsArea/_organizationListSection.cshtml",
+                ViewData = ViewData
+            };
         }
         
         [HttpPost]

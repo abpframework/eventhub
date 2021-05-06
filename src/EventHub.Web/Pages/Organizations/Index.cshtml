@@ -1,6 +1,7 @@
 ﻿@page "/organizations"
 @inject IHtmlLocalizer<EventHubResource> L
 @using EventHub.Localization
+@using EventHub.Web.Pages.Organizations.Components.OrganizationsArea
 @using Microsoft.AspNetCore.Mvc.Localization
 @model EventHub.Web.Pages.Organizations.IndexPageModel
 
@@ -25,41 +26,8 @@
 </div>
 
 <div class="container">
-
-    <div class="row">
-        @foreach (var organization in Model.Organizations)
-        {
-            <div class="col-lg-4 col-md-6">
-                <div class="card">
-                     @if (organization.ProfilePictureContent == null)
-                     {
-                        <img src="assets/card-img.png" class="card-img-top" alt="@organization.Name">
-                     }
-                     else
-                     {
-                         <img src="@($"data:image/png;base64,{Convert.ToBase64String(organization.ProfilePictureContent)}")" class="card-img-top" alt="@organization.Name">
-                     }
-                    <div class="card-body">
-                        <div class="event-container">
-                            <div class="event-info">
-                                <h5>@organization.DisplayName</h5>
-                                <p>
-                                    @organization.Description
-                                </p>
-                            </div>
-                            <a href="@Url.Page("/Organizations/Profile", new {name = organization.Name})" class="btn btn-link p-0">Details <img src="assets/more-btn.svg"></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
-
-    <div class="row">
-        <div class="col text-center">
-            <button class="btn btn-secondary btn-lg ">
-                Load More
-            </button>
-        </div>
-    </div>
+    @await Component.InvokeAsync(typeof(OrganizationsAreaViewComponent), new
+    {
+        maxResultCount = 12
+    })
 </div>
