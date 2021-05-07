@@ -59,7 +59,7 @@
                             <a class="dropdown-item" href="@Url.Page("/Profile")" title="@L["Settings"]">
                                 <i class="fas fa-cog"></i> @L["Settings"]
                             </a>
-                            <a class="dropdown-item" href="/Account/Logout?returnUrl=@EventHubExternalUrls.EhWww" title="@L["Logout"]">
+                            <a class="dropdown-item" href="/Account/Logout?returnUrl=@EventHubExternalUrls.EhWww@(System.Net.WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery()))" title="@L["Logout"]">
                                 <i class="fas fa-sign-out-alt"></i> @L["Logout"]
                             </a>
                         </div>

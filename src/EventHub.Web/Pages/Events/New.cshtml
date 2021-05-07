@@ -10,10 +10,14 @@
 
 @if (!Model.Organizations.Any())
 {
-    <abp-alert alert-type="Danger">
+  <div class="container">
+    <div class="m-5 text-center">
+      <abp-alert alert-type="Danger">
         <p>@L["NewEventYouHaveNoOrganizationYetMessage"]</p>
         <a abp-button="Primary" href="@Url.Page("/Organizations/New")">@L["CreateAnOrganization"]</a>
-    </abp-alert>
+      </abp-alert>
+    </div>
+  </div>
 }
 else
 {
