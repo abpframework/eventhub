@@ -43,7 +43,7 @@ stages:
     displayName: Deploy-HttpApi-Host
     pool:
       vmImage: $(vmImageName)
-    environment: 'volosofteventhub-6504.default'
+    environment: 'volosofteventhub-2042'
     strategy:
       runOnce:
         deploy:
