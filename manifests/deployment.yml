@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: eventhubhttpapihost 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eventhubhttpapihost
+  template:
+    metadata:
+      labels:
+        app: eventhubhttpapihost 
+    spec:
+      containers:
+        - name: eventhubhttpapihost 
+          image: eventhubregistry.azurecr.io/eventhubhttpapihost
+          ports:
+          - containerPort: 80
