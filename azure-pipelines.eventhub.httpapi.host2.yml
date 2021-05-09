@@ -2,14 +2,13 @@ trigger:
 - dev
 
 variables:
-
   dockerRegistryServiceConnection: '8a2bf690-716a-490c-8a88-d93fab12cf9d'
-  imageRepository: 'voloeventhubhttpapihost'
-  containerRegistry: 'voloeventhubhttpapihost.azurecr.io'
+  imageRepository: 'eventhubhttpapihost'
+  containerRegistry: 'eventhubregistry.azurecr.io'
   dockerfilePath: '**/Dockerfile.EventHub.HttpApi.Host'
   tag: '$(Build.BuildNumber)'
 
-  # Agent VM image name
+  # Agent VM image namedocker images
   vmImageName: 'ubuntu-latest'
 
 
