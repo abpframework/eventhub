@@ -3,7 +3,7 @@ trigger:
 
 variables:
 
-  dockerRegistryServiceConnection: 'b46a670b-6940-4de5-b6b1-b06f9dd1c849'
+  dockerRegistryServiceConnection: '8a2bf690-716a-490c-8a88-d93fab12cf9d'
   imageRepository: 'voloeventhubhttpapihost'
   containerRegistry: 'voloeventhubhttpapihost.azurecr.io'
   dockerfilePath: '**/Dockerfile.EventHub.HttpApi.Host'
