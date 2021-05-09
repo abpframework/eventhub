@@ -3,7 +3,7 @@ trigger:
 
 variables:
 
-  dockerRegistryServiceConnection: 'b46a670b-6940-4de5-b6b1-b06f9dd1c849'
+  dockerRegistryServiceConnection: '9c592463-a558-4040-b897-d3da2193b571'
   imageRepository: 'eventhubregistry'
   containerRegistry: 'eventhubregistry.azurecr.io'
   dockerfilePath: '**/Dockerfile.EventHub.HttpApi.Host'
