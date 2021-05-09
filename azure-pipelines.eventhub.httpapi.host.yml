@@ -2,7 +2,7 @@ trigger:
 - dev
 
 variables:
-  dockerRegistryServiceConnection: '8a2bf690-716a-490c-8a88-d93fab12cf9d'
+  dockerRegistryServiceConnection: 'efbb038e-4f76-4833-a538-fbd8ecb7c545'
   imageRepository: 'eventhubhttpapihost'
   containerRegistry: 'eventhubregistry.azurecr.io'
   dockerfilePath: '**/Dockerfile.EventHub.HttpApi.Host'
@@ -43,7 +43,7 @@ stages:
     displayName: Deploy-HttpApi-Host
     pool:
       vmImage: $(vmImageName)
-    environment: 'volosofteventhub-6504.default'
+    environment: 'volosofteventhub-2042'
     strategy:
       runOnce:
         deploy:
