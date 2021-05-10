@@ -5,6 +5,8 @@ namespace EventHub.Events
 {
     public class EventDetailDto : EntityDto<Guid>
     {
+        public Guid OrganizationId { get; set; }
+
         public string OrganizationName { get; set; }
 
         public string OrganizationDisplayName { get; set; }
@@ -22,6 +24,12 @@ namespace EventHub.Events
         public byte[] CoverImageContent { get; set; }
 
         public bool IsOnline { get; set; }
+        
+        public string OnlineLink { get; set; }
+
+        public Guid? CountryId { get; set; }
+
+        public string City { get; set; }
 
         public bool IsLive { get; set; }
 

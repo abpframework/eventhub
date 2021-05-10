@@ -20,7 +20,8 @@ namespace EventHub.Web.Pages.Organizations
         
         [BindProperty] 
         public EditOrganizationViewModel Organization { get; set; }
-        
+        public byte[] ProfilePictureContent { get; private set; }
+
         private readonly IOrganizationAppService _organizationAppService;
 
         public EditPageModel(IOrganizationAppService organizationAppService)
@@ -31,6 +32,7 @@ namespace EventHub.Web.Pages.Organizations
         public async Task OnGetAsync()
         {
             var organizationProfileDto = await _organizationAppService.GetProfileAsync(Name);
+            ProfilePictureContent = organizationProfileDto.ProfilePictureContent;
             
             Organization = ObjectMapper.Map<OrganizationProfileDto, EditOrganizationViewModel>(organizationProfileDto);
         }

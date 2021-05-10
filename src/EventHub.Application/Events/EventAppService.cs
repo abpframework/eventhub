@@ -176,6 +176,7 @@ namespace EventHub.Events
 
             var dto = ObjectMapper.Map<Event, EventDetailDto>(@event);
 
+            dto.OrganizationId = organization.Id;
             dto.OrganizationName = organization.Name;
             dto.OrganizationDisplayName = organization.DisplayName;
             dto.OwnerEmail = (await _userRepository.GetAsync(organization.OwnerUserId)).Email;
@@ -249,29 +250,16 @@ namespace EventHub.Events
             @event.Language = input.Language;
 
             await _eventManager.SetCapacityAsync(@event, input.Capacity);
-
-            await _eventRepository.UpdateAsync(@event);
-        }
-
-        [Authorize]
-        public async Task UpdateEventTimingAsync(Guid id, UpdateEventTimingDto input)
-        {
-            var @event = await _eventRepository.GetAsync(id);
-
-            if (@event.TimingChangeCount >= EventConsts.MaxTimingChangeCountForUser)
+            
+            if (input.CoverImageContent != null && input.CoverImageContent.Length > 0)
             {
-                throw new BusinessException(EventHubErrorCodes.CantChangeEventTiming)
-                    .WithData("MaxTimingChangeLimit", EventConsts.MaxTimingChangeCountForUser);
+                await SaveCoverImageAsync(@event.Id, input.CoverImageContent);
             }
-
-            @event.SetTime(input.StartTime, input.EndTime);
-            @event.TimingChangeCount++;
-
+            
             await _eventRepository.UpdateAsync(@event);
         }
 
-        [Authorize]
-        public async Task SaveCoverImageAsync(Guid id, byte[] coverImageContent)
+        private async Task SaveCoverImageAsync(Guid id, byte[] coverImageContent)
         {
             var blobName = id.ToString();
 

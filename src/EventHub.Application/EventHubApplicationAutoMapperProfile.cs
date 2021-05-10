@@ -24,6 +24,7 @@ namespace EventHub
                 .Ignore(x => x.OrganizationDisplayName)
                 .Ignore(x => x.IsLiveNow);
             CreateMap<Event, EventDetailDto>()
+                .Ignore(x => x.OrganizationId)
                 .Ignore(x => x.OrganizationName)
                 .Ignore(x => x.OrganizationDisplayName);
 

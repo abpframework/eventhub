@@ -20,8 +20,7 @@ namespace EventHub.Web.Pages.Events
 {
     public class NewPageModel : EventHubPageModel
     {
-        [BindProperty]
-        public NewEventViewModel Event { get; set; }
+        [BindProperty] public NewEventViewModel Event { get; set; }
 
         public List<SelectListItem> Organizations { get; private set; }
         public List<SelectListItem> Countries { get; private set; }
@@ -50,7 +49,7 @@ namespace EventHub.Web.Pages.Events
             await FillCountriesAsync();
             FillLanguages();
         }
-        
+
         public async Task<IActionResult> OnPostAsync()
         {
             try
@@ -81,7 +80,7 @@ namespace EventHub.Web.Pages.Events
                 return Page();
             }
         }
-        
+
         private async Task FillOrganizationsAsync()
         {
             var result = await _organizationAppService.GetMyOrganizationsAsync();
@@ -93,11 +92,11 @@ namespace EventHub.Web.Pages.Events
                 }
             ).ToList();
         }
-        
+
         private async Task FillCountriesAsync()
         {
             var result = await _eventAppService.GetCountriesLookupAsync();
-           
+
             Countries = result.Select(
                 country => new SelectListItem
                 {
@@ -146,35 +145,33 @@ namespace EventHub.Web.Pages.Events
             [StringLength(EventConsts.MaxDescriptionLength, MinimumLength = EventConsts.MinDescriptionLength)]
             [TextArea]
             public string Description { get; set; }
-            
+
             [CanBeNull]
             [Display(Name = "Cover Image")]
             [DataType(DataType.Upload)]
-            [MaxFileSize(EventConsts.MaxCoverImageFileSize)] 
-            [AllowedExtensions(new string[] { ".jpg", ".png", ".jpeg" })]
+            [MaxFileSize(EventConsts.MaxCoverImageFileSize)]
+            [AllowedExtensions(new string[] {".jpg", ".png", ".jpeg"})]
             public IFormFile CoverImageFile { get; set; }
 
-            [Required]
-            public bool? IsOnline { get; set; }
-            
+            [Required] public bool? IsOnline { get; set; }
+
             [CanBeNull]
             [StringLength(EventConsts.MaxOnlineLinkLength, MinimumLength = EventConsts.MinOnlineLinkLength)]
             public string OnlineLink { get; set; }
-            
+
             [SelectItems(nameof(Countries))]
             [DisplayName("Country")]
             public Guid? CountryId { get; set; }
 
-            [SelectItems(nameof(Languages))]
-            [DisplayName("Language")]
-            public string Language { get; set; }
-        
             [CanBeNull]
             [StringLength(EventConsts.MaxCityLength, MinimumLength = EventConsts.MinCityLength)]
             public string City { get; set; }
 
-            [Range(1, int.MaxValue)]
-            public int? Capacity { get; set; }
+            [SelectItems(nameof(Languages))]
+            [DisplayName("Language")]
+            public string Language { get; set; }
+
+            [Range(1, int.MaxValue)] public int? Capacity { get; set; }
         }
     }
 }

@@ -2,90 +2,127 @@
 @inject IHtmlLocalizer<EventHubResource> L
 @using EventHub.Localization
 @using Microsoft.AspNetCore.Mvc.Localization
-@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @model EventHub.Web.Pages.Events.EditPageModel
 
 @section scripts {
     <abp-script src="/Pages/Events/Edit.js"/>
 }
 
-<input type="hidden" value="@Model.Url" id="event-detail-url"/>
-<div class="container mb-4">
-    <h1>@L["EditEvent"]</h1>
-    <abp-tabs tab-style="Pill">
-        <abp-tab title="@(L["EventInformation"].Value)">
-            <form method="post" class="mt-3" id="Event_Information_Form">
-                <abp-input asp-for="Event.Id"/>
-                <abp-input asp-for="Event.Title"/>
-                <abp-input asp-for="Event.Description"/>
-                <abp-input asp-for="Event.IsOnline"/>
+<form method="post" enctype="multipart/form-data">
+    <div class="container pt-4">
+        <div class="row py-4">
+            <div class="col-md-9 mx-auto profile-content">
 
-                <div id="event-link-group" style="display: none">
-                    <abp-input asp-for="Event.OnlineLink"/>
-                </div>
+                <div class="card">
+                    <div class="card-body" style="min-height: 496px">
+                        <h3 class="mb-4">Edit Event</h3>
+                        <div class="form">
+                            <div class="row">
+                                <input type="hidden" value="@Model.Url" id="event-detail-url"/>
+                                <abp-input asp-for="Event.Id"/>
+                                <div class="col-md-6">
+                                    <div class="form-label-group">
+                                        <select asp-for="Event.OrganizationId" asp-items="Model.Organizations" class="form-select">
+                                            <option selected value="">Organization</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-label-group">
+                                        <input type="text" id="inputTitle" asp-for="Event.Title" class="form-control" placeholder="Title">
+                                        <label for="inputTitle">Title</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-label-group">
+                                        <input id="inputStartdate" asp-for="Event.StartTime" class="form-control" placeholder="Start Date">
+                                        <label for="inputStartdate">Start Date</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-label-group">
+                                        <input id="inputEnddate" asp-for="Event.EndTime" class="form-control" placeholder="End Date">
+                                        <label for="inputEnddate">End Date</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-label-group">
+                                        <input type="text" id="inputDescription" asp-for="Event.Description" class="form-control" placeholder="Description">
+                                        <label for="inputDescription">Description</label>
+                                    </div>
+                                </div>
 
-                <div id="event-location-group">
-                    <abp-select asp-for="Event.CountryId"/>
-                    <abp-input asp-for="Event.City"/>
-                </div>
+                                <div class="col-md-12">
+                                    <h4 class="mb-4">Cover Image</h4>
+                                    <div class="row">
+                                        <div class="col-5">
+                                            <div class="image-area">
+                                                @if (Model.CoverImageContent != null && Model.CoverImageContent.Length > 0)
+                                                {
+                                                    <img id="imageResult" src="@($"data:image/png;base64,{Convert.ToBase64String(Model.CoverImageContent)}")" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
+                                                }
+                                                else
+                                                {
+                                                    <img id="imageResult" src="#" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="col-7">
+                                            <div>
+                                                <p class="mb-3">For horizontal format 600x300 sized upload images.</p>
+                                                <input type="file" id="Event_CoverImageFile" asp-for="Event.CoverImageFile" class="form-control border-0" hidden>
+                                                <label id="upload-label" for="Event_CoverImageFile" class="btn btn-primary btn-lg text-white">Choose file</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <select class="form-select" asp-for="Event.IsOnline">
+                                        <option selected="selected" value="">Event Type</option>
+                                        <option value="@Boolean.TrueString">Online</option>
+                                        <option value="@Boolean.FalseString">In Person</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 event-link-group" style="display: none">
+                                    <div class="form-label-group">
+                                        <input type="text" id="inputOnlineLink" asp-for="Event.OnlineLink" class="form-control" placeholder="Online Link">
+                                        <label for="inputOnlineLink">Online Link</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-label-group">
+                                        <input type="number" id="inputCapacity" asp-for="Event.Capacity" class="form-control" placeholder="Capacity">
+                                        <label for="inputCapacity">Capacity</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 event-location-group">
+                                    <select asp-for="Event.CountryId" asp-items="Model.Countries" class="form-select">
+                                        <option selected="" value="">Country</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 event-location-group">
+                                    <div class="form-label-group">
+                                        <input type="text" id="inputCity" asp-for="Event.City" class="form-control" placeholder="City">
+                                        <label for="inputCity">City</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <select asp-for="Event.Language" asp-items="Model.Languages" aria-label="en" class="form-select">
+                                        <option selected value="">Language</option>
+                                    </select>
+                                </div>
 
-                <abp-select asp-for="Event.Language"/>
-                <abp-input label="@(L["EventCapacityLabel"].Value)" info="@(L["EventCapacityInfo", Model.AttendeeCount].Value)" asp-for="Event.Capacity" name="capacity" min="@Model.AttendeeCount"/>
 
-                <abp-button size="Large" button-type="Primary" type="submit" text="@L["Submit"].Value"/>
-            </form>
-        </abp-tab>
-        <abp-tab title="@(L["EventTiming"].Value)">
-            <div class="alert alert-info mt-3" role="alert" >
-                <b>@L["Note"]</b> : @L["EventTimingChangeCountWarningMessage"]
-            </div>
-            <div class="alert alert-warning mt-3" role="alert">
-                <b>@L["Note"]</b> : @L["EventTimingChangeEmailNotificationMessage"]
-            </div>
-            <form method="post" id="Event_Timing_Form">
-                <abp-input asp-for="EventTiming.Id"/>
-                <abp-input asp-for="EventTiming.StartTime"/>
-                <abp-input asp-for="EventTiming.EndTime"/>
-
-                <abp-button size="Large" button-type="Primary" type="button" id="btn-event-timing" text="@L["Submit"].Value"/>
-            </form>   
-        </abp-tab>
-        <abp-tab title="@(L["EventCoverImage"].Value)">
-            <form method="post" id="cover-image-form" class="mt-3">
-                <input type="hidden" id="event-id" value="@Model.Event.Id"/>
-                <abp-row>
-                    <abp-column size="_12" v-align="Center">
-                        <div class="form-group">
-                            <label>@L["CoverImage"]</label>
-                            <div class="custom-file">
-                                <input id="event-cover-image-input" type="file" class="custom-file-input form-control">
-                                <label id="choose-cover-image" class="custom-file-label" for="customFile">@L["ChooseEventCoverImage"]</label>
-                                <small id="event-cover-image-info-text" class="form-text text-muted mt-2">@L["ChooseEventCoverImageInfo"]</small>
+                                <div class="col-md-12 text-right">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        Edit Event 
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </abp-column>
-                </abp-row>
-                                
-                <abp-button class="btn-block" id="event-cover-image-btnSubmit" button-type="Primary" type="submit" text="@L["Submit"].Value" />
-            </form>
-        </abp-tab>
-    </abp-tabs>
-    <abp-modal centered="true" scrollable="true" size="Large" id="event-timing-preview-modal">
-        <abp-modal-header title="@(L["EventTimingPreview"].Value)"></abp-modal-header>
-        <abp-modal-body>
-            @L["EventTimingChangeEmailNotificationMessage"]
-        </abp-modal-body>
-        <abp-modal-footer>
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            <button type="button" id="event-timing-confirm" class="btn btn-success">Confirm</button>
-        </abp-modal-footer>
-    </abp-modal>
-
-    <abp-modal centered="true" scrollable="true" size="Small" id="cover-image-preview-modal">
-        <abp-modal-header title="@(L["CoverImagePreview"].Value)"></abp-modal-header>
-        <abp-modal-body>
-            <img class="img-fluid" id="img-upload" alt="event-cover-image-preview"/>
-        </abp-modal-body>
-        <abp-modal-footer buttons="@(AbpModalButtons.Close)"></abp-modal-footer>
-    </abp-modal>
-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

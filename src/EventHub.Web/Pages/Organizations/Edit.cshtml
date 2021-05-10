@@ -26,7 +26,14 @@
                                     <div class="row">
                                         <div class="col-4">
                                             <div class="image-area">
-                                                <img id="imageResult" src="#" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
+                                                @if (Model.ProfilePictureContent != null && Model.ProfilePictureContent.Length > 0)
+                                                {
+                                                    <img id="imageResult" src="@($"data:image/png;base64,{Convert.ToBase64String(Model.ProfilePictureContent)}")" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
+                                                }
+                                                else
+                                                {
+                                                    <img id="imageResult" src="#" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
+                                                }
                                             </div>
                                         </div>
                                 

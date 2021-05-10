@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Events;
-using EventHub.Events.Registrations;
+using EventHub.Organizations;
 using EventHub.Web.Helpers;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
@@ -25,38 +26,34 @@ namespace EventHub.Web.Pages.Events
         [BindProperty] 
         public EditEventViewModel Event { get; set; }
         
-        [BindProperty] 
-        public EditEventTimingViewModel EventTiming { get; set; }
-
-        public int AttendeeCount { get; set; }
-        
+        public List<SelectListItem> Organizations { get; private set; }
         public List<SelectListItem> Countries { get; private set; }
         public List<SelectListItem> Languages { get; private set; }
+        public byte[] CoverImageContent { get; private set; }
 
         private readonly IEventAppService _eventAppService;
-        private readonly IEventRegistrationAppService _eventRegistrationAppService;
+        private readonly IOrganizationAppService _organizationAppService;
 
-        public EditPageModel(IEventAppService eventAppService, IEventRegistrationAppService eventRegistrationAppService)
+        public EditPageModel(
+            IEventAppService eventAppService,
+            IOrganizationAppService organizationAppService)
         {
             _eventAppService = eventAppService;
-            _eventRegistrationAppService = eventRegistrationAppService;
+            _organizationAppService = organizationAppService;
         }
         
         public async Task OnGetAsync()
         {
             var urlCode = EventUrlCodeHelper.GetCodeFromUrl(Url);
-
             var eventDetailDto = await _eventAppService.GetByUrlCodeAsync(urlCode);
+            CoverImageContent = eventDetailDto.CoverImageContent;
             Event = ObjectMapper.Map<EventDetailDto, EditEventViewModel>(eventDetailDto);
-            EventTiming = ObjectMapper.Map<EventDetailDto, EditEventTimingViewModel>(eventDetailDto);
             
-            FillLanguages();
+            await FillOrganizationsAsync();
             await FillCountriesAsync();
-            await GetLocationInfoAsync();
-
-            AttendeeCount = await _eventRegistrationAppService.GetAttendeeCountAsync(Event.Id);
+            FillLanguages();
         }
-
+        
         public async Task<IActionResult> OnPostAsync()
         {
             try
@@ -64,6 +61,16 @@ namespace EventHub.Web.Pages.Events
                 ValidateModel();
 
                 var input = ObjectMapper.Map<EditEventViewModel, UpdateEventDto>(Event);
+                
+                if (Event.CoverImageFile != null && Event.CoverImageFile.Length > 0)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await Event.CoverImageFile.CopyToAsync(memoryStream);
+                        input.CoverImageContent = memoryStream.ToArray();
+                    }
+                }
+                
                 await _eventAppService.UpdateAsync(Event.Id, input);
                 
                 return RedirectToPage("./Detail", new { url = Url });
@@ -71,9 +78,27 @@ namespace EventHub.Web.Pages.Events
             catch (Exception exception)
             {
                 ShowAlert(exception);
-                FillLanguages();
+                await FillOrganizationsAsync();
                 await FillCountriesAsync();
+                FillLanguages();
                 return Page();
+            }
+        }
+
+        private async Task FillOrganizationsAsync()
+        {
+            var result = await _organizationAppService.GetMyOrganizationsAsync();
+            Organizations = result.Items.Select(
+                organization => new SelectListItem
+                {
+                    Value = organization.Id.ToString(),
+                    Text = organization.DisplayName
+                }
+            ).ToList();
+
+            if (Event.OrganizationId != Guid.Empty)
+            {
+                Organizations.Single(x => x.Value == Event.OrganizationId.ToString()).Selected = true;
             }
         }
         
@@ -88,6 +113,11 @@ namespace EventHub.Web.Pages.Events
                     Text = country.Name
                 }
             ).ToList();
+
+            if (Event.CountryId.HasValue)
+            {
+                Countries.Single(x => x.Value == Event.CountryId.ToString()).Selected = true;
+            }
         }
 
         private void FillLanguages()
@@ -105,78 +135,67 @@ namespace EventHub.Web.Pages.Events
                     Text = cultureInfo.EnglishName
                 }
             ).ToList();
+
+            if (!string.IsNullOrWhiteSpace(Event.Language))
+            {
+                Languages.Single(x => x.Value == Event.Language).Selected = true;
+            }
         }
-
-        private async Task GetLocationInfoAsync()
-        {
-            var eventLocationDto = await _eventAppService.GetLocationAsync(Event.Id);
-            Event.City = eventLocationDto.City;
-            Event.OnlineLink = eventLocationDto.OnlineLink;
-
-            Event.CountryId = Guid.TryParse(
-                Countries.FirstOrDefault(x => x.Text == eventLocationDto.Country)?.Value,
-                out var countryId
-            )
-                ? countryId
-                : null;
-        }
-
+        
         public class EditEventViewModel
         {
             [HiddenInput]
             public Guid Id { get; set; }
             
+            [SelectItems(nameof(Organizations))]
+            [DisplayName("Organization")]
+            public Guid OrganizationId { get; set; }
+
             [Required]
             [StringLength(EventConsts.MaxTitleLength, MinimumLength = EventConsts.MinTitleLength)]
             public string Title { get; set; }
 
             [Required]
+            [DataType(DataType.DateTime)]
+            public DateTime StartTime { get; set; } = DateTime.Now;
+
+            [Required]
+            [DataType(DataType.DateTime)]
+            public DateTime EndTime { get; set; } = DateTime.Now;
+
+            [Required]
             [StringLength(EventConsts.MaxDescriptionLength, MinimumLength = EventConsts.MinDescriptionLength)]
             [TextArea]
             public string Description { get; set; }
+            
+            [CanBeNull]
+            [Display(Name = "Cover Image")]
+            [DataType(DataType.Upload)]
+            [MaxFileSize(EventConsts.MaxCoverImageFileSize)] 
+            [AllowedExtensions(new string[] { ".jpg", ".png", ".jpeg" })]
+            public IFormFile CoverImageFile { get; set; }
 
+            [Required]
             public bool IsOnline { get; set; }
-        
+            
             [CanBeNull]
             [StringLength(EventConsts.MaxOnlineLinkLength, MinimumLength = EventConsts.MinOnlineLinkLength)]
             public string OnlineLink { get; set; }
-        
+            
             [SelectItems(nameof(Countries))]
             [DisplayName("Country")]
             public Guid? CountryId { get; set; }
-        
+
             [CanBeNull]
             [StringLength(EventConsts.MaxCityLength, MinimumLength = EventConsts.MinCityLength)]
             public string City { get; set; }
-        
+            
             [SelectItems(nameof(Languages))]
             [DisplayName("Language")]
             public string Language { get; set; }
-
+            
             [Range(1, int.MaxValue)]
             public int? Capacity { get; set; }
         }
-
-        public class EditEventTimingViewModel
-        {
-            [HiddenInput]
-            public Guid Id { get; set; }
-            
-            public DateTime StartTime { get; set; }
-
-            public DateTime EndTime { get; set; }
-        }
-    }
-    
-    public class EventCoverImageInput
-    {
-        [Required]
-        public Guid EventId { get; set; }
-
-        [Required]
-        [DataType(DataType.Upload)]
-        [MaxFileSize(EventConsts.MaxCoverImageFileSize)] 
-        [AllowedExtensions(new string[] { ".jpg", ".png", ".jpeg" })]
-        public IFormFile CoverImageFile { get; set; }
     }
 }
