@@ -155,6 +155,14 @@ namespace EventHub
                 app.UseErrorPage();
             }
 
+            app.Use((httpContext, next) =>
+            {
+                httpContext.Request.Scheme = "https";
+                return next();
+            });
+            
+            app.UseHttpsRedirection();
+            
             app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseRouting();
