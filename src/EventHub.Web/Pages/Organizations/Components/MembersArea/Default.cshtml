@@ -1,15 +1,26 @@
 @model EventHub.Web.Pages.Organizations.Components.MembersArea.MembersAreaViewComponent.MembersAreaViewComponentModel
-<h5 class="detail-head mt-5 font-weight-bold" data-organization-id="@Model.OrganizationId">Members (@Model.TotalCount)</h5> 
-<div>
-    @foreach (var member in Model.Members)
+<h5 class="detail-head mt-3 font-weight-bold" data-is-more-detail="@Model.IsMoreDetail" data-organization-id="@Model.OrganizationId" data-hash-code="@Model.GetHashCode()" data-total-count="@Model.TotalCount" data-skip-count="@Model.SkipCount" data-max-result-count="@Model.MaxResultCount">
+    Members 
+    @if (Model.IsMoreDetail)
     {
-        <img gravatar-email="@member.Email" default-image="Wavatar" gravatar-size="60" class="org-avatar avatar rounded-circle"/>
+        <span class="badge badge-primary">@Model.TotalCount</span>
     }
-</div> 
-@if (Model.TotalCount > 10)
+    else
+    {
+        <span>(@Model.TotalCount)</span>
+    }
+</h5>
+<div id="MemberList-@Model.GetHashCode()" class="row">
+    <partial name="~/Pages/Organizations/Components/MembersArea/_memberListSection.cshtml" model="@Model.Members"/>
+</div>
+@if (Model.IsPagination && Model.TotalCount > Model.MaxResultCount && Model.TotalCount > Model.Members.Count)
 {
-    // ToDo: Implement show more!!!
-    <button class="btn btn-secondary btn-lg mt-3">
-        Show More
-    </button>
+    <div id="load-more-section-@Model.GetHashCode()">
+        <button
+            id="LoadMoreButton-@Model.GetHashCode()"
+            class="btn btn-secondary btn-lg mt-3"
+            data-url="@Url.Action("GetList", "OrganizationMembership", new { organizationId = Model.OrganizationId, maxResultCount = Model.MaxResultCount})">
+            Show More
+        </button>
+    </div>
 }

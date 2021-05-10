@@ -4,12 +4,12 @@
         var skipCount = Number($wrapper.find('[data-skip-count]').attr('data-skip-count'))
         var maxResultCount = Number($wrapper.find('[data-max-result-count]').attr('data-max-result-count'))
         var hashCode = Number($wrapper.find('[data-hash-code]').attr('data-hash-code'))
+        skipCount += maxResultCount;
 
         function init() {
             var loadMoreButton = $wrapper.find('#LoadMoreButton-' + hashCode);
             loadMoreButton.click(function (e) {
                 e.preventDefault();
-                skipCount += maxResultCount;
                 loadMoreButton.buttonBusy(true);
                 abp.ajax({
                     type: 'GET',
@@ -19,10 +19,10 @@
                 }).then(function (response) {
                     var organizationList = $wrapper.find('#OrganizationList')
                     organizationList.append(response);
+                    skipCount += maxResultCount;
                 }).always(function () {
-                    var organizationCount = $('.organization').length;
-                    if (Number(organizationCount) >= totalCount) {
-                        $('.load-more-section-' + hashCode).hide();
+                    if (skipCount >= totalCount) {
+                        $('#load-more-section-' + hashCode).hide();
                     }
                     loadMoreButton.buttonBusy(false);
                 });

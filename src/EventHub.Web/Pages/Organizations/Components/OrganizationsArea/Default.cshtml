@@ -8,12 +8,16 @@
 
     @if (Model.IsPagination && Model.TotalCount > Model.MaxResultCount && Model.TotalCount > Model.Organizations.Count)
     {
-        <div class="row load-more-section-@Model.GetHashCode()">
+        <div id="load-more-section-@Model.GetHashCode()" class="row">
             <div class="col text-center">
                 <button
                     id="LoadMoreButton-@Model.GetHashCode()"
                     class="btn btn-secondary btn-lg"
-                    data-url="@Url.Action("GetList", "Organization", new {maxResultCount = Model.MaxResultCount})">
+                    data-url="@Url.Action("GetList", "Organization", 
+                                  new {
+                                      registeredUserId = Model.RegisteredUserId,
+                                      maxResultCount = Model.MaxResultCount
+                                  })">
                     Load More
                 </button>
             </div>

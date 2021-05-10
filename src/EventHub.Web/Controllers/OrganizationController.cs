@@ -22,7 +22,7 @@ namespace EventHub.Web.Controllers
         
         [HttpGet]
         [Route("get-list")]
-        public async Task<IActionResult> GetList(PagedResultRequestDto input)
+        public async Task<IActionResult> GetList(OrganizationListFilterDto input)
         {
             ViewData.Model = (await _organizationAppService.GetListAsync(input)).Items.ToList();
             

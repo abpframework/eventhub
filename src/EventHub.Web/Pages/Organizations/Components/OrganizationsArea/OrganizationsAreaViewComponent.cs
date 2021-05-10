@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using EventHub.Organizations;
@@ -21,13 +22,15 @@ namespace EventHub.Web.Pages.Organizations.Components.OrganizationsArea
         }
 
         public async Task<IViewComponentResult> InvokeAsync(
+            Guid? registeredUserId,
             int? skipCount,
             int maxResultCount = 15,
             bool isPagination = true)
         {
             var result = await _organizationAppService.GetListAsync(
-                new PagedResultRequestDto
+                new OrganizationListFilterDto
                 {
+                    RegisteredUserId = registeredUserId,
                     SkipCount = skipCount.GetValueOrDefault(),
                     MaxResultCount = maxResultCount
                 }
@@ -39,6 +42,7 @@ namespace EventHub.Web.Pages.Organizations.Components.OrganizationsArea
                 {
                     Organizations = result.Items,
                     TotalCount = result.TotalCount,
+                    RegisteredUserId = registeredUserId,
                     SkipCount = skipCount.GetValueOrDefault(),
                     MaxResultCount = maxResultCount,
                     IsPagination = isPagination
@@ -51,6 +55,8 @@ namespace EventHub.Web.Pages.Organizations.Components.OrganizationsArea
             public IReadOnlyList<OrganizationInListDto> Organizations { get; set; }
             
             public long TotalCount { get; set; }
+            
+            public Guid? RegisteredUserId { get; set; }
 
             public int SkipCount { get; set; }
             

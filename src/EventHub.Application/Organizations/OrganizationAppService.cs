@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EventHub.Organizations.Memberships;
 using EventHub.Users;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp;
@@ -15,17 +16,20 @@ namespace EventHub.Organizations
     public class OrganizationAppService : EventHubAppService, IOrganizationAppService
     {
         private readonly IRepository<Organization, Guid> _organizationRepository;
+        private readonly IRepository<OrganizationMembership, Guid>  _organizationMembershipsRepository;
         private readonly OrganizationManager _organizationManager;
         private readonly IBlobContainer<OrganizationProfilePictureContainer> _organizationBlobContainer;
         private readonly IRepository<AppUser, Guid> _userRepository;
 
         public OrganizationAppService(
             IRepository<Organization, Guid> organizationRepository,
+            IRepository<OrganizationMembership, Guid> organizationMembershipsRepository,
             OrganizationManager organizationManager,
             IBlobContainer<OrganizationProfilePictureContainer> organizationBlobContainer, 
             IRepository<AppUser, Guid> userRepository)
         {
             _organizationRepository = organizationRepository;
+            _organizationMembershipsRepository = organizationMembershipsRepository;
             _organizationManager = organizationManager;
             _organizationBlobContainer = organizationBlobContainer;
             _userRepository = userRepository;
@@ -56,16 +60,29 @@ namespace EventHub.Organizations
             }
         }
 
-        public async Task<PagedResultDto<OrganizationInListDto>> GetListAsync(PagedResultRequestDto input)
+        public async Task<PagedResultDto<OrganizationInListDto>> GetListAsync(OrganizationListFilterDto input)
         {
-            var organizationCount = await _organizationRepository.GetCountAsync();
-            var organizations = await _organizationRepository.GetPagedListAsync(
-                input.SkipCount,
-                input.MaxResultCount,
-                nameof(Organization.DisplayName)
-            );
+            var organizationQueryable = await _organizationRepository.GetQueryableAsync();
+            var organizationMemberQueryable = await _organizationMembershipsRepository.GetQueryableAsync();
 
-            var organizationDto = ObjectMapper.Map<List<Organization>, List<OrganizationInListDto>>(organizations);
+            var query = organizationQueryable;
+            
+            if (input.RegisteredUserId.HasValue)
+            {
+                var registeredOrganization = organizationMemberQueryable
+                    .Where(x => x.UserId == input.RegisteredUserId)
+                    .Select(x => x.OrganizationId);
+                
+                var organizationIds = await AsyncExecuter.ToListAsync(registeredOrganization);
+                query = query.Where(x => organizationIds.Contains(x.Id));
+            }
+
+            var totalCount = await AsyncExecuter.CountAsync(query);
+
+            query = query.PageBy(input);
+
+            var organizationDto = ObjectMapper
+                .Map<List<Organization>, List<OrganizationInListDto>>(await AsyncExecuter.ToListAsync(query));
             
             foreach (var organization in organizationDto)
             {
@@ -73,7 +90,7 @@ namespace EventHub.Organizations
             }
 
             return new PagedResultDto<OrganizationInListDto>(
-                organizationCount,
+                totalCount,
                 organizationDto
             );
         }

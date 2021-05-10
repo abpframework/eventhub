@@ -59,8 +59,14 @@
                                 </div>
 
                                 @await Component.InvokeAsync(typeof(JoinAreaViewComponent), new {organizationId = Model.Organization.Id})
-                                @await Component.InvokeAsync(typeof(MembersAreaViewComponent), new {organizationId = Model.Organization.Id})
-
+                                @await Component.InvokeAsync(typeof(MembersAreaViewComponent), 
+                                    new
+                                    {
+                                        organizationId = Model.Organization.Id, 
+                                        isPagination = true,
+                                        maxResultCount = 15
+                                    })
+                                
                                 <h5 class="detail-head mt-5 font-weight-bold">Share Organizations</h5>
                                 <div class="share-container">
                                     <a href="https://twitter.com/@Model.Organization.TwitterUsername">
@@ -112,35 +118,14 @@
                         </div>
                     </div>
                     <div id="members-section" class="tab-pane fade">
-                        <h4 class="mb-5 mt-3">Members <span class="badge badge-primary">@Model.Members.Count</span></h4>
-                        <div class="row">
-                            @foreach (var member in Model.Members)
+                        @await Component.InvokeAsync(typeof(MembersAreaViewComponent), 
+                            new
                             {
-                                <div class="col-6 col-md-4 col-lg-2">
-                                    <div class="member-container text-center">
-                                        <img gravatar-email="@member.Email" default-image="Wavatar" gravatar-size="60" class="org-avatar avatar rounded-circle" data-toggle="tooltip" title="" data-original-title="@member.UserName"/>
-                                        <span class="member-name">
-                                            @if (!string.IsNullOrWhiteSpace(member.Name) && !string.IsNullOrWhiteSpace(member.Surname))
-                                            {
-                                                @(member.Name + " " + member.Surname)
-                                            }
-                                            else
-                                            {
-                                                {
-                                                    @member.UserName
-                                                }
-                                            }
-                                        </span>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                        <div class="text-center mt-3">
-                            @* ToDo: Implement show more!!! *@
-                            <button class="btn btn-secondary btn-lg mt-3">
-                                Load More
-                            </button>
-                        </div>
+                                organizationId = Model.Organization.Id, 
+                                isPagination = true,
+                                maxResultCount = 18,
+                                isMoreDetail = true
+                            })
                     </div>
                 </div>
 

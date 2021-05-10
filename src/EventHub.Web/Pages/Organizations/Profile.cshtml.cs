@@ -17,23 +17,18 @@ namespace EventHub.Web.Pages.Organizations
 
         public bool IsOrganizationOwner { get; private set; }
         
-        public List<OrganizationMemberDto> Members { get; private set; }
-
         private readonly IOrganizationAppService _organizationAppService;
-        private readonly IOrganizationMembershipAppService _organizationMembershipAppService;
 
         public ProfilePageModel(
             IOrganizationAppService organizationAppService,
             IOrganizationMembershipAppService organizationMembershipAppService)
         {
             _organizationAppService = organizationAppService;
-            _organizationMembershipAppService = organizationMembershipAppService;
         }
 
         public async Task OnGetAsync()
         {
             await GetProfileAsync();
-            await GetMembersAsync();
 
             IsOrganizationOwner = await _organizationAppService.IsOrganizationOwnerAsync(Organization.Id);
         }
@@ -41,11 +36,6 @@ namespace EventHub.Web.Pages.Organizations
         private async Task GetProfileAsync()
         {
             Organization = await _organizationAppService.GetProfileAsync(Name);
-        }
-        
-        private async Task GetMembersAsync()
-        {
-            Members = (await _organizationMembershipAppService.GetMembersAsync(Organization.Id)).Items.ToList();
         }
     }
 }

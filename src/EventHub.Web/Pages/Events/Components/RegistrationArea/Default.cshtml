@@ -8,10 +8,9 @@
             if (Model.IsRegistered)
             {
                 <abp-button class="mt-4" id="EventCancelRegistrationButton"
-                            button-type="Primary"
+                            button-type="Success"
                             size="Large"
-                            icon="fas fa-times"
-                            text="@L["CancelRegistration"].Value"
+                            text="@L["YouAttendedThisEvent"].Value"
                             data-url="@Url.Action("Unregister", "EventRegistration", new {eventId = Model.EventId})"/>
             }
             else
@@ -19,8 +18,7 @@
                 <abp-button class="mt-4" id="EventRegisterButton"
                             button-type="Primary"
                             size="Large"
-                            icon="fas fa-plus"
-                            text="@L["RegisterNow"].Value"
+                            text="@L["JoinThisEvent"].Value"
                             data-url="@Url.Action("Register","EventRegistration", new { eventId = Model.EventId })"/>
             }
         }
