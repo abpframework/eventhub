@@ -1,11 +1,14 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Threading.Tasks;
 using EventHub.Organizations;
 using EventHub.Web.Helpers;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 
 namespace EventHub.Web.Pages.Organizations
 {
@@ -27,7 +30,9 @@ namespace EventHub.Web.Pages.Organizations
 
         public async Task OnGetAsync()
         {
-            await GetOrganizationAsync();
+            var organizationProfileDto = await _organizationAppService.GetProfileAsync(Name);
+            
+            Organization = ObjectMapper.Map<OrganizationProfileDto, EditOrganizationViewModel>(organizationProfileDto);
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -37,6 +42,16 @@ namespace EventHub.Web.Pages.Organizations
                 ValidateModel();
 
                 var input = ObjectMapper.Map<EditOrganizationViewModel, UpdateOrganizationDto>(Organization);
+                
+                if (Organization.ProfilePictureFile != null && Organization.ProfilePictureFile.Length > 0)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await Organization.ProfilePictureFile.CopyToAsync(memoryStream);
+                        input.ProfilePictureContent = memoryStream.ToArray();
+                    }
+                }
+                
                 await _organizationAppService.UpdateAsync(Organization.Id, input);
                 
                 return RedirectToPage("./Profile", new { name = Name });
@@ -46,12 +61,6 @@ namespace EventHub.Web.Pages.Organizations
                 ShowAlert(exception);
                 return Page();
             }
-        }
-
-        private async Task GetOrganizationAsync()
-        {
-            var organizationProfileDto = await _organizationAppService.GetProfileAsync(Name);
-            Organization = ObjectMapper.Map<OrganizationProfileDto, EditOrganizationViewModel>(organizationProfileDto);
         }
     }
 
@@ -65,31 +74,32 @@ namespace EventHub.Web.Pages.Organizations
         public string DisplayName { get; set; }
 
         [Required]
+        [DataType(DataType.MultilineText)]
         [StringLength(OrganizationConsts.MaxDescriptionNameLength, MinimumLength = OrganizationConsts.MinDescriptionNameLength)]
         public string Description { get; set; }
         
-        public string Website { get; set; }
-
-        public string TwitterUsername { get; set; }
-
-        public string GitHubUsername { get; set; }
-
-        public string FacebookUsername { get; set; }
-
-        public string InstagramUsername { get; set; }
-
-        public string MediumUsername { get; set; }
-    }
-
-    public class OrganizationProfilePictureInput
-    {
-        [Required]
-        public Guid OrganizationId { get; set; }
-
-        [Required]
+        [CanBeNull]
         [DataType(DataType.Upload)]
         [MaxFileSize(OrganizationConsts.MaxProfilePictureFileSize)] 
         [AllowedExtensions(new string[] { ".jpg", ".png", ".jpeg" })]
         public IFormFile ProfilePictureFile { get; set; }
+        
+        [StringLength(OrganizationConsts.MaxWebsiteLength)]
+        public string Website { get; set; }
+        
+        [StringLength(OrganizationConsts.MaxTwitterUsernameLength)]
+        public string TwitterUsername { get; set; }
+        
+        [StringLength(OrganizationConsts.MaxGitHubUsernameLength)]
+        public string GitHubUsername { get; set; }
+        
+        [StringLength(OrganizationConsts.MaxFacebookUsernameLength)]
+        public string FacebookUsername { get; set; }
+        
+        [StringLength(OrganizationConsts.MaxInstagramUsernameLength)]
+        public string InstagramUsername { get; set; }
+        
+        [StringLength(OrganizationConsts.MaxMediumUsernameLength)]
+        public string MediumUsername { get; set; }
     }
 }

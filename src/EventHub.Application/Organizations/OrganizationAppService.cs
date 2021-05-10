@@ -7,6 +7,7 @@ using EventHub.Users;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Authorization;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Users;
@@ -137,8 +138,7 @@ namespace EventHub.Organizations
 
             if (organization.OwnerUserId != CurrentUser.GetId())
             {
-                //TODO: throw AbpAuthorizationException instead 
-                throw new BusinessException(EventHubErrorCodes.NotAuthorizedToUpdateOrganizationProfile)
+                throw new AbpAuthorizationException(EventHubErrorCodes.NotAuthorizedToUpdateOrganizationProfile)
                     .WithData("OrganizationName", organization.DisplayName);
             }
 
@@ -151,18 +151,21 @@ namespace EventHub.Organizations
             organization.FacebookUsername = input.FacebookUsername;
             organization.MediumUsername = input.MediumUsername;
             
+            if (input.ProfilePictureContent != null && input.ProfilePictureContent.Length > 0)
+            {
+                await SaveProfilePictureAsync(organization.Id, input.ProfilePictureContent);
+            }
+            
             await _organizationRepository.UpdateAsync(organization);
         }
 
-        [Authorize]
-        public async Task SaveProfilePictureAsync(Guid id, byte[] bytes)
+        private async Task SaveProfilePictureAsync(Guid id, byte[] bytes)
         {
             var organization = await _organizationRepository.GetAsync(x => x.Id == id);
             
             if (organization.OwnerUserId != CurrentUser.GetId())
             {
-                //TODO: throw AbpAuthorizationException instead
-                throw new BusinessException(EventHubErrorCodes.NotAuthorizedToUpdateOrganizationProfile)
+                throw new AbpAuthorizationException(EventHubErrorCodes.NotAuthorizedToUpdateOrganizationProfile)
                     .WithData("Name", organization.DisplayName);
             }
             
