@@ -12,7 +12,7 @@ spec:
         - identityserver.eventhub.gokhansengun.com
       secretName: identityserver-tls
   rules:
-  - host: api.eventhub.gokhansengun.com
+  - host: identityserver.eventhub.gokhansengun.com
     http:
       paths:
       - backend:

@@ -3,8 +3,8 @@
     "windowsAuthentication": false, 
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "https://localhost:44308",
-      "sslPort": 44308
+      "applicationUrl": "https://web.eventhub.gokhansengun.com/",
+      "sslPort": 80
     }
   },
   "profiles": {
@@ -18,7 +18,7 @@
     "EventHub.Web": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:44308",
+      "applicationUrl": "https://web.eventhub.gokhansengun.com/",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
