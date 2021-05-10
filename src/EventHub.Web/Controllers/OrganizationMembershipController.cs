@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Organizations.Memberships;
@@ -9,7 +8,6 @@ using Volo.Abp.AspNetCore.Mvc;
 
 namespace EventHub.Web.Controllers
 {
-    [Route("api/organization-membership")]
     public class OrganizationMembershipController : AbpController
     {
         private readonly IOrganizationMembershipAppService _organizationMembershipAppService;

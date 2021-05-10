@@ -4,6 +4,7 @@
         var totalCount = Number($wrapper.find('[data-total-count]').attr('data-total-count'))
         var skipCount = Number($wrapper.find('[data-skip-count]').attr('data-skip-count'))
         var maxResultCount = Number($wrapper.find('[data-max-result-count]').attr('data-max-result-count'))
+        var isPagination = $wrapper.find('[data-is-pagination]').attr('data-is-pagination')
         var isMoreDetail = $wrapper.find('[data-is-more-detail]').attr('data-is-more-detail')
         var hashCode = Number($wrapper.find('[data-hash-code]').attr('data-hash-code'))
         skipCount += maxResultCount;
@@ -49,7 +50,11 @@
         return {
             getFilters: function () {
                 return {
-                    organizationId: organizationId
+                    organizationId: organizationId,
+                    skipCount: skipCount,
+                    maxResultCount: maxResultCount,
+                    isPagination: isPagination,
+                    isMoreDetail: isMoreDetail
                 };
             },
             init: init

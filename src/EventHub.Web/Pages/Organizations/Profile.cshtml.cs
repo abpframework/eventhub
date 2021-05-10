@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EventHub.Events;
+﻿using System.Threading.Tasks;
 using EventHub.Organizations;
 using EventHub.Organizations.Memberships;
 using Microsoft.AspNetCore.Mvc;

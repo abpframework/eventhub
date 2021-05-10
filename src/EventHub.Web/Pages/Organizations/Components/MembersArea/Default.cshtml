@@ -1,5 +1,5 @@
 @model EventHub.Web.Pages.Organizations.Components.MembersArea.MembersAreaViewComponent.MembersAreaViewComponentModel
-<h5 class="detail-head mt-3 font-weight-bold" data-is-more-detail="@Model.IsMoreDetail" data-organization-id="@Model.OrganizationId" data-hash-code="@Model.GetHashCode()" data-total-count="@Model.TotalCount" data-skip-count="@Model.SkipCount" data-max-result-count="@Model.MaxResultCount">
+<h5 class="detail-head mt-3 font-weight-bold" data-is-more-detail="@Model.IsMoreDetail" data-is-pagination="@Model.IsPagination" data-organization-id="@Model.OrganizationId" data-hash-code="@Model.GetHashCode()" data-total-count="@Model.TotalCount" data-skip-count="@Model.SkipCount" data-max-result-count="@Model.MaxResultCount">
     Members 
     @if (Model.IsMoreDetail)
     {
