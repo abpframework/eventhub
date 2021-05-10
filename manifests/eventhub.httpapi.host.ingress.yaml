@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: httpapi-host
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/issuer: letsencrypt-prod
+spec:
+  tls:
+    - hosts:
+        - api.eventhub.gokhansengun.com
+      secretName: httpapi-host-tls
+  rules:
+  - host: api.eventhub.gokhansengun.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: httpapi-host
+            port: 
+              number: 80
+        path: /
+        pathType: Prefix

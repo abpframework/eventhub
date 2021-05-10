@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: volosoft-eventhub-identityserver-deployment
+  name: identityserver
 spec:
   selector:
     matchLabels:
-      app: volosoft-eventhub-identityserver-pod
+      app: identityserver
   template:
     metadata:
       labels:
-        app: volosoft-eventhub-identityserver-pod
+        app: identityserver
     spec:
       containers:
-      - name: volosoft-eventhub-identityserver-container
-        image: voloeventhubidentityserver.azurecr.io/voloeventhubidentityserver
+      - name: identityserver
+        image: eventhubregistry.azurecr.io/eventhubregistry:v3
         imagePullPolicy: Always
         resources:
-          limits:
+          requests:
             memory: "128Mi"
             cpu: "500m"
         ports:

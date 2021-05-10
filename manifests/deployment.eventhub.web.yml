@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: volosoft-eventhub-web-deployment
+  name: web
 spec:
   selector:
     matchLabels:
-      app: volosoft-eventhub-web-pod
+      app: web
   template:
     metadata:
       labels:
-        app: volosoft-eventhub-web-pod
+        app: web
     spec:
       containers:
-      - name: volosoft-eventhub-web-container
-        image: voloeventhub.azurecr.io/voloeventhub
+      - name: web
+        image: eventhubregistry.azurecr.io/eventhubregistry:v4
         imagePullPolicy: Always
         resources:
-          limits:
+          requests:
             memory: "128Mi"
             cpu: "500m"
         ports:
