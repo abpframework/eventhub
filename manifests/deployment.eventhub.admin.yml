@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web
+  name: admin
 spec:
   selector:
     matchLabels:
-      app: web
+      app: admin
   template:
     metadata:
       labels:
-        app: web
+        app: admin
     spec:
       containers:
-      - name: web
-        image: eventhubregistry.azurecr.io/eventhubweb:v5
+      - name: admin
+        image: eventhubregistry.azurecr.io/eventhubadmin:v2
         imagePullPolicy: Always
         resources:
           requests:

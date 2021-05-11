@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: identityserver
-        image: eventhubregistry.azurecr.io/eventhubidentityserver:v1
+        image: eventhubregistry.azurecr.io/eventhubidentityserver:v2
         imagePullPolicy: Always
         resources:
           requests:

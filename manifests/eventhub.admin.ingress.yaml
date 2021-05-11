@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: web
+  name: admin
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
@@ -9,15 +9,15 @@ metadata:
 spec:
   tls:
     - hosts:
-        - api.eventhub.gokhansengun.com
-      secretName: web-tls
+        - admin.openeventhub.com
+      secretName: admin-tls
   rules:
-  - host: web.eventhub.gokhansengun.com
+  - host: admin.openeventhub.com
     http:
       paths:
       - backend:
           service:
-            name: web
+            name: admin
             port: 
               number: 80
         path: /

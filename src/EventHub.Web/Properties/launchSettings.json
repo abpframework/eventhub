@@ -3,7 +3,7 @@
     "windowsAuthentication": false, 
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "https://web.eventhub.gokhansengun.com/",
+      "applicationUrl": "https://web.openeventhub.com/",
       "sslPort": 80
     }
   },
@@ -18,7 +18,7 @@
     "EventHub.Web": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://web.eventhub.gokhansengun.com/",
+      "applicationUrl": "https://web.openeventhub.com/",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

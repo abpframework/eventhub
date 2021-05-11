@@ -10,8 +10,6 @@ RUN dotnet restore "src/EventHub.HttpApi.Host/EventHub.HttpApi.Host.csproj"
 COPY . .
 WORKDIR "/src/src/EventHub.HttpApi.Host"
 
-RUN dotnet dev-certs https -v -ep localhost.pfx -p e8202f07-66e5-4619-be07-72ba76fde97f
- 
 RUN dotnet build "EventHub.HttpApi.Host.csproj" -c Release -o /app
 
 FROM build AS publish

@@ -9,10 +9,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - api.eventhub.gokhansengun.com
+        - api.openeventhub.com
       secretName: httpapi-host-tls
   rules:
-  - host: api.eventhub.gokhansengun.com
+  - host: api.openeventhub.com
     http:
       paths:
       - backend:
