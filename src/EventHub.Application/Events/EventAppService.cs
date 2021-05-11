@@ -248,7 +248,7 @@ namespace EventHub.Events
             @event.SetTitle(input.Title);
             @event.SetDescription(input.Description);
             @event.Language = input.Language;
-
+            @event.SetTime(input.StartTime, input.EndTime);
             await _eventManager.SetCapacityAsync(@event, input.Capacity);
             
             if (input.CoverImageContent != null && input.CoverImageContent.Length > 0)

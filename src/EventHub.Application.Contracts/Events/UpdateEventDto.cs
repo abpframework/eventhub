@@ -16,6 +16,14 @@ namespace EventHub.Events
         
         [CanBeNull] 
         public byte[] CoverImageContent { get; set; }
+        
+        [Required]
+        [DataType(DataType.DateTime)]
+        public DateTime StartTime { get; set; }
+
+        [Required]
+        [DataType(DataType.DateTime)]
+        public DateTime EndTime { get; set; }
 
         public bool IsOnline { get; set; }
         
