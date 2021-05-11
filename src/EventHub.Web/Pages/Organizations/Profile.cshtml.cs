@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using EventHub.Organizations;
 using EventHub.Organizations.Memberships;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,8 @@ namespace EventHub.Web.Pages.Organizations
         public OrganizationProfileDto Organization { get; private set; }
 
         public bool IsOrganizationOwner { get; private set; }
+
+        public bool IsShowSocialMediaContent { get; set; } = false;
         
         private readonly IOrganizationAppService _organizationAppService;
 
@@ -33,6 +36,11 @@ namespace EventHub.Web.Pages.Organizations
         private async Task GetProfileAsync()
         {
             Organization = await _organizationAppService.GetProfileAsync(Name);
+
+            if (!Organization.Website.IsNullOrWhiteSpace() || !Organization.TwitterUsername.IsNullOrWhiteSpace() || !Organization.GitHubUsername.IsNullOrWhiteSpace() || !Organization.FacebookUsername.IsNullOrWhiteSpace() || !Organization.InstagramUsername.IsNullOrWhiteSpace() || !Organization.MediumUsername.IsNullOrWhiteSpace())
+            {
+                IsShowSocialMediaContent = true;
+            }
         }
     }
 }

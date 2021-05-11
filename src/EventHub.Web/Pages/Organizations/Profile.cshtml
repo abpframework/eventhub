@@ -65,27 +65,60 @@
                                     </a>
                                 }
                                 @await Component.InvokeAsync(typeof(JoinAreaViewComponent), new {organizationId = Model.Organization.Id})
-                                @await Component.InvokeAsync(typeof(MembersAreaViewComponent), 
+                                @await Component.InvokeAsync(typeof(MembersAreaViewComponent),
                                     new
                                     {
-                                        organizationId = Model.Organization.Id, 
+                                        organizationId = Model.Organization.Id,
                                         isPagination = true,
                                         maxResultCount = 15
                                     })
-                                
-                                <h5 class="detail-head mt-5 font-weight-bold">Share Organizations</h5>
-                                <div class="share-container">
-                                    <a href="https://twitter.com/@Model.Organization.TwitterUsername">
-                                        <img src="/assets/twitter2.svg">
-                                    </a>
-                                    @* ToDo: Social Links *@
-                                    <a href="https://www.linkedin.com/in/@Model.Organization.Website">
-                                        <img src="/assets/in2.svg">
-                                    </a>
-                                    <a href="https://www.facebook.com/@Model.Organization.FacebookUsername">
-                                        <img src="/assets/facebook2.png">
-                                    </a>
-                                </div>
+
+                                @if (Model.IsShowSocialMediaContent)
+                                {
+                                    <h5 class="detail-head mt-5 font-weight-bold">Share Organizations</h5>
+                                    <div class="share-container">
+                                        @if (!Model.Organization.Website.IsNullOrWhiteSpace())
+                                        {
+                                            <span>
+                                                WEBSITE:
+                                                <a href="@Model.Organization.Website">
+                                                    @Model.Organization.Website
+                                                </a>
+                                            </span>
+                                        }
+                                        <br>
+                                        @if (!Model.Organization.TwitterUsername.IsNullOrWhiteSpace())
+                                        {
+                                            <a href="https://twitter.com/@Model.Organization.TwitterUsername">
+                                                <img width="40" height="40" src="/assets/twitter2.svg">
+                                            </a>
+                                        }
+                                        @if (!Model.Organization.GitHubUsername.IsNullOrWhiteSpace())
+                                        {
+                                            <a href="https://www.github.com/@Model.Organization.GitHubUsername">
+                                                <img width="40" height="40" src="/assets/github.svg">
+                                            </a>
+                                        }
+                                        @if (!Model.Organization.FacebookUsername.IsNullOrWhiteSpace())
+                                        {
+                                            <a href="https://www.facebook.com/@Model.Organization.FacebookUsername">
+                                                <img width="40" height="40" src="/assets/facebook2.png">
+                                            </a>
+                                        }
+                                        @if (!Model.Organization.InstagramUsername.IsNullOrWhiteSpace())
+                                        {
+                                            <a href="https://www.instagram.com/@Model.Organization.InstagramUsername">
+                                                <img width="40" height="40" src="/assets/instagram.svg">
+                                            </a>
+                                        }
+                                        @if (!Model.Organization.MediumUsername.IsNullOrWhiteSpace())
+                                        {
+                                            <a href="https://www.medium.com/@@@Model.Organization.MediumUsername">
+                                                <img width="40" height="40" src="/assets/medium.svg">
+                                            </a>
+                                        }
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>
@@ -124,10 +157,10 @@
                         </div>
                     </div>
                     <div id="members-section" class="tab-pane fade">
-                        @await Component.InvokeAsync(typeof(MembersAreaViewComponent), 
+                        @await Component.InvokeAsync(typeof(MembersAreaViewComponent),
                             new
                             {
-                                organizationId = Model.Organization.Id, 
+                                organizationId = Model.Organization.Id,
                                 isPagination = true,
                                 maxResultCount = 18,
                                 isMoreDetail = true

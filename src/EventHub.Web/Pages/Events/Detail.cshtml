@@ -56,24 +56,7 @@
                 <p>
                     @EventDateHelper.GetDateRangeText(Model.Event.StartTime, Model.Event.EndTime)
                 </p>
-
                 @await Component.InvokeAsync(typeof(AttendeesAreaViewComponent), new {eventId = Model.Event.Id})
-
-            </div>
-
-            <div class="col-md-5 pl-md-5">
-                <h5 class="detail-head mt-5 font-weight-bold">Share Event</h5>
-                <div class="share-container">
-                    <a href="#">
-                        <img src="/assets/twitter2.svg">
-                    </a>
-                    <a href="#">
-                        <img src="/assets/in2.svg">
-                    </a>
-                    <a href="#">
-                        <img src="/assets/facebook2.png">
-                    </a>
-                </div>
             </div>
         </div>
     </div>
