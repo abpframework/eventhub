@@ -56,8 +56,11 @@
                             </span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="@Url.Page("/Profile")" title="@L["Settings"]">
+                            <a class="dropdown-item" href="@(EventHubExternalUrls.EhAccount.EnsureEndsWith('/') + "Account/Manage")" target="_blank" title="@L["Settings"]">
                                 <i class="fas fa-cog"></i> @L["Settings"]
+                            </a>
+                            <a class="dropdown-item" href="@Url.Page("/Profile")" title="@L["Profile"]">
+                                <i class="fas fa-user"></i> @L["Profile"]
                             </a>
                             <a class="dropdown-item" href="/Account/Logout?returnUrl=@EventHubExternalUrls.EhWww@(System.Net.WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery()))" title="@L["Logout"]">
                                 <i class="fas fa-sign-out-alt"></i> @L["Logout"]
@@ -107,6 +110,7 @@
 </nav>
 
 @functions{
+
     public string GetPageActiveClassOrEmpty(ViewContext viewContext, string pageUrl)
     {
         var activeRoute = viewContext?.RouteData.Values["page"]?.ToString()?.ToLowerInvariant();
@@ -127,7 +131,7 @@
 
         pageUrl = pageUrl.Replace("/index", "");
         var highLevelActiveRoute = GetHighLevelRoute(activeRoute); // "/organizations/ng-coders" => "organizations"
-        
+
         return highLevelActiveRoute.Contains(pageUrl) ? "active" : highLevelActiveRoute;
     }
 
