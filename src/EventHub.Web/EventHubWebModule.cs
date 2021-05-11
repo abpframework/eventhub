@@ -117,6 +117,9 @@ namespace EventHub.Web
             Configure<RazorPagesOptions>(options =>
             {
                 options.Conventions.AuthorizePage("/Events/New");
+                options.Conventions.AuthorizePage("/Events/Edit");
+                options.Conventions.AuthorizePage("/Organizations/New");
+                options.Conventions.AuthorizePage("/Organizations/Edit");
             });
         }
 
