@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using EventHub.Organizations.Memberships;
 using Microsoft.AspNetCore.Mvc;
@@ -68,28 +67,6 @@ namespace EventHub.Web.Pages.Organizations.Components.MembersArea
             public bool IsPagination { get; set; }
             
             public bool IsMoreDetail { get; set; }
-
-            public string GetMemberName(OrganizationMemberDto member)
-            {
-                var nameBuilder = new StringBuilder();
-
-                if (!member.Name.IsNullOrEmpty())
-                {
-                    nameBuilder.Append(member.Name);
-                }
-
-                if (!member.Surname.IsNullOrEmpty())
-                {
-                    nameBuilder.Append(member.Surname);
-                }
-
-                if (nameBuilder.Length == 0)
-                {
-                    nameBuilder.Append(member.UserName);
-                }
-
-                return nameBuilder.ToString();
-            }
         }
     }
 }
