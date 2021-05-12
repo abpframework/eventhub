@@ -70,7 +70,7 @@ namespace EventHub.Organizations
         [Fact]
         public async Task Should_Get_List_Of_Organizations()
         {
-            var result = await _organizationAppService.GetListAsync(new PagedResultRequestDto());
+            var result = await _organizationAppService.GetListAsync(new OrganizationListFilterDto());
             result.TotalCount.ShouldBeGreaterThanOrEqualTo(2);
             result.Items.ShouldContain(o => o.Name == _testData.OrganizationVolosoftName && o.Id == _testData.OrganizationVolosoftId);
             result.Items.ShouldContain(o => o.Name == _testData.OrganizationDotnetEuropeName && o.Id == _testData.OrganizationDotnetEuropeId);

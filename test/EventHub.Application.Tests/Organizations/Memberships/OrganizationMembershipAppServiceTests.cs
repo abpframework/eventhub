@@ -81,7 +81,7 @@ namespace EventHub.Organizations.Memberships
                 );
             });
 
-            var result = await _organizationMembershipAppService.GetMembersAsync(_testData.OrganizationVolosoftId);
+            var result = await _organizationMembershipAppService.GetMembersAsync(new OrganizationMemberListFilterDto{OrganizationId = _testData.OrganizationVolosoftId});
 
             result.TotalCount.ShouldBeGreaterThanOrEqualTo(2);
             result.Items.ShouldContain(x => x.Id == _testData.UserAdminId);
