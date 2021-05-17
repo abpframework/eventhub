@@ -1,4 +1,4 @@
-@page "/Organization/Edit/{name}"
+@page "/organization/edit/{name}"
 @inject IHtmlLocalizer<EventHubResource> L
 @using EventHub.Localization
 @using EventHub.Organizations
@@ -42,6 +42,7 @@
                                                 <p class="mb-3">Photo size should be <span class="text-primary">max @(OrganizationConsts.MaxProfilePictureFileSize / (1024 * 1024)) MB.</span></p>
                                                 <input type="file" id="Organization_ProfilePictureFile" asp-for="Organization.ProfilePictureFile" class="form-control border-0" hidden>
                                                 <label id="upload-label" for="Organization_ProfilePictureFile" class="btn btn-primary btn-lg text-white">Upload</label>
+                                                <span asp-validation-for="Organization.ProfilePictureFile" class="text-danger"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -51,6 +52,7 @@
                                     <div class="form-label-group">
                                         <input type="text" id="inputDisplayname" asp-for="Organization.DisplayName" class="form-control" placeholder="Display Name*" required="">
                                         <label for="inputDisplayname">Display Name*</label>
+                                        <span asp-validation-for="Organization.DisplayName" class="text-danger"></span>
                                     </div>
                                 </div>
                                 
@@ -58,13 +60,15 @@
                                     <div class="form-label-group">
                                         <input type="text" id="inputWebsite" class="form-control" asp-for="Organization.Website" placeholder="Website">
                                         <label for="inputWebsite">Website</label>
+                                        <span asp-validation-for="Organization.Website" class="text-danger"></span>
                                     </div>
                                 </div>
                                 
                                 <div class="col-md-12">
                                     <div class="form-label-group">
-                                        <input type="text" id="inputDescription" asp-for="Organization.Description" class="form-control" placeholder="Description*" required=""></input>
+                                        <textarea rows="3" type="text" id="inputDescription" asp-for="Organization.Description" class="form-control" placeholder="Description*" required=""></textarea>
                                         <label for="inputDescription">Description*</label>
+                                        <span asp-validation-for="Organization.Description" class="text-danger"></span>
                                     </div>
                                 </div>
                                
@@ -72,35 +76,40 @@
                                     <div class="form-label-group">
                                         <input type="text" id="inputTwitterusername" asp-for="Organization.TwitterUsername" class="form-control" placeholder="Twitter Username">
                                         <label for="inputTwitterusername">Twitter Username</label>
+                                        <span asp-validation-for="Organization.TwitterUsername" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-label-group">
                                         <input type="text" id="inputGitHubusername" asp-for="Organization.GitHubUsername" class="form-control" placeholder="GitHub Username">
                                         <label for="inputGitHubusername">GitHub Username</label>
+                                        <span asp-validation-for="Organization.GitHubUsername" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-label-group">
                                         <input type="text" id="inputFacebookusername" asp-for="Organization.FacebookUsername" class="form-control" placeholder="Facebook Username">
                                         <label for="inputFacebookusername">Facebook Username</label>
+                                        <span asp-validation-for="Organization.FacebookUsername" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-label-group">
                                         <input type="text" id="inputInstagramusername" asp-for="Organization.InstagramUsername" class="form-control" placeholder="Instagram Username">
                                         <label for="inputInstagramusername">Instagram Username</label>
+                                        <span asp-validation-for="Organization.InstagramUsername" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-label-group">
                                         <input type="text" id="inputMediumusername" asp-for="Organization.MediumUsername" class="form-control" placeholder="Medium Username">
                                         <label for="inputMediumusername">Medium Username</label>
+                                        <span asp-validation-for="Organization.MediumUsername" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-12 text-right">
                                     <button type="submit" class="btn btn-primary btn-lg">
-                                        Submit
+                                        Edit Organization
                                     </button>
                                 </div>
                             </div>
