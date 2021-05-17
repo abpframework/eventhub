@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using EventHub.Admin;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using EventHub.EntityFrameworkCore;
+using Microsoft.AspNetCore.Localization;
 using StackExchange.Redis;
 using Microsoft.OpenApi.Models;
 using Volo.Abp;
@@ -139,7 +141,6 @@ namespace EventHub
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Languages.Add(new LanguageInfo("en", "en", "English", "gb"));
-                options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe", "tr"));
             });
         }
 
@@ -185,7 +186,22 @@ namespace EventHub
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseAbpRequestLocalization();
+            var supportedCultures = new[]
+            {
+                new CultureInfo("en")
+            };
+            
+            app.UseAbpRequestLocalization(options =>
+            {
+                options.DefaultRequestCulture = new RequestCulture("en");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+                options.RequestCultureProviders = new List<IRequestCultureProvider>
+                {
+                    new QueryStringRequestCultureProvider(),
+                    new CookieRequestCultureProvider()
+                };
+            });
 
             if (!env.IsDevelopment())
             {
