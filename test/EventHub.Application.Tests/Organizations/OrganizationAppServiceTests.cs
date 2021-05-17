@@ -5,6 +5,7 @@ using NSubstitute;
 using Shouldly;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Authorization;
 using Volo.Abp.Users;
 using Xunit;
 
@@ -110,7 +111,7 @@ namespace EventHub.Organizations
         {
             Login(_testData.UserAdminId);
 
-            var exception = await Assert.ThrowsAsync<BusinessException>(() =>
+            var exception = await Assert.ThrowsAsync<AbpAuthorizationException>(() =>
                 _organizationAppService.UpdateAsync(
                     _testData.OrganizationDotnetEuropeId,
                     new UpdateOrganizationDto
