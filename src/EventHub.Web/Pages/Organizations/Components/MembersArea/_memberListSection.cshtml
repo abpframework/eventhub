@@ -4,7 +4,7 @@
 {
     <div>
         <div>
-            <img gravatar-email="@member.Email" default-image="Wavatar" gravatar-size="60" class="org-avatar avatar rounded-circle"/>
+            <img gravatar-email="@member.Email" default-image="Wavatar" gravatar-size="40" class="org-avatar avatar rounded-circle"/>
             <span class="member-name" style="display: none">
                 @if (!string.IsNullOrWhiteSpace(member.Name) && !string.IsNullOrWhiteSpace(member.Surname))
                 {
@@ -12,9 +12,7 @@
                 }
                 else
                 {
-                    {
-                        @member.UserName
-                    }
+                    {@member.UserName}
                 }
             </span>
         </div>

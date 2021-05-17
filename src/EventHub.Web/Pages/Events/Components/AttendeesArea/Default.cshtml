@@ -1,8 +1,15 @@
 ﻿@model EventHub.Web.Pages.Events.Components.AttendeesArea.AttendeesAreaViewComponent.AttendeesAreaViewComponentModel
 <h5 class="detail-head mt-5 font-weight-bold" data-event-id="@Model.EventId">Attendees (@Model.TotalCount)</h5> 
-<div>
-    @foreach (var attendee in Model.Attendees)
-    {
-        <img gravatar-email="@attendee.Email" default-image="Wavatar" gravatar-size="60" class="org-avatar rounded-circle"/>
-    }
-</div>
+@if (Model.TotalCount > 0)
+{
+    <div>
+        @foreach (var attendee in Model.Attendees)
+        {
+            <img gravatar-email="@attendee.Email" default-image="Wavatar" gravatar-size="40" class="org-avatar rounded-circle"/>
+        }
+    </div>
+}
+else
+{
+    <p>There is no attendee</p>
+}

@@ -10,9 +10,17 @@
         <span>(@Model.TotalCount)</span>
     }
 </h5>
-<div id="MemberList-@Model.GetHashCode()" class="row">
-    <partial name="~/Pages/Organizations/Components/MembersArea/_memberListSection.cshtml" model="@Model.Members"/>
-</div>
+@if (Model.TotalCount > 0)
+{
+    <div id="MemberList-@Model.GetHashCode()" class="row">
+        <partial name="~/Pages/Organizations/Components/MembersArea/_memberListSection.cshtml" model="@Model.Members"/>
+    </div>
+}
+else
+{
+    <p>There is no member</p>
+}
+
 @if (Model.IsPagination && Model.TotalCount > Model.MaxResultCount && Model.TotalCount > Model.Members.Count)
 {
     <div id="load-more-section-@Model.GetHashCode()">
