@@ -7,7 +7,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md">
-                <a href="@Url.Page("/Index")" class="footer-logo">
+                <a href="@Url.Page("/index")" class="footer-logo">
                     EventHub
                 </a>
             </div>
@@ -16,30 +16,27 @@
                 <div class="footer-links">
                     @if (!CurrentUser.IsAuthenticated)
                     {
-                        <a href="@EventHubExternalUrls.EhAccount/Account/Register?returnUrl=@EventHubExternalUrls.EhWww@(System.Net.WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery()))" class="d-block">Sign Up</a>
-                        <a href="/Account/Login?returnUrl=@(System.Net.WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery()))" class="d-block">Log In</a>
+                        <a href="@EventHubExternalUrls.EhAccount/account/register?returnUrl=@EventHubExternalUrls.EhWww@(System.Net.WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery()))" class="d-block">Sign Up</a>
+                        <a href="/account/login?returnUrl=@(System.Net.WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery()))" class="d-block">Log In</a>
                     }
-                    <a href="@Url.Page("/Help")" class="d-block">Help</a>
+                    <a href="@Url.Page("/help")" class="d-block">Help</a>
                 </div>
             </div>
             <div class="col-md">
                 <h5>Follow Us</h5>
                 @* ToDo: Social platform links *@
                 <div class="footer-links">
-                    <a href="#">
-                        <img src="/assets/facebook.svg">
+                    <a href="https://www.facebook.com/openeventhub">
+                        <i class="fab fa-facebook"></i>
                     </a>
-                    <a href="#">
-                        <img src="/assets/twitter.svg">
+                    <a href="https://twitter.com/openeventhub">
+                        <i class="fab fa-twitter"></i>
                     </a>
-                    <a href="#">
-                        <img src="/assets/in.svg">
+                    <a href="https://www.instagram.com/openeventhub/">
+                        <i class="fab fa-instagram"></i>
                     </a>
-                    <a href="#">
-                        <img src="/assets/you.svg">
-                    </a>
-                    <a href="#">
-                        <img src="/assets/google.svg">
+                    <a href="https://github.com/openeventhub">
+                        <i class="fab fa-github"></i>
                     </a>
                 </div>
             </div>
