@@ -59,7 +59,7 @@
                             <a class="dropdown-item" href="@(EventHubExternalUrls.EhAccount.EnsureEndsWith('/') + "account/manage")" target="_blank" title="@L["Settings"]">
                                 <i class="fas fa-cog"></i> @L["Settings"]
                             </a>
-                            <a class="dropdown-item" href="@Url.Page("/profile")" title="@L["Profile"]">
+                            <a class="dropdown-item" href="/members/profile?username=@CurrentUser.UserName" title="@L["Profile"]">
                                 <i class="fas fa-user"></i> @L["Profile"]
                             </a>
                             <a class="dropdown-item" href="/account/logout?returnUrl=@EventHubExternalUrls.EhWww@(System.Net.WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery()))" title="@L["Logout"]">

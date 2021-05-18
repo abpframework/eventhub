@@ -5,7 +5,9 @@
     <div>
         @foreach (var attendee in Model.Attendees)
         {
-            <img gravatar-email="@attendee.Email" default-image="Wavatar" gravatar-size="40" class="org-avatar rounded-circle"/>
+            <a href="/members/profile?username=@attendee.UserName">
+                <img gravatar-email="@attendee.Email" default-image="Wavatar" gravatar-size="40" class="org-avatar rounded-circle"/>
+            </a>
         }
     </div>
 }

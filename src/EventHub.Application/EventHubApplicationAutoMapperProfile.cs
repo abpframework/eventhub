@@ -2,6 +2,7 @@
 using EventHub.Countries;
 using EventHub.Events;
 using EventHub.Events.Registrations;
+using EventHub.Members;
 using EventHub.Organizations;
 using EventHub.Organizations.Memberships;
 using EventHub.Users;
@@ -34,6 +35,8 @@ namespace EventHub
                 .Ignore(x => x.Country);
             
             CreateMap<Country, CountryLookupDto>();
+
+            CreateMap<AppUser, UserDto>();
         }
     }
 }

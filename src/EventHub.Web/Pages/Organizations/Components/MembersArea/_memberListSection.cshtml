@@ -4,7 +4,9 @@
 {
     <div>
         <div>
-            <img gravatar-email="@member.Email" default-image="Wavatar" gravatar-size="40" class="org-avatar avatar rounded-circle"/>
+            <a href="/members/profile?username=@member.UserName">
+                <img gravatar-email="@member.Email" default-image="Wavatar" gravatar-size="40" class="org-avatar avatar rounded-circle"/>
+            </a>
             <span class="member-name" style="display: none">
                 @if (!string.IsNullOrWhiteSpace(member.Name) && !string.IsNullOrWhiteSpace(member.Surname))
                 {

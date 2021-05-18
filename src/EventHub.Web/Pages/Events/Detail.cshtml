@@ -34,7 +34,9 @@
 
                 <h5 class="detail-head mt-4">Owner</h5>
                 <div>
-                    <img gravatar-email="@Model.Event.OwnerEmail" default-image="Wavatar" gravatar-size="40" class="org-avatar avatar rounded-circle"/>
+                    <a href="/members/profile?username=@Model.Event.OwnerUserName">
+                        <img gravatar-email="@Model.Event.OwnerEmail" default-image="Wavatar" gravatar-size="40" class="org-avatar avatar rounded-circle"/>
+                    </a>
                 </div>
                 @if (Model.IsEventOwner)
                 {

@@ -179,8 +179,11 @@ namespace EventHub.Events
             dto.OrganizationId = organization.Id;
             dto.OrganizationName = organization.Name;
             dto.OrganizationDisplayName = organization.DisplayName;
-            dto.OwnerEmail = (await _userRepository.GetAsync(organization.OwnerUserId)).Email;
             dto.CoverImageContent = await GetCoverImageAsync(dto.Id);
+
+            var user = await _userRepository.GetAsync(organization.OwnerUserId);
+            dto.OwnerUserName = user.UserName;
+            dto.OwnerEmail = user.Email;
 
             return dto;
         }

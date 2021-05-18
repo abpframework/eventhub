@@ -15,7 +15,7 @@ namespace EventHub.Web.Pages.Organizations
 
         public bool IsOrganizationOwner { get; private set; }
 
-        public bool IsShowSocialMediaContent { get; set; } = false;
+        public bool IsShowSocialMediaContent { get; set; }
         
         private readonly IOrganizationAppService _organizationAppService;
 

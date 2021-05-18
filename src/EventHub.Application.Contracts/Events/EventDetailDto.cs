@@ -11,6 +11,8 @@ namespace EventHub.Events
 
         public string OrganizationDisplayName { get; set; }
 
+        public string OwnerUserName { get; set; }
+
         public string OwnerEmail { get; set; }
 
         public string Title { get; set; }
