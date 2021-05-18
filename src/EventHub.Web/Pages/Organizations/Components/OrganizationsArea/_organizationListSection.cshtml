@@ -1,3 +1,4 @@
+@using EventHub.Web.Helpers
 @model List<EventHub.Organizations.OrganizationInListDto>
 
 @foreach (var organization in Model)
@@ -6,7 +7,9 @@
         <div class="card">
             @if (organization.ProfilePictureContent == null)
             {
-                <img src="assets/card-img.png" class="card-img-top" alt="@organization.Name">
+                <div class="rounded list-span text-center" style="background: @(CoverImageHelper.GetRandomColor(organization.Name))">
+                    <span>@CoverImageHelper.GetTitle(organization.Name).TruncateWithPostfix(40)</span>
+                </div>
             }
             else
             {
@@ -20,7 +23,7 @@
                             @organization.Description
                         </p>
                     </div>
-                    <a href="@Url.Page("/Organizations/Profile", new {name = organization.Name})" class="btn btn-link p-0">Details <img src="assets/more-btn.svg"></a>
+                    <a href="@Url.Page("/Organizations/Profile", new {name = organization.Name})" class="btn btn-link p-0">Details <img src="/assets/more-btn.svg"></a>
                 </div>
             </div>
         </div>

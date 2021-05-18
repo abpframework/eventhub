@@ -1,4 +1,5 @@
 @using System.Globalization
+@using EventHub.Web.Helpers
 @using EventHub.Web.Pages.Events
 @model List<EventHub.Events.EventInListDto>
 
@@ -8,7 +9,9 @@
         <div class="card">
             @if (eventDto.CoverImageContent is null)
             {
-                <img abp-card-image="Top" src="/assets/card-img.png" alt="@eventDto.Title"/>
+                <div class="rounded list-span text-center" style="background: @(CoverImageHelper.GetRandomColor(eventDto.Title))">
+                    <span>@CoverImageHelper.GetTitle(eventDto.Title).TruncateWithPostfix(40)</span>
+                </div>
             }
             else
             {

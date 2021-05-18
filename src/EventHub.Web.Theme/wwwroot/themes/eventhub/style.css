@@ -566,6 +566,45 @@ nav.breadcrumb-container .breadcrumb a,nav.breadcrumb-container .breadcrumb li{
     width: 40px;
     height: 40px;
 }
+
+.list-span {
+    line-height: 168px; }
+.list-span span {
+    font-size: 1em;
+    color: #fff;
+    opacity: 0.5;
+    line-height: 1;
+    font-weight: 100;
+    text-shadow: 0 0 35px rgba(0, 0, 0, 0.5); }
+@media screen and (max-width: 767px) {
+    .list-span {
+        width: 100%;
+        height: 150px;
+        line-height: 150px;
+        margin-bottom: 1em; }
+    .list-span span {
+        font-size: 1em;
+        line-height: 150px; } }
+
+.carousel-list-span {
+    line-height: 215px; }
+.carousel-list-span span {
+    font-size: 1em;
+    color: #fff;
+    opacity: 0.5;
+    line-height: 1;
+    font-weight: 100;
+    text-shadow: 0 0 35px rgba(0, 0, 0, 0.5); }
+@media screen and (max-width: 767px) {
+    .carousel-list-span {
+        width: 100%;
+        height: 150px;
+        line-height: 150px;
+        margin-bottom: 1em; }
+    .carousel-list-spann span {
+        font-size: 1em;
+        line-height: 150px; } }
+
 .detail-head {
     font-weight: normal;
     font-size: 18px;

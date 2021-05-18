@@ -11,16 +11,18 @@
                     EventHub
                 </a>
             </div>
+              
             <div class="col-md">
-                <h5>Account</h5>
-                <div class="footer-links">
-                    @if (!CurrentUser.IsAuthenticated)
-                    {
+                @if (!CurrentUser.IsAuthenticated)
+                {
+                    <h5>Account</h5>
+                    <div class="footer-links">
+
                         <a href="@EventHubExternalUrls.EhAccount/account/register?returnUrl=@EventHubExternalUrls.EhWww@(System.Net.WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery()))" class="d-block">Sign Up</a>
                         <a href="/account/login?returnUrl=@(System.Net.WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery()))" class="d-block">Log In</a>
-                    }
-                    <a href="@Url.Page("/help")" class="d-block">Help</a>
-                </div>
+
+                    </div>
+                }
             </div>
             <div class="col-md">
                 <h5>Follow Us</h5>
@@ -50,6 +52,12 @@
                 <span class="copyright">© 2021 EventHub</span>
             </div>
             <div class="col-md text-center text-md-right">
+                <a href="@Url.Page("/help")">
+                    Help
+                </a>
+                <span>
+                    <img src="/assets/seperator2.svg" class="mx-3">
+                </span>
                 <a href="@Url.Page("/TermsService")">
                     @* ToDo: The content of the page will be edited *@
                     Terms of Service

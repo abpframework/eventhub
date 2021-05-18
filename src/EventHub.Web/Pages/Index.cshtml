@@ -4,6 +4,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @using EventHub.Localization
 @using EventHub.Web
+@using EventHub.Web.Helpers
 @using EventHub.Web.Pages.Events.Components.EventsArea
 @using Volo.Abp.Timing
 @using Volo.Abp.Users
@@ -120,7 +121,9 @@
                                 <div class="col-md-5">
                                     @if (Model.OnlineEvents[i].CoverImageContent is null)
                                     {
-                                        <img src="/assets/card-left-image.png" class="card-img-left" alt="@Model.OnlineEvents[i].Title">
+                                        <div class="rounded carousel-list-span text-center" style="background: @(CoverImageHelper.GetRandomColor(@Model.OnlineEvents[i].Title))">
+                                            <small>@CoverImageHelper.GetTitle(Model.OnlineEvents[i].Title).TruncateWithPostfix(30)</small>
+                                        </div>
                                     }
                                     else
                                     {
@@ -148,7 +151,9 @@
                                      <div class="col-md-5">
                                          @if (Model.OnlineEvents[i + 1].CoverImageContent is null)
                                          {
-                                             <img src="/assets/card-left-image.png" class="card-img-left" alt="@Model.OnlineEvents[i + 1].Title">
+                                             <div class="rounded carousel-list-span text-center" style="background: @(CoverImageHelper.GetRandomColor(@Model.OnlineEvents[i + 1].Title))">
+                                                 <small>@CoverImageHelper.GetTitle(Model.OnlineEvents[i + 1].Title).TruncateWithPostfix(30)</small>
+                                             </div>
                                          }
                                          else
                                          {
