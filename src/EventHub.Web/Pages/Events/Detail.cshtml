@@ -1,6 +1,7 @@
 ﻿@page "/events/{url}"
 @inject IHtmlLocalizer<EventHubResource> L
 @using EventHub.Localization
+@using EventHub.Web.Helpers
 @using EventHub.Web.Pages.Events
 @using EventHub.Web.Pages.Events.Components.AttendeesArea
 @using EventHub.Web.Pages.Events.Components.EventsArea
@@ -19,7 +20,15 @@
                 <div class="detail-image">
                     @if (Model.Event.CoverImageContent == null)
                     {
-                        <img src="/assets/detail.png" alt="@Model.Event.Title">
+                        <div class="rounded detail-span text-center" style="background: @(CoverImageHelper.GetRandomColor(Model.Event.Title))">
+                            <span>
+                                @CoverImageHelper.GetContentOfImage(Model.Event.Title.TruncateWithPostfix(70))
+                                <br>
+                                @CoverImageHelper.GetContentOfImage(Model.Event.OrganizationDisplayName.TruncateWithPostfix(80))
+                                <br>
+                                @CoverImageHelper.GetContentOfImage(EventDateHelper.GetDateRangeText(Model.Event.StartTime, Model.Event.EndTime))
+                            </span>
+                        </div>
                     }
                     else
                     {

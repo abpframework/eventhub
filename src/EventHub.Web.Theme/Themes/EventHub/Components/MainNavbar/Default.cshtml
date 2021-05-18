@@ -111,7 +111,6 @@
 </nav>
 
 @functions{
-
     public string GetPageActiveClassOrEmpty(ViewContext viewContext, string pageUrl)
     {
         var activeRoute = viewContext?.RouteData.Values["page"]?.ToString()?.ToLowerInvariant();
