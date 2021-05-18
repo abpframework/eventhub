@@ -1,11 +1,14 @@
 @page
 @using System.Globalization
+@using EventHub.Localization
 @using EventHub.Web.Pages.Events.Components.EventsArea
 @using EventHub.Web.Pages.Organizations.Components.OrganizationsArea
+@using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.Timing
 @using Volo.Abp.Users
 @inject ICurrentUser CurrentUser
 @inject IClock Clock
+@inject IHtmlLocalizer<EventHubResource> L
 @model EventHub.Web.Pages.Members.ProfileModel
 <div class="container pt-4">
     <div class="row py-4">
@@ -59,9 +62,24 @@
                             <div class="card">
                                 <div class="card-body" style="min-height: 496px">
                                     <div>
-                                        <h3 class="mb-4">Ownered Organizations</h3>
-                                        <partial name="~/Pages/Organizations/Components/OrganizationsArea/_organizationListSection.cshtml" model="@Model.Organizations"/>
-                                    </div>
+                                        <div class="row mb-4">
+                                            <div class="col-8">
+                                                <h3>
+                                                    Ownered Organizations
+                                                </h3>
+                                            </div>
+                                            @if (CurrentUser.IsAuthenticated)
+                                            {
+                                                @if (CurrentUser.Id == Model.User.Id)
+                                                {
+                                                    <div class="col-4 text-right">
+                                                        <a abp-button="Primary" size="Small" href="@Url.Page("/Organizations/New")">@L["CreateAnOrganization"]</a>
+                                                    </div>       
+                                                }
+                                            }
+                                        </div>
+                                            <partial name="~/Pages/Organizations/Components/OrganizationsArea/_organizationListSection.cshtml" model="@Model.Organizations"/>
+                                        </div>
                                     <div>
                                         <h3 class="mb-4">Membership Organizations</h3>
                                         @await Component.InvokeAsync(typeof(OrganizationsAreaViewComponent), new

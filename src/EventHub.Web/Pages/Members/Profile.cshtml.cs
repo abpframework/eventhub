@@ -27,8 +27,6 @@ namespace EventHub.Web.Pages.Members
 
         public async Task<IActionResult> OnGetAsync(string userName)
         {
-            Organizations = (await _organizationAppService.GetMyOrganizationsAsync()).Items.ToList();
-
             if (userName.IsNullOrWhiteSpace())
             {
                 if (CurrentUser.IsAuthenticated)
@@ -42,6 +40,7 @@ namespace EventHub.Web.Pages.Members
             }
             
             User = await _memberAppService.FindByUserNameAsync(userName);
+            Organizations = (await _organizationAppService.GetOrganizationsByUserIdAsync(User.Id)).Items.ToList();
 
             if (User != null)
             {

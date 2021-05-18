@@ -109,11 +109,9 @@ namespace EventHub.Organizations
             return organizationProfileDto;
         }
 
-        [Authorize]
-        public async Task<ListResultDto<OrganizationInListDto>> GetMyOrganizationsAsync()
+        public async Task<ListResultDto<OrganizationInListDto>> GetOrganizationsByUserIdAsync(Guid userId)
         {
-            var currentUserId = CurrentUser.GetId();
-            var query = (await _organizationRepository.GetQueryableAsync()).Where(o => o.OwnerUserId == currentUserId);
+            var query = (await _organizationRepository.GetQueryableAsync()).Where(o => o.OwnerUserId == userId);
             var organizations = await AsyncExecuter.ToListAsync(query);
 
             var organizationDto = ObjectMapper.Map<List<Organization>, List<OrganizationInListDto>>(organizations);

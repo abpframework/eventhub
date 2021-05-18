@@ -13,7 +13,7 @@ namespace EventHub.Organizations
 
         Task<OrganizationProfileDto> GetProfileAsync(string name);
 
-        Task<ListResultDto<OrganizationInListDto>> GetMyOrganizationsAsync();
+        Task<ListResultDto<OrganizationInListDto>> GetOrganizationsByUserIdAsync(Guid userId);
 
         Task<bool> IsOrganizationOwnerAsync(Guid organizationId);
 

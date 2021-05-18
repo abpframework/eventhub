@@ -1,6 +1,8 @@
 ﻿@page "/organizations/{name}"
 @inject IHtmlLocalizer<EventHubResource> L
 @using EventHub.Localization
+@using EventHub.Web.Helpers
+@using EventHub.Web.Pages.Events
 @using EventHub.Web.Pages.Events.Components.EventsArea
 @using EventHub.Web.Pages.Organizations.Components.JoinArea
 @using EventHub.Web.Pages.Organizations.Components.MembersArea
@@ -20,7 +22,13 @@
                 <div class="detail-image">
                     @if (Model.Organization.ProfilePictureContent == null)
                     {
-                        <img src="/assets/org-detail-top.png" alt="@Model.Organization.Name">
+                        <div class="rounded detail-span text-center" style="background: @(CoverImageHelper.GetRandomColor(Model.Organization.Name))">
+                            <span>
+                                @CoverImageHelper.GetContentOfImage(Model.Organization.DisplayName.TruncateWithPostfix(80))
+                                <br>
+                                <small>@CoverImageHelper.GetContentOfImage("EventHub")</small>
+                            </span>
+                        </div>
                     }
                     else
                     {
