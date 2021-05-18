@@ -77,7 +77,19 @@ namespace EventHub.Events
 
         public Event SetTime(DateTime startTime, DateTime endTime)
         {
+            if (startTime == StartTime && endTime == EndTime)
+            {
+                return this;
+            }
+            
+            if (TimingChangeCount >= EventConsts.MaxTimingChangeCountForUser)
+            {
+                throw new BusinessException(EventHubErrorCodes.CantChangeEventTiming)
+                    .WithData("MaxTimingChangeLimit", EventConsts.MaxTimingChangeCountForUser);
+            }
+            
             AddLocalEvent(new EventTimeChangingEventData(this, StartTime, EndTime));
+
             return SetTimeInternal(startTime, endTime);
         }
 
@@ -90,6 +102,7 @@ namespace EventHub.Events
 
             StartTime = startTime;
             EndTime = endTime;
+            TimingChangeCount++;
             return this;
         }
     }
