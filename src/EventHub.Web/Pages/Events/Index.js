@@ -2,7 +2,14 @@ $(function () {
     var params = new window.URLSearchParams(window.location.search);
     var minDate = Date.parse(params.get('MinDate')) || 0;
     var maxDate = Date.parse(params.get('MaxDate')) || 0;
-
+    var isOnline = params.get('IsOnline') || "false";
+    var countryId = params.get('CountryId');
+    
+    if (isOnline === "true" || countryId === "00000000-0000-0000-0000-000000000000"){
+        $('#CountrySelect').val("00000000-0000-0000-0000-000000000000")
+        isOnline = true
+    }
+    
     if (!isNaN(minDate)){
         minDate = params.get('MinDate')
     }else{
@@ -50,22 +57,61 @@ $(function () {
             ranges: getRanges()
         }, cb);
     }
+
+    function submitEventFilter() {
+        var language = $('#LanguageSelect').find(":selected").val();
+        var countryId = $('#CountrySelect').find(":selected").val();
+        var minDate = $("#MinDate").val()
+        var maxDate = $("#MaxDate").val()
+
+        var location = "/Events?"
+
+        if (!isNullOrEmpty(minDate)) {
+            location += "MinDate=" + minDate
+        }
+
+        if (!isNullOrEmpty(maxDate)) {
+            location += "&MaxDate=" + maxDate
+        }
+
+        if (!isNullOrEmpty(language)) {
+            location += "&Language=" + language
+        }
+
+        if (!isNullOrEmpty(countryId)) {
+            if (countryId === "00000000-0000-0000-0000-000000000000") {
+                location += "&IsOnline=true"
+            } else {
+                location += "&CountryId=" + countryId + "&IsOnline=false"
+            }
+        }
+
+        if (!isNullOrEmpty(location) && location !== "/Events?") {
+            window.location.replace(location)
+        } else {
+            $('#EventListFilterForm').submit()
+        }
+    }
     
     when.on('apply.daterangepicker', function(ev, picker) {
         $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
         $("#MinDate").val(picker.startDate.format('MM/DD/YYYY'));
         $("#MaxDate").val(picker.endDate.format('MM/DD/YYYY'));
-        $('#EventListFilterForm').submit()
+        submitEventFilter()
     });
     
     when.on('cancel.daterangepicker', function(ev, picker) {
         $(this).val('');
         $("#MinDate").val('');
         $("#MaxDate").val('');
-        $('#EventListFilterForm').submit()
+        submitEventFilter()
     });
 
-    $("#EventType").on('change', function () {
-        $('#EventListFilterForm').submit()
+    function isNullOrEmpty(str){
+        return str === null || str.match(/^ *$/) !== null;
+    }
+
+    $("#CountrySelect, #LanguageSelect").on('change', function () {
+        submitEventFilter();
     });
 });

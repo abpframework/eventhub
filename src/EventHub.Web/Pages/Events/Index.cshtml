@@ -41,7 +41,27 @@
         <form method="get" id="EventListFilterForm">
             <div class="col-md-auto">
                 <div class="row filter-select">
-                    <div class="col-8 pr-0">
+                    <div class="col-4 pr-0">
+                        <select id="LanguageSelect" asp-for="Language" class="form-select" aria-label="en">
+                            <option value="" selected>Looking for</option>
+                            @foreach (var language in Model.Languages)
+                            {
+                                <option value=@language.TwoLetterISOLanguageName>@language.EnglishName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-4 pr-0">
+                        <div class="form-label-group locationGroup">
+                            <select id="CountrySelect" asp-for="CountryId" class="form-select" aria-label="Turkey">
+                                <option value="" selected>Location</option>
+                                @foreach (var country in Model.Countries)
+                                {
+                                    <option value=@country.Id>@country.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-4 pr-0">
                         <div class="form-label-group">
                             <input type="text" id="WhenInput" class="form-control" placeholder="When">
                             <label for="WhenInput">When</label>
@@ -49,17 +69,9 @@
                             <input type="hidden" asp-for="MaxDate" value="">
                         </div>
                     </div>
-                    <div class="col-4 pr-0">
-                        <select id="EventType" class="form-select" asp-for="@Model.IsOnline" aria-label="true">
-                            <option value="" selected>Event Type</option>
-                            <option value="true">Online</option>
-                            <option value="false">In Person</option>
-                        </select>
-                    </div>
                 </div>
             </div>
         </form>
-
     </div>
 
     <div id="EventsAreaViewComponent" data-widget-filter="#EventListFilterForm">

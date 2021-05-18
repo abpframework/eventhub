@@ -68,14 +68,15 @@
     $('#SearchButton').on('click', '', function () {
         var language = $('#LanguageSelect').find(":selected").val();
         var countryId = $('#CountrySelect').find(":selected").val();
-        
+        console.log(language)
+        console.log(countryId)
         var location = "/Events?"
 
-        if (!isNullOrEmpty(minDate)){
+        if (minDate.length > 0 && !isNullOrEmpty(minDate)){
             location += "MinDate=" + minDate
         }
 
-        if (!isNullOrEmpty(maxDate)){
+        if (maxDate.length > 0 && !isNullOrEmpty(maxDate)){
             location += "&MaxDate=" + maxDate
         }
 
