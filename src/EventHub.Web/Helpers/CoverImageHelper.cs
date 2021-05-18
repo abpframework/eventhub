@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Text;
 using Volo.Abp;
 
 namespace EventHub.Web.Helpers
@@ -20,11 +21,11 @@ namespace EventHub.Web.Helpers
             return ImageColors[total % ImageColors.Length];
         }
 
-        public static string GetTitle(string title)
+        public static string GetContentOfImage(string content)
         {
-            title = Check.NotNullOrWhiteSpace(title, nameof(title));
+            content = Check.NotNullOrWhiteSpace(content, nameof(content));
 
-            return title.ToUpper();
+            return content.ToUpper();
         }
     }
 }

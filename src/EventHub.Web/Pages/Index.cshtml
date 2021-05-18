@@ -122,7 +122,7 @@
                                     @if (Model.OnlineEvents[i].CoverImageContent is null)
                                     {
                                         <div class="rounded carousel-list-span text-center" style="background: @(CoverImageHelper.GetRandomColor(@Model.OnlineEvents[i].Title))">
-                                            <small>@CoverImageHelper.GetTitle(Model.OnlineEvents[i].Title).TruncateWithPostfix(30)</small>
+                                            <small>@CoverImageHelper.GetContentOfImage(Model.OnlineEvents[i].Title).TruncateWithPostfix(30)</small>
                                         </div>
                                     }
                                     else
@@ -152,7 +152,7 @@
                                          @if (Model.OnlineEvents[i + 1].CoverImageContent is null)
                                          {
                                              <div class="rounded carousel-list-span text-center" style="background: @(CoverImageHelper.GetRandomColor(@Model.OnlineEvents[i + 1].Title))">
-                                                 <small>@CoverImageHelper.GetTitle(Model.OnlineEvents[i + 1].Title).TruncateWithPostfix(30)</small>
+                                                 <small>@CoverImageHelper.GetContentOfImage(Model.OnlineEvents[i + 1].Title).TruncateWithPostfix(30)</small>
                                              </div>
                                          }
                                          else
