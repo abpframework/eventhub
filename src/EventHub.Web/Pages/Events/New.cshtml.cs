@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NUglify.Helpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
+using Volo.Abp.Users;
 
 namespace EventHub.Web.Pages.Events
 {
@@ -83,7 +84,7 @@ namespace EventHub.Web.Pages.Events
 
         private async Task FillOrganizationsAsync()
         {
-            var result = await _organizationAppService.GetMyOrganizationsAsync();
+            var result = await _organizationAppService.GetOrganizationsByUserIdAsync(CurrentUser.GetId());
             Organizations = result.Items.Select(
                 organization => new SelectListItem
                 {
