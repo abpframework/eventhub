@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Events;
@@ -28,5 +29,19 @@ namespace EventHub.Web.Controllers
                 ViewData = ViewData
             };
         }
+        
+        [HttpGet]
+        [Route("cover-picture-source/{eventId}")]
+        public async Task<IActionResult> GetArticleCoverImageAsync(Guid eventId)
+        {
+            var coverImageContent = await _eventAppService.GetCoverImageAsync(eventId);
+
+            if (coverImageContent == null)
+            {
+                return NotFound();
+            }
+            
+            return File(coverImageContent, "image/jpeg");
+        } 
     }
 }

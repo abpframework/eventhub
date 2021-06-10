@@ -261,19 +261,19 @@ namespace EventHub.Events
             
             await _eventRepository.UpdateAsync(@event);
         }
+        
+        public async Task<byte[]> GetCoverImageAsync(Guid id)
+        {
+            var blobName = id.ToString();
+
+            return await _eventBlobContainer.GetAllBytesOrNullAsync(blobName);
+        }
 
         private async Task SaveCoverImageAsync(Guid id, byte[] coverImageContent)
         {
             var blobName = id.ToString();
 
             await _eventBlobContainer.SaveAsync(blobName, coverImageContent, overrideExisting: true);
-        }
-
-        private async Task<byte[]> GetCoverImageAsync(Guid id)
-        {
-            var blobName = id.ToString();
-
-            return await _eventBlobContainer.GetAllBytesOrNullAsync(blobName);
         }
     }
 }

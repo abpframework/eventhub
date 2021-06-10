@@ -1,6 +1,7 @@
 ﻿@page "/events/{url}"
 @inject IHtmlLocalizer<EventHubResource> L
 @using EventHub.Localization
+@using EventHub.Web
 @using EventHub.Web.Helpers
 @using EventHub.Web.Pages.Events
 @using EventHub.Web.Pages.Events.Components.AttendeesArea
@@ -13,6 +14,37 @@
 @inject ICurrentUser CurrentUser
 @inject IClock Clock
 @model EventHub.Web.Pages.Events.DetailPageModel
+
+@section scripts {
+    <abp-script src="/Pages/Events/Detail.js"/>
+}
+
+@{
+    string description = Model.Event.Description.Length >= 160 ? Model.Event.Description.TruncateWithPostfix(155) : Model.Event.Description;
+    string title = Model.Event.Title;
+    string coverImageUrl;
+
+    if (Model.Event.CoverImageContent is null)
+    {
+        // TODO(berkansasmaz): Get a default image from the design team to be used in social media posts
+        coverImageUrl = EventHubExternalUrls.EhWww + "/assets/slide.jpg";
+    }
+    else
+    {
+        coverImageUrl = $"{EventHubExternalUrls.EhWww}/api/event/cover-picture-source/{Model.Event.Id}";
+    }
+
+    ViewBag.Title = title;
+    ViewBag.Description = description;
+    ViewBag.OgTitle = title;
+    ViewBag.OgType = "event";
+    ViewBag.OgDescription = description;
+    ViewBag.TwitterTitle = title;
+    ViewBag.TwitterDescription = description;
+    ViewBag.TwitterImage = coverImageUrl;
+    ViewBag.OgImage = coverImageUrl;
+}
+
 <div class="bg-white py-5">
     <div class="container detail-page pb-4">
         <div class="row">
@@ -38,7 +70,7 @@
             </div>
 
             <div class="col-md-5 pl-md-5">
-                <h1 class="mt-4 mt-md-0">@Model.Event.Title</h1>
+                <h1 id="EventTitle" class="mt-4 mt-md-0">@Model.Event.Title</h1>
                 @await Component.InvokeAsync(typeof(LocationAreaViewComponent), new {eventId = Model.Event.Id})
 
                 <h5 class="detail-head mt-4">Owner</h5>
@@ -54,12 +86,18 @@
                     </a>
                 }
                 @await Component.InvokeAsync(typeof(RegistrationAreaViewComponent), new {eventId = Model.Event.Id})
+                <h5 class="detail-head mt-5 font-weight-bold">Share Event</h5>
+                <div class="share-container">
+                    <a href="#" target="_blank" id="TwitterShareLink" title="Twitter"><img src="/assets/twitter2.svg"></a>   
+                    <a href="#" target="_blank" id="LinkedinShareLink" title="LinkedIn"><img src="/assets/in2.svg"></a>   
+                    <a href="#" target="_blank" id="FacebookShareLink" title="Facebook"><img src="/assets/facebook2.png"></a>
+                </div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-7">
                 <h5 class="detail-head mt-5 font-weight-bold">Event Description</h5>
-                <p>
+                <p id="EventDescription">
                     @Model.Event.Description
                 </p>
 

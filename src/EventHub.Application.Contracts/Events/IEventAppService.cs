@@ -21,5 +21,7 @@ namespace EventHub.Events
         Task<bool> IsEventOwnerAsync(Guid id);
 
         Task UpdateAsync(Guid id, UpdateEventDto input);
+
+        Task<byte[]> GetCoverImageAsync(Guid id);
     }
 }
