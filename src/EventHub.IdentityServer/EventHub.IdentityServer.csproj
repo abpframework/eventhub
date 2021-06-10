@@ -46,6 +46,7 @@
     <PackageReference Include="Volo.Abp.Account.Web.IdentityServer" Version="4.2.1" />
     <PackageReference Include="Volo.Abp.Account.Application" Version="4.2.1" />
     <ProjectReference Include="..\EventHub.EntityFrameworkCore.DbMigrations\EventHub.EntityFrameworkCore.DbMigrations.csproj" />
+    <ProjectReference Include="..\EventHub.Web.Theme\EventHub.Web.Theme.csproj" />
   </ItemGroup>
 
 </Project>
