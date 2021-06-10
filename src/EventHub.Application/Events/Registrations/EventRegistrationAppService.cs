@@ -85,5 +85,12 @@ namespace EventHub.Events.Registrations
         {
             return await _eventRegistrationRepository.CountAsync(x => x.EventId == eventId);
         }
+
+        public async Task<bool> IsPastEventAsync(Guid eventId)
+        {
+            var @event = await _eventRepository.GetAsync(eventId);
+
+            return _eventRegistrationManager.IsPastEvent(@event);
+        }
     }
 }

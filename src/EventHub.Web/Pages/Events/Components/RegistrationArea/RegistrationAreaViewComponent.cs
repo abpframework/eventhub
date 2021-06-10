@@ -37,6 +37,7 @@ namespace EventHub.Web.Pages.Events.Components.RegistrationArea
             if (model.IsLoggedIn)
             {
                 model.IsRegistered = await _eventRegistrationAppService.IsRegisteredAsync(eventId);
+                model.IsPastEvent = await _eventRegistrationAppService.IsPastEventAsync(eventId);
             }
 
             return View("~/Pages/Events/Components/RegistrationArea/Default.cshtml", model);
@@ -47,6 +48,7 @@ namespace EventHub.Web.Pages.Events.Components.RegistrationArea
             public Guid EventId { get; set; }
             public bool IsLoggedIn { get; set; }
             public bool IsRegistered { get; set; }
+            public bool IsPastEvent { get; set; }
         }
     }
 }

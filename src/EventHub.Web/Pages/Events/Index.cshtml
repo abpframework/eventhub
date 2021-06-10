@@ -43,7 +43,7 @@
                 <div class="row filter-select">
                     <div class="col-4 pr-0">
                         <select id="LanguageSelect" asp-for="Language" class="form-select" aria-label="en">
-                            <option value="" selected>Looking for</option>
+                            <option value="" selected>Language</option>
                             @foreach (var language in Model.Languages)
                             {
                                 <option value=@language.TwoLetterISOLanguageName>@language.EnglishName</option>

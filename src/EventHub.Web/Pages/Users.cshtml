@@ -1,4 +1,4 @@
-@page
+@page "/users/{userName}"
 @using System.Globalization
 @using EventHub.Localization
 @using EventHub.Web.Pages.Events.Components.EventsArea
@@ -27,7 +27,6 @@
                                 {
                                     <h4 class="m-0 mt-4">@Model.User.Name @Model.User.Surname</h4>
                                 }
-        
                             </div>
                             <div class="mt-4">
                                 <small class="text-muted text-uppercase">UserName</small>
@@ -44,50 +43,46 @@
             </div>
         </div>
         <div class="col-md-10">
-            <ul class="nav nav-tabs profile-nav" id="profileTab">
-                <li class="nav-item">
-                    <a href="#Organizations" class="nav-link active" data-toggle="tab">Organizations</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#AttendedEvents" class="nav-link" data-toggle="tab">Attended Events</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#UpcomingEvents" class="nav-link" data-toggle="tab">Upcoming Events</a>
-                </li>
-            </ul>
+            <abp-row>
+                <abp-column size="_8">
+                    <ul class="nav nav-tabs profile-nav" id="profileTab">
+                        <li class="nav-item">
+                            <a href="#UpcomingEvents" class="nav-link active" data-toggle="tab">Upcoming Events</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#AttendedEvents" class="nav-link" data-toggle="tab">Attended Events</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#Organizations" class="nav-link" data-toggle="tab">Organizations</a>
+                        </li>
+                    </ul>
+                </abp-column>
+                @if (CurrentUser.IsAuthenticated)
+                    {
+                        @if (CurrentUser.Id == Model.User.Id)
+                        {
+                            <abp-column size="_4">
+                                <div class="text-right">
+                                    <a abp-button="Primary" size="Small" href="@Url.Page("/Organizations/New")">@L["CreateAnOrganization"]</a>
+                                </div>
+                            </abp-column>
+                        }
+                    }
+            </abp-row>
             <div class="tab-content profile-content py-4">
-                <div id="Organizations" class="tab-pane fade show active">
+                <div id="UpcomingEvents" class="tab-pane fade show active">
                     <div class="row">
                         <div class="col">
                             <div class="card">
                                 <div class="card-body" style="min-height: 496px">
-                                    <div>
-                                        <div class="row mb-4">
-                                            <div class="col-8">
-                                                <h3>
-                                                    Ownered Organizations
-                                                </h3>
-                                            </div>
-                                            @if (CurrentUser.IsAuthenticated)
-                                            {
-                                                @if (CurrentUser.Id == Model.User.Id)
-                                                {
-                                                    <div class="col-4 text-right">
-                                                        <a abp-button="Primary" size="Small" href="@Url.Page("/Organizations/New")">@L["CreateAnOrganization"]</a>
-                                                    </div>       
-                                                }
-                                            }
-                                        </div>
-                                            <partial name="~/Pages/Organizations/Components/OrganizationsArea/_organizationListSection.cshtml" model="@Model.Organizations"/>
-                                        </div>
-                                    <div>
-                                        <h3 class="mb-4">Membership Organizations</h3>
-                                        @await Component.InvokeAsync(typeof(OrganizationsAreaViewComponent), new
-                                        {
-                                            registeredUserId = Model.User.Id,
-                                            maxResultCount = 6
-                                        })
-                                    </div>
+                                    <h3 class="mb-4">Upcoming Events</h3>
+                                    @await Component.InvokeAsync(typeof(EventsAreaViewComponent), new
+                                    {
+                                        minDate = Clock.Now.ClearTime(),
+                                        registeredUserId = Model.User.Id,
+                                        maxResultCount = 6,
+                                        skipCount = 0,
+                                    })
                                 </div>
                             </div>
                         </div>
@@ -113,19 +108,29 @@
                         </div>
                     </div>
                 </div>
-                <div id="UpcomingEvents" class="tab-pane fade">
+                <div id="Organizations" class="tab-pane fade">
                     <div class="row">
                         <div class="col">
                             <div class="card">
                                 <div class="card-body" style="min-height: 496px">
-                                    <h3 class="mb-4">Upcoming Events</h3>
-                                    @await Component.InvokeAsync(typeof(EventsAreaViewComponent), new
-                                    {
-                                        minDate = Clock.Now.ClearTime(),
-                                        registeredUserId = Model.User.Id,
-                                        maxResultCount = 6,
-                                        skipCount = 0,
-                                    })
+                                    <div id="membership-organizations">
+                                        <h3 class="mb-4">My Organizations</h3>
+                                        @await Component.InvokeAsync(typeof(OrganizationsAreaViewComponent), new
+                                        {
+                                            registeredUserId = Model.User.Id,
+                                            maxResultCount = 6
+                                        })
+                                    </div>
+                                    <div id="owned-organizations">
+                                        <div class="row mb-4">
+                                            <div class="col-8">
+                                                <h3>
+                                                    Owned Organizations
+                                                </h3>
+                                            </div>
+                                        </div>
+                                        <partial name="~/Pages/Organizations/Components/OrganizationsArea/_organizationListSection.cshtml" model="@Model.Organizations"/>
+                                    </div>
                                 </div>
                             </div>
                         </div>

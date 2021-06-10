@@ -63,8 +63,8 @@
                             <div class="col-md-5">
                                 <h5 class="detail-head mt-3 font-weight-bold">Owners</h5>
                                 <div>
-                                    <a href="/members/profile?username=@Model.Organization.OwnerUserName">
-                                        <img gravatar-email="@Model.Organization.OwnerEmail" default-image="Wavatar" gravatar-size="40" class="org-avatar avatar rounded-circle" data-toggle="tooltip" title="" data-original-title="@Model.Organization.OwnerUserName"/>
+                                    <a href="/users/@Model.Organization.OwnerUserName">
+                                        <img gravatar-email="@Model.Organization.OwnerEmail" default-image="Wavatar" gravatar-size="40" class="org-avatar avatar rounded-circle" data-toggle="tooltip" title="@Model.Organization.OwnerUserName"/>
                                     </a>
                                 </div>
 
@@ -85,7 +85,7 @@
 
                                 @if (Model.IsShowSocialMediaContent)
                                 {
-                                    <h5 class="detail-head mt-5 font-weight-bold">Share Organizations</h5>
+                                    <h5 class="detail-head mt-5 font-weight-bold">Links</h5>
                                     <div class="share-container">
                                         @if (!Model.Organization.Website.IsNullOrWhiteSpace())
                                         {

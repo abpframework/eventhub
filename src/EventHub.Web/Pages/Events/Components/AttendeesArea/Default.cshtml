@@ -5,8 +5,8 @@
     <div>
         @foreach (var attendee in Model.Attendees)
         {
-            <a href="/members/profile?username=@attendee.UserName">
-                <img gravatar-email="@attendee.Email" default-image="Wavatar" gravatar-size="40" class="org-avatar rounded-circle"/>
+            <a href="/users/@attendee.UserName">
+                <img gravatar-email="@attendee.Email" default-image="Wavatar" gravatar-size="40" class="org-avatar rounded-circle"  data-toggle="tooltip" title="@attendee.UserName" />
             </a>
         }
     </div>

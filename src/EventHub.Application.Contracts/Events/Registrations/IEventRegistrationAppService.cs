@@ -16,5 +16,7 @@ namespace EventHub.Events.Registrations
         Task<PagedResultDto<EventAttendeeDto>> GetAttendeesAsync(Guid eventId);
 
         Task<int> GetAttendeeCountAsync(Guid eventId);
+
+        Task<bool> IsPastEventAsync(Guid eventId);
     }
 }

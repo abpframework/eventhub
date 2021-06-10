@@ -12,6 +12,14 @@
                             size="Large"
                             text="@L["YouAttendedThisEvent"].Value"
                             data-url="@Url.Action("Unregister", "EventRegistration", new {eventId = Model.EventId})"/>
+            }else if (Model.IsPastEvent)
+            {
+                <abp-button class="mt-4" id="PastEventButton"
+                            button-type="Dark"
+                            size="Large"
+                            text="@L["PastEvent"].Value"
+                            disabled="true"
+                            abp-tooltip-top="@L["EventHub:CantRegisterOrUnregisterForAPastEvent"].Value" />
             }
             else
             {
