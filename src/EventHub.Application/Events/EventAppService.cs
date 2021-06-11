@@ -7,7 +7,6 @@ using EventHub.Events.Registrations;
 using EventHub.Organizations;
 using EventHub.Users;
 using Microsoft.AspNetCore.Authorization;
-using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
 using Volo.Abp.BlobStoring;

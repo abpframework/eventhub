@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using EventHub.Organizations.Memberships;
 using EventHub.Users;
 using Microsoft.AspNetCore.Authorization;
-using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
 using Volo.Abp.BlobStoring;

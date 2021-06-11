@@ -4,22 +4,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Members;
 using EventHub.Organizations;
+using EventHub.Users;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventHub.Web.Pages.Members
 {
     public class ProfileModel : EventHubPageModel
     {
-        private readonly IMemberAppService _memberAppService;
+        private readonly IUserAppService _userAppService;
         private readonly IOrganizationAppService _organizationAppService;
 
         public List<OrganizationInListDto> Organizations { get; set; }
 
         public ProfileModel(
-            IMemberAppService memberAppService, 
+            IUserAppService userAppService, 
             IOrganizationAppService organizationAppService)
         {
-            _memberAppService = memberAppService;
+            _userAppService = userAppService;
             _organizationAppService = organizationAppService;
         }
 
@@ -39,7 +40,7 @@ namespace EventHub.Web.Pages.Members
                 }
             }
             
-            User = await _memberAppService.FindByUserNameAsync(userName);
+            User = await _userAppService.FindByUserNameAsync(userName);
             Organizations = (await _organizationAppService.GetOrganizationsByUserIdAsync(User.Id)).Items.ToList();
 
             if (User != null)

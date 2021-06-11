@@ -1,9 +1,10 @@
 using System.Threading.Tasks;
+using EventHub.Members;
 using Volo.Abp.Application.Services;
 
-namespace EventHub.Members
+namespace EventHub.Users
 {
-    public interface IMemberAppService : IApplicationService
+    public interface IUserAppService : IApplicationService
     {
         Task<UserDto> FindByUserNameAsync(string username);
     }

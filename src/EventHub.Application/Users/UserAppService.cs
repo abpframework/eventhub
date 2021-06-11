@@ -1,15 +1,15 @@
 using System;
 using System.Threading.Tasks;
-using EventHub.Users;
+using EventHub.Members;
 using Volo.Abp.Domain.Repositories;
 
-namespace EventHub.Members
+namespace EventHub.Users
 {
-    public class MemberAppService : EventHubAppService, IMemberAppService
+    public class UserAppService : EventHubAppService, IUserAppService
     {
         private readonly IRepository<AppUser, Guid> _userRepository;
         
-        public MemberAppService(IRepository<AppUser, Guid> userRepository)
+        public UserAppService(IRepository<AppUser, Guid> userRepository)
         {
             _userRepository = userRepository;
         }

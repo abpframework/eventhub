@@ -84,6 +84,14 @@ namespace EventHub.Organizations
             result.Id.ShouldBe(_testData.OrganizationVolosoftId);
             result.Name.ShouldBe(_testData.OrganizationVolosoftName);
         }
+        
+        [Fact]
+        public async Task Should_Get_List_Of_Organizations_By_UserId()
+        {
+            var result = await _organizationAppService.GetOrganizationsByUserIdAsync(_testData.UserAdminId);
+            result.Items.Count.ShouldBeGreaterThanOrEqualTo(1);
+            result.Items.ShouldContain(o => o.Name == _testData.OrganizationVolosoftName && o.Id == _testData.OrganizationVolosoftId);
+        }
 
         [Fact]
         public async Task Should_Update_Organization_If_User_Is_Owner()
