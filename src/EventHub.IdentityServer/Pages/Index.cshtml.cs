@@ -1,14 +1,11 @@
-using EventHub.Web;
-using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
 namespace EventHub.Pages
 {
     public class IndexModel : AbpPageModel
     {
-        public IActionResult OnGet()
+        public void OnGet()
         {
-            return Redirect(EventHubExternalUrls.EhWww);
         }
     }
 }
