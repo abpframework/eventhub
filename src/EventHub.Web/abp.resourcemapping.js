@@ -8,5 +8,6 @@
     ],
     mappings: {
         "@node_modules/daterangepicker/*": "@libs/date-range-picker/",
+        "@node_modules/owl.carousel/dist/**": "@libs/owl.carousel/",
     }
 };

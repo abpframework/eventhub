@@ -54,12 +54,10 @@
     <meta property="twitter:description" content="@(!string.IsNullOrWhiteSpace(ViewBag.TwitterDescription) ? ViewBag.TwitterDescription : "EventHub Description")"/>
     <meta property="twitter:image" content="@(!string.IsNullOrWhiteSpace(ViewBag.TwitterImage) ? ViewBag.TwitterImage : EventHubExternalUrls.EhWww + "/assets/slide.jpg")"/>
 
-    <!-- TODO: Include into the solution and use as packages! -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g==" crossorigin="anonymous"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css" integrity="sha512-OTcub78R3msOCtY3Tc6FzeDJ8N9qvQn1Ph49ou13xgA9VsH9+LRxoFU6EqLhW4+PKRfU+/HReXmSZXHEkpYoOA==" crossorigin="anonymous"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icon-css@3.5.0/css/flag-icon.min.css"/>
+    <abp-style src="/libs/owl.carousel/assets/owl.carousel.min.css"></abp-style>
+    <abp-style src="/libs/owl.carousel/assets/owl.theme.default.css"></abp-style>
 
     <abp-style-bundle name="@EventHubThemeBundles.Styles.Global"/>
 
@@ -78,7 +76,7 @@
 @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.Last, StandardLayouts.Application)
 @(await Component.InvokeAsync<FooterViewComponent>())
 <abp-script-bundle name="@EventHubThemeBundles.Scripts.Global"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous"></script>
+<abp-script src="/libs/owl.carousel/owl.carousel.min.js" />
 <script src="~/Abp/ApplicationConfigurationScript"></script>
 <script src="~/Abp/ServiceProxyScript"></script>
 @await Component.InvokeAsync(typeof(WidgetScriptsViewComponent))
