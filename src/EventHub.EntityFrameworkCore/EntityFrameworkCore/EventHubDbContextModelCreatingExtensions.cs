@@ -73,6 +73,8 @@ namespace EventHub.EntityFrameworkCore
                
                 b.HasOne<Country>().WithMany().HasForeignKey(x => x.CountryId).OnDelete(DeleteBehavior.NoAction);
 
+                b.Property(x => x.IsTimingChangeEmailSent).HasDefaultValue(true);
+
                 b.HasIndex(x => new {x.OrganizationId, x.StartTime});
                 b.HasIndex(x => x.StartTime);
                 b.HasIndex(x => x.UrlCode);
@@ -85,9 +87,6 @@ namespace EventHub.EntityFrameworkCore
                 b.ToTable(EventHubConsts.DbTablePrefix + "EventRegistrations", EventHubConsts.DbSchema);
 
                 b.ConfigureByConvention();
-
-                b.Property(x => x.IsTimingChangeEmailSent).HasDefaultValue(true)
-                    .HasColumnName(nameof(EventRegistration.IsTimingChangeEmailSent));
 
                 b.HasOne<Event>().WithMany().HasForeignKey(x => x.EventId).IsRequired().OnDelete(DeleteBehavior.NoAction);
 

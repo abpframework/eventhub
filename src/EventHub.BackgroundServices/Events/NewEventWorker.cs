@@ -16,7 +16,7 @@ namespace EventHub.Events
     {
         public NewEventWorker(
             AbpAsyncTimer timer,
-            IServiceScopeFactory serviceScopeFactory) 
+            IServiceScopeFactory serviceScopeFactory)
             : base(
                 timer,
                 serviceScopeFactory)
@@ -46,7 +46,7 @@ namespace EventHub.Events
                     {
                         await newEventNotifier.NotifyAsync(@event);
                     }
-                    
+
                     @event.IsEmailSentToMembers = true;
                     await eventRepository.UpdateAsync(@event);
                 }

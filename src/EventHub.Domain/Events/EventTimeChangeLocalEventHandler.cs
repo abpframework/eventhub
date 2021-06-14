@@ -1,48 +1,30 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
-using EventHub.Events.Registrations;
-using IdentityServer4.Validation;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EventBus;
-using Volo.Abp.Linq;
 
 namespace EventHub.Events
 {
     public class EventTimeChangeLocalEventHandler : ILocalEventHandler<EventTimeChangingEventData>, ITransientDependency
     {
-        private readonly IRepository<EventRegistration, Guid> _eventRegistrationRepository;
-        private readonly IAsyncQueryableExecuter _asyncExecuter;
+        private readonly IRepository<Event, Guid> _eventRepository;
 
-        public EventTimeChangeLocalEventHandler(
-            IRepository<EventRegistration, Guid> eventRegistrationRepository,
-            IAsyncQueryableExecuter asyncExecuter)
+        public EventTimeChangeLocalEventHandler(IRepository<Event, Guid> eventRepository)
         {
-            _eventRegistrationRepository = eventRegistrationRepository;
-            _asyncExecuter = asyncExecuter;
+            _eventRepository = eventRepository;
         }
         
         public async Task HandleEventAsync(EventTimeChangingEventData eventData)
         {
-            await UpdateEventRegistrationForTimingChangeAsync(@eventData.Event);
+            await UpdateEventForTimingChangeAsync(eventData.Event);
         }
         
-        private async Task UpdateEventRegistrationForTimingChangeAsync(Event @event)
+        private async Task UpdateEventForTimingChangeAsync(Event @event)
         {
-            var eventRegistrationQueryable = await _eventRegistrationRepository.GetQueryableAsync();
-            var query = eventRegistrationQueryable.Where(x => x.EventId == @event.Id);
-            var eventRegistrations = await _asyncExecuter.ToListAsync(query);
+            @event.IsTimingChangeEmailSent = false;
 
-            foreach (var eventRegistration in eventRegistrations)
-            {
-                if (eventRegistration.IsTimingChangeEmailSent)
-                {
-                    eventRegistration.IsTimingChangeEmailSent = false;
-                }
-            }
-
-            await _eventRegistrationRepository.UpdateManyAsync(eventRegistrations, true);
+            await _eventRepository.UpdateAsync(@event, true);
         }
     }
 }

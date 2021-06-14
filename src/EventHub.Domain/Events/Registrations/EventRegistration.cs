@@ -8,9 +8,7 @@ namespace EventHub.Events.Registrations
         public Guid EventId { get; private set; }
 
         public Guid UserId { get; private set; }
-
-        public bool IsTimingChangeEmailSent { get; set; }
-
+        
         private EventRegistration()
         {
 

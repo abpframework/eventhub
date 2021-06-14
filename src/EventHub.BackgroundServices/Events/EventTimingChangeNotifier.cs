@@ -16,22 +16,22 @@ namespace EventHub.Events
     {
         private readonly IEmailSender _emailSender;
         private readonly ITemplateRenderer _templateRenderer;
-        private readonly IRepository<EventRegistration, Guid> _eventRegistrationRepository;
         private readonly IAsyncQueryableExecuter _asyncExecuter;
         private readonly IRepository<AppUser, Guid> _userRepository;
+        private readonly IRepository<EventRegistration, Guid> _eventRegistrationRepository;
 
         public EventTimingChangeNotifier(
             IEmailSender emailSender,
             ITemplateRenderer templateRenderer,
-            IRepository<EventRegistration, Guid> eventRegistrationRepository,
             IAsyncQueryableExecuter asyncExecuter,
-            IRepository<AppUser, Guid> userRepository)
+            IRepository<AppUser, Guid> userRepository,
+            IRepository<EventRegistration, Guid> eventRegistrationRepository)
         {
             _emailSender = emailSender;
             _templateRenderer = templateRenderer;
-            _eventRegistrationRepository = eventRegistrationRepository;
             _asyncExecuter = asyncExecuter;
             _userRepository = userRepository;
+            _eventRegistrationRepository = eventRegistrationRepository;
         }
 
         public async Task NotifyAsync(Event @event)
@@ -40,22 +40,19 @@ namespace EventHub.Events
             {
                 return;
             }
-            
-            //TODO: It will be more performant if we join to users instead of individually query (already done for EventReminderNotifier)
 
-            var queryable = await _eventRegistrationRepository.GetQueryableAsync();
-            var registrations = await _asyncExecuter.ToListAsync(
-                queryable.Where(x => x.EventId == @event.Id && !x.IsTimingChangeEmailSent)
-            );
+            var userQueryable = await _userRepository.GetQueryableAsync();
+            var registrationQueryable = await _eventRegistrationRepository.GetQueryableAsync();
 
-            foreach (var registration in registrations)
+            var userQuery = from eventRegistration in registrationQueryable
+                join user in userQueryable on eventRegistration.UserId equals user.Id
+                where eventRegistration.EventId == @event.Id
+                select user;
+
+            var users = await _asyncExecuter.ToListAsync(userQuery);
+
+            foreach (var user in users)
             {
-                var user = await _userRepository.FindAsync(registration.UserId);
-                if (user is null)
-                {
-                    continue;
-                }
-
                 var templateModel = new
                 {
                     UserName = user.GetFullNameOrUsername(),
@@ -70,11 +67,7 @@ namespace EventHub.Events
                     "Event time has been changed!",
                     await _templateRenderer.RenderAsync(EmailTemplates.EventTimingChanged, templateModel)
                 );
-
-                registration.IsTimingChangeEmailSent = true;
             }
-
-            await _eventRegistrationRepository.UpdateManyAsync(registrations, autoSave: true);
         }
     }
 }

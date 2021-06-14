@@ -21,10 +21,10 @@ namespace EventHub.Events
         private readonly IAsyncQueryableExecuter _asyncExecuter;
 
         public EventReminderNotifier(
-            IEmailSender emailSender, 
-            ITemplateRenderer templateRenderer, 
-            IRepository<AppUser, Guid> userRepository, 
-            IRepository<EventRegistration, Guid> eventRegistrationRepository, 
+            IEmailSender emailSender,
+            ITemplateRenderer templateRenderer,
+            IRepository<AppUser, Guid> userRepository,
+            IRepository<EventRegistration, Guid> eventRegistrationRepository,
             IAsyncQueryableExecuter asyncExecuter)
         {
             _emailSender = emailSender;
@@ -33,12 +33,17 @@ namespace EventHub.Events
             _eventRegistrationRepository = eventRegistrationRepository;
             _asyncExecuter = asyncExecuter;
         }
-        
+
         public async Task NotifyAsync(Event @event)
         {
+            if (@event is null)
+            {
+                return;
+            }
+
             var userQueryable = await _userRepository.GetQueryableAsync();
             var registrationQueryable = await _eventRegistrationRepository.GetQueryableAsync();
-            
+
             var userQuery = from eventRegistration in registrationQueryable
                 join user in userQueryable on eventRegistration.UserId equals user.Id
                 where eventRegistration.EventId == @event.Id
@@ -61,7 +66,7 @@ namespace EventHub.Events
                     user.Email,
                     "The event has last thirty minutes to start!",
                     await _templateRenderer.RenderAsync(EmailTemplates.EventReminder, templateModel)
-                );   
+                );
             }
         }
     }

@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using EventHub.Events.Registrations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.BackgroundWorkers;
@@ -17,7 +16,7 @@ namespace EventHub.Events
         public EventTimingChangeWorker(
             AbpAsyncTimer timer,
             IServiceScopeFactory serviceScopeFactory
-            ) : base(
+        ) : base(
             timer,
             serviceScopeFactory)
         {
@@ -29,27 +28,26 @@ namespace EventHub.Events
         {
             var eventTimingChangeNotifier = workerContext.ServiceProvider.GetRequiredService<EventTimingChangeNotifier>();
             var eventRepository = workerContext.ServiceProvider.GetRequiredService<IRepository<Event, Guid>>();
-            var eventRegistrationRepository = workerContext.ServiceProvider.GetRequiredService<IRepository<EventRegistration, Guid>>();
             var asyncExecuter = workerContext.ServiceProvider.GetRequiredService<IAsyncQueryableExecuter>();
 
-            var queryable = await eventRegistrationRepository.GetQueryableAsync();
-            var query = queryable
-                .Where(x => !x.IsTimingChangeEmailSent)
-                .Select(x => x.EventId)
-                .Distinct();
-            
-            var eventRegistrations = await asyncExecuter.ToListAsync(query);
-           
-            foreach (var eventRegistration in eventRegistrations)
+            var queryable = await eventRepository.GetQueryableAsync();
+            var query = queryable.Where(x => !x.IsTimingChangeEmailSent);
+
+            var events = await asyncExecuter.ToListAsync(query);
+
+            foreach (var @event in events)
             {
                 try
                 {
-                    await eventTimingChangeNotifier.NotifyAsync(await eventRepository.FindAsync(eventRegistration));
+                    await eventTimingChangeNotifier.NotifyAsync(@event);
+
+                    @event.IsTimingChangeEmailSent = true;
+                    await eventRepository.UpdateAsync(@event);
                 }
                 catch (Exception e)
                 {
                     Logger.LogError($"An error occurred while sending an email to the attendees of the event after the event time has changed. Error message: {e.Message}");
-                }    
+                }
             }
         }
     }

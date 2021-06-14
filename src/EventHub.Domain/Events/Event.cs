@@ -40,6 +40,8 @@ namespace EventHub.Events
         
         public int TimingChangeCount  { get; set; }
         
+        public bool IsTimingChangeEmailSent { get; set; }
+
         private Event()
         {
 
