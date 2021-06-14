@@ -55,19 +55,20 @@ namespace EventHub.Organizations.Memberships
             );
         }
 
-        public async Task<PagedResultDto<OrganizationMemberDto>> GetMembersAsync(Guid organizationId)
+        public async Task<PagedResultDto<OrganizationMemberDto>> GetMembersAsync(OrganizationMemberListFilterDto input)
         {
             var organizationMembershipsQueryable = await _organizationMembershipsRepository.GetQueryableAsync();
             var userQueryable = await _userRepository.GetQueryableAsync();
 
             var query = from organizationMembership in organizationMembershipsQueryable
                 join user in userQueryable on organizationMembership.UserId equals user.Id
-                where organizationMembership.OrganizationId == organizationId
+                where organizationMembership.OrganizationId == input.OrganizationId
                 orderby organizationMembership.CreationTime descending
                 select user;
 
             var totalCount = await AsyncExecuter.CountAsync(query);
-            var users = await AsyncExecuter.ToListAsync(query.Take(10));
+            
+            var users = await AsyncExecuter.ToListAsync(query.PageBy(input));
 
             return new PagedResultDto<OrganizationMemberDto>(
                 totalCount,

@@ -1,5 +1,7 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using NSubstitute;
 using Shouldly;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Users;
@@ -12,19 +14,26 @@ namespace EventHub.Organizations.Memberships
         private readonly IOrganizationMembershipAppService _organizationMembershipAppService;
         private readonly IRepository<OrganizationMembership, Guid> _organizationMembershipRepository;
         private readonly EventHubTestData _testData;
-        private readonly ICurrentUser _currentUser;
+        private ICurrentUser _currentUser;
 
         public OrganizationMembershipAppServiceTests()
         {
             _organizationMembershipAppService = GetRequiredService<IOrganizationMembershipAppService>();
             _organizationMembershipRepository = GetRequiredService<IRepository<OrganizationMembership, Guid>>();
             _testData = GetRequiredService<EventHubTestData>();
-            _currentUser = GetRequiredService<ICurrentUser>();
+        }
+        
+        protected override void AfterAddApplication(IServiceCollection services)
+        {
+            _currentUser = Substitute.For<ICurrentUser>();
+            services.AddSingleton(_currentUser);
         }
         
         [Fact]
         public async Task Should_Join_To_An_Organization()
         {
+            Login(_testData.UserAdminId);
+
             await _organizationMembershipAppService.JoinAsync(
                 _testData.OrganizationVolosoftId
             );
@@ -38,6 +47,8 @@ namespace EventHub.Organizations.Memberships
         [Fact]
         public async Task Should_Leave_From_An_Organization()
         {
+            Login(_testData.UserAdminId);
+
             await WithUnitOfWorkAsync(async () =>
             {
                 await _organizationMembershipRepository.InsertAsync(
@@ -57,6 +68,33 @@ namespace EventHub.Organizations.Memberships
                     _testData.OrganizationDotnetEuropeId,
                     _currentUser.GetId())
                 ).ShouldBeNull();
+        }
+        
+        [Fact]
+        public async Task Should_True_To_A_Joined_In_Organization()
+        {
+            Login(_testData.UserAdminId);
+
+            await _organizationMembershipAppService.JoinAsync(_testData.OrganizationDotnetEuropeId);
+            var result = await _organizationMembershipAppService.IsJoinedAsync(
+                _testData.OrganizationDotnetEuropeId
+            );
+
+            result.ShouldBeTrue();
+        }
+
+        [Fact]
+        public async Task Should_False_To_A_Not_Joined_In_Organization()
+        {
+            Login(_testData.UserAdminId);
+
+            await _organizationMembershipAppService.LeaveAsync(_testData.OrganizationDotnetEuropeId);
+
+            var result = await _organizationMembershipAppService.IsJoinedAsync(
+                _testData.OrganizationDotnetEuropeId
+            );
+
+            result.ShouldBeFalse();
         }
         
         [Fact]
@@ -81,7 +119,7 @@ namespace EventHub.Organizations.Memberships
                 );
             });
 
-            var result = await _organizationMembershipAppService.GetMembersAsync(_testData.OrganizationVolosoftId);
+            var result = await _organizationMembershipAppService.GetMembersAsync(new OrganizationMemberListFilterDto{OrganizationId = _testData.OrganizationVolosoftId});
 
             result.TotalCount.ShouldBeGreaterThanOrEqualTo(2);
             result.Items.ShouldContain(x => x.Id == _testData.UserAdminId);
@@ -96,6 +134,12 @@ namespace EventHub.Organizations.Memberships
                     x => x.OrganizationId == organizationId && x.UserId == userId
                 );
             });
+        }
+        
+        private void Login(Guid userId)
+        {
+            _currentUser.Id.Returns(userId);
+            _currentUser.IsAuthenticated.Returns(true);
         }
     }
 }

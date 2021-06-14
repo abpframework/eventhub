@@ -1,43 +1,39 @@
 $(function () {
     var l = abp.localization.getResource('EventHub');
 
-    var fileInput = document.getElementById("organization-profile-picture");
+    var infoArea = document.getElementById( 'upload-label' );
+    var fileInput = document.getElementById('Organization_ProfilePictureFile');
     var file;
-    
+
     fileInput.addEventListener('change', function () {
-        var showModal = true;
-        
+        var showFile = true;
         file = fileInput.files[0];
-        
-        if(file == undefined) {
-            $("#choose-cover-image").html(l("ChooseOrganizationProfilePicture"));
+
+        if (file === undefined){
+            $('#Organization_ProfilePictureFile').val('');
+            $('#imageResult').attr('src', '#');
+            infoArea.textContent = 'Choose file'
             return;
-        }
-        else {
-            $("#choose-cover-image").html(file.name);
         }
 
         var permittedExtensions = ["jpg", "jpeg", "png"]
         var fileExtension = $(this).val().split('.').pop();
-
         if (permittedExtensions.indexOf(fileExtension) === -1) {
-            showModal = false;
-            abp.message.error(l("OrganizationProfilePictureExtensionNotAllowed"))
-                .then(() =>  {
-                    $("#choose-cover-image").html(l("ChooseOrganizationProfilePicture"));
-                    file = null;
-                });
-        }
-        //1mb
-        else if(file.size > 1024 * 1024) {
-            showModal = false;
-            abp.message.error(l("OrganizationProfilePictureSizeExceedMessage"))
+            showFile = false;
+            abp.message.error(l('OrganizationProfilePictureExtensionNotAllowed'))
                 .then(() => {
-                    $("#choose-cover-image").html(l("ChooseOrganizationProfilePicture"));
+                    $('#Organization_ProfilePictureFile').val('');
+                    file = null;
+                });
+        } else if (file.size > 1024 * 1024) {
+            showFile = false;
+            abp.message.error(l('OrganizationProfilePictureSizeExceedMessage'))
+                .then(() => {
+                    $('#Organization_ProfilePictureFile').val('');
                     file = null;
                 });
         }
-        
+
         var img = new Image();
         img.onload = function () {
             var imageError = true;
@@ -45,12 +41,10 @@ $(function () {
                 width: this.width,
                 height: this.height
             };
-            
             URL.revokeObjectURL(this.src);
-            
-            if(showModal && imageError) {
+
+            if (showFile && imageError) {
                 readURL(file);
-                $("#picturePreviewModal").modal('show');
             }
         }
 
@@ -63,60 +57,11 @@ $(function () {
             var reader = new FileReader();
 
             reader.onload = function (e) {
-                $('#img-upload').attr('src', e.target.result);
+                $('#imageResult').attr('src', e.target.result);
+                infoArea.textContent = 'File name: ' + input.name;
             }
 
             reader.readAsDataURL(input);
         }
     }
-    
-    $("form#EditOrganizationProfileForm").submit(function (e) {
-        e.preventDefault();
-
-        var organizationId = document.getElementById("organization-id").value;
-        var organizationName = document.getElementById("organization-name").value;
-
-        if(!$(this).valid()) {
-            return false;
-        }
-        
-        if(file === undefined) {
-            file = null;
-        }
-        
-        var formData = new FormData();
-        formData.append("OrganizationId", organizationId);
-        formData.append("ProfilePictureFile", file);
-
-        $.ajax({
-            xhr: function() {
-                var xhr = new window.XMLHttpRequest();
-                xhr.upload.addEventListener("progress", function(evt) {
-                    if (evt.lengthComputable) {
-                        var percentage = evt.loaded / evt.total;
-                        percentage = parseInt(percentage * 100);
-                        if(percentage !== 100){
-                            $('#btnSubmit').prop("disabled", true);
-                        }
-                    }
-                }, false);
-
-                return xhr;
-            },
-            url: `/api/organization/save-profile-picture`,
-            data: formData,
-            type: 'POST',
-            contentType: false,
-            processData: false,
-            success: function(data){
-                abp.message
-                    .success(l("OrganizationProfilePictureEditSuccessMessage"))
-                    .then(data => window.location.href = "/Organizations/" + organizationName);
-            },
-            error: function (data) {
-                abp.message.error(data.responseJSON.error.message);
-            }
-        });
-
-    });
 });

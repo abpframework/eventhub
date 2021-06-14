@@ -1,0 +1,36 @@
+@model EventHub.Web.Pages.Events.Components.EventsArea.EventsAreaViewComponent.ListAreaViewComponentModel
+
+@if (Model.Events != null && Model.Events.Count > 0)
+{
+    <div id="EventList" class="row" data-hash-code="@Model.GetHashCode()" data-total-count="@Model.TotalCount" data-skip-count="@Model.SkipCount" data-max-result-count="@Model.MaxResultCount">
+        <partial name="~/Pages/Events/Components/EventsArea/_eventListSection.cshtml" model="@Model.Events"/>
+    </div>
+
+    @if (Model.IsPagination && Model.TotalCount > Model.MaxResultCount && Model.TotalCount > Model.Events.Count)
+    {
+        <div id="load-more-section-@Model.GetHashCode()" class="row">
+            <div class="col text-center">
+            <button
+                id="LoadMoreButton-@Model.GetHashCode()"
+                class="btn btn-secondary btn-lg"
+                data-url="@Url.Action("GetList","Event", 
+                              new {
+                                  minDate = Model.MinDate,
+                                  maxDate = Model.MaxDate,
+                                  organizationId = Model.OrganizationId,
+                                  registeredUserId = Model.RegisteredUserId,
+                                  isOnline = Model.IsOnline,
+                                  language = Model.Language,
+                                  countryId = Model.CountryId,
+                                  maxResultCount = Model.MaxResultCount
+                              })">
+                    Load More
+                </button>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <p>There is no Event</p>
+}

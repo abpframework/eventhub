@@ -1,21 +1,131 @@
-﻿@using EventHub.Web.Theme.Themes.EventHub.Components.Brand
-@using EventHub.Web.Theme.Themes.EventHub.Components.Menu
-@using EventHub.Web.Theme.Themes.EventHub.Components.Toolbar
-<nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm flex-column flex-md-row mb-4" id="main-navbar" style="min-height: 4rem;">
+﻿@using EventHub.Web
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.Users
+@using EventHub.Localization
+@using Microsoft.AspNetCore.Http.Extensions
+@using Volo.Abp.Localization
+@inject ICurrentUser CurrentUser
+@inject ILanguageProvider LanguageProvider
+@inject IStringLocalizer<EventHubResource> L
+
+@{
+    var returnUrl = System.Net.WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery());
+    if (returnUrl.IsNullOrWhiteSpace())
+    {
+        returnUrl = "/";
+    }
+}
+<nav class="navbar navbar-expand-lg navbar-light bg-light static-top">
     <div class="container">
-        @(await Component.InvokeAsync<MainNavbarBrandViewComponent>())
-        <button class="navbar-toggler" type="button" data-toggle="collapse"
-                data-target="#main-navbar-collapse" aria-controls="main-navbar-collapse"
-                aria-expanded="false" aria-label="Toggle navigation">
+        <a class="navbar-brand font-weight-bold" href="@Url.Page("/index")">EventHub</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="main-navbar-collapse">
+        <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav mx-auto">
-                @(await Component.InvokeAsync<MainNavbarMenuViewComponent>())
-            </ul> 
-            <ul class="navbar-nav"> 
-                @(await Component.InvokeAsync<MainNavbarToolbarViewComponent>())
+                <li class="nav-item @(GetPageActiveClassOrEmpty(ViewContext, "/index"))">
+                    <a class="nav-link" href="@EventHubExternalUrls.EhWww@Url.Page("/index")">
+                        Home
+                    </a>
+                </li>
+                <li class="nav-item @(GetPageActiveClassOrEmpty(ViewContext, "/events/index"))">
+                    <a class="nav-link" href="@EventHubExternalUrls.EhWww/events">Events</a>
+                </li>
+                <li class="nav-item @(GetPageActiveClassOrEmpty(ViewContext, "/organizations/index"))">
+                    <a class="nav-link" href="@EventHubExternalUrls.EhWww/organizations">Organizations</a>
+                </li>
+            </ul>
+            @if (EventHubExternalUrls.EhWww.Contains(Context.Request.Host.ToString()))
+            {
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link event-link" href="@EventHubExternalUrls.EhWww@Url.Page("/events/new")">+ Create an Event</a>
+                    </li>
+                </ul>   
+            }
+            <ul class="navbar-nav">
+
+                @if (CurrentUser.IsAuthenticated)
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="user-avatar">
+                                <img gravatar-email="@CurrentUser.Email" default-image="Wavatar" gravatar-size="40" width="40" height="40" class="nav-avatar avatar rounded-circle"/>
+                            </span>
+                            <span class="ml-2">
+                                @if (!string.IsNullOrWhiteSpace(CurrentUser.Name) && !string.IsNullOrWhiteSpace(CurrentUser.SurName))
+                                {
+                                    @(CurrentUser.Name + " " + CurrentUser.SurName)
+                                }
+                                else
+                                {
+                                    {
+                                        @CurrentUser.UserName
+                                    }
+                                }
+                            </span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="@(EventHubExternalUrls.EhAccount.EnsureEndsWith('/') + "account/manage")" title="@L["Account"]">
+                                <i class="fas fa-cog"></i> @L["Account"]
+                            </a>
+                            <a class="dropdown-item" href="@EventHubExternalUrls.EhWww/users/@CurrentUser.UserName" title="@L["Profile"]">
+                                <i class="fas fa-user"></i> @L["Profile"]
+                            </a>
+                            <a class="dropdown-item" href="/account/logout?returnUrl=@returnUrl" title="@L["Logout"]">
+                                <i class="fas fa-sign-out-alt"></i> @L["Logout"]
+                            </a>
+                        </div>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="/account/login?returnUrl=@returnUrl">Log In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-primary ml-lg-2" href="@EventHubExternalUrls.EhAccount/account/register?returnUrl=@returnUrl">Sign Up</a>
+                    </li>
+                }
             </ul>
         </div>
     </div>
 </nav>
+
+@functions{
+    public string GetPageActiveClassOrEmpty(ViewContext viewContext, string pageUrl)
+    {
+        if (!EventHubExternalUrls.EhWww.Contains(Context.Request.Host.ToString()))
+        {
+            return "";
+        }
+        
+        var activeRoute = viewContext?.RouteData.Values["page"]?.ToString()?.ToLowerInvariant();
+        pageUrl = pageUrl.ToLowerInvariant();
+
+        if (activeRoute is null)
+        {
+            return "";
+        }
+
+        switch (pageUrl)
+        {
+            case "/index" when activeRoute == "/index":
+                return activeRoute == pageUrl ? "active" : activeRoute;
+            case "/index":
+                return "";
+        }
+
+        pageUrl = pageUrl.Replace("/index", "");
+        var highLevelActiveRoute = GetHighLevelRoute(activeRoute); // "/organizations/ng-coders" => "organizations"
+
+        return highLevelActiveRoute.Contains(pageUrl) ? "active" : highLevelActiveRoute;
+    }
+
+    private string GetHighLevelRoute(string route)
+    {
+        route.EnsureStartsWith('/');
+        return route.Split("/")[1].EnsureStartsWith('/').EnsureEndsWith('/');
+    }
+
+}

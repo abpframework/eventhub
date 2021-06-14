@@ -20,7 +20,10 @@ namespace EventHub.Events.Registrations
             Event @event,
             AppUser user)
         {
-            CheckEventEndTime(@event);
+            if (IsPastEvent(@event))
+            {
+                throw new BusinessException(EventHubErrorCodes.CantRegisterOrUnregisterForAPastEvent);
+            }
 
             if (await IsRegisteredAsync(@event, user))
             {
@@ -48,7 +51,10 @@ namespace EventHub.Events.Registrations
             Event @event,
             AppUser user)
         {
-            CheckEventEndTime(@event);
+            if (IsPastEvent(@event))
+            {
+                throw new BusinessException(EventHubErrorCodes.CantRegisterOrUnregisterForAPastEvent);
+            }
 
             await _eventRegistrationRepository.DeleteAsync(
                 x => x.EventId == @event.Id && x.UserId == user.Id
@@ -63,12 +69,14 @@ namespace EventHub.Events.Registrations
                 .AnyAsync(x => x.EventId == @event.Id && x.UserId == user.Id);
         }
 
-        private void CheckEventEndTime(Event @event)
+        public bool IsPastEvent(Event @event)
         {
             if (Clock.Now > @event.EndTime)
             {
-                throw new BusinessException(EventHubErrorCodes.CantRegisterOrUnregisterForAPastEvent);
+                return true;
             }
+
+            return false;
         }
     }
 }

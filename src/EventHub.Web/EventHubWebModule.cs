@@ -11,6 +11,7 @@ using EventHub.Localization;
 using EventHub.Web.Menus;
 using EventHub.Web.Theme;
 using EventHub.Web.Theme.Bundling;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using StackExchange.Redis;
 using Microsoft.OpenApi.Models;
 using Volo.Abp;
@@ -78,6 +79,7 @@ namespace EventHub.Web
             ConfigureVirtualFileSystem(hostingEnvironment);
             ConfigureNavigationServices(configuration);
             ConfigureSwaggerServices(context.Services);
+            ConfigureRazorPageOptions();
         }
 
         private void ConfigureBundles()
@@ -107,6 +109,17 @@ namespace EventHub.Web
             Configure<AppUrlOptions>(options =>
             {
                 options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
+            });
+        }
+        
+        private void ConfigureRazorPageOptions()
+        {
+            Configure<RazorPagesOptions>(options =>
+            {
+                options.Conventions.AuthorizePage("/Events/New");
+                options.Conventions.AuthorizePage("/Events/Edit");
+                options.Conventions.AuthorizePage("/Organizations/New");
+                options.Conventions.AuthorizePage("/Organizations/Edit");
             });
         }
 

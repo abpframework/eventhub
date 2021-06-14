@@ -1,11 +1,9 @@
-using System.IO;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Events;
-using EventHub.Web.Pages.Events;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
-using EditPageModel = EventHub.Web.Pages.Events.EditPageModel;
 
 namespace EventHub.Web.Controllers
 {
@@ -19,31 +17,31 @@ namespace EventHub.Web.Controllers
             _eventAppService = eventAppService;
         }
         
-        [Authorize]
-        [HttpPost]
-        [Route("update-timing")]
-        public async Task UpdateEventTiming(EditPageModel.EditEventTimingViewModel input)
+        [HttpGet]
+        [Route("get-list")]
+        public async Task<IActionResult> GetList(EventListFilterDto input)
         {
-            await _eventAppService.UpdateEventTimingAsync(input.Id, new UpdateEventTimingDto { StartTime = input.StartTime, EndTime = input.EndTime });
+            ViewData.Model = (await _eventAppService.GetListAsync(input)).Items.ToList();
+            
+            return new PartialViewResult
+            {
+                ViewName = "~/Pages/Events/Components/EventsArea/_eventListSection.cshtml",
+                ViewData = ViewData
+            };
         }
         
-        [HttpPost]
-        [Authorize]
-        [Route("save-cover-image")]
-        public async Task SaveCoverImage([FromForm] EventCoverImageInput input)
+        [HttpGet]
+        [Route("cover-picture-source/{eventId}")]
+        public async Task<IActionResult> GetArticleCoverImageAsync(Guid eventId)
         {
-            var coverImageContent = new byte[] {};
-            
-            if (input.CoverImageFile.Length > 0)
+            var coverImageContent = await _eventAppService.GetCoverImageAsync(eventId);
+
+            if (coverImageContent == null)
             {
-                using (var memoryStream = new MemoryStream())
-                {
-                    await input.CoverImageFile.CopyToAsync(memoryStream);
-                    coverImageContent = memoryStream.ToArray();
-                }
-                
-                await _eventAppService.SaveCoverImageAsync(input.EventId, coverImageContent);
+                return NotFound();
             }
-        }
+            
+            return File(coverImageContent, "image/jpeg");
+        } 
     }
 }

@@ -20,13 +20,15 @@ namespace EventHub.Events
 
         public string Description { get; private set; }
 
-        public bool IsOnline { get; private set; }
+        public bool IsOnline { get; internal set; }
         
-        public string OnlineLink { get; private set; }
+        public string OnlineLink { get; internal set; }
 
-        public Guid? CountryId { get; private set; }
+        public Guid? CountryId { get; internal set; }
         
-        public string City { get; private set; }
+        public string CountryName { get; internal set; }
+
+        public string City { get; internal set; }
 
         public string Language { get; set; }
 
@@ -75,34 +77,22 @@ namespace EventHub.Events
 
         public Event SetTime(DateTime startTime, DateTime endTime)
         {
+            if (startTime == StartTime && endTime == EndTime)
+            {
+                return this;
+            }
+            
+            if (TimingChangeCount >= EventConsts.MaxTimingChangeCountForUser)
+            {
+                throw new BusinessException(EventHubErrorCodes.CantChangeEventTiming)
+                    .WithData("MaxTimingChangeLimit", EventConsts.MaxTimingChangeCountForUser);
+            }
+            
             AddLocalEvent(new EventTimeChangingEventData(this, StartTime, EndTime));
+
             return SetTimeInternal(startTime, endTime);
         }
 
-        public Event SetLocation(
-            bool isOnline,
-            string onlineLink,
-            Guid? countryId,
-            string city)
-        {
-            IsOnline = isOnline;
-            
-            if (IsOnline)
-            {
-                OnlineLink = onlineLink;
-                CountryId = null;
-                City = null;
-            }
-            else
-            {
-                OnlineLink = null;
-                CountryId = countryId;
-                City = city;
-            }
-
-            return this;
-        }
-        
         private Event SetTimeInternal(DateTime startTime, DateTime endTime)
         {
             if (startTime > endTime)
@@ -112,6 +102,7 @@ namespace EventHub.Events
 
             StartTime = startTime;
             EndTime = endTime;
+            TimingChangeCount++;
             return this;
         }
     }

@@ -18,7 +18,6 @@ namespace EventHub.Web
             CreateMap<EditOrganizationViewModel, UpdateOrganizationDto>();
             CreateMap<EventDetailDto, EditPageModel.EditEventViewModel>();
             CreateMap<EditPageModel.EditEventViewModel, UpdateEventDto>();
-            CreateMap<EventDetailDto, EditPageModel.EditEventTimingViewModel>();
         }
     }
 }

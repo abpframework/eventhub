@@ -1,6 +1,7 @@
 @page "/organization/edit/{name}"
 @inject IHtmlLocalizer<EventHubResource> L
 @using EventHub.Localization
+@using EventHub.Organizations
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @model EventHub.Web.Pages.Organizations.EditPageModel
@@ -9,41 +10,113 @@
     <abp-script src="/Pages/Organizations/Edit.js"/>
 }
 
-<div class="container mb-4">
-    <h1>@L["EditOrganization"]</h1>
+<div class="container pt-4">
+    <div class="row py-4">
+        <div class="col-md-9 mx-auto profile-content">
+            <div class="card">
+                <div class="card-body" style="min-height: 496px">
+                    <h3 class="mb-4">Edit Organization</h3>
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="form">
+                            <div class="row">
+                                <abp-input asp-for="Organization.Id"/>
 
-    <abp-tabs tab-style="Pill">
-        <abp-tab title="@(L["ProfileInfo"].Value)">
-            <abp-dynamic-form abp-model="Organization" submit-button="true" class="mt-3"/>
-        </abp-tab>
-        <abp-tab title="@(L["ProfilePicture"].Value)">
-            <form method="post" id="EditOrganizationProfileForm" enctype="multipart/form-data">
-                <input type="hidden" id="organization-id" value="@Model.Organization.Id"/>
-                <input type="hidden" id="organization-name" value="@Model.Name"/>
-                <abp-row>
-                    <abp-column size="_12" v-align="Center">
-                        <div class="form-group">
-                            <label>@L["ProfilePicture"]</label>
-                            <div class="custom-file">
-                                <input id="organization-profile-picture" type="file" class="custom-file-input form-control" required="required">
-                                <label id="choose-cover-image" class="custom-file-label" for="customFile">@L["ChooseOrganizationProfilePicture"]</label>
-                                <small id="Organization_ProfilePictureInfoText" class="form-text text-muted mt-2">@L["OrganizationProfilePictureInfo"]</small>
+                                <div class="col-md-12">
+                                    <h4 class="mb-4">Profile Image</h4>
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <div class="image-area">
+                                                @if (Model.ProfilePictureContent != null && Model.ProfilePictureContent.Length > 0)
+                                                {
+                                                    <img id="imageResult" src="@($"data:image/png;base64,{Convert.ToBase64String(Model.ProfilePictureContent)}")" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
+                                                }
+                                                else
+                                                {
+                                                    <img id="imageResult" src="#" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
+                                                }
+                                            </div>
+                                        </div>
+                                
+                                        <div class="col-8">
+                                            <div>
+                                                <p class="mb-3">Photo size should be <span class="text-primary">max @(OrganizationConsts.MaxProfilePictureFileSize / (1024 * 1024)) MB.</span></p>
+                                                <input type="file" id="Organization_ProfilePictureFile" asp-for="Organization.ProfilePictureFile" class="form-control border-0" hidden>
+                                                <label id="upload-label" for="Organization_ProfilePictureFile" class="btn btn-primary btn-lg text-white">Upload</label>
+                                                <span asp-validation-for="Organization.ProfilePictureFile" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-label-group">
+                                        <input type="text" id="inputDisplayname" asp-for="Organization.DisplayName" class="form-control" placeholder="Display Name*" required="">
+                                        <label for="inputDisplayname">Display Name*</label>
+                                        <span asp-validation-for="Organization.DisplayName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-label-group">
+                                        <input type="text" id="inputWebsite" class="form-control" asp-for="Organization.Website" placeholder="Website">
+                                        <label for="inputWebsite">Website</label>
+                                        <span asp-validation-for="Organization.Website" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-12">
+                                    <div class="form-label-group">
+                                        <textarea rows="3" type="text" id="inputDescription" asp-for="Organization.Description" class="form-control" placeholder="Description*" required=""></textarea>
+                                        <label for="inputDescription">Description*</label>
+                                        <span asp-validation-for="Organization.Description" class="text-danger"></span>
+                                    </div>
+                                </div>
+                               
+                                <div class="col-md-6">
+                                    <div class="form-label-group">
+                                        <input type="text" id="inputTwitterusername" asp-for="Organization.TwitterUsername" class="form-control" placeholder="Twitter Username">
+                                        <label for="inputTwitterusername">Twitter Username</label>
+                                        <span asp-validation-for="Organization.TwitterUsername" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-label-group">
+                                        <input type="text" id="inputGitHubusername" asp-for="Organization.GitHubUsername" class="form-control" placeholder="GitHub Username">
+                                        <label for="inputGitHubusername">GitHub Username</label>
+                                        <span asp-validation-for="Organization.GitHubUsername" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-label-group">
+                                        <input type="text" id="inputFacebookusername" asp-for="Organization.FacebookUsername" class="form-control" placeholder="Facebook Username">
+                                        <label for="inputFacebookusername">Facebook Username</label>
+                                        <span asp-validation-for="Organization.FacebookUsername" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-label-group">
+                                        <input type="text" id="inputInstagramusername" asp-for="Organization.InstagramUsername" class="form-control" placeholder="Instagram Username">
+                                        <label for="inputInstagramusername">Instagram Username</label>
+                                        <span asp-validation-for="Organization.InstagramUsername" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-label-group">
+                                        <input type="text" id="inputMediumusername" asp-for="Organization.MediumUsername" class="form-control" placeholder="Medium Username">
+                                        <label for="inputMediumusername">Medium Username</label>
+                                        <span asp-validation-for="Organization.MediumUsername" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 text-right">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        @L["Submit"]
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </abp-column>
-                </abp-row>
-                <button id="btnSubmit" type="submit" class="btn btn-primary btn-block">
-                    @L["Submit"]
-                </button>
-            </form>
-        </abp-tab>
-    </abp-tabs>
-    
-    <abp-modal centered="true" scrollable="true" size="Large" id="picturePreviewModal">
-        <abp-modal-header title="@(L["ProfilePicturePreview"].Value)"></abp-modal-header>
-        <abp-modal-body>
-            <img class="img-fluid" id="img-upload" alt=""/>
-        </abp-modal-body>
-        <abp-modal-footer buttons="@(AbpModalButtons.Close)"></abp-modal-footer>
-    </abp-modal>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

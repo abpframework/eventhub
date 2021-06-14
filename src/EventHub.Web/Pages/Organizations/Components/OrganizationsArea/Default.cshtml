@@ -1,0 +1,30 @@
+@model EventHub.Web.Pages.Organizations.Components.OrganizationsArea.OrganizationsAreaViewComponent.ListAreaViewComponentModel
+
+@if (Model.Organizations != null && Model.Organizations.Count > 0)
+{
+    <div id="OrganizationList" class="row" data-hash-code="@Model.GetHashCode()" data-total-count="@Model.TotalCount" data-skip-count="@Model.SkipCount" data-max-result-count="@Model.MaxResultCount">
+        <partial name="~/Pages/Organizations/Components/OrganizationsArea/_organizationListSection.cshtml" model="@Model.Organizations"/>
+    </div>
+
+    @if (Model.IsPagination && Model.TotalCount > Model.MaxResultCount && Model.TotalCount > Model.Organizations.Count)
+    {
+        <div id="load-more-section-@Model.GetHashCode()" class="row">
+            <div class="col text-center">
+                <button
+                    id="LoadMoreButton-@Model.GetHashCode()"
+                    class="btn btn-secondary btn-lg"
+                    data-url="@Url.Action("GetList", "Organization", 
+                                  new {
+                                      registeredUserId = Model.RegisteredUserId,
+                                      maxResultCount = Model.MaxResultCount
+                                  })">
+                    Load More
+                </button>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <p>There is no organization</p>
+}

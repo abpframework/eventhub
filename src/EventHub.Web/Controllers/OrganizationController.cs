@@ -1,8 +1,6 @@
-using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Organizations;
-using EventHub.Web.Pages.Organizations;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 
@@ -18,23 +16,17 @@ namespace EventHub.Web.Controllers
             _organizationAppService = organizationAppService;
         }
         
-        [HttpPost]
-        [Authorize]
-        [Route("save-profile-picture")]
-        public async Task SaveProfilePicture([FromForm] OrganizationProfilePictureInput input)
+        [HttpGet]
+        [Route("get-list")]
+        public async Task<IActionResult> GetList(OrganizationListFilterDto input)
         {
-            var profilePictureContent = new byte[] {};
+            ViewData.Model = (await _organizationAppService.GetListAsync(input)).Items.ToList();
             
-            if (input.ProfilePictureFile.Length > 0)
+            return new PartialViewResult
             {
-                using (var memoryStream = new MemoryStream())
-                {
-                    await input.ProfilePictureFile.CopyToAsync(memoryStream);
-                    profilePictureContent = memoryStream.ToArray();
-                }
-
-                await _organizationAppService.SaveProfilePictureAsync(input.OrganizationId, profilePictureContent);
-            }
+                ViewName = "~/Pages/Organizations/Components/OrganizationsArea/_organizationListSection.cshtml",
+                ViewData = ViewData
+            };
         }
     }
 }

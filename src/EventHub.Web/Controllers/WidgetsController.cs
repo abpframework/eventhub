@@ -19,11 +19,23 @@ namespace EventHub.Web.Controllers
         }
         
         [HttpGet]
-        public IActionResult OrganizationMembersArea(Guid organizationId)
+        public IActionResult OrganizationMembersArea(
+            Guid organizationId,
+            int? skipCount,
+            int maxResultCount,
+            bool isPagination,
+            bool isMoreDetail)
         {
             return ViewComponent(
                 typeof(MembersAreaViewComponent),
-                new {organizationId}
+                new
+                {
+                    organizationId,
+                    skipCount,
+                    maxResultCount,
+                    isPagination,
+                    isMoreDetail
+                }
             );
         }
         

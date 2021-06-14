@@ -6,15 +6,16 @@
 @using Volo.Abp.Localization
 @using Volo.Abp.Ui.Branding
 @using EventHub.Web.Theme.Bundling
+@using EventHub.Web.Theme.Themes.EventHub.Components.Footer
 @using EventHub.Web.Theme.Themes.EventHub.Components.MainNavbar
 @using EventHub.Web.Theme.Themes.EventHub.Components.PageAlerts
+@using EventHub.Web
+@using Microsoft.AspNetCore.Http.Extensions
 @inject IBrandingProvider BrandingProvider
 @inject IPageLayout PageLayout
 @{
     Layout = null;
-    var containerClass = ViewBag.FluidLayout == true ? "container-fluid" : "container"; //TODO: Better and type-safe options
-
-    var pageTitle = ViewBag.Title == null ? BrandingProvider.AppName : ViewBag.Title; //TODO: Discard to get from Title
+    var pageTitle = ViewBag.Title == null ? "EventHub" : ViewBag.Title;
 
     if (PageLayout.Content.Title != null)
     {
@@ -40,8 +41,25 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <title>@pageTitle</title>
+    @* TODO(berkansasmaz): Get SEO content from the marketing team *@
+    <meta name="description" content="@(!string.IsNullOrEmpty(ViewBag.Description) ? ViewBag.Description : "EventHub Description")"/>
+    <meta property="og:title" content="@(!string.IsNullOrWhiteSpace(ViewBag.OgTitle) ? ViewBag.OgTitle : "EventHub Title")"/>
+    <meta property="og:url" content="@Context.Request.GetDisplayUrl()"/>
+    <meta property="og:type" content="@(!string.IsNullOrWhiteSpace(ViewBag.OgType) ? ViewBag.OgType : "website")"/>
+    <meta property="og:description" content="@(!string.IsNullOrWhiteSpace(ViewBag.OgDescription) ? ViewBag.OgDescription : "EventHub Description")"/>
+    <meta property="og:image" content="@(!string.IsNullOrWhiteSpace(ViewBag.OgImage) ? ViewBag.OgImage : EventHubExternalUrls.EhWww + "/assets/slide.jpg")"/>
+    <meta property="twitter:card" content="summary_large_image"/>
+    <meta property="twitter:site" content="@Html.Raw("@openeventhub")"/>
+    <meta property="twitter:title" content="@(!string.IsNullOrWhiteSpace(ViewBag.TwitterTitle) ? ViewBag.TwitterTitle : "EventHub")"/>
+    <meta property="twitter:description" content="@(!string.IsNullOrWhiteSpace(ViewBag.TwitterDescription) ? ViewBag.TwitterDescription : "EventHub Description")"/>
+    <meta property="twitter:image" content="@(!string.IsNullOrWhiteSpace(ViewBag.TwitterImage) ? ViewBag.TwitterImage : EventHubExternalUrls.EhWww + "/assets/slide.jpg")"/>
 
-    <abp-style-bundle name="@EventHubThemeBundles.Styles.Global" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <abp-style src="/libs/owl.carousel/assets/owl.carousel.min.css"></abp-style>
+    <abp-style src="/libs/owl.carousel/assets/owl.theme.default.css"></abp-style>
+
+    <abp-style-bundle name="@EventHubThemeBundles.Styles.Global"/>
 
     @await Component.InvokeAsync(typeof(WidgetStylesViewComponent))
 
@@ -49,32 +67,20 @@
 
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.Last, StandardLayouts.Application)
 </head>
-<body class="abp-application-layout bg-light @rtl">
-    @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.First, StandardLayouts.Application)
-
-    @(await Component.InvokeAsync<MainNavbarViewComponent>())
-
-    <div class="@containerClass">
-        @(await Component.InvokeAsync<PageAlertsViewComponent>())
-        <div id="AbpContentToolbar">
-            <div class="text-right mb-2">
-                @RenderSection("content_toolbar", false)
-            </div>
-        </div>
-        @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.First, StandardLayouts.Application)
-        @RenderBody()
-        @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.Last, StandardLayouts.Application)
-    </div>
-
-    <abp-script-bundle name="@EventHubThemeBundles.Scripts.Global" />
-
-    <script src="~/Abp/ApplicationConfigurationScript"></script>
-    <script src="~/Abp/ServiceProxyScript"></script>
-
-    @await Component.InvokeAsync(typeof(WidgetScriptsViewComponent))
-
-    @await RenderSectionAsync("scripts", false)
-
-    @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.Last, StandardLayouts.Application)
+<body class="abp-application-layout @rtl">
+@await Component.InvokeLayoutHookAsync(LayoutHooks.Body.First, StandardLayouts.Application)
+@(await Component.InvokeAsync<MainNavbarViewComponent>())
+@(await Component.InvokeAsync<PageAlertsViewComponent>())
+@await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.First, StandardLayouts.Application)
+@RenderBody()
+@await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.Last, StandardLayouts.Application)
+@(await Component.InvokeAsync<FooterViewComponent>())
+<abp-script-bundle name="@EventHubThemeBundles.Scripts.Global"/>
+<abp-script src="/libs/owl.carousel/owl.carousel.min.js" />
+<script src="~/Abp/ApplicationConfigurationScript"></script>
+<script src="~/Abp/ServiceProxyScript"></script>
+@await Component.InvokeAsync(typeof(WidgetScriptsViewComponent))
+@await RenderSectionAsync("scripts", false)
+@await Component.InvokeLayoutHookAsync(LayoutHooks.Body.Last, StandardLayouts.Application)
 </body>
 </html>

@@ -1,0 +1,91 @@
+﻿@page "/events"
+@using EventHub.Web.Pages.Events.Components.EventsArea
+@model EventHub.Web.Pages.Events.IndexModel
+
+@section styles {
+    <abp-style-bundle>
+        <abp-style src="/libs/date-range-picker/daterangepicker.css"/>
+    </abp-style-bundle>
+}
+
+@section scripts {
+    <abp-script-bundle>
+        <abp-script src="/libs/date-range-picker/moment.min.js"/>
+        <abp-script src="/libs/date-range-picker/daterangepicker.js"/>
+        <abp-script src="/Pages/Events/Index.js"/>
+    </abp-script-bundle>
+}
+
+<div class="container-fluid p-0">
+    <div class="inner-banner">
+        <div class="container">
+            <div class="row align-items-center" style="min-height: 250px;">
+                <div class="col">
+                    <h1>Events</h1>
+                    <nav aria-label="breadcrumb" class="breadcrumb-container">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="@Url.Page("/Index")">Home</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Events</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row mb-4">
+        <form method="get" id="EventListFilterForm">
+            <div class="col-md-auto">
+                <div class="row filter-select">
+                    <div class="col-4 pr-0">
+                        <select id="LanguageSelect" asp-for="Language" class="form-select" aria-label="en">
+                            <option value="" selected>Language</option>
+                            @foreach (var language in Model.Languages)
+                            {
+                                <option value=@language.TwoLetterISOLanguageName>@language.EnglishName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-4 pr-0">
+                        <div class="form-label-group locationGroup">
+                            <select id="CountrySelect" asp-for="CountryId" class="form-select" aria-label="Turkey">
+                                <option value="" selected>Location</option>
+                                @foreach (var country in Model.Countries)
+                                {
+                                    <option value=@country.Id>@country.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-4 pr-0">
+                        <div class="form-label-group">
+                            <input type="text" id="WhenInput" class="form-control" placeholder="When">
+                            <label for="WhenInput">When</label>
+                            <input type="hidden" asp-for="MinDate" value="">
+                            <input type="hidden" asp-for="MaxDate" value="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="EventsAreaViewComponent" data-widget-filter="#EventListFilterForm">
+        @await Component.InvokeAsync(typeof(EventsAreaViewComponent), new
+        {
+            organizationId = Model.OrganizationId,
+            minDate = Model.MinDate,
+            maxDate = Model.MaxDate,
+            isOnline = Model.IsOnline,
+            language = Model.Language,
+            countryId = Model.CountryId,
+            maxResultCount = 9,
+            skipCount = 0
+        })
+    </div>
+
+</div>

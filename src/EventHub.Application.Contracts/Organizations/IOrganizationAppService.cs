@@ -9,16 +9,14 @@ namespace EventHub.Organizations
     {
         Task CreateAsync(CreateOrganizationDto input);
 
-        Task<PagedResultDto<OrganizationInListDto>> GetListAsync(PagedResultRequestDto input);
+        Task<PagedResultDto<OrganizationInListDto>> GetListAsync(OrganizationListFilterDto input);
 
         Task<OrganizationProfileDto> GetProfileAsync(string name);
 
-        Task<ListResultDto<OrganizationInListDto>> GetMyOrganizationsAsync();
+        Task<ListResultDto<OrganizationInListDto>> GetOrganizationsByUserIdAsync(Guid userId);
 
         Task<bool> IsOrganizationOwnerAsync(Guid organizationId);
 
         Task UpdateAsync(Guid id, UpdateOrganizationDto input);
-
-        Task SaveProfilePictureAsync(Guid id, byte[] bytes);
     }
 }
