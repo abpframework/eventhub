@@ -36,7 +36,7 @@ namespace EventHub.Events
 
         public async Task NotifyAsync(Event @event)
         {
-            if (@event is null)
+            if (@event is null || @event.IsRemindingEmailSent)
             {
                 return;
             }
