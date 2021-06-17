@@ -19,18 +19,17 @@
                     <h3 class="mb-4">Create New Organization</h3>
                     <form method="post" enctype="multipart/form-data">
                         <div class="form">
-                            <div class="row">
-
+                            <div class="row"> 
                                 <div class="col-md-12">
                                     <h4 class="mb-4">Profile Image</h4>
                                     <div class="row">
-                                        <div class="col-4">
+                                        <div class="col-6">
                                             <div class="image-area">
                                                 <img id="imageResult" src="#" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
                                             </div>
                                         </div>
 
-                                        <div class="col-8">
+                                        <div class="col-6">
                                             <div>
                                                 <p class="mb-3">Photo size should be <span class="text-primary">max @(OrganizationConsts.MaxProfilePictureFileSize / (1024 * 1024)) MB.</span></p>
                                                 <input type="file" id="Organization_ProfilePictureFile" asp-for="Organization.ProfilePictureFile" class="form-control border-0" hidden>
@@ -59,8 +58,7 @@
                                 <div class="col-md-12">
                                     <div class="form-label-group">
                                         <textarea rows="3" type="text" id="inputDescription" asp-for="Organization.Description" class="form-control" placeholder="Description*" required=""></textarea>
-                                        <label for="inputDescription">Description*</label>
-                                        <span asp-validation-for="Organization.Description" class="text-danger"></span>
+                                         <span asp-validation-for="Organization.Description" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">

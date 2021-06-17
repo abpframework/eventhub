@@ -287,8 +287,7 @@ p {
 .profile-content .form-control ,
 .profile-content .form-select {
     border: 1px solid rgba(107, 126, 146, 0.20);
-    background-color: white;
-    margin-bottom: 30px;
+    background-color: white; 
     color: #6B7E92;
 }
 
@@ -296,12 +295,14 @@ p {
 .profile-content   label { 
     color: #6B7E92;
 }
+.form-label-group {
+        margin-bottom: 30px;
+    }
 
 
 
 
-
-.form-row>.col, .form-row>[class*=col-] {
+.form-row > .col, .form-row > [class*=col-] {
     padding-right: 10px;
     padding-left: 10px;
 }
@@ -829,4 +830,44 @@ div.checkbox.switcher label, div.radio.switcher label {
     font-size: 10px;
     color: #999cdf; 
 }
+
+
+
+
+.static-page h1 {
+    font-size: 1.75em;
+}
+
+.static-page h2 {
+    font-size: 1.5em;
+}
+
+.static-page h3 {
+    font-size: 1.25em;
+}
+
+.static-page h4 {
+    font-size: 1.05em;
+}
+
+.event .card {
+    max-width: 300px;
+    margin: 0 auto 34px;
+}
+
+.logo {
+    height: 32px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 /*This area was made to be able to navigate between pages. It should be removed from the project*/

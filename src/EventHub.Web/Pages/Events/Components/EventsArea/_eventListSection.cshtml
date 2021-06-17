@@ -9,7 +9,7 @@
         <div class="card">
             @if (eventDto.CoverImageContent is null)
             {
-                <div class="rounded list-span text-center" style="background: @(CoverImageHelper.GetRandomColor(eventDto.Title))">
+                <div class="list-span text-center" style="background: @(CoverImageHelper.GetRandomColor(eventDto.Title))">
                     <span>@CoverImageHelper.GetContentOfImage(eventDto.Title).TruncateWithPostfix(30)</span>
                 </div>
             }
