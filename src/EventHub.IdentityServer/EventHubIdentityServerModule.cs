@@ -9,13 +9,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using EventHub.EntityFrameworkCore;
 using EventHub.Localization;
+using EventHub.Web;
 using EventHub.Web.Theme;
 using EventHub.Web.Theme.Bundling;
+using IdentityServer4.Configuration;
 using StackExchange.Redis;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Auditing;
@@ -75,6 +78,17 @@ namespace EventHub
                 //options.IsEnabledForGetRequests = true;
                 options.ApplicationName = "AuthServer";
             });
+
+            Configure<AppUrlOptions>(options =>
+            {
+                options.Applications["MVC"].RootUrl = EventHubExternalUrls.EhAccount;
+            });
+
+            Configure<IdentityServerOptions>(options =>
+            {
+                options.IssuerUri = EventHubExternalUrls.EhAccount;
+            });
+
 
             if (hostingEnvironment.IsDevelopment())
             {
