@@ -3,11 +3,6 @@
 @using Volo.Abp.Users
 @model IndexModel
 @inject ICurrentUser CurrentUser
-@using Volo.Abp.AspNetCore.Mvc.UI.Theming
-@inject IThemeManager ThemeManager
-@{
-    Layout = ThemeManager.CurrentTheme.GetAccountLayout();
-}
 @if (CurrentUser.IsAuthenticated)
 {
     <div>
