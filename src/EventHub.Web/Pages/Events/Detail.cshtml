@@ -52,15 +52,7 @@
                 <div class="detail-image">
                     @if (Model.Event.CoverImageContent == null)
                     {
-                        <div class="rounded detail-span text-center" style="background: @(CoverImageHelper.GetRandomColor(Model.Event.Title))">
-                            <span>
-                                @CoverImageHelper.GetContentOfImage(Model.Event.Title.TruncateWithPostfix(70))
-                                <br>
-                                @CoverImageHelper.GetContentOfImage(Model.Event.OrganizationDisplayName.TruncateWithPostfix(80))
-                                <br>
-                                @CoverImageHelper.GetContentOfImage(EventDateHelper.GetDateRangeText(Model.Event.StartTime, Model.Event.EndTime))
-                            </span>
-                        </div>
+                        <img src="/assets/eh-event.png" width="588" height="360" alt="@Model.Event.Title">
                     }
                     else
                     {

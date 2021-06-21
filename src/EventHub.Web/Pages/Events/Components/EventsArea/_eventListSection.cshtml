@@ -9,13 +9,11 @@
         <div class="card">
             @if (eventDto.CoverImageContent is null)
             {
-                <div class="list-span text-center" style="background: @(CoverImageHelper.GetRandomColor(eventDto.Title))">
-                    <span>@CoverImageHelper.GetContentOfImage(eventDto.Title).TruncateWithPostfix(30)</span>
-                </div>
+                <img abp-card-image="Top" style="max-height: 310px; min-height: 170px;" src="/assets/eh-event.png" alt="@eventDto.Title"/>
             }
             else
             {
-                <img abp-card-image="Top" style="max-height: 400px; min-height: 160px;" src="@($"data:image/png;base64,{Convert.ToBase64String(eventDto.CoverImageContent)}")" alt="@eventDto.Title"/>
+                <img abp-card-image="Top" style="max-height: 310px; min-height: 170px;" src="@($"data:image/png;base64,{Convert.ToBase64String(eventDto.CoverImageContent)}")" alt="@eventDto.Title"/>
             }
             <div class="card-body">
                 <div class="event-container">

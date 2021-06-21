@@ -121,9 +121,7 @@
                                 <div class="col-md-5">
                                     @if (Model.OnlineEvents[i].CoverImageContent is null)
                                     {
-                                        <div class="rounded carousel-list-span text-center" style="background: @(CoverImageHelper.GetRandomColor(@Model.OnlineEvents[i].Title))">
-                                            <small>@CoverImageHelper.GetContentOfImage(Model.OnlineEvents[i].Title).TruncateWithPostfix(30)</small>
-                                        </div>
+                                        <img src="/assets/eh-event.png" width="187" height="218" class="card-img-left">
                                     }
                                     else
                                     {
@@ -151,9 +149,7 @@
                                      <div class="col-md-5">
                                          @if (Model.OnlineEvents[i + 1].CoverImageContent is null)
                                          {
-                                             <div class="rounded carousel-list-span text-center" style="background: @(CoverImageHelper.GetRandomColor(@Model.OnlineEvents[i + 1].Title))">
-                                                 <small>@CoverImageHelper.GetContentOfImage(Model.OnlineEvents[i + 1].Title).TruncateWithPostfix(30)</small>
-                                             </div>
+                                             <img src="/assets/eh-event.png" width="187" height="218" class="card-img-left">
                                          }
                                          else
                                          {
