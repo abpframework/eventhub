@@ -45,7 +45,7 @@ namespace EventHub.Events
                     {
                         await eventReminderNotifier.NotifyAsync(@event);
                     }
-                    
+
                     @event.IsRemindingEmailSent = true;
                     await eventRepository.UpdateAsync(@event);
                 }
