@@ -81,9 +81,11 @@ namespace EventHub.Events.Registrations
             );
         }
 
-        public async Task<int> GetAttendeeCountAsync(Guid eventId)
+        public async Task<bool> IsPastEventAsync(Guid eventId)
         {
-            return await _eventRegistrationRepository.CountAsync(x => x.EventId == eventId);
+            var @event = await _eventRepository.GetAsync(eventId);
+
+            return _eventRegistrationManager.IsPastEvent(@event);
         }
     }
 }

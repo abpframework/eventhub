@@ -1,8 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Threading.Tasks;
 using EventHub.Organizations;
+using EventHub.Web.Helpers;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 
@@ -11,8 +15,7 @@ namespace EventHub.Web.Pages.Organizations
     [Authorize]
     public class NewPageModel : EventHubPageModel
     {
-        [BindProperty]
-        public CreateOrganizationViewModel Organization { get; set; }
+        [BindProperty] public CreateOrganizationViewModel Organization { get; set; }
 
         private readonly IOrganizationAppService _organizationAppService;
 
@@ -33,6 +36,16 @@ namespace EventHub.Web.Pages.Organizations
                 ValidateModel();
 
                 var input = ObjectMapper.Map<CreateOrganizationViewModel, CreateOrganizationDto>(Organization);
+
+                if (Organization.ProfilePictureFile != null && Organization.ProfilePictureFile.Length > 0)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await Organization.ProfilePictureFile.CopyToAsync(memoryStream);
+                        input.ProfilePictureContent = memoryStream.ToArray();
+                    }
+                }
+
                 await _organizationAppService.CreateAsync(input);
 
                 return RedirectToPage("./Profile", new {name = Organization.Name});
@@ -58,6 +71,30 @@ namespace EventHub.Web.Pages.Organizations
             [StringLength(OrganizationConsts.MaxDescriptionNameLength, MinimumLength = OrganizationConsts.MinDescriptionNameLength)]
             [TextArea]
             public string Description { get; set; }
+
+            [CanBeNull]
+            [DataType(DataType.Upload)]
+            [MaxFileSize(OrganizationConsts.MaxProfilePictureFileSize)]
+            [AllowedExtensions(new string[] {".jpg", ".png", ".jpeg"})]
+            public IFormFile ProfilePictureFile { get; set; }
+
+            [StringLength(OrganizationConsts.MaxWebsiteLength)]
+            public string Website { get; set; }
+
+            [StringLength(OrganizationConsts.MaxTwitterUsernameLength)]
+            public string TwitterUsername { get; set; }
+
+            [StringLength(OrganizationConsts.MaxGitHubUsernameLength)]
+            public string GitHubUsername { get; set; }
+
+            [StringLength(OrganizationConsts.MaxFacebookUsernameLength)]
+            public string FacebookUsername { get; set; }
+
+            [StringLength(OrganizationConsts.MaxInstagramUsernameLength)]
+            public string InstagramUsername { get; set; }
+
+            [StringLength(OrganizationConsts.MaxMediumUsernameLength)]
+            public string MediumUsername { get; set; }
         }
     }
 }

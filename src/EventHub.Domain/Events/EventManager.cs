@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using EventHub.Countries;
 using EventHub.Events.Registrations;
 using EventHub.Organizations;
 using Volo.Abp;
@@ -13,13 +14,16 @@ namespace EventHub.Events
     {
         private readonly EventUrlCodeGenerator _eventUrlCodeGenerator;
         private readonly IRepository<EventRegistration, Guid> _eventRegistrationRepository;
+        private readonly IRepository<Country, Guid> _countriesRepository;
 
         public EventManager(
             EventUrlCodeGenerator eventUrlCodeGenerator, 
-            IRepository<EventRegistration, Guid> eventRegistrationRepository)
+            IRepository<EventRegistration, Guid> eventRegistrationRepository, 
+            IRepository<Country, Guid> countriesRepository)
         {
             _eventUrlCodeGenerator = eventUrlCodeGenerator;
             _eventRegistrationRepository = eventRegistrationRepository;
+            _countriesRepository = countriesRepository;
         }
 
         public async Task<Event> CreateAsync(
@@ -54,6 +58,34 @@ namespace EventHub.Events
             }
 
             @event.Capacity = capacity;
+        }
+        
+        public async Task SetLocationAsync(
+            Event @event,
+            bool isOnline,
+            string onlineLink,
+            Guid? countryId,
+            string city)
+        {
+            @event.IsOnline = isOnline;
+            
+            if (@event.IsOnline)
+            {
+                @event.OnlineLink = onlineLink;
+                @event.CountryId = null;
+                @event.CountryName = null;
+                @event.City = null;
+            }
+            else
+            {
+                Check.NotNull(countryId, nameof(countryId));
+                Check.NotNull(city, nameof(city));
+
+                @event.OnlineLink = null;
+                @event.CountryId = countryId;
+                @event.CountryName = (await _countriesRepository.GetAsync(@event.CountryId!.Value)).Name;
+                @event.City = city;
+            }
         }
     }
 }

@@ -15,13 +15,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NUglify.Helpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
+using Volo.Abp.Users;
 
 namespace EventHub.Web.Pages.Events
 {
     public class NewPageModel : EventHubPageModel
     {
-        [BindProperty]
-        public NewEventViewModel Event { get; set; }
+        [BindProperty] public NewEventViewModel Event { get; set; }
 
         public List<SelectListItem> Organizations { get; private set; }
         public List<SelectListItem> Countries { get; private set; }
@@ -51,47 +51,6 @@ namespace EventHub.Web.Pages.Events
             FillLanguages();
         }
 
-        private async Task FillOrganizationsAsync()
-        {
-            var result = await _organizationAppService.GetMyOrganizationsAsync();
-            Organizations = result.Items.Select(
-                organization => new SelectListItem
-                {
-                    Value = organization.Id.ToString(),
-                    Text = organization.DisplayName
-                }
-            ).ToList();
-        }
-        
-        private async Task FillCountriesAsync()
-        {
-            var result = await _eventAppService.GetCountriesLookupAsync();
-           
-            Countries = result.Select(
-                country => new SelectListItem
-                {
-                    Value = country.Id.ToString(),
-                    Text = country.Name
-                }
-            ).ToList();
-        }
-
-        private void FillLanguages()
-        {
-            var result = CultureInfo.GetCultures(CultureTypes.NeutralCultures)
-                .DistinctBy(x => x.EnglishName)
-                .OrderBy(x => x.EnglishName)
-                .ToList();
-            result.Remove(result.Single(x => x.TwoLetterISOLanguageName == "iv")); // Invariant Language
-
-            Languages = result.Select(
-                cultureInfo => new SelectListItem
-                {
-                    Value = cultureInfo.TwoLetterISOLanguageName,
-                    Text = cultureInfo.EnglishName
-                }
-            ).ToList();
-        }
         public async Task<IActionResult> OnPostAsync()
         {
             try
@@ -123,6 +82,48 @@ namespace EventHub.Web.Pages.Events
             }
         }
 
+        private async Task FillOrganizationsAsync()
+        {
+            var result = await _organizationAppService.GetOrganizationsByUserIdAsync(CurrentUser.GetId());
+            Organizations = result.Items.Select(
+                organization => new SelectListItem
+                {
+                    Value = organization.Id.ToString(),
+                    Text = organization.DisplayName
+                }
+            ).ToList();
+        }
+
+        private async Task FillCountriesAsync()
+        {
+            var result = await _eventAppService.GetCountriesLookupAsync();
+
+            Countries = result.Select(
+                country => new SelectListItem
+                {
+                    Value = country.Id.ToString(),
+                    Text = country.Name
+                }
+            ).ToList();
+        }
+
+        private void FillLanguages()
+        {
+            var result = CultureInfo.GetCultures(CultureTypes.NeutralCultures)
+                .DistinctBy(x => x.EnglishName)
+                .OrderBy(x => x.EnglishName)
+                .ToList();
+            result.Remove(result.Single(x => x.TwoLetterISOLanguageName == "iv")); // Invariant Language
+
+            Languages = result.Select(
+                cultureInfo => new SelectListItem
+                {
+                    Value = cultureInfo.TwoLetterISOLanguageName,
+                    Text = cultureInfo.EnglishName
+                }
+            ).ToList();
+        }
+
         public class NewEventViewModel
         {
             [SelectItems(nameof(Organizations))]
@@ -134,43 +135,44 @@ namespace EventHub.Web.Pages.Events
             public string Title { get; set; }
 
             [Required]
-            public DateTime StartTime { get; set; }
+            [DataType(DataType.DateTime)]
+            public DateTime StartTime { get; set; } = DateTime.Now;
 
             [Required]
-            public DateTime EndTime { get; set; }
+            [DataType(DataType.DateTime)]
+            public DateTime EndTime { get; set; } = DateTime.Now;
 
             [Required]
             [StringLength(EventConsts.MaxDescriptionLength, MinimumLength = EventConsts.MinDescriptionLength)]
             [TextArea]
             public string Description { get; set; }
-            
+
             [CanBeNull]
             [Display(Name = "Cover Image")]
             [DataType(DataType.Upload)]
-            [MaxFileSize(EventConsts.MaxCoverImageFileSize)] 
-            [AllowedExtensions(new string[] { ".jpg", ".png", ".jpeg" })]
+            [MaxFileSize(EventConsts.MaxCoverImageFileSize)]
+            [AllowedExtensions(new string[] {".jpg", ".png", ".jpeg"})]
             public IFormFile CoverImageFile { get; set; }
 
-            public bool IsOnline { get; set; }
-            
+            [Required] public bool? IsOnline { get; set; }
+
             [CanBeNull]
             [StringLength(EventConsts.MaxOnlineLinkLength, MinimumLength = EventConsts.MinOnlineLinkLength)]
             public string OnlineLink { get; set; }
-            
+
             [SelectItems(nameof(Countries))]
             [DisplayName("Country")]
             public Guid? CountryId { get; set; }
 
-            [SelectItems(nameof(Languages))]
-            [DisplayName("Language")]
-            public string Language { get; set; }
-        
             [CanBeNull]
             [StringLength(EventConsts.MaxCityLength, MinimumLength = EventConsts.MinCityLength)]
             public string City { get; set; }
 
-            [Range(1, int.MaxValue)]
-            public int? Capacity { get; set; }
+            [SelectItems(nameof(Languages))]
+            [DisplayName("Language")]
+            public string Language { get; set; }
+
+            [Range(1, int.MaxValue)] public int? Capacity { get; set; }
         }
     }
 }

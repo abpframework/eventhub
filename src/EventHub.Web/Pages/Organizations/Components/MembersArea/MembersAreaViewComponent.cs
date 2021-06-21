@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using EventHub.Organizations.Memberships;
 using Microsoft.AspNetCore.Mvc;
@@ -24,9 +23,19 @@ namespace EventHub.Web.Pages.Organizations.Components.MembersArea
             _organizationMembershipAppService = organizationMembershipAppService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(Guid organizationId)
+        public async Task<IViewComponentResult> InvokeAsync(
+            Guid organizationId,
+            int? skipCount,
+            int maxResultCount = 26,
+            bool isPagination = true,
+            bool isMoreDetail = false)
         {
-            var result = await _organizationMembershipAppService.GetMembersAsync(organizationId);
+            var result = await _organizationMembershipAppService.GetMembersAsync(new OrganizationMemberListFilterDto
+            {
+                OrganizationId = organizationId,
+                SkipCount = skipCount.GetValueOrDefault(),
+                MaxResultCount = maxResultCount
+            });
 
             return View(
                "~/Pages/Organizations/Components/MembersArea/Default.cshtml",
@@ -34,7 +43,11 @@ namespace EventHub.Web.Pages.Organizations.Components.MembersArea
                 {
                     OrganizationId = organizationId,
                     Members = result.Items,
-                    TotalCount = result.TotalCount
+                    TotalCount = result.TotalCount,
+                    SkipCount = skipCount.GetValueOrDefault(),
+                    MaxResultCount = maxResultCount,
+                    IsPagination = isPagination,
+                    IsMoreDetail = isMoreDetail
                 }
             );
         }
@@ -46,28 +59,14 @@ namespace EventHub.Web.Pages.Organizations.Components.MembersArea
             public long TotalCount { get; set; }
 
             public Guid OrganizationId { get; set; }
+            
+            public int SkipCount { get; set; }
+            
+            public int MaxResultCount { get; set; }
 
-            public string GetMemberName(OrganizationMemberDto member)
-            {
-                var nameBuilder = new StringBuilder();
-
-                if (!member.Name.IsNullOrEmpty())
-                {
-                    nameBuilder.Append(member.Name);
-                }
-
-                if (!member.Surname.IsNullOrEmpty())
-                {
-                    nameBuilder.Append(member.Surname);
-                }
-
-                if (nameBuilder.Length == 0)
-                {
-                    nameBuilder.Append(member.UserName);
-                }
-
-                return nameBuilder.ToString();
-            }
+            public bool IsPagination { get; set; }
+            
+            public bool IsMoreDetail { get; set; }
         }
     }
 }

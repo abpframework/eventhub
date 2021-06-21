@@ -1,49 +1,210 @@
 ﻿@page
 @model EventHub.Web.Pages.IndexModel
+@using System.Globalization
 @using Microsoft.AspNetCore.Mvc.Localization
 @using EventHub.Localization
-@using EventHub.Web.Pages.Events
+@using EventHub.Web
+@using EventHub.Web.Helpers
+@using EventHub.Web.Pages.Events.Components.EventsArea
+@using Volo.Abp.Timing
+@using Volo.Abp.Users
+@inject ICurrentUser CurrentUser
+@inject IClock Clock
 @inject IHtmlLocalizer<EventHubResource> L
 
 @section styles {
     <abp-style-bundle>
         <abp-style src="/Pages/Index.css"/>
+        <abp-style src="/libs/date-range-picker/daterangepicker.css"/>
     </abp-style-bundle>
 }
 
 @section scripts {
     <abp-script-bundle>
+        <abp-script src="/libs/date-range-picker/moment.min.js"/>
+        <abp-script src="/libs/date-range-picker/daterangepicker.js"/>
         <abp-script src="/Pages/Index.js"/>
     </abp-script-bundle>
 }
 
-<h2>Upcoming Events</h2>
 
-<abp-row>
-    @foreach (var eventItem in Model.Events)
+<div class="container-fluid p-0">
+    <div class="main-slider">
+        <div class="owl-carousel owl-theme">
+            <div class="item">
+                <div class="slider-container d-flex align-items-center text-center text-light" style="background-image: url('/assets/slide.jpg')">
+                    <div class="mx-auto">
+                        <h1>Let's Share Together</h1>
+                        <p>Try something new, or do more of what you love.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="slider-container d-flex align-items-center text-center text-light" style="background-image: url('/assets/slide.jpg')">
+                    <div class="mx-auto">
+                        <h1>Let's Share Together</h1>
+                        <p class="lead">Try something new, or do more of what you love.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="search-event container">
+    <div class="card bg-primary mb-0">
+        <div class="card-body">
+            <div class="form-row search-form">
+                <div class="col-md mb-3 mb-md-0">
+                    <select id="LanguageSelect" class="form-select" aria-label="en">
+                        <option value="" selected>Language</option>
+                        @foreach (var language in Model.Languages)
+                        {
+                            <option value=@language.TwoLetterISOLanguageName>@language.EnglishName</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md mb-3 mb-md-0">
+                    <div class="form-label-group locationGroup">
+                        <select id="CountrySelect" class="form-select" aria-label="Turkey">
+                            <option value="" selected>Location</option>
+                            @foreach (var country in Model.Countries)
+                            {
+                                <option value=@country.Id>@country.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md mb-3 mb-md-0">
+                    <div class="form-label-group">
+                        <input type="text" id="inputWhen" class="form-control" placeholder="When" required>
+                        <label for="inputWhen">When</label>
+                    </div>
+                </div>
+                <div class="col-md-auto">
+                    <button id="SearchButton" class="btn btn-primary btn-lg btn-block ">
+                        <img src="/assets/search.svg">
+                        Search
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md">
+            <h2>Upcoming Events</h2>
+        </div>
+    </div>
+
+    @await Component.InvokeAsync(typeof(EventsAreaViewComponent), new 
     {
-        <abp-column size-lg="_4" size-md="_6">
-            <abp-card class="mb-3">
-                @if (eventItem.CoverImageContent is null)
+        minDate = Clock.Now, 
+        maxResultCount = 15
+    })
+</div>
+
+
+<div class="container-fluid bg-white my-5 py-5">
+    <div class="container py-3">
+        <div class="card-slider">
+
+            <h2 class="mb-4">Online Events</h2>
+            <div class="owl-carousel owl-theme">
+                @for (var i = 0; i < Model.OnlineEvents.Count; i+=2)
                 {
-                    <img abp-card-image="Top" src="https://picsum.photos/seed/@eventItem.Id.ToString()/400/160?blur=8" alt="@eventItem.Title"/>
+                    <div class="item">
+                        <div class="card mb-3">
+                            <div class="row no-gutters">
+                                <div class="col-md-5">
+                                    @if (Model.OnlineEvents[i].CoverImageContent is null)
+                                    {
+                                        <div class="rounded carousel-list-span text-center" style="background: @(CoverImageHelper.GetRandomColor(@Model.OnlineEvents[i].Title))">
+                                            <small>@CoverImageHelper.GetContentOfImage(Model.OnlineEvents[i].Title).TruncateWithPostfix(30)</small>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <img class="card-img-left" src="@($"data:image/png;base64,{Convert.ToBase64String(Model.OnlineEvents[i].CoverImageContent)}")" alt="@Model.OnlineEvents[i].Title"/>
+                                    }
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="card-body">
+                                        <div class="event-container online-event">
+                                            <div class="event-info">
+                                                <h5>@Model.OnlineEvents[i].Title</h5>
+                                                <small>@Model.OnlineEvents[i].StartTime.ToString("MMMM dd, yyyy dddd") | @Model.OnlineEvents[i].StartTime.ToString("hh tt", CultureInfo.InvariantCulture) - @Model.OnlineEvents[i].EndTime.ToString("hh tt", CultureInfo.InvariantCulture) | Online</small>
+                                                <p>@Model.OnlineEvents[i].Description</p>
+                                            </div>
+                                            <a href="@Url.Page("/Events/Detail", new {url = @Model.OnlineEvents[i].Url})" class="btn btn-link p-0">Learn More <img src="/assets/more-btn.svg"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                         @if (i + 1 <= Model.OnlineEvents.Count - 1)
+                         {
+                             <div class="card mb-3">
+                                 <div class="row no-gutters">
+                                     <div class="col-md-5">
+                                         @if (Model.OnlineEvents[i + 1].CoverImageContent is null)
+                                         {
+                                             <div class="rounded carousel-list-span text-center" style="background: @(CoverImageHelper.GetRandomColor(@Model.OnlineEvents[i + 1].Title))">
+                                                 <small>@CoverImageHelper.GetContentOfImage(Model.OnlineEvents[i + 1].Title).TruncateWithPostfix(30)</small>
+                                             </div>
+                                         }
+                                         else
+                                         {
+                                             <img class="card-img-left" src="@($"data:image/png;base64,{Convert.ToBase64String(Model.OnlineEvents[i + 1].CoverImageContent)}")" alt="@Model.OnlineEvents[i + 1].Title"/>
+                                         }
+                                     </div>
+                                     <div class="col-md-7">
+                                         <div class="card-body">
+                                             <div class="event-container online-event">
+                                                 <div class="event-info">
+                                                     <h5>@Model.OnlineEvents[i + 1].Title</h5>
+                                                     <small>@Model.OnlineEvents[i + 1].StartTime.ToString("MMMM dd, yyyy dddd") | @Model.OnlineEvents[i + 1].StartTime.ToString("hh tt", CultureInfo.InvariantCulture) - @Model.OnlineEvents[i + 1].EndTime.ToString("hh tt", CultureInfo.InvariantCulture) | Online</small>
+                                                     <p>@Model.OnlineEvents[i + 1].Description</p>
+                                                 </div>
+                                                 <a href="@Url.Page("/Events/Detail", new {url = @Model.OnlineEvents[i + 1].Url})" class="btn btn-link p-0">Learn More <img src="/assets/more-btn.svg"></a>
+                                             </div>
+                                         </div>
+                                     </div>
+
+                                 </div>
+                             </div>
+                         }
+                    </div>
                 }
-                else
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container text-center py-1">
+    <h1 class="my-5 pb-5">How EventHub Works?</h1>
+    <div class="row my-4">
+        <div class="col-md-5 ml-auto">
+            <div class="px-5">
+                <h3>Explore groups</h3>
+                <p class="lead">
+                    List who is organizing local events
+                    with one click.
+                </p>
+                @if (!CurrentUser.IsAuthenticated)
                 {
-                    <img abp-card-image="Top" style="max-height: 400px; min-height: 160px;" src="@($"data:image/png;base64,{Convert.ToBase64String(eventItem.CoverImageContent)}")" alt="@eventItem.Title"/>
+                    <a href="@EventHubExternalUrls.EhAccount/Account/Register?returnUrl=@EventHubExternalUrls.EhWww" class="btn btn-link btn-lg">Join EventHub</a>
                 }
-                <abp-card-body>
-                    <abp-card-title>@eventItem.Title</abp-card-title>
-                    <abp-card-subtitle>
-                        @EventDateHelper.GetDateRangeText(eventItem.StartTime, eventItem.EndTime) <br/>
-                        <span class="text-muted">@L["OrganizedBy"]</span> <a href="@Url.Page("/Organizations/Profile", new {name = eventItem.OrganizationName})">@eventItem.OrganizationDisplayName</a>
-                    </abp-card-subtitle>
-                    <abp-card-text class="mt-2">
-                        @eventItem.Description.TruncateWithPostfix(100)
-                    </abp-card-text>
-                    <a abp-button="Primary" href="@Url.Page("/Events/Detail", new { url = eventItem.Url })"> @L["SeeEvent"]</a>
-                </abp-card-body>
-            </abp-card>
-        </abp-column>
-    }
-</abp-row>
+            </div>
+        </div>
+        <div class="col-md-5 mr-auto border-left">
+            <div class="px-5">
+                <h3>Start an Event</h3>
+                <p class="lead">Create your own Eventhub group and benefit from a community of millions.</p>
+                <a href="@Url.Page("/Events/New")" class="btn btn-link btn-lg">Start</a>
+            </div>
+        </div>
+    </div>
+</div>

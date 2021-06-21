@@ -162,6 +162,7 @@ namespace EventHub.DbMigrator.Data
                 DateTime.Now.AddDays(-1),
                 "Modern application design has changed quite a bit in recent years. \"Mobile-first\" and \"cloud-ready\" are the types of applications you are expected to develop. Also, to keep pace with these demands, Microsoft has revamped their complete web stack with ASP.NET Core to meet these architectural demands."
             );
+            await _eventManager.SetLocationAsync(pastEvent1, true, "https://www.youtube.com/" ,null, null);
             await _eventRepository.InsertAsync(pastEvent1);
 
             var pastEvent2 = await _eventManager.CreateAsync(organizationDotnetWorld,
@@ -169,6 +170,7 @@ namespace EventHub.DbMigrator.Data
                 DateTime.Now.AddDays(-20),
                 DateTime.Now.AddDays(-2),
                 "gRPC is a high-performance, cross-platform framework for building distributed systems and APIs. It’s an ideal choice for communication between microservices, internal network applications, or mobile devices and services.");
+            await _eventManager.SetLocationAsync(pastEvent2, true, "https://www.youtube.com/" ,null, null);
             await _eventRepository.InsertAsync(pastEvent2);
 
             var pastEvent3 = await _eventManager.CreateAsync(organizationDotnetWorld,
@@ -176,6 +178,7 @@ namespace EventHub.DbMigrator.Data
                 DateTime.Now.AddDays(-30),
                 DateTime.Now.AddDays(-7),
                 "The explosive growth of web frameworks and the demands of users have changed the approach to building enterprise applications. Many challenges exist and just getting started can be a daunting prospect. Let's change that now.");
+            await _eventManager.SetLocationAsync(pastEvent3, true, "https://www.youtube.com/" ,null, null);
             await _eventRepository.InsertAsync(pastEvent3);
 
             var pastEvent4 = await _eventManager.CreateAsync(organizationDeveloperDays,
@@ -183,6 +186,7 @@ namespace EventHub.DbMigrator.Data
                 DateTime.Now.AddDays(-30),
                 DateTime.Now.AddDays(-7),
                 "Functional programming and domain-driven design might not seem to be a good match, but in fact functional programming can be an excellent approach to designing decoupled, reusable systems with a rich domain model. ");
+            await _eventManager.SetLocationAsync(pastEvent4, true, "https://www.youtube.com/" ,null, null);
             await _eventRepository.InsertAsync(pastEvent4);
 
             var pastEvent5 = await _eventManager.CreateAsync(organizationCSharpLovers,
@@ -190,6 +194,7 @@ namespace EventHub.DbMigrator.Data
                 DateTime.Now.AddDays(-32),
                 DateTime.Now.AddDays(-10),
                 "GraphQL is a query language for APIs and a runtime for fulfilling those queries with your existing data. That sounds nice, but what is GraphQL and how can we use it in .NET?");
+            await _eventManager.SetLocationAsync(pastEvent5, true, "https://www.youtube.com/" ,null, null);
             await _eventRepository.InsertAsync(pastEvent5);
 
             var pastEvent6 = await _eventManager.CreateAsync(organizationDotnetWorld,
@@ -197,6 +202,7 @@ namespace EventHub.DbMigrator.Data
                 DateTime.Now.AddDays(-35),
                 DateTime.Now.AddDays(-15),
                 "In this session we will walk through a real world example of a year-long modernization journey. We will take a closer look at how you can get started, what obstacles you may face and how to overcome them.");
+            await _eventManager.SetLocationAsync(pastEvent6, true, "https://www.youtube.com/" ,null, null);
             await _eventRepository.InsertAsync(pastEvent6);
 
             var pastEvent7 = await _eventManager.CreateAsync(organizationDeveloperDays,
@@ -204,6 +210,7 @@ namespace EventHub.DbMigrator.Data
                 DateTime.Now.AddDays(-25),
                 DateTime.Now.AddDays(-14),
                 "GraphQL is making a huge splash in modern serverless applications. GraphQL allows you to present custom apis that allow the consumer of the API to decide what information they want and how it should be shaped. It also allows for real time pushes of data using web sockets and subscriptions. In this talk, you will learn how to implement this powerful API in the cloud using serverless functions in Azure.");
+            await _eventManager.SetLocationAsync(pastEvent7, true, "https://www.youtube.com/" ,null, null);
             await _eventRepository.InsertAsync(pastEvent7);
 
             var pastEvent8 = await _eventManager.CreateAsync(organizationDotnetWorld,
@@ -211,6 +218,7 @@ namespace EventHub.DbMigrator.Data
                 DateTime.Now.AddDays(-25),
                 DateTime.Now.AddDays(-10),
                 "With the releases of .NET Core 2.x, 3.x and now .NET 5, more developers have now got to grips with the basics of using the default Microsoft Dependency Injection container that comes with .NET Core. However, the story does not end there...");
+            await _eventManager.SetLocationAsync(pastEvent8, true, "https://www.youtube.com/" ,null, null);
             await _eventRepository.InsertAsync(pastEvent8);
 
             var pastEvent9 = await _eventManager.CreateAsync(organizationAngularCoders,
@@ -218,6 +226,7 @@ namespace EventHub.DbMigrator.Data
                 DateTime.Now.AddDays(-15),
                 DateTime.Now.AddDays(-2),
                 "How many times have you tried to start writing unit tests and didn’t know where to start? Or the tutorials weren’t clear enough? In our webinar we’ll start with just a bit of theory and then we’ll move on to examples. We’ll show you how to test basic (and a bit more complex) components, services, how to deal with dependencies, asynchronous code, forms, child components etc");
+            await _eventManager.SetLocationAsync(pastEvent9, true, "https://www.youtube.com/" ,null, null);
             await _eventRepository.InsertAsync(pastEvent9);
 
             var pastEvent10 = await _eventManager.CreateAsync(organizationAngularCoders,
@@ -225,6 +234,7 @@ namespace EventHub.DbMigrator.Data
                 DateTime.Now.AddDays(-45),
                 DateTime.Now.AddDays(-43),
                 "Introduction to Angular unit tests includes introduction to Jasmin and Angular testing module. You will learn to create unit tests for your Angular project by understanding Jasmin and Angular testing module which provides infrastructure for testing Angular core functionality.");
+            await _eventManager.SetLocationAsync(pastEvent10, true, "https://www.youtube.com/" ,null, null);
             await _eventRepository.InsertAsync(pastEvent10);
 
             //15 upcoming events
@@ -233,6 +243,7 @@ namespace EventHub.DbMigrator.Data
                 DateTime.Now,
                 DateTime.Now.AddDays(7),
                 "In the microservice environment, it is important to know the health state of the different services and handle bad states. This is why Microsoft created the ASP.NET Core Health Checks.");
+            await _eventManager.SetLocationAsync(upcomingEvent1, true, "https://www.youtube.com/" ,null, null);
             await _eventRepository.InsertAsync(upcomingEvent1);
             await _eventRegistrationManager.RegisterAsync(upcomingEvent1, userSandra);
             await _eventRegistrationManager.RegisterAsync(upcomingEvent1, userAlessandro);
@@ -242,6 +253,7 @@ namespace EventHub.DbMigrator.Data
                 DateTime.Now,
                 DateTime.Now.AddDays(7),
                 "Grab some snacks and a drink, and tech along to our online GraphQL meetup! GraphQL is all the rage nowadays, especially in the frontend community. Although Microsoft has been silent about GraphQL, the open-source community is slowly picking up the task of integrating GraphQL tech in .NET Core. This presentation will be an introduction to GraphQL for anyone who has never tried it.");
+            await _eventManager.SetLocationAsync(upcomingEvent2, true, "https://www.youtube.com/" ,null, null);
             await _eventRepository.InsertAsync(upcomingEvent2);
             await _eventRegistrationManager.RegisterAsync(upcomingEvent2, userTony);
 
@@ -250,6 +262,7 @@ namespace EventHub.DbMigrator.Data
                 DateTime.Now,
                 DateTime.Now.AddDays(15),
                 "First, we will present .NET 5, it's importance in the .NET evolution, and the reasons to switch your new development to .NET 5. We will pay close attention to the challenging topic of migration to .NET 5 and provide a few guidelines. Afterward, we will dig into C# 9.0 and see how it makes us more productive and enables us to write more expressive code.");
+            await _eventManager.SetLocationAsync(upcomingEvent3, true, "https://www.youtube.com/" ,null, null);
             await _eventRepository.InsertAsync(upcomingEvent3);
             await _eventRegistrationManager.RegisterAsync(upcomingEvent3, userTony);
             await _eventRegistrationManager.RegisterAsync(upcomingEvent3, userAlessandro);
@@ -260,6 +273,7 @@ namespace EventHub.DbMigrator.Data
                 DateTime.Now,
                 DateTime.Now.AddDays(10),
                 "Join us for a discussion and live coding session where Jeff Fritz will take us on a tour of a more complex Blazor Static Web App. We'll learn how to take advantage of other Azure Services without breaking the bank while delivering cool features like search, caching, and using event-driven architecture.");
+            await _eventManager.SetLocationAsync(upcomingEvent4, true, "https://www.youtube.com/" ,null, null);
             await _eventRepository.InsertAsync(upcomingEvent4);
             await _eventRegistrationManager.RegisterAsync(upcomingEvent4, userMark);
 
@@ -268,6 +282,7 @@ namespace EventHub.DbMigrator.Data
                 DateTime.Now,
                 DateTime.Now.AddDays(30),
                 "This talk starts by introducing the DDD and providing a layering model based on the DDD and the Clean Architecture. It then introduces the core building of an application built on the DDD principles. In the second part of the talk, it shows some strict coding rules for the core building blocks with real code examples and suggestions. These rules are essential to build a large scale application implements DDD patterns & practices.");
+            await _eventManager.SetLocationAsync(upcomingEvent5, true, "https://www.youtube.com/" ,null, null);
             await _eventRepository.InsertAsync(upcomingEvent5);
             await _eventRegistrationManager.RegisterAsync(upcomingEvent5, userMark);
             await _eventRegistrationManager.RegisterAsync(upcomingEvent5, userAlessandro);
@@ -277,6 +292,7 @@ namespace EventHub.DbMigrator.Data
                 DateTime.Now,
                 DateTime.Now.AddDays(30),
                 "ABP Framework is a complete infrastructure to create modern web applications by following the software development best practices and conventions. In this talk we'll examine ABP Framework top to down.");
+            await _eventManager.SetLocationAsync(upcomingEvent6, true, "https://www.youtube.com/" ,null, null);
             await _eventRepository.InsertAsync(upcomingEvent6);
             await _eventRegistrationManager.RegisterAsync(upcomingEvent6, userAlessandro);
 
@@ -285,6 +301,7 @@ namespace EventHub.DbMigrator.Data
                 DateTime.Now,
                 DateTime.Now.AddDays(30),
                 "This is a Zoom Meeting and the link will be provided the day of the event via email and 1 hour before the meeting start. We'll start with quick intro and then we'll deep dive into .NET dependency injection system.");
+            await _eventManager.SetLocationAsync(upcomingEvent7, true, "https://www.youtube.com/" ,null, null);
             await _eventRepository.InsertAsync(upcomingEvent7);
             await _eventRegistrationManager.RegisterAsync(upcomingEvent7, userSandra);
 
@@ -293,6 +310,7 @@ namespace EventHub.DbMigrator.Data
                 DateTime.Now.AddDays(5),
                 DateTime.Now.AddDays(15),
                 "Recently Bob Martin has categorized a set of architectures, including hexagonal architecture, onion architecture and screaming architecture as 'the clean architecture' - a layered architecture of concentric circles with a strong emphasis on separation of concerns. This architecture has become popular because of its amenability to modification as an evolutionary architecture and its support for practices such as TDD.In this presentation we will discuss the clean architecture and its benefits");
+            await _eventManager.SetLocationAsync(upcomingEvent8, true, "https://www.youtube.com/" ,null, null);
             await _eventRepository.InsertAsync(upcomingEvent8);
             await _eventRegistrationManager.RegisterAsync(upcomingEvent8, userSandra);
             await _eventRegistrationManager.RegisterAsync(upcomingEvent8, userAlessandro);
@@ -302,6 +320,7 @@ namespace EventHub.DbMigrator.Data
                 DateTime.Now.AddDays(5),
                 DateTime.Now.AddDays(10),
                 "There are no bad practices. Just trade-offs.Let's dive into the real world! because sometimes, a 'Bad practice' is not optional...The trick is to learn and make sure you understand what's going -on, and how to it right!We will use jQuery in Angular, work with promises instead of RxJS, Pass callbacks as Inputs - and much more!");
+            await _eventManager.SetLocationAsync(upcomingEvent9, true, "https://www.youtube.com/" ,null, null);
             await _eventRepository.InsertAsync(upcomingEvent9);
             await _eventRegistrationManager.RegisterAsync(upcomingEvent9, userAlessandro);
             await _eventRegistrationManager.RegisterAsync(upcomingEvent9, userMark);
@@ -311,6 +330,7 @@ namespace EventHub.DbMigrator.Data
                 DateTime.Now.AddDays(4),
                 DateTime.Now.AddDays(5),
                 "This meetup will explore an approach to iteratively and rigorously testing mainframe migrations to cloud, all while building “living documentation” of the old and new systems. It will discuss how visual data flows build accurate logical pictures of legacy systems, while one flow can generate automated tests for both legacy and new components. ");
+            await _eventManager.SetLocationAsync(upcomingEvent10, true, "https://www.youtube.com/" ,null, null);
             await _eventRepository.InsertAsync(upcomingEvent10);
             await _eventRegistrationManager.RegisterAsync(upcomingEvent10, userAlessandro);
 
@@ -319,6 +339,7 @@ namespace EventHub.DbMigrator.Data
                 DateTime.Now.AddDays(7),
                 DateTime.Now.AddDays(14),
                 "In this talk, we'll go through Typescript top to down and understand what it solved for software applications");
+            await _eventManager.SetLocationAsync(upcomingEvent11, true, "https://www.youtube.com/" ,null, null);
             await _eventRepository.InsertAsync(upcomingEvent11);
             await _eventRegistrationManager.RegisterAsync(upcomingEvent11, userMark);
 
@@ -327,6 +348,7 @@ namespace EventHub.DbMigrator.Data
                 DateTime.Now.AddDays(1),
                 DateTime.Now.AddDays(2),
                 "Cypress is a next-generation front end testing tool built for the modern web. They address the key pain points developers and QA engineers face when testing modern applications.In this session, we will learn how to add cypress to angular projects, setup, write, and run cypress tests.");
+            await _eventManager.SetLocationAsync(upcomingEvent12, true, "https://www.youtube.com/" ,null, null);
             await _eventRepository.InsertAsync(upcomingEvent12);
             await _eventRegistrationManager.RegisterAsync(upcomingEvent12, userMark);
             await _eventRegistrationManager.RegisterAsync(upcomingEvent12, userAlessandro);
@@ -337,6 +359,7 @@ namespace EventHub.DbMigrator.Data
                 DateTime.Now.AddDays(10),
                 DateTime.Now.AddDays(12),
                 "Some of the topics covered in the conference: Angular core topicsThe future of Angular and Angular migration path, Bundling & Packaging, Rendering on server and mobile, Performance, Tools & The ecosystem");
+            await _eventManager.SetLocationAsync(upcomingEvent13, true, "https://www.youtube.com/" ,null, null);
             await _eventRepository.InsertAsync(upcomingEvent13);
             await _eventRegistrationManager.RegisterAsync(upcomingEvent13, userAlessandro);
 
@@ -345,6 +368,7 @@ namespace EventHub.DbMigrator.Data
                 DateTime.Now.AddDays(5),
                 DateTime.Now.AddDays(12),
                 "We’ll start by going over the differences between the two careers. Then, we’ll walk you through how to get the skills to be successful in each, and discuss the different jobs that will be available to you once you’ve acquired those skills.");
+            await _eventManager.SetLocationAsync(upcomingEvent14, true, "https://www.youtube.com/" ,null, null);
             await _eventRepository.InsertAsync(upcomingEvent14);
             await _eventRegistrationManager.RegisterAsync(upcomingEvent14, userTony);
 
@@ -353,6 +377,7 @@ namespace EventHub.DbMigrator.Data
                 DateTime.Now.AddDays(36),
                 DateTime.Now.AddDays(50),
                 "Mark your calendars! Join us for DevFest Silicon Valley, virtually from anywhere around the world! DevFest brings together thousands of developers from all different backgrounds and skill levels who have a shared passion for Google technologies to teach, learn, and connect. Let's keep the momentum going for DevFest 2021!");
+            await _eventManager.SetLocationAsync(upcomingEvent15, true, "https://www.youtube.com/" ,null, null);
             await _eventRepository.InsertAsync(upcomingEvent15);
             await _eventRegistrationManager.RegisterAsync(upcomingEvent15, userTony);
             await _eventRegistrationManager.RegisterAsync(upcomingEvent15, userAlessandro);

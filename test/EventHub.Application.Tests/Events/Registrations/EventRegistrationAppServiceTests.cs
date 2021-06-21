@@ -91,6 +91,34 @@ namespace EventHub.Events.Registrations
             
             exception.Code.ShouldBe(EventHubErrorCodes.CapacityOfEventFull);
         }
+        
+        [Fact]
+        public async Task Should_True_To_A_Registered_In_Event()
+        {
+            Login(_testData.UserAdminId);
+
+            await _eventRegistrationAppService.RegisterAsync(_testData.AbpMicroservicesFutureEventId);
+
+            var result = await _eventRegistrationAppService.IsRegisteredAsync(
+                _testData.AbpMicroservicesFutureEventId
+            );
+
+            result.ShouldBeTrue();
+        }
+
+        [Fact]
+        public async Task Should_False_To_A_Not_Registered_In_Event()
+        {
+            Login(_testData.UserAdminId);
+
+            await _eventRegistrationAppService.UnregisterAsync(_testData.AbpMicroservicesFutureEventId);
+
+            var result = await _eventRegistrationAppService.IsRegisteredAsync(
+                _testData.AbpMicroservicesFutureEventId
+            );
+
+            result.ShouldBeFalse();
+        }
 
         [Fact]
         public async Task Should_Get_List_Of_Attendees()
@@ -122,7 +150,27 @@ namespace EventHub.Events.Registrations
             result.Items.ShouldContain(x => x.Id == _testData.UserAdminId);
             result.Items.ShouldContain(x => x.Id == _testData.UserJohnId);
         }
+        
+        [Fact]
+        public async Task Should_True_To_A_Past_Event()
+        {
+            var result = await _eventRegistrationAppService.IsPastEventAsync(
+                _testData.AbpBlazorPastEventId
+            );
 
+            result.ShouldBeTrue();
+        }
+
+        [Fact]
+        public async Task Should_False_To_A_Future_Event()
+        {
+            var result = await _eventRegistrationAppService.IsPastEventAsync(
+                _testData.AbpMicroservicesFutureEventId
+            );
+
+            result.ShouldBeFalse();
+        }
+        
         private async Task<EventRegistration> GetRegistrationOrNull(Guid eventId, Guid userId)
         {
             return await WithUnitOfWorkAsync(async () =>

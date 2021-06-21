@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Threading.Tasks;
-using EventHub.Events;
 using EventHub.Organizations;
+using EventHub.Organizations.Memberships;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventHub.Web.Pages.Organizations
@@ -11,31 +11,24 @@ namespace EventHub.Web.Pages.Organizations
         [BindProperty(SupportsGet = true)]
         public string Name { get; set; }
 
-        public OrganizationProfileDto Organization { get; set; }
-        public IReadOnlyList<EventInListDto> UpcomingEvents { get; private set; }
-        public long UpcomingEventTotalCount { get; private set; }
-
-        public IReadOnlyList<EventInListDto> PastEvents { get; private set; }
-        public long PastEventTotalCount { get; private set; }
+        public OrganizationProfileDto Organization { get; private set; }
 
         public bool IsOrganizationOwner { get; private set; }
 
-        private readonly IEventAppService _eventAppService;
+        public bool IsShowSocialMediaContent { get; set; }
+        
         private readonly IOrganizationAppService _organizationAppService;
 
         public ProfilePageModel(
             IOrganizationAppService organizationAppService,
-            IEventAppService eventAppService)
+            IOrganizationMembershipAppService organizationMembershipAppService)
         {
             _organizationAppService = organizationAppService;
-            _eventAppService = eventAppService;
         }
 
         public async Task OnGetAsync()
         {
             await GetProfileAsync();
-            await GetUpcomingEventsAsync();
-            await GetPastEventsAsync();
 
             IsOrganizationOwner = await _organizationAppService.IsOrganizationOwnerAsync(Organization.Id);
         }
@@ -43,32 +36,11 @@ namespace EventHub.Web.Pages.Organizations
         private async Task GetProfileAsync()
         {
             Organization = await _organizationAppService.GetProfileAsync(Name);
-        }
 
-        private async Task GetUpcomingEventsAsync()
-        {
-            var result = await _eventAppService.GetListAsync(
-                new EventListFilterDto
-                {
-                    MinDate = Clock.Now,
-                    OrganizationId = Organization.Id
-                }
-            );
-            UpcomingEvents = result.Items;
-            UpcomingEventTotalCount = result.TotalCount;
-        }
-
-        private async Task GetPastEventsAsync()
-        {
-            var result = await _eventAppService.GetListAsync(
-                new EventListFilterDto
-                {
-                    MaxDate = Clock.Now,
-                    OrganizationId = Organization.Id
-                }
-            );
-            PastEvents = result.Items;
-            PastEventTotalCount = result.TotalCount;
+            if (!Organization.Website.IsNullOrWhiteSpace() || !Organization.TwitterUsername.IsNullOrWhiteSpace() || !Organization.GitHubUsername.IsNullOrWhiteSpace() || !Organization.FacebookUsername.IsNullOrWhiteSpace() || !Organization.InstagramUsername.IsNullOrWhiteSpace() || !Organization.MediumUsername.IsNullOrWhiteSpace())
+            {
+                IsShowSocialMediaContent = true;
+            }
         }
     }
 }

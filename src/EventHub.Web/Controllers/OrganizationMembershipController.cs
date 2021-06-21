@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Organizations.Memberships;
 using EventHub.Web.Pages.Organizations.Components.JoinArea;
@@ -14,6 +15,19 @@ namespace EventHub.Web.Controllers
         public OrganizationMembershipController(IOrganizationMembershipAppService organizationMembershipAppService)
         {
             _organizationMembershipAppService = organizationMembershipAppService;
+        }
+        
+        [HttpGet]
+        [Route("get-list")]
+        public async Task<IActionResult> GetList(OrganizationMemberListFilterDto input)
+        {
+            ViewData.Model = (await _organizationMembershipAppService.GetMembersAsync(input)).Items.ToList();
+            
+            return new PartialViewResult
+            {
+                ViewName = "~/Pages/Organizations/Components/MembersArea/_memberListSection.cshtml",
+                ViewData = ViewData
+            };
         }
         
         [HttpPost]

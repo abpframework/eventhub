@@ -20,8 +20,15 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\**\*.*" />
+    <Content Include="wwwroot\themes\eventhub\floating-labels.css" />
+    <Content Include="wwwroot\themes\eventhub\owl-edit.css" />
+    <Content Include="wwwroot\themes\eventhub\style.css" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EventHub.Domain.Shared\EventHub.Domain.Shared.csproj" />
+  </ItemGroup>
+  
   <ItemGroup>
     <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy" Version="4.2.1" />
     <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared" Version="4.2.1" />

@@ -9,13 +9,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using EventHub.EntityFrameworkCore;
 using EventHub.Localization;
+using EventHub.Web;
+using EventHub.Web.Theme;
+using EventHub.Web.Theme.Bundling;
+using IdentityServer4.Configuration;
 using StackExchange.Redis;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Auditing;
@@ -35,7 +38,7 @@ namespace EventHub
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAccountApplicationModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+        typeof(EventHubWebThemeModule),
         typeof(EventHubEntityFrameworkCoreDbMigrationsModule),
         typeof(AbpAspNetCoreSerilogModule)
         )]
@@ -56,25 +59,13 @@ namespace EventHub
                         typeof(AbpUiResource)
                     );
 
-                options.Languages.Add(new LanguageInfo("ar", "ar", "العربية"));
-                options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
-                options.Languages.Add(new LanguageInfo("en-GB", "en-GB", "English (UK)"));
-                options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
-                options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
-                options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
-                options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
-                options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
-                options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
-                options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
-                options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch", "de"));
-                options.Languages.Add(new LanguageInfo("es", "es", "Español", "es"));
             });
 
             Configure<AbpBundlingOptions>(options =>
             {
                 options.StyleBundles.Configure(
-                    BasicThemeBundles.Styles.Global,
+                    EventHubThemeBundles.Styles.Global,
                     bundle =>
                     {
                         bundle.AddFiles("/global-styles.css");
@@ -88,12 +79,24 @@ namespace EventHub
                 options.ApplicationName = "AuthServer";
             });
 
+            Configure<AppUrlOptions>(options =>
+            {
+                options.Applications["MVC"].RootUrl = EventHubExternalUrls.EhAccount;
+            });
+
+            Configure<IdentityServerOptions>(options =>
+            {
+                options.IssuerUri = EventHubExternalUrls.EhAccount;
+            });
+
+
             if (hostingEnvironment.IsDevelopment())
             {
                 Configure<AbpVirtualFileSystemOptions>(options =>
                 {
                     options.FileSets.ReplaceEmbeddedByPhysical<EventHubDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}EventHub.Domain.Shared"));
                     options.FileSets.ReplaceEmbeddedByPhysical<EventHubDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}EventHub.Domain"));
+                    options.FileSets.ReplaceEmbeddedByPhysical<EventHubWebThemeModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}EventHub.Web.Theme"));
                 });
             }
 

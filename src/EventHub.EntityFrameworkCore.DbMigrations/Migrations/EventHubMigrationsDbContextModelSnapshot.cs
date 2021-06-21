@@ -61,6 +61,9 @@ namespace EventHub.Migrations
                     b.Property<Guid?>("CountryId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("CountryName")
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");

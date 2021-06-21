@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Events.Registrations;
+using Microsoft.Extensions.DependencyInjection;
+using NSubstitute;
 using Shouldly;
-using Volo.Abp;
 using Volo.Abp.Authorization;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Timing;
+using Volo.Abp.Users;
 using Xunit;
 
 namespace EventHub.Events
@@ -17,6 +18,7 @@ namespace EventHub.Events
         private readonly IEventRegistrationAppService _eventRegistrationAppService;
         private readonly EventHubTestData _testData;
         private readonly IRepository<Event, Guid> _eventRepository;
+        private ICurrentUser _currentUser;
 
         public EventAppServiceTests()
         {
@@ -25,10 +27,42 @@ namespace EventHub.Events
             _testData = GetRequiredService<EventHubTestData>();
             _eventRepository = GetRequiredService<IRepository<Event, Guid>>();
         }
+        
+        protected override void AfterAddApplication(IServiceCollection services)
+        {
+            _currentUser = Substitute.For<ICurrentUser>();
+            services.AddSingleton(_currentUser);
+        }
+        
+        [Fact]
+        public async Task Should_True_To_A_Owned_Event()
+        {
+            Login(_testData.UserAdminId);
+
+            var result = await _eventAppService.IsEventOwnerAsync(
+                _testData.AbpBlazorPastEventId
+            );
+
+            result.ShouldBeTrue();
+        }
+
+        [Fact]
+        public async Task Should_False_To_Not_Owned_Event()
+        {
+            Login(_testData.UserJohnId);
+            
+            var result = await _eventAppService.IsEventOwnerAsync(
+                _testData.AbpBlazorPastEventId
+            );
+
+            result.ShouldBeFalse();
+        }
 
         [Fact]
         public async Task Should_Create_A_New_Valid_Event()
         {
+            Login(_testData.UserAdminId);
+
             var eventDto = await _eventAppService.CreateAsync(
                 new CreateEventDto
                 {
@@ -55,6 +89,8 @@ namespace EventHub.Events
         [Fact]
         public async Task Should_Not_Create_Event_For_Not_Authorized_Organization()
         {
+            Login(_testData.UserAdminId);
+
             var exception = await Assert.ThrowsAsync<AbpAuthorizationException>(async () =>
             {
                 await _eventAppService.CreateAsync(
@@ -128,6 +164,8 @@ namespace EventHub.Events
         [Fact]
         public async Task Should_Get_Location()
         {
+            Login(_testData.UserAdminId);
+
             var eventDto = await _eventAppService.CreateAsync(
                 new CreateEventDto
                 {
@@ -166,6 +204,8 @@ namespace EventHub.Events
         [Fact]
         public async Task Should_Update_The_Event()
         {
+            Login(_testData.UserAdminId);
+
             await _eventAppService.UpdateAsync(
                 _testData.AbpMicroservicesFutureEventId,
                 new UpdateEventDto
@@ -186,6 +226,12 @@ namespace EventHub.Events
             updatedEvent.Title.ShouldBe("Updated_Microservices_Event_Title");
             updatedEvent.Description.ShouldBe("Updated_Microservices_Event_Description-Updated_Microservices_Event_Description-Updated_Blazor_Microservices_Description");
             updatedEvent.IsOnline.ShouldBeTrue();
+        }
+
+        private void Login(Guid userId)
+        {
+            _currentUser.Id.Returns(userId);
+            _currentUser.IsAuthenticated.Returns(true);
         }
     }
 }

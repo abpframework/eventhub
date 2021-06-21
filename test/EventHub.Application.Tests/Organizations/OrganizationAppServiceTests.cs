@@ -5,6 +5,7 @@ using NSubstitute;
 using Shouldly;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Authorization;
 using Volo.Abp.Users;
 using Xunit;
 
@@ -70,7 +71,7 @@ namespace EventHub.Organizations
         [Fact]
         public async Task Should_Get_List_Of_Organizations()
         {
-            var result = await _organizationAppService.GetListAsync(new PagedResultRequestDto());
+            var result = await _organizationAppService.GetListAsync(new OrganizationListFilterDto());
             result.TotalCount.ShouldBeGreaterThanOrEqualTo(2);
             result.Items.ShouldContain(o => o.Name == _testData.OrganizationVolosoftName && o.Id == _testData.OrganizationVolosoftId);
             result.Items.ShouldContain(o => o.Name == _testData.OrganizationDotnetEuropeName && o.Id == _testData.OrganizationDotnetEuropeId);
@@ -82,6 +83,14 @@ namespace EventHub.Organizations
             var result = await _organizationAppService.GetProfileAsync(_testData.OrganizationVolosoftName);
             result.Id.ShouldBe(_testData.OrganizationVolosoftId);
             result.Name.ShouldBe(_testData.OrganizationVolosoftName);
+        }
+        
+        [Fact]
+        public async Task Should_Get_List_Of_Organizations_By_UserId()
+        {
+            var result = await _organizationAppService.GetOrganizationsByUserIdAsync(_testData.UserAdminId);
+            result.Items.Count.ShouldBeGreaterThanOrEqualTo(1);
+            result.Items.ShouldContain(o => o.Name == _testData.OrganizationVolosoftName && o.Id == _testData.OrganizationVolosoftId);
         }
 
         [Fact]
@@ -110,7 +119,7 @@ namespace EventHub.Organizations
         {
             Login(_testData.UserAdminId);
 
-            var exception = await Assert.ThrowsAsync<BusinessException>(() =>
+            var exception = await Assert.ThrowsAsync<AbpAuthorizationException>(() =>
                 _organizationAppService.UpdateAsync(
                     _testData.OrganizationDotnetEuropeId,
                     new UpdateOrganizationDto

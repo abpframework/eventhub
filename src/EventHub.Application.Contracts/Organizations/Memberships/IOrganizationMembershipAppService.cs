@@ -13,6 +13,6 @@ namespace EventHub.Organizations.Memberships
 
         Task<bool> IsJoinedAsync(Guid organizationId);
 
-        Task<PagedResultDto<OrganizationMemberDto>> GetMembersAsync(Guid organizationId);
+        Task<PagedResultDto<OrganizationMemberDto>> GetMembersAsync(OrganizationMemberListFilterDto input);
     }
 }

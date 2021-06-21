@@ -1,12 +1,11 @@
 ﻿using System.Threading.Tasks;
 using EventHub.Events;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
 
 namespace EventHub.Web.Pages.Events
 {
-    public class DetailPageModel : PageModel
+    public class DetailPageModel : EventHubPageModel
     {
         [BindProperty(SupportsGet = true)]
         public string Url { get; set; }

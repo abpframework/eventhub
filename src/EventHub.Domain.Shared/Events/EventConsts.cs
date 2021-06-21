@@ -23,6 +23,6 @@
 
         public const int MaxTimingChangeCountForUser = 2;
         
-        public const int MaxCoverImageFileSize = 1024 * 1024;
+        public const int MaxCoverImageFileSize = 5 * 1024 * 1024;
     }
 }
