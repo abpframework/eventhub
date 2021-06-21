@@ -53,7 +53,7 @@
 
     @(await Component.InvokeAsync<MainNavbarViewComponent>())
 
-    <div class="@containerClass">
+    <div class="@containerClass my-5">
         <abp-row>
             <abp-column class="col mx-auto" style="max-width: 440px">
                 @if (MultiTenancyOptions.Value.IsEnabled &&

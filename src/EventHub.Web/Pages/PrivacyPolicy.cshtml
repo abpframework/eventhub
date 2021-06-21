@@ -2,26 +2,25 @@
 @using EventHub.Web.Pages
 @model EventHub.Web.Pages.PrivacyPolicy
 
-<main>
-    <div class="d-print-none">
-        <div class="container">
-            <div class="row">
-                <div class="col-auto mr-auto"></div>
-                <div class="col-auto">
-                    <abp-button icon="print" text="Print" onclick="javascript:window.print();"></abp-button>
+    <main class="static-page container mt-5">
+        <div class="d-print-none">
+            <div class="container">
+                <div class="row">
+                    <div class="col-auto mr-auto"></div>
+                    <div class="col-auto">
+                        <abp-button icon="print" text="Print" onclick="javascript:window.print();"></abp-button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="page-title">
-        <h1>Privacy Policy &#x26; Cookie Policy</h1>
-    </div>
+        <div class="card shadow-sm rounded">
+            <div class="card-body p-lg-5 p-md-4">
+                <div class="page-title">
+                    <h1>Privacy Policy &#x26; Cookie Policy</h1>
+                </div>
 
-    <section class="sub-section">
-        <div class="container">
-            <div class="row">
-                <div class="col">
+                <section class="sub-section">
                     <p>
                         This policy is about how Volosoft uses and processes your data when shared
                         through our website or service. It was last updated on @PrivacyPolicy.LastUpdateDate
@@ -542,19 +541,18 @@
                         You may contact us via our privacy e-mail <a href="mailto:info@volosoft.com">info@volosoft.com</a>.
                         Please send e-mail through this adress for exercise your rights.
                     </p>
-                </div>
-            </div>
-        </div>
-    </section>
+                </section>
 
-    <div class="d-print-none">
-        <div class="container">
-            <div class="row">
-                <div class="col-auto mr-auto"></div>
-                <div class="col-auto">
-                    <abp-button icon="print" text="Print" onclick="javascript:window.print();"></abp-button>
+            </div>
+        </div>
+        <div class="d-print-none">
+            <div class="container">
+                <div class="row">
+                    <div class="col-auto mr-auto"></div>
+                    <div class="col-auto">
+                        <abp-button icon="print" text="Print" onclick="javascript:window.print();"></abp-button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</main>
+    </main>

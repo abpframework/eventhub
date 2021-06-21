@@ -7,7 +7,7 @@
         <div class="card">
             @if (organization.ProfilePictureContent == null)
             {
-                <div class="rounded list-span text-center" style="background: @(CoverImageHelper.GetRandomColor(organization.Name))">
+                <div class="list-span text-center" style="background: @(CoverImageHelper.GetRandomColor(organization.Name))">
                     <span>@CoverImageHelper.GetContentOfImage(organization.Name).TruncateWithPostfix(40)</span>
                 </div>
             }

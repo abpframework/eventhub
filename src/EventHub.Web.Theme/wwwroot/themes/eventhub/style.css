@@ -157,7 +157,7 @@ p {
 
 @media (min-width: 1200px){ 
     .container, .container-lg, .container-md, .container-sm, .container-xl {
-        max-width: 996px;
+        max-width: 1080px;
     }
     .navbar .container {
         max-width: 1200px;
@@ -192,7 +192,7 @@ p {
 }
 
 .event-info small {
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 500;
     color: #6F32E2;
     margin-bottom: 15px;
@@ -215,13 +215,13 @@ p {
 } 
 .event-date small{
     color: #E8345D;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 500; 
     display: block;
 } 
 .event-date span{
     color: #00044A;
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 700; 
     display: block;
     line-height: 1.2;
@@ -246,10 +246,13 @@ p {
     border-radius: 10px; 
 }
 
-.search-event .form-control, .search-event .form-select {  
+.search-event .form-control, .search-event .form-select {
     color: #ffffff;
-    background-color: rgba(255,255,255,.2); 
-    border: 1px solid  rgba(255,255,255,.4);  
+    background-color: rgba(255,255,255,.2);
+    border: 1px solid rgba(255,255,255,.4);
+}
+.search-event .form-label-group { 
+    margin-bottom: 0;
 }
 .search-event .btn-group-lg > .search-event .btn, .search-event .btn-lg { 
     height: 52px; 
@@ -287,8 +290,7 @@ p {
 .profile-content .form-control ,
 .profile-content .form-select {
     border: 1px solid rgba(107, 126, 146, 0.20);
-    background-color: white;
-    margin-bottom: 30px;
+    background-color: white; 
     color: #6B7E92;
 }
 
@@ -296,12 +298,14 @@ p {
 .profile-content   label { 
     color: #6B7E92;
 }
+.form-label-group {
+        margin-bottom: 30px;
+    }
 
 
 
 
-
-.form-row>.col, .form-row>[class*=col-] {
+.form-row > .col, .form-row > [class*=col-] {
     padding-right: 10px;
     padding-left: 10px;
 }
@@ -743,7 +747,7 @@ div.checkbox.switcher label, div.radio.switcher label {
     padding: 1em;
     position: relative;
     border-radius: 10px;
-    min-height: 160px;
+    min-height: 200px;
     text-align: center;
     margin-bottom: 30px;
 }
@@ -829,4 +833,62 @@ div.checkbox.switcher label, div.radio.switcher label {
     font-size: 10px;
     color: #999cdf; 
 }
+
+
+
+
+.static-page h1 {
+    font-size: 1.75em;
+}
+
+.static-page h2 {
+    font-size: 1.5em;
+}
+
+.static-page h3 {
+    font-size: 1.25em;
+}
+
+.static-page h4 {
+    font-size: 1.05em;
+}
+
+.event .card {
+    max-width: 330px;
+    margin: 0 auto 34px;
+}
+
+.logo {
+    height: 28px;
+}
+ 
+.text-danger.field-validation-error {
+    background: #ffe4ea;
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-top: 4px;
+    display: inline-block;
+}
+
+
+.input-validation-error {
+    border-color: #ffd5df !important;
+}
+.navbar-light .navbar-toggler, .navbar-light .navbar-toggler:focus {
+    border: 0;
+    outline: none;
+}
+@media screen and (max-width: 991px) {
+    .navbar-collapse {
+        padding: 2em;
+        text-align: center;
+    }
+        .navbar-collapse .nav-item {
+            margin: 8px 0;
+        }
+}
+
+
+
 /*This area was made to be able to navigate between pages. It should be removed from the project*/

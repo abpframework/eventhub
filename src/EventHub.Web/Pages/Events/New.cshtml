@@ -11,11 +11,9 @@
 @if (!Model.Organizations.Any())
 {
   <div class="container">
-    <div class="m-5 text-center">
-      <abp-alert alert-type="Danger">
-        <p>@L["NewEventYouHaveNoOrganizationYetMessage"]</p>
-        <a abp-button="Primary" href="@Url.Page("/Organizations/New")">@L["CreateAnOrganization"]</a>
-      </abp-alert>
+    <div class="my-5 text-center"> 
+        <h3>@L["NewEventYouHaveNoOrganizationYetMessage"]</h3>
+        <a abp-button="Primary" href="@Url.Page("/Organizations/New")">@L["CreateAnOrganization"]</a> 
     </div>
   </div>
 }
@@ -24,8 +22,7 @@ else
   <form method="post" enctype="multipart/form-data">
     <div class="container pt-4">
       <div class="row py-4">
-        <div class="col-md-9 mx-auto profile-content">     
-                
+        <div class="col-md-9 mx-auto profile-content">      
           <div class="card">
             <div class="card-body" style="min-height: 496px"> 
               <h3 class="mb-4">Create New Event</h3>
@@ -62,19 +59,17 @@ else
                   </div>
                   <div class="col-md-12">
                     <div class="form-label-group">
-                      <textarea rows="3" type="text" id="inputDescription" asp-for="Event.Description" class="form-control" placeholder="Description"></textarea>
-                      <label for="inputDescription">Description</label>
+                      <textarea rows="3" type="text" id="inputDescription" asp-for="Event.Description" class="form-control" placeholder="Description"></textarea> 
                       <span asp-validation-for="Event.Description" class="text-danger"></span>
                     </div>
-                  </div> 
-                          
+                  </div>  
                   <div class="col-md-12"> 
                     <h4 class="mb-4">Cover Image</h4> 
                     <div class="row">
-                      <div class="col-5"> 
+                      <div class="col-6"> 
                         <div class="image-area"><img id="imageResult" src="#" alt="" class="img-fluid rounded shadow-sm mx-auto d-block"></div>
                       </div>
-                      <div class="col-7"> 
+                      <div class="col-6"> 
                         <div>
                           <p class="mb-3">For horizontal format 600x300 sized upload images.</p>
                           <input type="file" id="Event_CoverImageFile" asp-for="Event.CoverImageFile" class="form-control border-0" hidden>
@@ -124,9 +119,7 @@ else
                       <option selected value="">Language</option>
                     </select>
                     <span asp-validation-for="Event.Language" class="text-danger"></span>
-                  </div>
-                  
-
+                  </div> 
                   <div class="col-md-12 text-right">
                     <button type="submit" class="btn btn-primary btn-lg"> 
                       Publish New Event
