@@ -1,6 +1,8 @@
 ﻿@page "/events"
 @using EventHub.Web.Pages.Events.Components.EventsArea
+@using Volo.Abp.Timing
 @model EventHub.Web.Pages.Events.IndexModel
+@inject IClock Clock
 
 @section styles {
     <abp-style-bundle>
@@ -78,7 +80,7 @@
         @await Component.InvokeAsync(typeof(EventsAreaViewComponent), new
         {
             organizationId = Model.OrganizationId,
-            minDate = Model.MinDate,
+            minDate = Model.MinDate ?? Clock.Now,
             maxDate = Model.MaxDate,
             isOnline = Model.IsOnline,
             language = Model.Language,
