@@ -10,7 +10,7 @@
 .main-slider .owl-carousel .owl-nav button.owl-next {
     width: 40px;
     height: 40px;
-    background: rgb(255 255 255 / 22%);
+    background: rgb(0 4 74 / 20%);
     transition: background-color .3s ease;
     position: absolute;
     display: inline-block;
