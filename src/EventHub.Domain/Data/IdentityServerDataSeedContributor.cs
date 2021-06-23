@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer4.Models;
 using Microsoft.Extensions.Configuration;
@@ -81,6 +82,7 @@ namespace EventHub.Data
             };
 
             await CreateApiResourceAsync("EventHub", commonApiUserClaims);
+            await CreateApiResourceAsync("EventHubAdmin", commonApiUserClaims);
         }
 
         private async Task<ApiResource> CreateApiResourceAsync(string name, IEnumerable<string> claims)
@@ -136,8 +138,7 @@ namespace EventHub.Data
                 "profile",
                 "role",
                 "phone",
-                "address",
-                "EventHub"
+                "address"
             };
 
             var configurationSection = _configuration.GetSection("IdentityServer:Clients");
@@ -153,30 +154,12 @@ namespace EventHub.Data
 
                 await CreateClientAsync(
                     name: webClientId,
-                    scopes: commonScopes,
+                    scopes: commonScopes.Union(new []{"EventHubAdmin"}),
                     grantTypes: new[] { "hybrid" },
                     secret: (configurationSection["EventHub_Web:ClientSecret"] ?? "1q2w3e*").Sha256(),
                     redirectUri: $"{webClientRootUrl}signin-oidc",
                     postLogoutRedirectUri: $"{webClientRootUrl}signout-callback-oidc",
                     frontChannelLogoutUri: $"{webClientRootUrl}Account/FrontChannelLogout",
-                    corsOrigins: new[] { webClientRootUrl.RemovePostFix("/") }
-                );
-            }
-
-            //Console Test / Angular Client
-            var consoleAndAngularClientId = configurationSection["EventHub_App:ClientId"];
-            if (!consoleAndAngularClientId.IsNullOrWhiteSpace())
-            {
-                var webClientRootUrl = configurationSection["EventHub_App:RootUrl"]?.TrimEnd('/');
-
-                await CreateClientAsync(
-                    name: consoleAndAngularClientId,
-                    scopes: commonScopes,
-                    grantTypes: new[] { "password", "client_credentials", "authorization_code" },
-                    secret: (configurationSection["EventHub_App:ClientSecret"] ?? "1q2w3e*").Sha256(),
-                    requireClientSecret: false,
-                    redirectUri: webClientRootUrl,
-                    postLogoutRedirectUri: webClientRootUrl,
                     corsOrigins: new[] { webClientRootUrl.RemovePostFix("/") }
                 );
             }
@@ -189,7 +172,7 @@ namespace EventHub.Data
 
                 await CreateClientAsync(
                     name: blazorClientId,
-                    scopes: commonScopes,
+                    scopes: commonScopes.Union(new []{"EventHubAdmin"}),
                     grantTypes: new[] { "authorization_code" },
                     secret: configurationSection["EventHub_Blazor:ClientSecret"]?.Sha256(),
                     requireClientSecret: false,
@@ -207,7 +190,7 @@ namespace EventHub.Data
 
                 await CreateClientAsync(
                     name: swaggerClientId,
-                    scopes: commonScopes,
+                    scopes: commonScopes.Union(new []{"EventHub","EventHubAdmin"}),
                     grantTypes: new[] { "authorization_code" },
                     secret: configurationSection["EventHub_Swagger:ClientSecret"]?.Sha256(),
                     requireClientSecret: false,
