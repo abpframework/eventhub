@@ -7,18 +7,18 @@ namespace EventHub.EntityFrameworkCore
 {
     /* This class is needed for EF Core console commands
      * (like Add-Migration and Update-Database commands) */
-    public class EventHubMigrationsDbContextFactory : IDesignTimeDbContextFactory<EventHubMigrationsDbContext>
+    public class EventHubDbContextFactory : IDesignTimeDbContextFactory<EventHubDbContext>
     {
-        public EventHubMigrationsDbContext CreateDbContext(string[] args)
+        public EventHubDbContext CreateDbContext(string[] args)
         {
             EventHubEfCoreEntityExtensionMappings.Configure();
 
             var configuration = BuildConfiguration();
 
-            var builder = new DbContextOptionsBuilder<EventHubMigrationsDbContext>()
+            var builder = new DbContextOptionsBuilder<EventHubDbContext>()
                 .UseNpgsql(configuration.GetConnectionString("Default"));
 
-            return new EventHubMigrationsDbContext(builder.Options);
+            return new EventHubDbContext(builder.Options);
         }
 
         private static IConfigurationRoot BuildConfiguration()

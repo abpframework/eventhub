@@ -25,7 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\EventHub.Application\EventHub.Application.csproj" />
     <ProjectReference Include="..\EventHub.HttpApi\EventHub.HttpApi.csproj" />
-    <ProjectReference Include="..\EventHub.EntityFrameworkCore.DbMigrations\EventHub.EntityFrameworkCore.DbMigrations.csproj" />
+    <ProjectReference Include="..\EventHub.EntityFrameworkCore\EventHub.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>

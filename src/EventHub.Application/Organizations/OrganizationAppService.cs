@@ -9,6 +9,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Identity;
 using Volo.Abp.Users;
 
 namespace EventHub.Organizations
@@ -19,14 +20,14 @@ namespace EventHub.Organizations
         private readonly IRepository<OrganizationMembership, Guid>  _organizationMembershipsRepository;
         private readonly OrganizationManager _organizationManager;
         private readonly IBlobContainer<OrganizationProfilePictureContainer> _organizationBlobContainer;
-        private readonly IRepository<AppUser, Guid> _userRepository;
+        private readonly IRepository<IdentityUser, Guid> _userRepository;
 
         public OrganizationAppService(
             IRepository<Organization, Guid> organizationRepository,
             IRepository<OrganizationMembership, Guid> organizationMembershipsRepository,
             OrganizationManager organizationManager,
             IBlobContainer<OrganizationProfilePictureContainer> organizationBlobContainer, 
-            IRepository<AppUser, Guid> userRepository)
+            IRepository<IdentityUser, Guid> userRepository)
         {
             _organizationRepository = organizationRepository;
             _organizationMembershipsRepository = organizationMembershipsRepository;

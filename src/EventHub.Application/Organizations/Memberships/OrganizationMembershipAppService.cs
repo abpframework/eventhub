@@ -6,6 +6,7 @@ using EventHub.Users;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Identity;
 using Volo.Abp.Users;
 
 namespace EventHub.Organizations.Memberships
@@ -13,13 +14,13 @@ namespace EventHub.Organizations.Memberships
     public class OrganizationMembershipAppService : EventHubAppService, IOrganizationMembershipAppService 
     {
         private readonly OrganizationMembershipManager _organizationMembershipManager;
-        private readonly IRepository<AppUser, Guid> _userRepository;
+        private readonly IRepository<IdentityUser, Guid> _userRepository;
         private readonly IRepository<Organization, Guid> _organizationRepository;
         private readonly IRepository<OrganizationMembership, Guid>  _organizationMembershipsRepository;
 
         public OrganizationMembershipAppService(
             OrganizationMembershipManager organizationMembershipManager, 
-            IRepository<AppUser, Guid> userRepository, 
+            IRepository<IdentityUser, Guid> userRepository, 
             IRepository<Organization, Guid> organizationRepository, 
             IRepository<OrganizationMembership, Guid> organizationMembershipsRepository)
         {
@@ -72,7 +73,7 @@ namespace EventHub.Organizations.Memberships
 
             return new PagedResultDto<OrganizationMemberDto>(
                 totalCount,
-                ObjectMapper.Map<List<AppUser>, List<OrganizationMemberDto>>(users)
+                ObjectMapper.Map<List<IdentityUser>, List<OrganizationMemberDto>>(users)
             );
         }
     }

@@ -7,6 +7,7 @@ using EventHub.Users;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Emailing;
+using Volo.Abp.Identity;
 using Volo.Abp.Linq;
 using Volo.Abp.TextTemplating;
 
@@ -16,14 +17,14 @@ namespace EventHub.Events
     {
         private readonly IEmailSender _emailSender;
         private readonly ITemplateRenderer _templateRenderer;
-        private readonly IRepository<AppUser, Guid> _userRepository;
+        private readonly IRepository<IdentityUser, Guid> _userRepository;
         private readonly IRepository<EventRegistration, Guid> _eventRegistrationRepository;
         private readonly IAsyncQueryableExecuter _asyncExecuter;
 
         public EventReminderNotifier(
             IEmailSender emailSender,
             ITemplateRenderer templateRenderer,
-            IRepository<AppUser, Guid> userRepository,
+            IRepository<IdentityUser, Guid> userRepository,
             IRepository<EventRegistration, Guid> eventRegistrationRepository,
             IAsyncQueryableExecuter asyncExecuter)
         {

@@ -121,7 +121,7 @@ namespace EventHub.Data
             var srcDirectoryPath = Path.Combine(slnDirectoryPath, "src");
 
             return Directory.GetDirectories(srcDirectoryPath)
-                .FirstOrDefault(d => d.EndsWith(".DbMigrations"));
+                .FirstOrDefault(d => d.EndsWith(".EntityFrameworkCore"));
         }
 
         private static string GetSolutionDirectoryPath()

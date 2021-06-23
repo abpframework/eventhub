@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using EventHub.Users;
 using Volo.Abp;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
+using Volo.Abp.Identity;
 
 namespace EventHub.Events.Registrations
 {
@@ -18,7 +18,7 @@ namespace EventHub.Events.Registrations
 
         public async Task RegisterAsync(
             Event @event,
-            AppUser user)
+            IdentityUser user)
         {
             if (IsPastEvent(@event))
             {
@@ -49,7 +49,7 @@ namespace EventHub.Events.Registrations
 
         public async Task UnregisterAsync(
             Event @event,
-            AppUser user)
+            IdentityUser user)
         {
             if (IsPastEvent(@event))
             {
@@ -63,7 +63,7 @@ namespace EventHub.Events.Registrations
 
         public async Task<bool> IsRegisteredAsync(
             Event @event,
-            AppUser user)
+            IdentityUser user)
         {
             return await _eventRegistrationRepository
                 .AnyAsync(x => x.EventId == @event.Id && x.UserId == user.Id);

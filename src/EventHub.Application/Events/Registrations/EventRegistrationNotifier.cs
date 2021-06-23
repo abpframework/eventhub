@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using EventHub.Emailing;
-using EventHub.Users;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Emailing;
+using Volo.Abp.Identity;
 using Volo.Abp.TextTemplating;
 
 namespace EventHub.Events.Registrations
@@ -22,7 +22,7 @@ namespace EventHub.Events.Registrations
         
         public async Task NotifyAsync(
             Event @event, 
-            AppUser user)
+            IdentityUser user)
         {
             if (user is null || @event is null)
             {

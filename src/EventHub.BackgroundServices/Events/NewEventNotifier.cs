@@ -7,6 +7,7 @@ using EventHub.Users;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Emailing;
+using Volo.Abp.Identity;
 using Volo.Abp.Linq;
 using Volo.Abp.TextTemplating;
 
@@ -17,14 +18,14 @@ namespace EventHub.Events
         private readonly IEmailSender _emailSender;
         private readonly ITemplateRenderer _templateRenderer;
         private readonly IRepository<OrganizationMembership, Guid> _organizationMembershipsRepository;
-        private readonly IRepository<AppUser, Guid> _userRepository;
+        private readonly IRepository<IdentityUser, Guid> _userRepository;
         private readonly IAsyncQueryableExecuter _asyncExecuter;
 
         public NewEventNotifier(
             IEmailSender emailSender,
             ITemplateRenderer templateRenderer,
             IRepository<OrganizationMembership, Guid> organizationMembershipsRepository,
-            IRepository<AppUser, Guid> userRepository,
+            IRepository<IdentityUser, Guid> userRepository,
             IAsyncQueryableExecuter asyncExecuter)
         {
             _emailSender = emailSender;

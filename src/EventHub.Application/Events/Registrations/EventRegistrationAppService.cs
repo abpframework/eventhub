@@ -2,25 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using EventHub.Users;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Users;
+using Volo.Abp.Identity;
 
 namespace EventHub.Events.Registrations
 {
     public class EventRegistrationAppService : EventHubAppService, IEventRegistrationAppService
     {
         private readonly EventRegistrationManager _eventRegistrationManager;
-        private readonly IRepository<AppUser, Guid> _userRepository;
+        private readonly IRepository<IdentityUser, Guid> _userRepository;
         private readonly IRepository<Event, Guid> _eventRepository;
         private readonly IRepository<EventRegistration, Guid> _eventRegistrationRepository;
         private readonly EventRegistrationNotifier _eventRegistrationNotifier;
 
         public EventRegistrationAppService(
             EventRegistrationManager eventRegistrationManager,
-            IRepository<AppUser, Guid> userRepository,
+            IRepository<IdentityUser, Guid> userRepository,
             IRepository<Event, Guid> eventRepository,
             IRepository<EventRegistration, Guid> eventRegistrationRepository, 
             EventRegistrationNotifier eventRegistrationNotifier)
@@ -77,7 +77,7 @@ namespace EventHub.Events.Registrations
 
             return new PagedResultDto<EventAttendeeDto>(
                 totalCount,
-                ObjectMapper.Map<List<AppUser>, List<EventAttendeeDto>>(users)
+                ObjectMapper.Map<List<IdentityUser>, List<EventAttendeeDto>>(users)
             );
         }
 

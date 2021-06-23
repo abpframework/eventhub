@@ -11,6 +11,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Identity;
 using Volo.Abp.Users;
 
 namespace EventHub.Events
@@ -22,7 +23,7 @@ namespace EventHub.Events
         private readonly IRepository<EventRegistration, Guid> _eventRegistrationRepository;
         private readonly IRepository<Event, Guid> _eventRepository;
         private readonly IRepository<Organization, Guid> _organizationRepository;
-        private readonly IRepository<AppUser, Guid> _userRepository;
+        private readonly IRepository<IdentityUser, Guid> _userRepository;
         private readonly IRepository<Country, Guid> _countriesRepository;
         private readonly IBlobContainer<EventCoverImageContainer> _eventBlobContainer;
 
@@ -32,7 +33,7 @@ namespace EventHub.Events
             IRepository<EventRegistration, Guid> eventRegistrationRepository,
             IRepository<Event, Guid> eventRepository,
             IRepository<Organization, Guid> organizationRepository,
-            IRepository<AppUser, Guid> userRepository,
+            IRepository<IdentityUser, Guid> userRepository,
             IRepository<Country, Guid> countriesRepository,
             IBlobContainer<EventCoverImageContainer> eventBlobContainer)
         {

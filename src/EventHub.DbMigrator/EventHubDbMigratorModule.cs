@@ -8,7 +8,7 @@ namespace EventHub.DbMigrator
 {
     [DependsOn(
         typeof(AbpAutofacModule),
-        typeof(EventHubEntityFrameworkCoreDbMigrationsModule),
+        typeof(EventHubEntityFrameworkCoreModule),
         typeof(EventHubApplicationContractsModule),
         typeof(EventHubAdminApplicationContractsModule)
         )]

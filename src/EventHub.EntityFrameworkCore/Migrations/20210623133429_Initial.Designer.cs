@@ -10,9 +10,9 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace EventHub.Migrations
 {
-    [DbContext(typeof(EventHubMigrationsDbContext))]
-    [Migration("20210614064205_Moved_IsTimingChangeEmailSent_To_Event")]
-    partial class Moved_IsTimingChangeEmailSent_To_Event
+    [DbContext(typeof(EventHubDbContext))]
+    [Migration("20210623133429_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,7 +26,6 @@ namespace EventHub.Migrations
             modelBuilder.Entity("EventHub.Countries.Country", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -44,7 +43,6 @@ namespace EventHub.Migrations
             modelBuilder.Entity("EventHub.Events.Event", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<int?>("Capacity")
@@ -174,7 +172,6 @@ namespace EventHub.Migrations
             modelBuilder.Entity("EventHub.Events.Registrations.EventRegistration", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -213,7 +210,6 @@ namespace EventHub.Migrations
             modelBuilder.Entity("EventHub.Organizations.Memberships.OrganizationMembership", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -252,7 +248,6 @@ namespace EventHub.Migrations
             modelBuilder.Entity("EventHub.Organizations.Organization", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -728,7 +723,6 @@ namespace EventHub.Migrations
             modelBuilder.Entity("Volo.Abp.Identity.IdentityClaimType", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -775,7 +769,6 @@ namespace EventHub.Migrations
             modelBuilder.Entity("Volo.Abp.Identity.IdentityLinkUser", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("SourceTenantId")
@@ -801,7 +794,6 @@ namespace EventHub.Migrations
             modelBuilder.Entity("Volo.Abp.Identity.IdentityRole", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -878,7 +870,6 @@ namespace EventHub.Migrations
             modelBuilder.Entity("Volo.Abp.Identity.IdentitySecurityLog", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Action")
@@ -953,7 +944,6 @@ namespace EventHub.Migrations
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUser", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<int>("AccessFailedCount")
@@ -1233,7 +1223,6 @@ namespace EventHub.Migrations
             modelBuilder.Entity("Volo.Abp.Identity.OrganizationUnit", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Code")

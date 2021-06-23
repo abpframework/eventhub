@@ -34,6 +34,8 @@ namespace EventHub.EntityFrameworkCore
         {
             context.Services.AddAbpDbContext<EventHubDbContext>(options =>
             {
+                options.ReplaceDbContext<IIdentityDbContext>();
+
                 /* Remove "includeAllEntities: true" to create
                  * default repositories only for aggregate roots */
                 options.AddDefaultRepositories(includeAllEntities: true);

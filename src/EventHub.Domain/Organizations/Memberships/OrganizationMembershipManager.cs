@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using EventHub.Users;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
+using Volo.Abp.Identity;
 
 namespace EventHub.Organizations.Memberships
 {
@@ -17,7 +17,7 @@ namespace EventHub.Organizations.Memberships
         
         public async Task JoinAsync(
             Organization organization,
-            AppUser user)
+            IdentityUser user)
         {
             if (await IsJoinedAsync(organization, user))
             {
@@ -35,7 +35,7 @@ namespace EventHub.Organizations.Memberships
 
         public async Task<bool> IsJoinedAsync(
             Organization organization,
-            AppUser user)
+            IdentityUser user)
         {
             return await _organizationMembershipsRepository
                 .AnyAsync(x => x.OrganizationId == organization.Id && x.UserId == user.Id);

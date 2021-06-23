@@ -24,7 +24,7 @@ namespace EventHub.DbMigrator.Data
         private readonly IRepository<Event, Guid> _eventRepository;
         private readonly EventManager _eventManager;
         private readonly EventRegistrationManager _eventRegistrationManager;
-        private readonly IRepository<AppUser, Guid> _userRepository;
+        private readonly IRepository<IdentityUser, Guid> _userRepository;
 
         private Guid _userSandraId;
         private Guid _userSergeyId;
@@ -46,7 +46,7 @@ namespace EventHub.DbMigrator.Data
             IRepository<Event, Guid> eventRepository,
             EventManager eventManager,
             EventRegistrationManager eventRegistrationManager,
-            IRepository<AppUser, Guid> userRepository)
+            IRepository<IdentityUser, Guid> userRepository)
         {
             _guidGenerator = guidGenerator;
             _identityUserManager = identityUserManager;
