@@ -69,7 +69,7 @@ namespace EventHub.Admin.Web
             {
                 builder.Configuration.Bind("AuthServer", options.ProviderOptions);
                 options.UserOptions.RoleClaim = JwtClaimTypes.Role;
-                options.ProviderOptions.DefaultScopes.Add("EventHub");
+                options.ProviderOptions.DefaultScopes.Add("EventHubAdmin");
                 options.ProviderOptions.DefaultScopes.Add("role");
                 options.ProviderOptions.DefaultScopes.Add("email");
                 options.ProviderOptions.DefaultScopes.Add("phone");

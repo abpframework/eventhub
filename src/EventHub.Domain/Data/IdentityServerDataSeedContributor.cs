@@ -67,6 +67,7 @@ namespace EventHub.Data
         private async Task CreateApiScopesAsync()
         {
             await CreateApiScopeAsync("EventHub");
+            await CreateApiScopeAsync("EventHubAdmin");
         }
 
         private async Task CreateApiResourcesAsync()
@@ -154,7 +155,7 @@ namespace EventHub.Data
 
                 await CreateClientAsync(
                     name: webClientId,
-                    scopes: commonScopes.Union(new []{"EventHubAdmin"}),
+                    scopes: commonScopes.Union(new []{"EventHub"}),
                     grantTypes: new[] { "hybrid" },
                     secret: (configurationSection["EventHub_Web:ClientSecret"] ?? "1q2w3e*").Sha256(),
                     redirectUri: $"{webClientRootUrl}signin-oidc",
