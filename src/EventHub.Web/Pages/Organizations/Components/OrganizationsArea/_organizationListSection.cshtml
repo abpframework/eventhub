@@ -5,12 +5,14 @@
     <div class="col-lg-4 col-md-6 organization">
         <div class="card">
             @if (organization.ProfilePictureContent == null)
-            {
-                <img src="/assets/eh-organization.png" style="max-height: 310px; min-height: 170px;" class="card-img-top" alt="@organization.Name">
+            { 
+                <div class="event-thumbnail" style="        background-image: url(/assets/eh-organization.png);" alt="@organization.Name">
+                </div>
             }
             else
-            {
-                <img src="@($"data:image/png;base64,{Convert.ToBase64String(organization.ProfilePictureContent)}")" style="max-height: 310px; min-height: 170px;" class="card-img-top" alt="@organization.Name">
+            { 
+                <div class="event-thumbnail" style="background-image: url(@($"data:image/png;base64,{Convert.ToBase64String(organization.ProfilePictureContent)}"));" alt="@organization.Name">
+                </div>
             }
             <div class="card-body">
                 <div class="event-container">

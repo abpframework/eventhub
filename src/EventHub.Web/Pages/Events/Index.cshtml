@@ -39,11 +39,9 @@
 </div>
 
 <div class="container">
-    <div class="row mb-4">
         <form method="get" id="EventListFilterForm">
-            <div class="col-md-auto">
                 <div class="row filter-select">
-                    <div class="col-4 pr-0">
+                    <div class="col-4">
                         <select id="LanguageSelect" asp-for="Language" class="form-select" aria-label="en">
                             <option value="" selected>Language</option>
                             @foreach (var language in Model.Languages)
@@ -52,7 +50,7 @@
                             }
                         </select>
                     </div>
-                    <div class="col-4 pr-0">
+                    <div class="col-4">
                         <div class="form-label-group locationGroup">
                             <select id="CountrySelect" asp-for="CountryId" class="form-select" aria-label="Turkey">
                                 <option value="" selected>Location</option>
@@ -63,7 +61,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-4 pr-0">
+                    <div class="col-4">
                         <div class="form-label-group">
                             <input type="text" id="WhenInput" class="form-control" placeholder="When">
                             <label for="WhenInput">When</label>
@@ -72,9 +70,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
         </form>
-    </div>
 
     <div id="EventsAreaViewComponent" data-widget-filter="#EventListFilterForm">
         @await Component.InvokeAsync(typeof(EventsAreaViewComponent), new

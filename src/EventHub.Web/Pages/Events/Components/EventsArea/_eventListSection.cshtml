@@ -9,11 +9,13 @@
         <div class="card">
             @if (eventDto.CoverImageContent is null)
             {
-                <img abp-card-image="Top" class="event-thumbnail" src="/assets/eh-event.png" alt="@eventDto.Title"/>
+                <div class="event-thumbnail" style="background-image: url(/assets/eh-event.png);" alt="@eventDto.Title">
+                </div>
             }
             else
             {
-                <img abp-card-image="Top" class="event-thumbnail" src="@($"data:image/png;base64,{Convert.ToBase64String(eventDto.CoverImageContent)}")" alt="@eventDto.Title"/>
+                <div class="event-thumbnail" style="background-image: url( @($"data:image/png;base64,{Convert.ToBase64String(eventDto.CoverImageContent)}")"  alt="@eventDto.Title">
+                </div> 
             }
             <div class="card-body">
                 <div class="event-container">

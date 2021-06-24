@@ -20,11 +20,11 @@
                 <div class="detail-image">
                     @if (Model.Organization.ProfilePictureContent == null)
                     {
-                        <img src="/assets/eh-organization.png" width="996" height="300" alt="@Model.Organization.Name">
+                        <img class="detail-img" src="/assets/eh-organization-big.png" alt="@Model.Organization.Name">
                     }
                     else
                     {
-                        <img src="@($"data:image/png;base64,{Convert.ToBase64String(Model.Organization.ProfilePictureContent)}")" alt="@Model.Organization.Name">
+                        <img class="detail-img" src="@($"data:image/png;base64,{Convert.ToBase64String(Model.Organization.ProfilePictureContent)}")" alt="@Model.Organization.Name">
                     }
                 </div>
             </div>

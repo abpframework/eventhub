@@ -3,30 +3,35 @@
 @using Volo.Abp.Users
 @model IndexModel
 @inject ICurrentUser CurrentUser
-@if (CurrentUser.IsAuthenticated)
-{
-    <div>
-        <abp-row>
-            <abp-column size-md="_3" class="text-center">
-                <i class="fa fa-user d-block" style="font-size: 10em; color: #12b900"></i>
-                <a abp-button="Primary" href="/Account/Logout">Logout</a>
-            </abp-column>
-            <abp-column size-md="_9">
-                <h2>@CurrentUser.UserName</h2>
-                <h5 class="text-muted">@CurrentUser.Email</h5>
-                <div>
-                    <h3>Roles</h3> @CurrentUser.Roles.JoinAsString(", ")
-                    <h3>Claims</h3> @Html.Raw(CurrentUser.GetAllClaims().Select(c => $"{c.Type}={c.Value}").JoinAsString(" <br /> "))
-                </div>
-            </abp-column>
-        </abp-row>
-    </div>
-}
+<div class="container mt-5">
 
-@if (!CurrentUser.IsAuthenticated)
-{
-    <div class="text-center">
-        <i class="fa fa-user d-block" style="font-size: 10em; color: #aaa"></i><br/><br />
-        <a abp-button="Primary" asp-page="/Account/Login">Login</a>
-    </div>
-}
+    @if (CurrentUser.IsAuthenticated)
+    {
+        <div class="card">
+            <div class="card-body">
+                <abp-row>
+                    <abp-column size-md="_3" class="text-center">
+                        <i class="fa fa-user d-block" style="font-size: 10em; color: #12b900"></i>
+                        <a abp-button="Primary" href="/Account/Logout">Logout</a>
+                    </abp-column>
+                    <abp-column size-md="_9">
+                        <h2>@CurrentUser.UserName</h2>
+                        <h5 class="text-muted">@CurrentUser.Email</h5>
+                        <div>
+                            <h3>Roles</h3> @CurrentUser.Roles.JoinAsString(", ")
+                            <h3>Claims</h3> @Html.Raw(CurrentUser.GetAllClaims().Select(c => $"{c.Type}={c.Value}").JoinAsString(" <br /> "))
+                        </div>
+                    </abp-column>
+                </abp-row>
+            </div>
+        </div>
+    }
+
+    @if (!CurrentUser.IsAuthenticated)
+    {
+        <div class="text-center">
+            <i class="fa fa-user d-block" style="font-size: 10em; color: #aaa"></i><br /><br />
+            <a abp-button="Primary" asp-page="/Account/Login">Login</a>
+        </div>
+    }
+</div>
