@@ -7,16 +7,16 @@ using EventHub.Organizations;
 using EventHub.Users;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EventHub.Web.Pages.Members
+namespace EventHub.Web.Pages
 {
-    public class ProfileModel : EventHubPageModel
+    public class UserModel : EventHubPageModel
     {
         private readonly IUserAppService _userAppService;
         private readonly IOrganizationAppService _organizationAppService;
 
         public List<OrganizationInListDto> Organizations { get; set; }
 
-        public ProfileModel(
+        public UserModel(
             IUserAppService userAppService, 
             IOrganizationAppService organizationAppService)
         {
