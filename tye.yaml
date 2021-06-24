@@ -1,10 +1,5 @@
 name: myprojectname
 services:
-- name: redis
-  image: redis:6.0.10-alpine
-  bindings:
-    - port: 6379
-      connectionString: "${host}:${port}"
 - name: identityserver
   project: src/EventHub.IdentityServer/EventHub.IdentityServer.csproj
   bindings:
@@ -18,6 +13,14 @@ services:
   bindings:
     - protocol: https
       port: 44362
+  env:
+    - Kestrel__Certificates__Default__Path=../../etc/dev-cert/localhost.pfx
+    - Kestrel__Certificates__Default__Password=e8202f07-66e5-4619-be07-72ba76fde97f  
+- name: admin-api
+  project: src/EventHub.Admin.HttpApi.Host/EventHub.Admin.HttpApi.Host.csproj
+  bindings:
+    - protocol: https
+      port: 44305
   env:
     - Kestrel__Certificates__Default__Path=../../etc/dev-cert/localhost.pfx
     - Kestrel__Certificates__Default__Password=e8202f07-66e5-4619-be07-72ba76fde97f  
