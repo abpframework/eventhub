@@ -8,7 +8,18 @@ namespace EventHub.Emailing
         {
             context.Add(
                 new TemplateDefinition(
-                    EmailTemplates.EventRegistration
+                    EmailTemplates.Layout,
+                    isLayout: true
+                ).WithVirtualFilePath(
+                    "/Emailing/Templates/Layout.tpl",
+                    isInlineLocalized: true
+                )
+            );
+            
+            context.Add(
+                new TemplateDefinition(
+                    EmailTemplates.EventRegistration, 
+                    layout: EmailTemplates.Layout
                 ).WithVirtualFilePath(
                     "/Emailing/Templates/EventRegistration.tpl",
                     isInlineLocalized: true
@@ -17,7 +28,8 @@ namespace EventHub.Emailing
             
             context.Add(
                 new TemplateDefinition(
-                    EmailTemplates.EventReminder
+                    EmailTemplates.EventReminder,
+                    layout: EmailTemplates.Layout
                 ).WithVirtualFilePath(
                     "/Emailing/Templates/EventReminder.tpl",
                     isInlineLocalized: true
@@ -26,7 +38,8 @@ namespace EventHub.Emailing
             
             context.Add(
                 new TemplateDefinition(
-                    EmailTemplates.NewEventCreated
+                    EmailTemplates.NewEventCreated,
+                    layout: EmailTemplates.Layout
                 ).WithVirtualFilePath(
                     "/Emailing/Templates/NewEventCreated.tpl",
                     isInlineLocalized: true
@@ -35,7 +48,8 @@ namespace EventHub.Emailing
 
             context.Add(
                 new TemplateDefinition(
-                        EmailTemplates.EventTimingChanged)
+                        EmailTemplates.EventTimingChanged,
+                        layout: EmailTemplates.Layout)
                     .WithVirtualFilePath(
                         "/Emailing/Templates/EventTimingChanged.tpl",
                         isInlineLocalized: true
