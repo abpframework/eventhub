@@ -8,6 +8,7 @@ using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 using Volo.Abp.Data;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
@@ -27,6 +28,7 @@ namespace EventHub.EntityFrameworkCore
      * used modules (as explained above). See EventHubMigrationsDbContext for migrations.
      */
     [ConnectionStringName("Default")]
+    [ReplaceDbContext(typeof(IIdentityDbContext))]
     public class EventHubDbContext :
         AbpDbContext<EventHubDbContext>,
         IIdentityDbContext

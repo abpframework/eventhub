@@ -4,7 +4,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace EventHub.Countries
 {
-    public class Country : Entity<Guid>
+    public class Country : BasicAggregateRoot<Guid>
     {
         public string Name { get; private set; }
 

@@ -34,17 +34,11 @@ namespace EventHub.EntityFrameworkCore
         {
             context.Services.AddAbpDbContext<EventHubDbContext>(options =>
             {
-                options.ReplaceDbContext<IIdentityDbContext>();
-
-                /* Remove "includeAllEntities: true" to create
-                 * default repositories only for aggregate roots */
-                options.AddDefaultRepositories(includeAllEntities: true);
+                options.AddDefaultRepositories();
             });
 
             Configure<AbpDbContextOptions>(options =>
             {
-                /* The main point to change your DBMS.
-                 * See also EventHubMigrationsDbContextFactory for EF Core tooling. */
                 options.UseNpgsql();
             });
         }
