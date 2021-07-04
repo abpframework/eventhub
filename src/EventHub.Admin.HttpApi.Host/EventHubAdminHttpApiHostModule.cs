@@ -32,7 +32,7 @@ namespace EventHub.Admin
     [DependsOn(
         typeof(EventHubAdminApplicationModule),
         typeof(EventHubAdminHttpApiModule),
-        typeof(EventHubEntityFrameworkCoreDbMigrationsModule),
+        typeof(EventHubEntityFrameworkCoreModule),
         typeof(AbpAutofacModule),
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAspNetCoreSerilogModule),

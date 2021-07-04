@@ -4,12 +4,17 @@ using EventHub.Events.Registrations;
 using EventHub.Organizations;
 using EventHub.Organizations.Memberships;
 using Microsoft.EntityFrameworkCore;
-using EventHub.Users;
+using Volo.Abp.AuditLogging.EntityFrameworkCore;
+using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
+using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 using Volo.Abp.Data;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.Identity;
-using Volo.Abp.Users.EntityFrameworkCore;
+using Volo.Abp.Identity.EntityFrameworkCore;
+using Volo.Abp.IdentityServer.EntityFrameworkCore;
+using Volo.Abp.PermissionManagement.EntityFrameworkCore;
+using Volo.Abp.SettingManagement.EntityFrameworkCore;
 
 namespace EventHub.EntityFrameworkCore
 {
@@ -23,14 +28,27 @@ namespace EventHub.EntityFrameworkCore
      * used modules (as explained above). See EventHubMigrationsDbContext for migrations.
      */
     [ConnectionStringName("Default")]
-    public class EventHubDbContext : AbpDbContext<EventHubDbContext>
+    [ReplaceDbContext(typeof(IIdentityDbContext))]
+    public class EventHubDbContext :
+        AbpDbContext<EventHubDbContext>,
+        IIdentityDbContext
     {
-        public DbSet<AppUser> Users { get; set; }
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<OrganizationMembership> OrganizationMemberships { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<EventRegistration> EventRegistrations { get; set; }
         public DbSet<Country> Countries { get; set; }
+
+        #region Entities from the used modules
+
+        public DbSet<IdentityUser> Users { get; set; }
+        public DbSet<IdentityRole> Roles { get; set; }
+        public DbSet<IdentityClaimType> ClaimTypes { get; set; }
+        public DbSet<OrganizationUnit> OrganizationUnits { get; set; }
+        public DbSet<IdentitySecurityLog> SecurityLogs { get; set; }
+        public DbSet<IdentityLinkUser> LinkUsers { get; set; }
+
+        #endregion
         
         public EventHubDbContext(DbContextOptions<EventHubDbContext> options)
             : base(options)
@@ -42,23 +60,15 @@ namespace EventHub.EntityFrameworkCore
         {
             base.OnModelCreating(builder);
 
-            /* Configure the shared tables (with included modules) here */
+            builder.ConfigurePermissionManagement();
+            builder.ConfigureSettingManagement();
+            builder.ConfigureBackgroundJobs();
+            builder.ConfigureAuditLogging();
+            builder.ConfigureIdentity();
+            builder.ConfigureIdentityServer();
+            builder.ConfigureBlobStoring();
 
-            builder.Entity<AppUser>(b =>
-            {
-                b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "Users"); //Sharing the same table "AbpUsers" with the IdentityUser
-
-                b.ConfigureByConvention();
-                b.ConfigureAbpUser();
-
-                /* Configure mappings for your additional properties
-                 * Also see the EventHubEfCoreEntityExtensionMappings class
-                 */
-            });
-
-            /* Configure your own tables/entities inside the ConfigureEventHub method */
-
-            builder.ConfigureEventHub(false);
+            builder.ConfigureEventHub();
         }
     }
 }

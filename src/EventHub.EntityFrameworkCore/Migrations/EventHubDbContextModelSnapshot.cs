@@ -9,8 +9,8 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace EventHub.Migrations
 {
-    [DbContext(typeof(EventHubMigrationsDbContext))]
-    partial class EventHubMigrationsDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(EventHubDbContext))]
+    partial class EventHubDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,6 @@ namespace EventHub.Migrations
             modelBuilder.Entity("EventHub.Countries.Country", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -42,7 +41,6 @@ namespace EventHub.Migrations
             modelBuilder.Entity("EventHub.Events.Event", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<int?>("Capacity")
@@ -172,7 +170,6 @@ namespace EventHub.Migrations
             modelBuilder.Entity("EventHub.Events.Registrations.EventRegistration", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -211,7 +208,6 @@ namespace EventHub.Migrations
             modelBuilder.Entity("EventHub.Organizations.Memberships.OrganizationMembership", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -250,7 +246,6 @@ namespace EventHub.Migrations
             modelBuilder.Entity("EventHub.Organizations.Organization", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -388,9 +383,7 @@ namespace EventHub.Migrations
                         .HasColumnName("CorrelationId");
 
                     b.Property<string>("Exceptions")
-                        .HasMaxLength(4000)
-                        .HasColumnType("character varying(4000)")
-                        .HasColumnName("Exceptions");
+                        .HasColumnType("text");
 
                     b.Property<int>("ExecutionDuration")
                         .HasColumnType("integer")
@@ -726,7 +719,6 @@ namespace EventHub.Migrations
             modelBuilder.Entity("Volo.Abp.Identity.IdentityClaimType", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -773,7 +765,6 @@ namespace EventHub.Migrations
             modelBuilder.Entity("Volo.Abp.Identity.IdentityLinkUser", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("SourceTenantId")
@@ -799,7 +790,6 @@ namespace EventHub.Migrations
             modelBuilder.Entity("Volo.Abp.Identity.IdentityRole", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -876,7 +866,6 @@ namespace EventHub.Migrations
             modelBuilder.Entity("Volo.Abp.Identity.IdentitySecurityLog", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Action")
@@ -951,7 +940,6 @@ namespace EventHub.Migrations
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUser", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<int>("AccessFailedCount")
@@ -1231,7 +1219,6 @@ namespace EventHub.Migrations
             modelBuilder.Entity("Volo.Abp.Identity.OrganizationUnit", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Code")

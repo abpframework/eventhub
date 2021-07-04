@@ -27,7 +27,7 @@ namespace EventHub.EntityFrameworkCore
              */
 
             await _serviceProvider
-                .GetRequiredService<EventHubMigrationsDbContext>()
+                .GetRequiredService<EventHubDbContext>()
                 .Database
                 .MigrateAsync();
         }

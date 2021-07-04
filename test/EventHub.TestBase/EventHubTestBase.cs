@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using EventHub.Events;
 using EventHub.Organizations;
-using EventHub.Users;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
@@ -125,20 +124,20 @@ namespace EventHub
             return @event;
         }
 
-        protected virtual async Task<AppUser> GetUserOrNullAsync(Guid id)
+        protected virtual async Task<IdentityUser> GetUserOrNullAsync(Guid id)
         {
-            var userRepository = GetRequiredService<IRepository<AppUser, Guid>>();
+            var userRepository = GetRequiredService<IRepository<IdentityUser, Guid>>();
             return await WithUnitOfWorkAsync(
                 () => userRepository.FindAsync(id)
             );
         }
 
-        protected virtual async Task<AppUser> GetUserAsync(Guid id)
+        protected virtual async Task<IdentityUser> GetUserAsync(Guid id)
         {
             var user = await GetUserOrNullAsync(id);
             if (user == null)
             {
-                throw new EntityNotFoundException(typeof(AppUser), id);
+                throw new EntityNotFoundException(typeof(IdentityUser), id);
             }
 
             return user;

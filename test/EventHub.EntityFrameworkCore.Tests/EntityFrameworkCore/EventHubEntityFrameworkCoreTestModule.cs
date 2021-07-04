@@ -11,7 +11,7 @@ using Volo.Abp.Modularity;
 namespace EventHub.EntityFrameworkCore
 {
     [DependsOn(
-        typeof(EventHubEntityFrameworkCoreDbMigrationsModule),
+        typeof(EventHubEntityFrameworkCoreModule),
         typeof(EventHubTestBaseModule),
         typeof(AbpEntityFrameworkCoreSqliteModule)
         )]
@@ -47,11 +47,11 @@ namespace EventHub.EntityFrameworkCore
             var connection = new SqliteConnection("Data Source=:memory:");
             connection.Open();
 
-            var options = new DbContextOptionsBuilder<EventHubMigrationsDbContext>()
+            var options = new DbContextOptionsBuilder<EventHubDbContext>()
                 .UseSqlite(connection)
                 .Options;
 
-            using (var context = new EventHubMigrationsDbContext(options))
+            using (var context = new EventHubDbContext(options))
             {
                 context.GetService<IRelationalDatabaseCreator>().CreateTables();
             }

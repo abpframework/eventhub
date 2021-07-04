@@ -27,10 +27,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Autofac" Version="4.2.1" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="4.4.0-rc.1" />
     <ProjectReference Include="..\EventHub.Application.Contracts\EventHub.Application.Contracts.csproj" />
     <ProjectReference Include="..\EventHub.Admin.Application.Contracts\EventHub.Admin.Application.Contracts.csproj" />
-    <ProjectReference Include="..\EventHub.EntityFrameworkCore.DbMigrations\EventHub.EntityFrameworkCore.DbMigrations.csproj" />
+    <ProjectReference Include="..\EventHub.EntityFrameworkCore\EventHub.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>

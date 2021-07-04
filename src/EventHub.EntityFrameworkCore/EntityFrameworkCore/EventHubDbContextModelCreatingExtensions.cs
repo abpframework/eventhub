@@ -12,9 +12,7 @@ namespace EventHub.EntityFrameworkCore
 {
     public static class EventHubDbContextModelCreatingExtensions
     {
-        public static void ConfigureEventHub(
-            this ModelBuilder builder,
-            bool isMigrationDbContext)
+        public static void ConfigureEventHub(this ModelBuilder builder)
         {
             Check.NotNull(builder, nameof(builder));
 
@@ -29,11 +27,7 @@ namespace EventHub.EntityFrameworkCore
                 b.Property(x => x.Name).IsRequired().HasMaxLength(OrganizationConsts.MaxNameLength);
                 b.Property(x => x.DisplayName).IsRequired().HasMaxLength(OrganizationConsts.MaxDisplayNameLength);
                 b.Property(x => x.Description).IsRequired().HasMaxLength(OrganizationConsts.MaxDescriptionNameLength);
-
-                if (isMigrationDbContext)
-                {
-                    b.HasOne<IdentityUser>().WithMany().HasForeignKey(x => x.OwnerUserId).IsRequired().OnDelete(DeleteBehavior.NoAction);
-                }
+                b.HasOne<IdentityUser>().WithMany().HasForeignKey(x => x.OwnerUserId).IsRequired().OnDelete(DeleteBehavior.NoAction);
 
                 b.HasIndex(x => x.Name);
                 b.HasIndex(x => x.DisplayName);
@@ -46,11 +40,7 @@ namespace EventHub.EntityFrameworkCore
                 b.ConfigureByConvention();
 
                 b.HasOne<Organization>().WithMany().HasForeignKey(x => x.OrganizationId).IsRequired().OnDelete(DeleteBehavior.NoAction);
-
-                if (isMigrationDbContext)
-                {
-                    b.HasOne<IdentityUser>().WithMany().HasForeignKey(x => x.UserId).IsRequired().OnDelete(DeleteBehavior.NoAction);
-                }
+                b.HasOne<IdentityUser>().WithMany().HasForeignKey(x => x.UserId).IsRequired().OnDelete(DeleteBehavior.NoAction);
 
                 b.HasIndex(x => new {x.OrganizationId, x.UserId});
             });
@@ -89,11 +79,7 @@ namespace EventHub.EntityFrameworkCore
                 b.ConfigureByConvention();
 
                 b.HasOne<Event>().WithMany().HasForeignKey(x => x.EventId).IsRequired().OnDelete(DeleteBehavior.NoAction);
-
-                if (isMigrationDbContext)
-                {
-                    b.HasOne<IdentityUser>().WithMany().HasForeignKey(x => x.UserId).IsRequired().OnDelete(DeleteBehavior.NoAction);
-                }
+                b.HasOne<IdentityUser>().WithMany().HasForeignKey(x => x.UserId).IsRequired().OnDelete(DeleteBehavior.NoAction);
 
                 b.HasIndex(x => new {x.EventId, x.UserId});
             });

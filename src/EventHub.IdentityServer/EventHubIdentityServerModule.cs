@@ -39,7 +39,7 @@ namespace EventHub
         typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAccountApplicationModule),
         typeof(EventHubWebThemeModule),
-        typeof(EventHubEntityFrameworkCoreDbMigrationsModule),
+        typeof(EventHubEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreSerilogModule)
         )]
     public class EventHubIdentityServerModule : AbpModule

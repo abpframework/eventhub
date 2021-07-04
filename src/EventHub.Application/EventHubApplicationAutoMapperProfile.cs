@@ -7,6 +7,7 @@ using EventHub.Organizations;
 using EventHub.Organizations.Memberships;
 using EventHub.Users;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Identity;
 
 namespace EventHub
 {
@@ -17,7 +18,7 @@ namespace EventHub
             CreateMap<Organization, OrganizationInListDto>();
             CreateMap<Organization, OrganizationProfileDto>();
             
-            CreateMap<AppUser, OrganizationMemberDto>();
+            CreateMap<IdentityUser, OrganizationMemberDto>();
 
             CreateMap<Event, EventDto>();
             CreateMap<Event, EventInListDto>()
@@ -29,14 +30,14 @@ namespace EventHub
                 .Ignore(x => x.OrganizationName)
                 .Ignore(x => x.OrganizationDisplayName);
 
-            CreateMap<AppUser, EventAttendeeDto>();
+            CreateMap<IdentityUser, EventAttendeeDto>();
 
             CreateMap<Event, EventLocationDto>()
                 .Ignore(x => x.Country);
             
             CreateMap<Country, CountryLookupDto>();
 
-            CreateMap<AppUser, UserDto>();
+            CreateMap<IdentityUser, UserDto>();
         }
     }
 }

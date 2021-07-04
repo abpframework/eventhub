@@ -33,7 +33,7 @@ namespace EventHub
     [DependsOn(
         typeof(EventHubApplicationModule),
         typeof(EventHubHttpApiModule),
-        typeof(EventHubEntityFrameworkCoreDbMigrationsModule),
+        typeof(EventHubEntityFrameworkCoreModule),
         typeof(AbpAutofacModule),
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAspNetCoreSerilogModule),
