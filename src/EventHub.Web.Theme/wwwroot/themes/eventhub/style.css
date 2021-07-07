@@ -1,3 +1,8 @@
+:root {
+    --primary: #00044A;
+    --blue: #00044A;
+}
+
 body {
     font-family: 'Poppins', sans-serif;
     line-height: 1.5;
@@ -84,25 +89,31 @@ p {
         margin-left: 12px;
         transition: color 0.3s ease; 
     }
-    .active .nav-link {
+    .navbar-expand-lg .navbar-nav .active .nav-link {
         background-image: url(../../../../assets/underline.svg);
         background-repeat: no-repeat;
         background-size: inherit;
         background-position: center 28px;
         color: #df2751 !important;
     }
-    .nav-link:hover { 
+    .navbar-expand-lg .navbar-nav .nav-link:hover {
         color: #df2751 !important;
     }
 }
- 
+
 
 
 .btn {
     border-radius: 10px !important;
     font-weight: 600;
     font-size: 14px;
-    padding: 10px 20px; 
+    padding: 10px 20px;
+}
+.btn-sm {
+    border-radius: 10px !important;
+    font-weight: 600;
+    font-size: 12px;
+    padding: 8px 16px;
 }
 .btn-primary {
     background-color: #E8345D !important;
@@ -312,7 +323,17 @@ p {
 }
 .event-thumbnail {
     width: 100%;
-    height: 200px;
+    height: 220px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.event-thumbnail-left {
+    width: 100%;
+    height: 220px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 .profile-content .form-control,
 .profile-content .form-select {
@@ -431,7 +452,7 @@ p {
 }
 footer {
     background: #00044A;
-    padding: 3.5em 0 2em; 
+    padding: 3em 0 3.5em 0; 
 }
 .footer-logo {
     color: white;
@@ -880,8 +901,7 @@ div.checkbox.switcher label, div.radio.switcher label {
     font-size: 1.05em;
 }
 
-.event .card {
-    max-width: 330px;
+.event .card { 
     margin: 0 auto 34px;
 }
 

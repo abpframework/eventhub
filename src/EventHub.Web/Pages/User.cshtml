@@ -9,10 +9,15 @@
 @inject ICurrentUser CurrentUser
 @inject IClock Clock
 @inject IHtmlLocalizer<EventHubResource> L
-@model EventHub.Web.Pages.Members.ProfileModel
+@model EventHub.Web.Pages.UserModel
+
+@section styles {
+    <abp-style src="/Pages/User.css" />
+}
+
 <div class="container pt-4">
     <div class="row py-4">
-        <div class="col-md-2">
+        <div class="col-md-3">
             <div class="">
                 <ul class="card list-group">
                     <div class="card-body">
@@ -42,7 +47,7 @@
                 </ul>
             </div>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-9">
             <abp-row>
                 <abp-column size="_8">
                     <ul class="nav nav-tabs profile-nav" id="profileTab">

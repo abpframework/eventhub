@@ -52,11 +52,11 @@
                 <div class="detail-image">
                     @if (Model.Event.CoverImageContent == null)
                     {
-                        <img src="/assets/eh-event.png" width="588" height="360" alt="@Model.Event.Title">
+                        <img src="/assets/eh-event.png" class="detail-img" alt="@Model.Event.Title">
                     }
                     else
                     {
-                        <img src="@($"data:image/png;base64,{Convert.ToBase64String(Model.Event.CoverImageContent)}")" alt="@Model.Event.Title">
+                        <img class="detail-img" src="@($"data:image/png;base64,{Convert.ToBase64String(Model.Event.CoverImageContent)}")" alt="@Model.Event.Title">
                     }
                 </div>
             </div>

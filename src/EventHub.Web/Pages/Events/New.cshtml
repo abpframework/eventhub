@@ -10,10 +10,16 @@
 
 @if (!Model.Organizations.Any())
 {
-  <div class="container">
-    <div class="my-5 text-center"> 
-        <h3>@L["NewEventYouHaveNoOrganizationYetMessage"]</h3>
-        <a abp-button="Primary" href="@Url.Page("/Organizations/New")">@L["CreateAnOrganization"]</a> 
+  <div class="container mt-5"> 
+    <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto ">
+            <div class="card" >
+                <div class="card-body text-center p-lg-5">
+                    <h4 class="mb-4">@L["NewEventYouHaveNoOrganizationYetMessage"]</h4>
+                    <a abp-button="Primary" href="@Url.Page("/Organizations/New")">@L["CreateAnOrganization"]</a>
+                </div>
+            </div> 
+        </div>
     </div>
   </div>
 }
@@ -71,7 +77,7 @@ else
                       </div>
                       <div class="col-6"> 
                         <div>
-                          <p class="mb-3">For horizontal format 600x300 sized upload images.</p>
+                          <p class="mb-3">For horizontal format 600x400 sized upload images.</p>
                           <input type="file" id="Event_CoverImageFile" asp-for="Event.CoverImageFile" class="form-control border-0" hidden>
                           <label id="upload-label" for="Event_CoverImageFile" class="btn btn-primary btn-lg text-white">Choose file</label>
                           <span asp-validation-for="Event.CoverImageFile" class="text-danger"></span>

@@ -3,36 +3,38 @@
 @inject IHtmlLocalizer<EventHubResource> L
 @model EventHub.Web.Pages.Events.Components.RegistrationArea.RegistrationAreaViewComponent.RegistrationAreaViewComponentModel
 <div data-event-id="@Model.EventId">
-        @if (Model.IsLoggedIn)
+    @if (Model.IsLoggedIn)
+    {
+        if (Model.IsRegistered)
         {
-            if (Model.IsRegistered)
-            {
-                <abp-button class="mt-4" id="EventCancelRegistrationButton"
-                            button-type="Success"
-                            size="Large"
-                            text="@L["YouAttendedThisEvent"].Value"
-                            data-url="@Url.Action("Unregister", "EventRegistration", new {eventId = Model.EventId})"/>
-            }else if (Model.IsPastEvent)
-            {
-                <abp-button class="mt-4" id="PastEventButton"
-                            button-type="Dark"
-                            size="Large"
-                            text="@L["PastEvent"].Value"
-                            disabled="true"
-                            abp-tooltip-top="@L["EventHub:CantRegisterOrUnregisterForAPastEvent"].Value" />
-            }
-            else
-            {
-                <abp-button class="mt-4" id="EventRegisterButton"
-                            button-type="Primary"
-                            size="Large"
-                            text="@L["JoinThisEvent"].Value"
-                            data-url="@Url.Action("Register","EventRegistration", new { eventId = Model.EventId })"/>
-            }
+            <p class="lead mt-4 mb-2"><i class="fa fa-check text-success"></i> @L["YouAttendedThisEvent"].Value</p>
+            <abp-button id="EventCancelRegistrationButton"
+                        button-type="Outline_Secondary"
+                        size="Small"
+                        text="Cancel Participating"
+                        data-url="@Url.Action("Unregister", "EventRegistration", new {eventId = Model.EventId})" />
+        }
+        else if (Model.IsPastEvent)
+        {
+            <abp-button class="mt-4" id="PastEventButton"
+                        button-type="Dark"
+                        size="Large"
+                        text="@L["PastEvent"].Value"
+                        disabled="true"
+                        abp-tooltip-top="@L["EventHub:CantRegisterOrUnregisterForAPastEvent"].Value" />
         }
         else
         {
-            <a abp-button="Primary" class="btn btn-primary btn-lg mt-4"
-               href="@Url.Action("Login", "Account", new { returnUrl = Context.Request.Path.Value })"> @L["LoginToRegister"]</a>
+            <abp-button class="mt-4" id="EventRegisterButton"
+                        button-type="Primary"
+                        size="Large"
+                        text="@L["JoinThisEvent"].Value"
+                        data-url="@Url.Action("Register","EventRegistration", new { eventId = Model.EventId })" />
         }
+    }
+    else
+    {
+        <a abp-button="Primary" class="btn btn-primary btn-lg mt-4"
+           href="@Url.Action("Login", "Account", new { returnUrl = Context.Request.Path.Value })"> @L["LoginToRegister"]</a>
+    }
 </div>
