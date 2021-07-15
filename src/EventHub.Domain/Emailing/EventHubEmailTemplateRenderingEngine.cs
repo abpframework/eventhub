@@ -7,14 +7,25 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.TextTemplating;
+using Volo.Abp.TextTemplating.Scriban;
 
 namespace EventHub.Emailing
 {
     [Dependency(ServiceLifetime.Transient, ReplaceServices = true)]
-    [ExposeServices(typeof(ITemplateRenderer), typeof(TemplateRenderer), typeof(EventHubEmailTemplateRenderingEngine))]
-    public class EventHubEmailTemplateRenderingEngine : TemplateRenderer
+    [ExposeServices(
+        typeof(ScribanTemplateRenderingEngine), 
+        typeof(EventHubEmailTemplateRenderingEngine)
+        )]
+    public class EventHubEmailTemplateRenderingEngine : ScribanTemplateRenderingEngine
     {
-        public EventHubEmailTemplateRenderingEngine(ITemplateContentProvider templateContentProvider, ITemplateDefinitionManager templateDefinitionManager, IStringLocalizerFactory stringLocalizerFactory) : base(templateContentProvider, templateDefinitionManager, stringLocalizerFactory)
+        public EventHubEmailTemplateRenderingEngine(
+            ITemplateDefinitionManager templateDefinitionManager, 
+            ITemplateContentProvider templateContentProvider,
+            IStringLocalizerFactory stringLocalizerFactory
+            ) : base(
+            templateDefinitionManager,
+            templateContentProvider,
+            stringLocalizerFactory)
         {
         }
 
