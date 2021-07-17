@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 
@@ -41,6 +43,8 @@ namespace EventHub.Events
         public int TimingChangeCount  { get; set; }
         
         public bool IsTimingChangeEmailSent { get; set; }
+        
+        public ICollection<Track> Tracks { get; private set; }
 
         private Event()
         {
@@ -59,9 +63,12 @@ namespace EventHub.Events
         {
             OrganizationId = organizationId;
             UrlCode = Check.NotNullOrWhiteSpace(urlCode, urlCode, EventConsts.UrlCodeLength, EventConsts.UrlCodeLength);
+            
             SetTitle(title);
             SetDescription(description);
             SetTimeInternal(startTime, endTime);
+            
+            Tracks = new Collection<Track>();
         }
 
         public Event SetTitle(string title)

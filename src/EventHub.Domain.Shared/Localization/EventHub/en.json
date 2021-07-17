@@ -82,6 +82,7 @@
     "EventTimingPreview": "Event Timing Preview",
     "CoverImagePreview": "Cover Image Preview",
     "EventTimingChangeSuccessMessage": "The time of the event has been changed successfully!",
-    "PastEvent": "Past Event"
+    "PastEvent": "Past Event",
+    "EventHub:SessionEndTimeCantBeEarlierThanStartTime": "Session end time can not be earlier than the start time."
   }
 }
