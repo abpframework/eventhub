@@ -44,6 +44,8 @@ namespace EventHub.Events
         
         public bool IsTimingChangeEmailSent { get; set; }
         
+        public bool IsDraft { get; set; }
+        
         public ICollection<Track> Tracks { get; private set; }
 
         private Event()
@@ -97,9 +99,10 @@ namespace EventHub.Events
                     .WithData("MaxTimingChangeLimit", EventConsts.MaxTimingChangeCountForUser);
             }
             
+            SetTimeInternal(startTime, endTime);
+            TimingChangeCount++;
             AddLocalEvent(new EventTimeChangingEventData(this, StartTime, EndTime));
-
-            return SetTimeInternal(startTime, endTime);
+            return this;
         }
 
         private Event SetTimeInternal(DateTime startTime, DateTime endTime)
@@ -111,7 +114,6 @@ namespace EventHub.Events
 
             StartTime = startTime;
             EndTime = endTime;
-            TimingChangeCount++;
             return this;
         }
     }
