@@ -261,7 +261,21 @@ namespace EventHub.Events
             
             await _eventRepository.UpdateAsync(@event);
         }
-        
+
+        public async Task AddSessionAsync(Guid id, AddSessionDto input)
+        {
+            var @event = await _eventRepository.GetAsync(id);
+            @event.AddSession(
+                input.TrackId,
+                input.Title,
+                input.StartTime,
+                input.EndTime,
+                input.Description,
+                input.Language
+            );
+            await _eventRepository.UpdateAsync(@event);
+        }
+
         public async Task<byte[]> GetCoverImageAsync(Guid id)
         {
             var blobName = id.ToString();

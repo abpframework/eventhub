@@ -22,6 +22,23 @@ namespace EventHub.Events
 
         Task UpdateAsync(Guid id, UpdateEventDto input);
 
+        Task AddSessionAsync(Guid id, AddSessionDto input);
+
         Task<byte[]> GetCoverImageAsync(Guid id);
+    }
+
+    public class AddSessionDto
+    {
+        public Guid TrackId { get; set; }
+        
+        public string Title { get; set; }
+
+        public DateTime StartTime { get; set; }
+
+        public DateTime EndTime { get; set; }
+
+        public string Description { get; set; }
+
+        public string Language { get; set; }
     }
 }

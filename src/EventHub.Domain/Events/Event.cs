@@ -116,5 +116,10 @@ namespace EventHub.Events
             EndTime = endTime;
             return this;
         }
+
+        public void AddSession(Guid trackId, string title, DateTime startTime, DateTime endTime, string description, string language)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
