@@ -32,7 +32,7 @@ namespace EventHub.Events.Registrations
             
             var registrationCount = await _eventRegistrationRepository.CountAsync(x => x.EventId == @event.Id);
 
-            if (@event.Capacity != null &&  registrationCount >= @event.Capacity)
+            if (@event.Capacity != null && registrationCount >= @event.Capacity)
             {
                 throw new BusinessException(EventHubErrorCodes.CapacityOfEventFull)
                     .WithData("EventTitle", @event.Title);

@@ -9,7 +9,7 @@
         public const string CantRegisterOrUnregisterForAPastEvent = "EventHub:CantRegisterOrUnregisterForAPastEvent";
         public const string NotAuthorizedToUpdateOrganizationProfile = "EventHub:NotAuthorizedToUpdateOrganizationProfile";
         public const string CapacityOfEventFull = "EventHub:CapacityOfEventFull";
-        public const string CapacityCantBeLowerThanRegisteredUserCount = "EventHub:CapacityCantBeLowerThanRegisteredUserCount";
+        public const string CapacityCanNotBeLowerThanRegisteredUserCount = "EventHub:CapacityCantBeLowerThanRegisteredUserCount";
         public const string NotAuthorizedToUpdateEvent = "EventHub:NotAuthorizedToUpdateEvent";
         public const string CantChangeEventTiming = "EventHub:CantChangeEventTiming";
         public const string SessionTimeShouldBeInTheEventTime = "EventHub:SessionTimeShouldBeInTheEventTime";
