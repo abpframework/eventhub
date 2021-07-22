@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Volo.Abp;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Auditing;
 
 namespace EventHub.Events
@@ -45,9 +47,8 @@ namespace EventHub.Events
         public bool IsTimingChangeEmailSent { get; set; }
         
         public bool IsDraft { get; set; }
-        
         public ICollection<Track> Tracks { get; private set; }
-
+        
         private Event()
         {
 
@@ -92,16 +93,24 @@ namespace EventHub.Events
             {
                 return this;
             }
-            
-            if (TimingChangeCount >= EventConsts.MaxTimingChangeCountForUser)
+
+            if (!IsDraft)
             {
-                throw new BusinessException(EventHubErrorCodes.CantChangeEventTiming)
-                    .WithData("MaxTimingChangeLimit", EventConsts.MaxTimingChangeCountForUser);
+                if (TimingChangeCount >= EventConsts.MaxTimingChangeCountForUser)
+                {
+                    throw new BusinessException(EventHubErrorCodes.CantChangeEventTiming)
+                        .WithData("MaxTimingChangeLimit", EventConsts.MaxTimingChangeCountForUser);
+                }
             }
             
             SetTimeInternal(startTime, endTime);
-            TimingChangeCount++;
-            AddLocalEvent(new EventTimeChangingEventData(this, StartTime, EndTime));
+
+            if (!IsDraft)
+            {
+                TimingChangeCount++;
+                IsTimingChangeEmailSent = false;
+            }
+            
             return this;
         }
 
@@ -109,7 +118,7 @@ namespace EventHub.Events
         {
             if (startTime > endTime)
             {
-                throw new BusinessException(EventHubErrorCodes.EventEndTimeCantBeEarlierThanStartTime);
+                throw new BusinessException(EventHubErrorCodes.EndTimeCantBeEarlierThanStartTime);
             }
 
             StartTime = startTime;
@@ -117,9 +126,34 @@ namespace EventHub.Events
             return this;
         }
 
-        public void AddSession(Guid trackId, string title, DateTime startTime, DateTime endTime, string description, string language)
+        public Event AddSession(
+            Guid trackId,
+            Guid sessionId,
+            string title,
+            DateTime startTime, 
+            DateTime endTime,
+            string description,
+            string language)
         {
-            throw new NotImplementedException();
+            if (startTime > endTime)
+            {
+                throw new BusinessException(EventHubErrorCodes.EndTimeCantBeEarlierThanStartTime);
+            }
+            
+            if (startTime < this.StartTime || this.EndTime < endTime)
+            {
+                throw new BusinessException(EventHubErrorCodes.SessionTimeShouldBeInTheEventTime);
+            }
+
+            var track = GetTrack(trackId);
+            track.AddSession(sessionId, title, startTime, endTime, description, language);
+            return this;
+        }
+
+        private Track GetTrack(Guid trackId)
+        {
+            return Tracks.FirstOrDefault(t => t.Id == trackId) ??
+                   throw new EntityNotFoundException(typeof(Track), trackId);
         }
     }
 }

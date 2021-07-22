@@ -267,6 +267,7 @@ namespace EventHub.Events
             var @event = await _eventRepository.GetAsync(id);
             @event.AddSession(
                 input.TrackId,
+                GuidGenerator.Create(),
                 input.Title,
                 input.StartTime,
                 input.EndTime,

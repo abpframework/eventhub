@@ -35,5 +35,32 @@ namespace EventHub.Events
             Name = Check.NotNullOrWhiteSpace(name, nameof(name), TrackConsts.MaxNameLength);
             return this;
         }
+
+        internal Track AddSession(
+            Guid sessionId,
+            string title,
+            DateTime startTime,
+            DateTime endTime, 
+            string description,
+            string language)
+        {
+            if (startTime > endTime)
+            {
+                throw new BusinessException(EventHubErrorCodes.EndTimeCantBeEarlierThanStartTime);
+            }
+
+            foreach (var session in Sessions)
+            {
+                if (startTime.IsBetween(session.StartTime, session.EndTime) ||
+                    endTime.IsBetween(session.StartTime, session.EndTime))
+                {
+                    throw new BusinessException(EventHubErrorCodes.SessionTimeConflictsWithAnExistingSession);
+                }
+            }
+            
+            Sessions.Add(new Session(sessionId, Id, title, startTime, endTime, description));
+            
+            return this;
+        }
     }
 }

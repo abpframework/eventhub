@@ -23,7 +23,7 @@ namespace EventHub.Events
                 );
             });
 
-            exception.Code.ShouldBe(EventHubErrorCodes.EventEndTimeCantBeEarlierThanStartTime);
+            exception.Code.ShouldBe(EventHubErrorCodes.EndTimeCantBeEarlierThanStartTime);
         }
     }
 }

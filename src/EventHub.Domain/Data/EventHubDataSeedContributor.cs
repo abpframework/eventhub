@@ -32,6 +32,7 @@ namespace EventHub.Data
 
             var countries = new List<Country>
             {
+                //TODO: Use IGuidGenerator
                 new Country(Guid.NewGuid(), "Afghanistan"),
                 new Country(Guid.NewGuid(), "Albania"),
                 new Country(Guid.NewGuid(), "Algeria"),
