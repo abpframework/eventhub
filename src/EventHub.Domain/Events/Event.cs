@@ -47,6 +47,7 @@ namespace EventHub.Events
         public bool IsTimingChangeEmailSent { get; set; }
         
         public bool IsDraft { get; set; }
+        
         public ICollection<Track> Tracks { get; private set; }
         
         private Event()

@@ -30,12 +30,14 @@ namespace EventHub.Events.Registrations
                 return;
             }
             
-            var registrationCount = await _eventRegistrationRepository.CountAsync(x => x.EventId == @event.Id);
-
-            if (@event.Capacity != null && registrationCount >= @event.Capacity)
+            if (@event.Capacity != null)
             {
-                throw new BusinessException(EventHubErrorCodes.CapacityOfEventFull)
-                    .WithData("EventTitle", @event.Title);
+                var registrationCount = await _eventRegistrationRepository.CountAsync(x => x.EventId == @event.Id);
+                if (registrationCount >= @event.Capacity)
+                {
+                    throw new BusinessException(EventHubErrorCodes.CapacityOfEventFull)
+                        .WithData("EventTitle", @event.Title);
+                }
             }
                 
             await _eventRegistrationRepository.InsertAsync(
