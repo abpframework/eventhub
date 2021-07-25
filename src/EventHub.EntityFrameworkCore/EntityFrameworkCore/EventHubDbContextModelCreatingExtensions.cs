@@ -70,6 +70,45 @@ namespace EventHub.EntityFrameworkCore
                 b.HasIndex(x => x.UrlCode);
                 b.HasIndex(x => new {x.IsRemindingEmailSent, x.StartTime});
                 b.HasIndex(x => x.IsEmailSentToMembers);
+
+                b.HasMany(x => x.Tracks).WithOne().IsRequired().HasForeignKey(x => x.EventId);
+            });
+
+            builder.Entity<Track>(b =>
+            {
+                b.ToTable(EventHubConsts.DbTablePrefix + "EventTracks", EventHubConsts.DbSchema);
+
+                b.ConfigureByConvention();
+
+                b.Property(x => x.Name).IsRequired().HasMaxLength(TrackConsts.MaxNameLength);
+                
+                b.HasMany(x => x.Sessions).WithOne().IsRequired().HasForeignKey(x => x.TrackId);
+            });
+            
+            builder.Entity<Session>(b =>
+            {
+                b.ToTable(EventHubConsts.DbTablePrefix + "EventSessions", EventHubConsts.DbSchema);
+
+                b.ConfigureByConvention();
+
+                b.Property(x => x.Title).IsRequired().HasMaxLength(SessionConsts.MaxTitleLength);
+                b.Property(x => x.Description).IsRequired().HasMaxLength(SessionConsts.MaxDescriptionLength);
+                b.Property(x => x.Language).IsRequired().HasMaxLength(SessionConsts.MaxLanguageLength);
+                
+                b.HasMany(x => x.Speakers).WithOne().IsRequired().HasForeignKey(x => x.SessionId);
+            });
+            
+            builder.Entity<Speaker>(b =>
+            {
+                b.ToTable(EventHubConsts.DbTablePrefix + "EventSpeakers", EventHubConsts.DbSchema);
+
+                b.ConfigureByConvention();
+
+                b.HasKey(x => new {x.SessionId, x.UserId});
+
+                b.HasOne<IdentityUser>().WithMany().HasForeignKey(x => x.UserId).IsRequired();
+
+                b.HasIndex(x => new {x.UserId, x.SessionId});
             });
 
             builder.Entity<EventRegistration>(b =>
