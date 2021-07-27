@@ -26,6 +26,8 @@ namespace EventHub.Organizations
 
         public string MediumUsername { get; set; }
 
+        public int MemberCount { get; internal set; }
+
         private Organization()
         {
         }
