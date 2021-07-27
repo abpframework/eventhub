@@ -8,10 +8,12 @@ namespace EventHub.Admin.Permissions
     {
         public override void Define(IPermissionDefinitionContext context)
         {
-            var myGroup = context.AddGroup(EventHubPermissions.GroupName);
+            var eventHubGroup = context.AddGroup(EventHubPermissions.GroupName);
 
-            //Define your own permissions here. Example:
-            //myGroup.AddPermission(EventHubPermissions.MyPermission1, L("Permission:MyPermission1"));
+            var tenantsPermission = eventHubGroup.AddPermission(EventHubPermissions.Organizations.Default, L("Permission:OrganizationManagement"));
+            tenantsPermission.AddChild(EventHubPermissions.Organizations.Create, L("Permission:Create"));
+            tenantsPermission.AddChild(EventHubPermissions.Organizations.Update, L("Permission:Edit"));
+            tenantsPermission.AddChild(EventHubPermissions.Organizations.Delete, L("Permission:Delete"));
         }
 
         private static LocalizableString L(string name)
