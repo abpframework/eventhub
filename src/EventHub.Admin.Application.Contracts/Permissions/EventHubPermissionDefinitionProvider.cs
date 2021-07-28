@@ -10,10 +10,11 @@ namespace EventHub.Admin.Permissions
         {
             var eventHubGroup = context.AddGroup(EventHubPermissions.GroupName);
 
-            var tenantsPermission = eventHubGroup.AddPermission(EventHubPermissions.Organizations.Default, L("Permission:OrganizationManagement"));
-            tenantsPermission.AddChild(EventHubPermissions.Organizations.Create, L("Permission:Create"));
-            tenantsPermission.AddChild(EventHubPermissions.Organizations.Update, L("Permission:Edit"));
-            tenantsPermission.AddChild(EventHubPermissions.Organizations.Delete, L("Permission:Delete"));
+            var organizationsPermission = eventHubGroup.AddPermission(EventHubPermissions.Organizations.Default, L("Permission:OrganizationManagement"));
+            organizationsPermission.AddChild(EventHubPermissions.Organizations.Create, L("Permission:Create"));
+            organizationsPermission.AddChild(EventHubPermissions.Organizations.Update, L("Permission:Edit"));
+            organizationsPermission.AddChild(EventHubPermissions.Organizations.Delete, L("Permission:Delete"));
+            organizationsPermission.AddChild(EventHubPermissions.Organizations.Memberships.Default, L("Permission:MembershipManagement"));
         }
 
         private static LocalizableString L(string name)

@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using EventHub.Organizations;
 using JetBrains.Annotations;

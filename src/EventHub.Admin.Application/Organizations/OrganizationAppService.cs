@@ -3,18 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
-using EventHub.Admin.Application;
-using EventHub.Admin.Application.Contracts.Organizations;
 using EventHub.Admin.Permissions;
 using EventHub.Organizations;
-using EventHub.Organizations.Memberships;
-using EventHub.Users;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
-using Volo.Abp.Identity.Settings;
 
 namespace EventHub.Admin.Organizations
 {
@@ -41,17 +36,14 @@ namespace EventHub.Admin.Organizations
 
 			if (!input.Name.IsNullOrWhiteSpace())
 			{
-				query = query.Where(o => o.Name.Contains(input.Name));
+				input.Name = input.Name.ToLower();
+				query = query.Where(o => o.Name.ToLower().Contains(input.Name));
 			}
 
 			if (!input.DisplayName.IsNullOrWhiteSpace())
 			{
-				query = query.Where(o => o.DisplayName.Contains(input.DisplayName));
-			}
-
-			if (!input.DisplayName.IsNullOrWhiteSpace())
-			{
-				query = query.Where(o => o.DisplayName.Contains(input.DisplayName));
+				input.DisplayName = input.DisplayName.ToLower();
+				query = query.Where(o => o.DisplayName.ToLower().Contains(input.DisplayName));
 			}
 
 			if (input.MinMemberCount != null)
@@ -86,11 +78,12 @@ namespace EventHub.Admin.Organizations
 			dto.OwnerUserName = user.UserName;
 			dto.OwnerEmail = user.Email;
 			
-			dto.ProfilePictureContent = await GetCoverImageAsync(id);
+			dto.ProfilePictureContent = await GetCoverImageAsync(organization.Id);
 			
 			return dto;
 		}
 
+		[Authorize(EventHubPermissions.Organizations.Update)]
 		public async Task<OrganizationProfileDto> UpdateAsync(Guid id, UpdateOrganizationDto input)
 		{
 			var organization = await _organizationRepository.GetAsync(id);

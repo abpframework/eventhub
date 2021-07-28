@@ -1,11 +1,11 @@
 using EventHub.Localization;
 using Volo.Abp.Application.Services;
 
-namespace EventHub.Admin.Application
+namespace EventHub.Admin
 {
     public class EventHubAdminAppService : ApplicationService
     {
-        public EventHubAdminAppService()
+        protected EventHubAdminAppService()
         {
             LocalizationResource = typeof(EventHubResource);
         }

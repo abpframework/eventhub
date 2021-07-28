@@ -5,7 +5,11 @@
         private const string Prefix = "EventHub";
         public const string Home = Prefix + ".Home";
 
-        //Add your menu items here...
-
+        public static class OrganizationManagement
+        {
+            public const string GroupName = Prefix + ".OrganizationManagement";
+            public const string Organizations = GroupName + ".Organizations";
+            public const string OrganizationMemberships = GroupName + ".OrganizationMemberships";
+        }
     }
 }

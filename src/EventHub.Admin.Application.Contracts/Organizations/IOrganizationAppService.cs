@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using EventHub.Admin.Application.Contracts.Organizations;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 

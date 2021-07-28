@@ -1,12 +1,11 @@
 using System;
 using System.Threading.Tasks;
-using EventHub.Admin.Application.Contracts.Organizations;
 using EventHub.Admin.Organizations;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 
-namespace EventHub.Admin.Controllers
+namespace EventHub.Admin.Controllers.Organizations
 {
     [Controller]
     [Area("eventhub-admin")]
