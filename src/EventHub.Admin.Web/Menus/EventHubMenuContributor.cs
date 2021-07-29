@@ -46,7 +46,7 @@ namespace EventHub.Admin.Web.Menus
                     icon: "fas fa-home"
                 )
             );
-            
+
             await AddOrganizationMenu(context, l);
         }
 
@@ -70,15 +70,21 @@ namespace EventHub.Admin.Web.Menus
 
             return Task.CompletedTask;
         }
-        
+
         private Task AddOrganizationMenu(MenuConfigurationContext context, IStringLocalizer l)
         {
-            var organizationMenu = new ApplicationMenuItem(EventHubMenus.OrganizationManagement.GroupName, l["Menu:OrganizationManagement"], icon: "fa fa-sitemap");
+            var organizationMenu = new ApplicationMenuItem(EventHubMenus.OrganizationManagement.GroupName,
+                l["Menu:OrganizationManagement"], icon: "fa fa-sitemap");
             context.Menu.Items.Insert(2, organizationMenu);
 
-            organizationMenu.AddItem(new ApplicationMenuItem(EventHubMenus.OrganizationManagement.Organizations, l["Menu:Organizations"], url: "/organizations").RequirePermissions(EventHubPermissions.Organizations.Default));
-            organizationMenu.AddItem(new ApplicationMenuItem(EventHubMenus.OrganizationManagement.OrganizationMemberships, l["Menu:OrganizationMemberships"], url: "/organization-memberships").RequirePermissions(EventHubPermissions.Organizations.Memberships.Default));
-            
+            organizationMenu.AddItem(
+                new ApplicationMenuItem(EventHubMenus.OrganizationManagement.Organizations, l["Menu:Organizations"],
+                    url: "/organizations").RequirePermissions(EventHubPermissions.Organizations.Default));
+            organizationMenu.AddItem(
+                new ApplicationMenuItem(EventHubMenus.OrganizationManagement.OrganizationMemberships,
+                        l["Menu:OrganizationMemberships"], url: "/organization-memberships")
+                    .RequirePermissions(EventHubPermissions.Organizations.Memberships.Default));
+
             return Task.CompletedTask;
         }
     }

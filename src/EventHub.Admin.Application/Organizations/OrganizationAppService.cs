@@ -13,130 +13,132 @@ using Volo.Abp.Identity;
 
 namespace EventHub.Admin.Organizations
 {
-	[Authorize(EventHubPermissions.Organizations.Default)]
-	public class OrganizationAppService : EventHubAdminAppService, IOrganizationAppService
-	{
-		private readonly IRepository<Organization, Guid> _organizationRepository;
-		private readonly IRepository<IdentityUser, Guid> _identityUserRepository;
-		private readonly IBlobContainer<OrganizationProfilePictureContainer> _organizationBlobContainer;
+    [Authorize(EventHubPermissions.Organizations.Default)]
+    public class OrganizationAppService : EventHubAdminAppService, IOrganizationAppService
+    {
+        private readonly IRepository<Organization, Guid> _organizationRepository;
+        private readonly IRepository<IdentityUser, Guid> _identityUserRepository;
+        private readonly IBlobContainer<OrganizationProfilePictureContainer> _organizationBlobContainer;
 
-		public OrganizationAppService(
-			IRepository<Organization, Guid> organizationRepository,
-			IRepository<IdentityUser, Guid> identityUserRepository,
-			IBlobContainer<OrganizationProfilePictureContainer> organizationBlobContainer)
-		{
-			_organizationRepository = organizationRepository;
-			_identityUserRepository = identityUserRepository;
-			_organizationBlobContainer = organizationBlobContainer;
-		}
+        public OrganizationAppService(
+            IRepository<Organization, Guid> organizationRepository,
+            IRepository<IdentityUser, Guid> identityUserRepository,
+            IBlobContainer<OrganizationProfilePictureContainer> organizationBlobContainer)
+        {
+            _organizationRepository = organizationRepository;
+            _identityUserRepository = identityUserRepository;
+            _organizationBlobContainer = organizationBlobContainer;
+        }
 
-		public async Task<PagedResultDto<OrganizationInListDto>> GetListAsync(OrganizationListFilterDto input)
-		{
-			var query = await _organizationRepository.GetQueryableAsync();
+        public async Task<PagedResultDto<OrganizationInListDto>> GetListAsync(OrganizationListFilterDto input)
+        {
+            var query = await _organizationRepository.GetQueryableAsync();
 
-			if (!input.Name.IsNullOrWhiteSpace())
-			{
-				input.Name = input.Name.ToLower();
-				query = query.Where(o => o.Name.ToLower().Contains(input.Name));
-			}
+            if (!input.Name.IsNullOrWhiteSpace())
+            {
+                input.Name = input.Name.ToLower();
+                query = query.Where(o => o.Name.ToLower().Contains(input.Name));
+            }
 
-			if (!input.DisplayName.IsNullOrWhiteSpace())
-			{
-				input.DisplayName = input.DisplayName.ToLower();
-				query = query.Where(o => o.DisplayName.ToLower().Contains(input.DisplayName));
-			}
+            if (!input.DisplayName.IsNullOrWhiteSpace())
+            {
+                input.DisplayName = input.DisplayName.ToLower();
+                query = query.Where(o => o.DisplayName.ToLower().Contains(input.DisplayName));
+            }
 
-			if (input.MinMemberCount != null)
-			{
-				query = query.Where(o => o.MemberCount >= input.MinMemberCount);
-			}
+            if (input.MinMemberCount != null)
+            {
+                query = query.Where(o => o.MemberCount >= input.MinMemberCount);
+            }
 
-			if (input.MaxMemberCount != null)
-			{
-				query = query.Where(o => o.MemberCount <= input.MaxMemberCount);
-			}
+            if (input.MaxMemberCount != null)
+            {
+                query = query.Where(o => o.MemberCount <= input.MaxMemberCount);
+            }
 
-			var totalCount = await AsyncExecuter.CountAsync(query);
+            var totalCount = await AsyncExecuter.CountAsync(query);
 
-			query = query.OrderBy(string.IsNullOrWhiteSpace(input.Sorting) ? OrganizationConsts.DefaultSorting : input.Sorting);
+            query = query.OrderBy(string.IsNullOrWhiteSpace(input.Sorting)
+                ? OrganizationConsts.DefaultSorting
+                : input.Sorting);
 
-			query = query.PageBy(input);
+            query = query.PageBy(input);
 
-			var organizationListDto = ObjectMapper
-				.Map<List<Organization>, List<OrganizationInListDto>>(await AsyncExecuter.ToListAsync(query));
+            var organizationListDto = ObjectMapper
+                .Map<List<Organization>, List<OrganizationInListDto>>(await AsyncExecuter.ToListAsync(query));
 
-			return new PagedResultDto<OrganizationInListDto>(totalCount, organizationListDto);
-		}
+            return new PagedResultDto<OrganizationInListDto>(totalCount, organizationListDto);
+        }
 
-		public async Task<OrganizationProfileDto> GetAsync(Guid id)
-		{
-			var organization = await _organizationRepository.GetAsync(id);
-			
-			var dto = ObjectMapper.Map<Organization, OrganizationProfileDto>(organization);
+        public async Task<OrganizationProfileDto> GetAsync(Guid id)
+        {
+            var organization = await _organizationRepository.GetAsync(id);
 
-			var user = await _identityUserRepository.GetAsync(organization.OwnerUserId);
-			dto.OwnerUserName = user.UserName;
-			dto.OwnerEmail = user.Email;
-			
-			dto.ProfilePictureContent = await GetCoverImageAsync(organization.Id);
-			
-			return dto;
-		}
+            var dto = ObjectMapper.Map<Organization, OrganizationProfileDto>(organization);
 
-		[Authorize(EventHubPermissions.Organizations.Update)]
-		public async Task<OrganizationProfileDto> UpdateAsync(Guid id, UpdateOrganizationDto input)
-		{
-			var organization = await _organizationRepository.GetAsync(id);
+            var user = await _identityUserRepository.GetAsync(organization.OwnerUserId);
+            dto.OwnerUserName = user.UserName;
+            dto.OwnerEmail = user.Email;
 
-			organization.SetDisplayName(input.DisplayName);
-			organization.SetDescription(input.Description);
-			
-			organization.Website = input.Website;
-			organization.TwitterUsername = input.TwitterUsername;
-			organization.GitHubUsername = input.GitHubUsername;
-			organization.FacebookUsername = input.FacebookUsername;
-			organization.InstagramUsername = input.InstagramUsername;
-			organization.MediumUsername = input.MediumUsername;
+            dto.ProfilePictureContent = await GetCoverImageAsync(organization.Id);
 
-			if (input.ProfilePictureContent?.Length > 0)
-			{
-				await SaveCoverImageAsync(organization.Id, input.ProfilePictureContent);
-			}
-			else
-			{
-				await DeleteCoverImageAsync(organization.Id);
-			}
+            return dto;
+        }
 
-			await _organizationRepository.UpdateAsync(organization);
+        [Authorize(EventHubPermissions.Organizations.Update)]
+        public async Task<OrganizationProfileDto> UpdateAsync(Guid id, UpdateOrganizationDto input)
+        {
+            var organization = await _organizationRepository.GetAsync(id);
 
-			return ObjectMapper.Map<Organization, OrganizationProfileDto>(organization);
-		}
+            organization.SetDisplayName(input.DisplayName);
+            organization.SetDescription(input.Description);
 
-		[Authorize(EventHubPermissions.Organizations.Delete)]
-		public async Task DeleteAsync(Guid id)
-		{
-			await _organizationRepository.DeleteAsync(id);
-		}
-		
-		private async Task<byte[]> GetCoverImageAsync(Guid id)
-		{
-			var blobName = id.ToString();
+            organization.Website = input.Website;
+            organization.TwitterUsername = input.TwitterUsername;
+            organization.GitHubUsername = input.GitHubUsername;
+            organization.FacebookUsername = input.FacebookUsername;
+            organization.InstagramUsername = input.InstagramUsername;
+            organization.MediumUsername = input.MediumUsername;
 
-			return await _organizationBlobContainer.GetAllBytesOrNullAsync(blobName);
-		}
+            if (input.ProfilePictureContent?.Length > 0)
+            {
+                await SaveCoverImageAsync(organization.Id, input.ProfilePictureContent);
+            }
+            else
+            {
+                await DeleteCoverImageAsync(organization.Id);
+            }
 
-		private async Task SaveCoverImageAsync(Guid id, byte[] coverImageContent)
-		{
-			var blobName = id.ToString();
+            await _organizationRepository.UpdateAsync(organization);
 
-			await _organizationBlobContainer.SaveAsync(blobName, coverImageContent, overrideExisting: true);
-		}
-		
-		private async Task DeleteCoverImageAsync(Guid id)
-		{
-			var blobName = id.ToString();
+            return ObjectMapper.Map<Organization, OrganizationProfileDto>(organization);
+        }
 
-			await _organizationBlobContainer.DeleteAsync(blobName);
-		}
-	}
+        [Authorize(EventHubPermissions.Organizations.Delete)]
+        public async Task DeleteAsync(Guid id)
+        {
+            await _organizationRepository.DeleteAsync(id);
+        }
+
+        private async Task<byte[]> GetCoverImageAsync(Guid id)
+        {
+            var blobName = id.ToString();
+
+            return await _organizationBlobContainer.GetAllBytesOrNullAsync(blobName);
+        }
+
+        private async Task SaveCoverImageAsync(Guid id, byte[] coverImageContent)
+        {
+            var blobName = id.ToString();
+
+            await _organizationBlobContainer.SaveAsync(blobName, coverImageContent, overrideExisting: true);
+        }
+
+        private async Task DeleteCoverImageAsync(Guid id)
+        {
+            var blobName = id.ToString();
+
+            await _organizationBlobContainer.DeleteAsync(blobName);
+        }
+    }
 }

@@ -19,7 +19,7 @@ namespace EventHub.Admin.Controllers.Organizations
         {
             _organizationAppService = organizationAppService;
         }
-        
+
         [HttpGet]
         public Task<PagedResultDto<OrganizationInListDto>> GetListAsync(OrganizationListFilterDto input)
         {
