@@ -11,5 +11,6 @@
         public const string CapacityCantBeLowerThanRegisteredUserCount = "EventHub:CapacityCantBeLowerThanRegisteredUserCount";
         public const string NotAuthorizedToUpdateEvent = "EventHub:NotAuthorizedToUpdateEvent";
         public const string CantChangeEventTiming = "EventHub:CantChangeEventTiming";
+        public const string UserNotFound = "EventHub:UserNotFound";
     }
 }

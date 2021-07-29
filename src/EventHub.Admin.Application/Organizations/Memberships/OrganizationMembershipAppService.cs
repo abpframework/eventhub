@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using EventHub.Admin.Permissions;
 using EventHub.Organizations.Memberships;
 using Microsoft.AspNetCore.Authorization;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
-using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 
@@ -36,7 +36,8 @@ namespace EventHub.Admin.Organizations.Memberships
                 user = await _userRepository.SingleOrDefaultAsync(x => x.UserName.ToLower().Contains(input.UserName));
                 if (user is null)
                 {
-                    throw new EntityNotFoundException(typeof(IdentityUser), input.UserName);
+                    throw new BusinessException(EventHubErrorCodes.UserNotFound)
+                        .WithData("UserName", input.UserName);
                 }
             }
 

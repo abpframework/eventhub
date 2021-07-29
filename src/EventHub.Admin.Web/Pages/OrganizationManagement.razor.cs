@@ -23,14 +23,14 @@ namespace EventHub.Admin.Web.Pages
 
         private OrganizationProfileDto Organization { get; set; }
         private string ProfileImageUrl { get; set; }
-        
+
         private Guid EditingOrganizationId { get; set; }
         private UpdateOrganizationDto EditingOrganization { get; set; }
         private Modal EditOrganizationModal { get; set; }
         private IFileEntry FileEntry { get; set; }
         private bool IsLoadingProfileImage { get; set; }
         private string SelectedTabInEditModal { get; set; }
-        
+
         public OrganizationManagement()
         {
             Filter = new OrganizationListFilterDto();
@@ -74,7 +74,7 @@ namespace EventHub.Admin.Web.Pages
             EditingOrganizationId = input.Id;
             Organization = await OrganizationAppService.GetAsync(EditingOrganizationId);
             FillProfileImageUrl(Organization.ProfilePictureContent);
-            
+
             EditingOrganization = ObjectMapper.Map<OrganizationProfileDto, UpdateOrganizationDto>(Organization);
             EditOrganizationModal.Show();
         }
@@ -86,35 +86,41 @@ namespace EventHub.Admin.Web.Pages
             EditOrganizationModal.Hide();
         }
 
+        private void OnDeleteCoverImageButtonClicked()
+        {
+            EditingOrganization.ProfilePictureContent = null;
+            FileEntry = new FileEntry();
+            ProfileImageUrl = null;
+            IsLoadingProfileImage = false;
+        }
+
         private async Task DeleteOrganizationAsync(OrganizationInListDto organization)
         {
             await OrganizationAppService.DeleteAsync(organization.Id);
             await GetOrganizationsAsync();
         }
-        
+
         private async Task OnProfileImageFileChanged(FileChangedEventArgs e)
         {
-            IsLoadingProfileImage = true;
-            
-            if (e.Files != null && e.Files.Any())
-            { 
-                FileEntry = e.Files[0];
-                
-                if (FileEntry != null)
-                {
-                    using (var stream = new MemoryStream())
-                    {
-                        await FileEntry.WriteToStreamAsync(stream);
+            FileEntry = e.Files.FirstOrDefault();
+            if (FileEntry is null)
+            {
+                return;
+            }
 
-                        stream.Seek(0, SeekOrigin.Begin);
-                        EditingOrganization.ProfilePictureContent = stream.ToArray();
-                        FillProfileImageUrl(EditingOrganization.ProfilePictureContent);
-                        await InvokeAsync(StateHasChanged);
-                    }
-                }
+            IsLoadingProfileImage = true;
+
+            using (var stream = new MemoryStream())
+            {
+                await FileEntry.WriteToStreamAsync(stream);
+
+                stream.Seek(0, SeekOrigin.Begin);
+                EditingOrganization.ProfilePictureContent = stream.ToArray();
+                FillProfileImageUrl(EditingOrganization.ProfilePictureContent);
+                await InvokeAsync(StateHasChanged);
             }
         }
-        
+
         private void FillProfileImageUrl(byte[] content)
         {
             if (content != null)
@@ -124,7 +130,7 @@ namespace EventHub.Admin.Web.Pages
                 ProfileImageUrl = imageDataUrl;
             }
         }
-        
+
         private void OnProgressedForProfileImage(FileProgressedEventArgs e)
         {
             if (e.Percentage == 100D)
@@ -137,12 +143,11 @@ namespace EventHub.Admin.Web.Pages
         {
             SelectedTabInEditModal = name;
         }
-        
+
         private void OnEditModalClosing(CancelEventArgs e)
         {
             IsLoadingProfileImage = false;
             SelectedTabInEditModal = TabContentInEditModal.OrganizationProfile.ToString();
-            
         }
 
         private async Task OnKeyPress(KeyboardEventArgs e)
@@ -153,7 +158,7 @@ namespace EventHub.Admin.Web.Pages
             }
         }
     }
-    
+
     public enum TabContentInEditModal : byte
     {
         OrganizationProfile = 0,

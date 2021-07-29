@@ -102,6 +102,10 @@ namespace EventHub.Admin.Organizations
 			{
 				await SaveCoverImageAsync(organization.Id, input.ProfilePictureContent);
 			}
+			else
+			{
+				await DeleteCoverImageAsync(organization.Id);
+			}
 
 			await _organizationRepository.UpdateAsync(organization);
 
@@ -126,6 +130,13 @@ namespace EventHub.Admin.Organizations
 			var blobName = id.ToString();
 
 			await _organizationBlobContainer.SaveAsync(blobName, coverImageContent, overrideExisting: true);
+		}
+		
+		private async Task DeleteCoverImageAsync(Guid id)
+		{
+			var blobName = id.ToString();
+
+			await _organizationBlobContainer.DeleteAsync(blobName);
 		}
 	}
 }

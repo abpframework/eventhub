@@ -4,10 +4,12 @@
 @using Microsoft.AspNetCore.Authorization
 @using EventHub.Admin.Organizations
 @using EventHub.Organizations
+@using Volo.Abp.AspNetCore.Components.Notifications
 @inherits EventHubComponentBase
 @inject NavigationManager NavigationManager
 @attribute [Authorize(EventHubPermissions.Organizations.Default)]
 @inject IOrganizationAppService OrganizationAppService
+@inject IUiNotificationService UiNotificationService
 
 <Card>
     <CardHeader>
@@ -15,7 +17,7 @@
         <h2>@L["Organizations"]</h2>
     </CardHeader>
 
-@* ************************* SEARCH ************************* *@
+    @* ************************* SEARCH ************************* *@
 
     <CardBody>
         <Form>
@@ -65,7 +67,8 @@
                             <EntityAction TItem="OrganizationInListDto"
                                           RequiredPolicy="@EventHubPermissions.Organizations.Memberships.Default"
                                           Clicked="@(() => NavigationManager.NavigateTo($"/organization-memberships/{context.Id}"))"
-                                          Text="@L["Members"]"></EntityAction>
+                                          Text="@L["Members"]">
+                            </EntityAction>
                             <EntityAction TItem="OrganizationInListDto"
                                           RequiredPolicy="@EventHubPermissions.Organizations.Update"
                                           Clicked="() => OpenEditOrganizationModal(context)"
@@ -112,8 +115,8 @@
             <ModalBody>
                 <Tabs SelectedTab="@SelectedTabInEditModal" SelectedTabChanged="@OnSelectedTabChangedInEditModal">
                     <Items>
-                        <Tab Name="@TabContentInEditModal.OrganizationProfile.ToString()">Organization Info</Tab>
-                        <Tab Name="@TabContentInEditModal.ProfileImage.ToString()">Profile Image</Tab>
+                        <Tab Name="@TabContentInEditModal.OrganizationProfile.ToString()">@L["OrganizationInfo"]</Tab>
+                        <Tab Name="@TabContentInEditModal.ProfileImage.ToString()">@L["ProfileImage"]</Tab>
                     </Items>
                     <Content>
                         <TabPanel Name="@TabContentInEditModal.OrganizationProfile.ToString()">
@@ -131,12 +134,12 @@
 
                                 <Validation>
                                     <Field>
-                                        <FieldLabel>@L["Description"]</FieldLabel>
-                                        <TextEdit TValue="string" @bind-Text="@EditingOrganization.Description">
+                                        <FieldLabel>@L["Description"] *</FieldLabel>
+                                        <MemoEdit Rows="4" TValue="string" @bind-Text="@EditingOrganization.Description">
                                             <Feedback>
                                                 <ValidationError/>
                                             </Feedback>
-                                        </TextEdit>
+                                        </MemoEdit>
                                     </Field>
                                 </Validation>
 
@@ -210,30 +213,40 @@
                             </Validations>
                         </TabPanel>
                         <TabPanel Name="@TabContentInEditModal.ProfileImage.ToString()">
-                            @if (!ProfileImageUrl.IsNullOrEmpty())
+                            @if (!IsLoadingProfileImage)
                             {
-                                @if (!IsLoadingProfileImage)
+                                @if (!ProfileImageUrl.IsNullOrEmpty())
                                 {
                                     <div class="text-center mt-4">
                                         <img src="@ProfileImageUrl" class="organization-profile-img" width="600" height="340" alt="profile-image"/>
                                     </div>
                                 }
-                                else
-                                {
-                                    <div class="d-flex justify-content-center mt-4">
-                                        <div class="spinner-border" role="status">
-                                            <span class="sr-only">Loading...</span>
-                                        </div>
+                            }
+                            else
+                            {
+                                <div class="d-flex justify-content-center mt-4">
+                                    <div class="spinner-border" role="status">
+                                        <span class="sr-only">@L["Loading"]...</span>
                                     </div>
-                                }
+                                </div>
                             }
 
-                            <div class="mt-3 mb-5">
+                            <div class="mt-3 mb-2">
                                 <Field Horizontal="true">
                                     <FieldLabel ColumnSize="ColumnSize.Is3">@L["ChooseProfileImage"]</FieldLabel>
-                                    <FieldBody ColumnSize="ColumnSize.Is9">
+                                    <FieldBody ColumnSize="ColumnSize.Is6">
                                         <FileEdit MaxMessageSize="@OrganizationConsts.MaxProfilePictureFileSize" Filter=".jpg, .png" Changed="@OnProfileImageFileChanged" Progressed="@OnProgressedForProfileImage" AutoReset="true"/>
                                     </FieldBody>
+                                    <Column ColumnSize="ColumnSize.Is3">
+                                        @if (!ProfileImageUrl.IsNullOrWhiteSpace())
+                                        {
+                                            <Button Color="Color.Warning" Clicked="@OnDeleteCoverImageButtonClicked">@L["DeleteCoverImage"]</Button>
+                                        }
+                                        else
+                                        {
+                                            <Button disabled Color="Color.Secondary" Clicked="@OnDeleteCoverImageButtonClicked">@L["DeleteCoverImage"]</Button>
+                                        }
+                                    </Column>
                                 </Field>
                             </div>
                         </TabPanel>
