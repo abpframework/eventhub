@@ -12,17 +12,18 @@ using Volo.Abp.Identity;
 
 namespace EventHub.EntityFrameworkCore.Organizations.Memberships
 {
-    public class OrganizationMembershipRepository : EfCoreRepository<EventHubDbContext, OrganizationMembership, Guid>, IOrganizationMembershipRepository
+    public class OrganizationMembershipRepository : EfCoreRepository<EventHubDbContext, OrganizationMembership, Guid>,
+        IOrganizationMembershipRepository
     {
-        public OrganizationMembershipRepository(IDbContextProvider<EventHubDbContext> dbContextProvider) : base(dbContextProvider)
+        public OrganizationMembershipRepository(IDbContextProvider<EventHubDbContext> dbContextProvider)
+            : base(dbContextProvider)
         {
-            
         }
 
         public async Task<List<OrganizationMemberWithDetails>> GetMemberListAsync(
-            Guid? organizationId, 
+            Guid? organizationId,
             Guid? userId,
-            int skipCount, 
+            int skipCount,
             int maxResultCount,
             CancellationToken cancellationToken = default)
         {
@@ -31,14 +32,15 @@ namespace EventHub.EntityFrameworkCore.Organizations.Memberships
             var organizationMembershipsDbSet = dbContext.Set<OrganizationMembership>();
             var identityUserDbSet = dbContext.Set<IdentityUser>();
             var organizationDbSet = dbContext.Set<Organization>();
-            
+
             var query = organizationMembershipsDbSet
-                .Join(organizationDbSet, t => t.OrganizationId, organization => organization.Id
-                    , (organizationMember, organization) => new {organizationMember, organization})
-                .Join(identityUserDbSet, organizationWithMember => organizationWithMember.organizationMember.UserId, user => user.Id,
-                    (organizationWithMember, user) => new {organizationWithMember, user})
+                .Join(organizationDbSet, t => t.OrganizationId, organization => organization.Id,
+                    (organizationMember, organization) => new {organizationMember, organization})
+                .Join(identityUserDbSet, organizationWithMember => organizationWithMember.organizationMember.UserId,
+                    user => user.Id, (organizationWithMember, user) => new {organizationWithMember, user})
                 .WhereIf(userId.HasValue, t => t.user.Id == userId)
-                .WhereIf(organizationId.HasValue, t => t.organizationWithMember.organizationMember.OrganizationId == organizationId)
+                .WhereIf(organizationId.HasValue,
+                    t => t.organizationWithMember.organizationMember.OrganizationId == organizationId)
                 .OrderByDescending(o => o.organizationWithMember.organizationMember.CreationTime)
                 .Select(t => new OrganizationMemberWithDetails
                 {
@@ -48,14 +50,14 @@ namespace EventHub.EntityFrameworkCore.Organizations.Memberships
                     Name = t.user.Name,
                     Surname = t.user.Surname
                 });
-            
+
             return await query
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<int> GetCountAsync(
-            Guid? organizationId, 
+            Guid? organizationId,
             Guid? userId,
             CancellationToken cancellationToken = default)
         {
