@@ -109,10 +109,12 @@
     "ChooseProfileImage": "Choose profile image:",
     "OrganizationMemberships": "Organization Memberships",
     "EventHub:UserNotFound": "There is no user named \"{UserName}\"",
+    "EventHub:OrganizationNotFound": "There is no organization named \"{OrganizationName}\"",
     "DeleteCoverImage": "Delete Cover Image",
     "DeleteConfirmationMessage": "Are you sure you want to delete this item?",
     "Loading": "Loading",
     "OrganizationInfo": "Organization Info",
-    "ProfileImage": "Profile Image"
+    "ProfileImage": "Profile Image",
+    "OrganizationName": "Organization Name"
   }
 }

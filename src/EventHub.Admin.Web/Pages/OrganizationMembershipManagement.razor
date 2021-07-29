@@ -14,7 +14,7 @@
             @L["OrganizationMemberships"]
             @if (OrganizationId.HasValue && !OrganizationName.IsNullOrWhiteSpace())
             {
-                <span> (@OrganizationName)</span>                
+                <span> (@OrganizationName)</span>
             }
         </h2>
     </CardHeader>
@@ -22,10 +22,21 @@
     @* ************************* SEARCH ************************* *@
     <CardBody>
         <div id="FilterSection" class="mt-3 ml-2">
-            <Field>
-                <FieldLabel>@L["UserName"]</FieldLabel>
-                <TextEdit TValue="string" KeyPress="OnKeyPress" @bind-Text="@Filter.UserName"/>
-            </Field>
+            <Row>
+                <Column ColumnSize="ColumnSize.Is5">
+                    <Field>
+                        <FieldLabel>@L["OrganizationName"]</FieldLabel>
+                        <TextEdit TValue="string" KeyPress="OnKeyPress" @bind-Text="@OrganizationName"/>
+                    </Field>
+                </Column>
+
+                <Column ColumnSize="ColumnSize.Is5">
+                    <Field>
+                        <FieldLabel>@L["UserName"]</FieldLabel>
+                        <TextEdit TValue="string" KeyPress="OnKeyPress" @bind-Text="@Filter.UserName"/>
+                    </Field>
+                </Column>
+            </Row>
         </div>
 
         @* ************************* DATA GRID ************************* *@
@@ -38,6 +49,10 @@
                   Responsive="true"
                   Sortable="false">
             <DataGridColumns>
+                <DataGridColumn TItem="OrganizationMemberDto"
+                                Field="OrganizationName"
+                                Caption="@L["OrganizationName"]">
+                </DataGridColumn>
                 <DataGridColumn TItem="OrganizationMemberDto"
                                 Field="UserName"
                                 Caption="@L["UserName"]">

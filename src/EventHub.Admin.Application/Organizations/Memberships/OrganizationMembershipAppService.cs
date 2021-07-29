@@ -33,7 +33,7 @@ namespace EventHub.Admin.Organizations.Memberships
             if (!input.UserName.IsNullOrWhiteSpace())
             {
                 input.UserName = input.UserName.ToLower();
-                user = await _userRepository.SingleOrDefaultAsync(x => x.UserName.ToLower().Contains(input.UserName));
+                user = await _userRepository.SingleOrDefaultAsync(x => x.UserName.ToLower() == input.UserName);
                 if (user is null)
                 {
                     throw new BusinessException(EventHubErrorCodes.UserNotFound)
@@ -46,7 +46,7 @@ namespace EventHub.Admin.Organizations.Memberships
             
             return new PagedResultDto<OrganizationMemberDto>(
                 totalCount,
-                ObjectMapper.Map<List<IdentityUser>, List<OrganizationMemberDto>>(members)
+                ObjectMapper.Map<List<OrganizationMemberWithDetails>, List<OrganizationMemberDto>>(members)
             );
         }
     }

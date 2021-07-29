@@ -9,7 +9,7 @@ namespace EventHub.Organizations.Memberships
 {
     public interface IOrganizationMembershipRepository : IRepository<OrganizationMembership, Guid>
     {
-        Task<List<IdentityUser>> GetMemberListAsync(
+        Task<List<OrganizationMemberWithDetails>> GetMemberListAsync(
             Guid? organizationId,
             Guid? userId,
             int skipCount, 

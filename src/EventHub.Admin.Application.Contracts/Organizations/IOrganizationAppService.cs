@@ -11,6 +11,8 @@ namespace EventHub.Admin.Organizations
 
         Task<OrganizationProfileDto> GetAsync(Guid id);
         
+        Task<OrganizationProfileDto> GetByNameAsync(string name);
+        
         Task<OrganizationProfileDto> UpdateAsync(Guid id, UpdateOrganizationDto input);
 
         Task DeleteAsync(Guid id);

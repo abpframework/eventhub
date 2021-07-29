@@ -1,9 +1,9 @@
 using System;
-using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Entities;
 
-namespace EventHub.Admin.Organizations.Memberships
+namespace EventHub.Organizations.Memberships
 {
-    public class OrganizationMemberDto : EntityDto<Guid>
+    public class OrganizationMemberWithDetails : Entity<Guid>
     {
         public string OrganizationName { get; set; }
         

@@ -14,7 +14,8 @@ namespace EventHub.Admin.Web.Pages
     {
         [Parameter]
         public Guid? OrganizationId { get; set; }
-        public string OrganizationName { get; set; }
+        private string OrganizationName { get; set; }
+        
         [Inject]
         protected IOrganizationAppService OrganizationAppService { get; set; }
 
@@ -59,7 +60,16 @@ namespace EventHub.Admin.Web.Pages
             {
                 Filter.OrganizationId = OrganizationId!.Value;
             }
-            
+            else
+            {
+                Filter.OrganizationId = null;
+            }
+
+            if (!Filter.UserName.IsNullOrWhiteSpace())
+            {
+                Filter.UserName = Filter.UserName.Trim();
+            }
+
             var result = await OrganizationMembershipAppService.GetListAsync(Filter);
             OrganizationMemberList = result.Items;
             TotalCount = (int) result.TotalCount;
@@ -69,6 +79,18 @@ namespace EventHub.Admin.Web.Pages
         {
             if (e.Code == "Enter" || e.Code == "NumpadEnter")
             {
+                if (OrganizationName.IsNullOrWhiteSpace())
+                {
+                    OrganizationId = null;
+                    OrganizationName = null;
+                }
+                else
+                {
+                    var organization = await OrganizationAppService.GetByNameAsync(OrganizationName.Trim());
+                    OrganizationId = organization.Id;
+                    OrganizationName = organization.Name;
+                }
+                
                 await GetOrganizationMembershipsAsync();
             }
         }

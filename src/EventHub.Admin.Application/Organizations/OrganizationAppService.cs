@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using EventHub.Admin.Permissions;
 using EventHub.Organizations;
 using Microsoft.AspNetCore.Authorization;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Domain.Repositories;
@@ -73,6 +74,26 @@ namespace EventHub.Admin.Organizations
         public async Task<OrganizationProfileDto> GetAsync(Guid id)
         {
             var organization = await _organizationRepository.GetAsync(id);
+
+            var dto = ObjectMapper.Map<Organization, OrganizationProfileDto>(organization);
+
+            var user = await _identityUserRepository.GetAsync(organization.OwnerUserId);
+            dto.OwnerUserName = user.UserName;
+            dto.OwnerEmail = user.Email;
+
+            dto.ProfilePictureContent = await GetCoverImageAsync(organization.Id);
+
+            return dto;
+        }
+        
+        public async Task<OrganizationProfileDto> GetByNameAsync(string name)
+        {
+            var organization = await _organizationRepository.FindAsync(x => x.Name.ToLower() == name.ToLower());
+            if (organization is null)
+            {
+                throw new BusinessException(EventHubErrorCodes.OrganizationNotFound)
+                    .WithData("OrganizationName", name);
+            }
 
             var dto = ObjectMapper.Map<Organization, OrganizationProfileDto>(organization);
 

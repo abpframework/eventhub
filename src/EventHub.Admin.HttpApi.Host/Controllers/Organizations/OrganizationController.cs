@@ -32,6 +32,13 @@ namespace EventHub.Admin.Controllers.Organizations
         {
             return _organizationAppService.GetAsync(id);
         }
+        
+        [HttpGet]
+        [Route("by-name/{name}")]
+        public Task<OrganizationProfileDto> GetByNameAsync(string name)
+        {
+            return _organizationAppService.GetByNameAsync(name);
+        }
 
         [HttpPut]
         public Task<OrganizationProfileDto> UpdateAsync(Guid id, UpdateOrganizationDto input)
