@@ -1,19 +1,18 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: account-ingress
+  name: api-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
 spec:
   rules:
-  - host: "account.openeventhub.com"
+  - host: "api.openeventhub.com"
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: account
+            name: api
             port:
               number: 80

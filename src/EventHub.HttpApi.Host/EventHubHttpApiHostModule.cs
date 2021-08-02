@@ -170,6 +170,8 @@ namespace EventHub
                         .AllowCredentials();
                 });
             });
+            
+            context.Services.AddSameSiteCookiePolicy();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -181,6 +183,12 @@ namespace EventHub
             {
                 app.UseDeveloperExceptionPage();
             }
+            
+            app.Use((context, next) =>
+            {
+                context.Request.Scheme = "https";
+                return next();
+            });
 
             var supportedCultures = new[]
             {
@@ -203,6 +211,8 @@ namespace EventHub
             {
                 app.UseErrorPage();
             }
+
+            app.UseCookiePolicy();
 
             app.UseCorrelationId();
             app.UseVirtualFiles();

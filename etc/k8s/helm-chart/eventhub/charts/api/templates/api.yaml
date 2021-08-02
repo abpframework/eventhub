@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: account
+  name: api
 spec:
   selector:
     matchLabels:
-      app: account
+      app: api
   template:
     metadata:
       labels:
-        app: account
+        app: api
     spec:
       containers:
-      - image: eventhub.account
+      - image: eventhub.api
         imagePullPolicy: Never
-        name: account
+        name: api
         ports:
-        - name: accounthttp
+        - name: apihttp
           containerPort: 80
-        - name: accounthttps
+        - name: apihttps
           containerPort: 443

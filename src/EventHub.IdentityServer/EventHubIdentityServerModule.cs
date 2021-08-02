@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
@@ -13,6 +14,7 @@ using EventHub.Web;
 using EventHub.Web.Theme;
 using EventHub.Web.Theme.Bundling;
 using IdentityServer4.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
 using Volo.Abp;
 using Volo.Abp.Account;
@@ -46,6 +48,14 @@ namespace EventHub
     {
         private const string DefaultCorsPolicyName = "Default";
 
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            PreConfigure<IIdentityServerBuilder>(builder =>
+            {
+                builder.AddSigningCredential(new X509Certificate2("localhost.pfx", "e8202f07-66e5-4619-be07-72ba76fde97f"));	
+            });
+        }
+        
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
@@ -148,6 +158,12 @@ namespace EventHub
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
 
+            app.Use((context, next) =>
+            {
+                context.Request.Scheme = "https";
+                return next();
+            });
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
