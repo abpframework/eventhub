@@ -1,0 +1,14 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrator
+spec:
+  activeDeadlineSeconds: 100
+  template:
+    spec:
+      containers:
+      - name: migrator
+        image: eventhubmigrator
+        imagePullPolicy: Never
+      restartPolicy: Never
+  backoffLimit: 4
