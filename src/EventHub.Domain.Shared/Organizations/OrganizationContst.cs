@@ -2,6 +2,8 @@
 {
     public static class OrganizationConsts
     {
+        public const string DefaultSorting = "CreationTime desc";
+
         public const int MinNameLength = 2;
         public const int MaxNameLength = 32;
 
@@ -24,6 +26,5 @@
         public const int MaxInstagramUsernameLength = 24;
 
         public const int MaxMediumUsernameLength = 24;
-
     }
 }

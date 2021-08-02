@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EventHub.Admin.Organizations;
 
 namespace EventHub.Admin.Web
 {
@@ -6,7 +7,7 @@ namespace EventHub.Admin.Web
     {
         public EventHubBlazorAutoMapperProfile()
         {
-            //Define your AutoMapper configuration here for the Blazor project.
+            CreateMap<OrganizationProfileDto, UpdateOrganizationDto>();
         }
     }
 }

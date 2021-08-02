@@ -1,0 +1,268 @@
+@page "/organizations"
+@using Volo.Abp.BlazoriseUI.Components
+@using EventHub.Admin.Permissions
+@using Microsoft.AspNetCore.Authorization
+@using EventHub.Admin.Organizations
+@using EventHub.Organizations
+@using Volo.Abp.AspNetCore.Components.Notifications
+@inherits EventHubComponentBase
+@inject NavigationManager NavigationManager
+@attribute [Authorize(EventHubPermissions.Organizations.Default)]
+@inject IOrganizationAppService OrganizationAppService
+@inject IUiNotificationService UiNotificationService
+
+<Card>
+    <CardHeader>
+        @* ************************* PAGE HEADER ************************* *@
+        <h2>@L["Organizations"]</h2>
+    </CardHeader>
+
+    @* ************************* SEARCH ************************* *@
+
+    <CardBody>
+        <Form>
+            <div id="FilterSection" class="row mt-3">
+                <Column ColumnSize="ColumnSize.Is3">
+                    <Field>
+                        <FieldLabel>@L["Name"]</FieldLabel>
+                        <TextEdit TValue="string" KeyPress="OnKeyPress" @bind-Text="@Filter.Name"/>
+                    </Field>
+                </Column>
+
+                <Column ColumnSize="ColumnSize.Is3">
+                    <Field>
+                        <FieldLabel>@L["DisplayName"]</FieldLabel>
+                        <TextEdit TValue="string" KeyPress="OnKeyPress" @bind-Text="@Filter.DisplayName"/>
+                    </Field>
+                </Column>
+
+                <Column ColumnSize="ColumnSize.Is3">
+                    <Field>
+                        <FieldLabel>@L["MinMemberCount"]</FieldLabel>
+                        <NumericEdit TValue="int?" KeyPress="OnKeyPress" @bind-Value="@Filter.MinMemberCount"/>
+                    </Field>
+                </Column>
+
+                <Column ColumnSize="ColumnSize.Is3">
+                    <Field>
+                        <FieldLabel>@L["MaxMemberCount"]</FieldLabel>
+                        <NumericEdit TValue="int?" KeyPress="OnKeyPress" @bind-Value="@Filter.MaxMemberCount"/>
+                    </Field>
+                </Column>
+            </div>
+        </Form>
+
+        @* ************************* DATA GRID ************************* *@
+        <DataGrid TItem="OrganizationInListDto"
+                  Data="OrganizationList"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  PageSize="PageSize"
+                  Responsive="true">
+            <DataGridColumns>
+                <DataGridEntityActionsColumn TItem="OrganizationInListDto">
+                    <DisplayTemplate>
+                        <EntityActions TItem="OrganizationInListDto">
+                            <EntityAction TItem="OrganizationInListDto"
+                                          RequiredPolicy="@EventHubPermissions.Organizations.Memberships.Default"
+                                          Clicked="@(() => NavigationManager.NavigateTo($"/organization-memberships/{context.Id}"))"
+                                          Text="@L["Members"]">
+                            </EntityAction>
+                            <EntityAction TItem="OrganizationInListDto"
+                                          RequiredPolicy="@EventHubPermissions.Organizations.Update"
+                                          Clicked="() => OpenEditOrganizationModal(context)"
+                                          Text="@L["Edit"]">
+                            </EntityAction>
+                            <EntityAction TItem="OrganizationInListDto"
+                                          RequiredPolicy="@EventHubPermissions.Organizations.Delete"
+                                          Clicked="() => DeleteOrganizationAsync(context)"
+                                          ConfirmationMessage="@(() => L["DeleteConfirmationMessage"])"
+                                          Text="@L["Delete"]">
+                            </EntityAction>
+                        </EntityActions>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+
+                <DataGridColumn TItem="OrganizationInListDto"
+                                Field="Name"
+                                Caption="@L["Name"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="OrganizationInListDto"
+                                Field="DisplayName"
+                                Caption="@L["DisplayName"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="OrganizationInListDto"
+                                Field="MemberCount"
+                                Caption="@L["MemberCount"]">
+                </DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+@* ************************* EDIT MODAL ************************* *@
+
+<Modal @ref="EditOrganizationModal" Closing="@OnEditModalClosing">
+    <ModalContent Centered="true" Size="ModalSize.Large">
+        <Form id="EditOrganizationForm">
+            <ModalHeader>
+                <ModalTitle>@L["UpdateOrganization"]</ModalTitle>
+                <CloseButton Clicked="() => EditOrganizationModal.Hide()"/>
+            </ModalHeader>
+            <ModalBody>
+                <Tabs SelectedTab="@SelectedTabInEditModal" SelectedTabChanged="@OnSelectedTabChangedInEditModal">
+                    <Items>
+                        <Tab Name="@TabContentInEditModal.OrganizationProfile.ToString()">@L["OrganizationInfo"]</Tab>
+                        <Tab Name="@TabContentInEditModal.ProfileImage.ToString()">@L["ProfileImage"]</Tab>
+                    </Items>
+                    <Content>
+                        <TabPanel Name="@TabContentInEditModal.OrganizationProfile.ToString()">
+                            <Validations Mode="ValidationMode.Auto" Model="@EditOrganizationModal" ValidateOnLoad="false">
+                                <Validation>
+                                    <Field>
+                                        <FieldLabel>@L["DisplayName"] *</FieldLabel>
+                                        <TextEdit TValue="string" @bind-Text="@EditingOrganization.DisplayName">
+                                            <Feedback>
+                                                <ValidationError/>
+                                            </Feedback>
+                                        </TextEdit>
+                                    </Field>
+                                </Validation>
+
+                                <Validation>
+                                    <Field>
+                                        <FieldLabel>@L["Description"] *</FieldLabel>
+                                        <MemoEdit Rows="4" TValue="string" @bind-Text="@EditingOrganization.Description">
+                                            <Feedback>
+                                                <ValidationError/>
+                                            </Feedback>
+                                        </MemoEdit>
+                                    </Field>
+                                </Validation>
+
+                                <Validation>
+                                    <Field>
+                                        <FieldLabel>@L["Website"]</FieldLabel>
+                                        <TextEdit TValue="string" @bind-Text="@EditingOrganization.Website">
+                                            <Feedback>
+                                                <ValidationError/>
+                                            </Feedback>
+                                        </TextEdit>
+                                    </Field>
+                                </Validation>
+
+                                <Validation>
+                                    <Field>
+                                        <FieldLabel>@L["TwitterUsername"]</FieldLabel>
+                                        <TextEdit TValue="string" @bind-Text="@EditingOrganization.TwitterUsername">
+                                            <Feedback>
+                                                <ValidationError/>
+                                            </Feedback>
+                                        </TextEdit>
+                                    </Field>
+                                </Validation>
+
+                                <Validation>
+                                    <Field>
+                                        <FieldLabel>@L["GitHubUsername"]</FieldLabel>
+                                        <TextEdit TValue="string" @bind-Text="@EditingOrganization.GitHubUsername">
+                                            <Feedback>
+                                                <ValidationError/>
+                                            </Feedback>
+                                        </TextEdit>
+                                    </Field>
+                                </Validation>
+
+                                <Validation>
+                                    <Field>
+                                        <FieldLabel>@L["FacebookUsername"]</FieldLabel>
+                                        <TextEdit TValue="string" @bind-Text="@EditingOrganization.FacebookUsername">
+                                            <Feedback>
+                                                <ValidationError/>
+                                            </Feedback>
+                                        </TextEdit>
+                                    </Field>
+                                </Validation>
+
+
+                                <Validation>
+                                    <Field>
+                                        <FieldLabel>@L["InstagramUsername"]</FieldLabel>
+                                        <TextEdit TValue="string" @bind-Text="@EditingOrganization.InstagramUsername">
+                                            <Feedback>
+                                                <ValidationError/>
+                                            </Feedback>
+                                        </TextEdit>
+                                    </Field>
+                                </Validation>
+
+                                <Validation>
+                                    <Field>
+                                        <FieldLabel>@L["MediumUsername"]</FieldLabel>
+                                        <TextEdit TValue="string" @bind-Text="@EditingOrganization.MediumUsername">
+                                            <Feedback>
+                                                <ValidationError/>
+                                            </Feedback>
+                                        </TextEdit>
+                                    </Field>
+                                </Validation>
+
+                            </Validations>
+                        </TabPanel>
+                        <TabPanel Name="@TabContentInEditModal.ProfileImage.ToString()">
+                            @if (!IsLoadingProfileImage)
+                            {
+                                @if (!ProfileImageUrl.IsNullOrEmpty())
+                                {
+                                    <div class="text-center mt-4">
+                                        <img src="@ProfileImageUrl" class="organization-profile-img" width="600" height="340" alt="profile-image"/>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="d-flex justify-content-center mt-4">
+                                    <div class="spinner-border" role="status">
+                                        <span class="sr-only">@L["Loading"]...</span>
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="mt-3 mb-2">
+                                <Field Horizontal="true">
+                                    <FieldLabel ColumnSize="ColumnSize.Is3">@L["ChooseProfileImage"]</FieldLabel>
+                                    <FieldBody ColumnSize="ColumnSize.Is6">
+                                        <FileEdit MaxMessageSize="@OrganizationConsts.MaxProfilePictureFileSize" Filter=".jpg, .png" Changed="@OnProfileImageFileChanged" Progressed="@OnProgressedForProfileImage" AutoReset="true"/>
+                                    </FieldBody>
+                                    <Column ColumnSize="ColumnSize.Is3">
+                                        @if (!ProfileImageUrl.IsNullOrWhiteSpace())
+                                        {
+                                            <Button Color="Color.Warning" Clicked="@OnDeleteCoverImageButtonClicked">@L["DeleteCoverImage"]</Button>
+                                        }
+                                        else
+                                        {
+                                            <Button disabled Color="Color.Secondary" Clicked="@OnDeleteCoverImageButtonClicked">@L["DeleteCoverImage"]</Button>
+                                        }
+                                    </Column>
+                                </Field>
+                            </div>
+                        </TabPanel>
+                    </Content>
+                </Tabs>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="() => EditOrganizationModal.Hide()">
+                    @L["Cancel"]
+                </Button>
+                <Button Type="ButtonType.Submit" PreventDefaultOnSubmit="true" Color="Color.Primary"
+                        Clicked="UpdateOrganizationAsync">
+                    <i class="fa-check fa"></i> @L["Save"]
+                </Button>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
