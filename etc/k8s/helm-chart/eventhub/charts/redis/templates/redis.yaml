@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - image: redis:6.0.10-alpine
+          name: redis
+          ports:
+            - name: redis
+              containerPort: 6379
+          env:
+          - name: POSTGRES_USER
+            value: "root"
+          - name: POSTGRES_PASSWORD
+            value: "root"
