@@ -139,6 +139,8 @@ namespace EventHub
                         .AllowCredentials();
                 });
             });
+            
+            context.Services.AddSameSiteCookiePolicy(); 
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -157,6 +159,8 @@ namespace EventHub
             {
                 app.UseErrorPage();
             }
+            
+            app.UseCookiePolicy();
 
             app.UseCorrelationId();
             app.UseVirtualFiles();

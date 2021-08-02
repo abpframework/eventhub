@@ -1,0 +1,6 @@
+apiVersion: v2
+name: account
+appVersion: "1.0"
+description: EventHub Account Application
+version: 1.0.0
+type: application

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: account
+  name: account
+spec:
+  ports:
+    - name: "80"
+      port: 80
+    - name: "433"
+      port: 433
+  selector:
+    app: account

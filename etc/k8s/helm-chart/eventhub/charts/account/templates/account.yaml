@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: account
+spec:
+  selector:
+    matchLabels:
+      app: account
+  template:
+    metadata:
+      labels:
+        app: account
+    spec:
+      containers:
+      - image: eventhub.account
+        imagePullPolicy: Never
+        name: account
+        ports:
+        - name: accounthttp
+          containerPort: 80
+        - name: accounthttps
+          containerPort: 433
