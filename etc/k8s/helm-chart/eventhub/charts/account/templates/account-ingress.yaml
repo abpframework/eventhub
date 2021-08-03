@@ -6,6 +6,10 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
 spec:
+  tls:
+  - hosts:
+      - account.openeventhub.com
+    secretName: account-tls
   rules:
   - host: "account.openeventhub.com"
     http:

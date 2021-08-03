@@ -73,7 +73,7 @@ namespace EventHub
         
         private X509Certificate2 GetSigningCertificate(IWebHostEnvironment hostingEnv, IConfiguration configuration)
         {
-            var fileName = "localhost.pfx";
+            var fileName = "EventHub.IdentityServer.pfx";
             var passPhrase = "e8202f07-66e5-4619-be07-72ba76fde97f";
             var file = Path.Combine(hostingEnv.ContentRootPath, fileName);
 

@@ -20,8 +20,8 @@
     <Content Remove="Logs\**" />
     <EmbeddedResource Remove="Logs\**" />
     <None Remove="Logs\**" />
-    <None Remove="localhost.pfx" />
-    <Content Include="localhost.pfx">
+    <None Remove="EventHub.IdentityServer.pfx" />
+    <Content Include="EventHub.IdentityServer.pfx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
