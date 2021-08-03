@@ -14,6 +14,8 @@ using EventHub.Web;
 using EventHub.Web.Theme;
 using EventHub.Web.Theme.Bundling;
 using IdentityServer4.Configuration;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
 using Volo.Abp;
@@ -28,6 +30,7 @@ using Volo.Abp.Autofac;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
+using Volo.Abp.IdentityServer;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation.Urls;
@@ -50,10 +53,36 @@ namespace EventHub
 
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            PreConfigure<IIdentityServerBuilder>(builder =>
+            var hostingEnvironment = context.Services.GetHostingEnvironment();
+
+            if (!hostingEnvironment.IsDevelopment())
             {
-                builder.AddSigningCredential(new X509Certificate2("localhost.pfx", "e8202f07-66e5-4619-be07-72ba76fde97f"));	
-            });
+                var configuration = context.Services.GetConfiguration();
+
+                PreConfigure<AbpIdentityServerBuilderOptions>(options =>
+                {
+                    options.AddDeveloperSigningCredential = false;
+                });
+
+                PreConfigure<IIdentityServerBuilder>(builder =>
+                {
+                    builder.AddSigningCredential(GetSigningCertificate(hostingEnvironment, configuration));
+                });
+            }
+        }
+        
+        private X509Certificate2 GetSigningCertificate(IWebHostEnvironment hostingEnv, IConfiguration configuration)
+        {
+            var fileName = "localhost.pfx";
+            var passPhrase = "e8202f07-66e5-4619-be07-72ba76fde97f";
+            var file = Path.Combine(hostingEnv.ContentRootPath, fileName);
+
+            if (!File.Exists(file))
+            {
+                throw new FileNotFoundException($"Signing Certificate couldn't found: {file}");
+            }
+
+            return new X509Certificate2(file, passPhrase);
         }
         
         public override void ConfigureServices(ServiceConfigurationContext context)

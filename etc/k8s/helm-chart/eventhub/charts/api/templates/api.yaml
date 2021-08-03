@@ -20,3 +20,9 @@ spec:
           containerPort: 80
         - name: apihttps
           containerPort: 443
+      hostAliases:
+      - ip: 10.105.172.183
+        hostnames:
+        - "account.openeventhub.com"
+        - "openeventhub.com"
+        - "api.openeventhub.com"
