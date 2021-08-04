@@ -9,10 +9,10 @@ namespace EventHub.Web
         public const string EhWww = "https://localhost:44308";
 #else
         // TODO: Change these production links
-        public const string EhAccount = "https://account.openeventhub.com";
-        public const string EhApi = "https://api.openeventhub.com";
-        public const string EhAdmin = "https://admin.openeventhub.com";
-        public const string EhWww = "https://openeventhub.com";
+        public const string EhAccount = "https://eh-st-account";
+        public const string EhApi = "https://eh-st-api";
+        public const string EhAdmin = "https://eh-st-admin";
+        public const string EhWww = "https://eh-st-www";
 #endif
     }
 }
