@@ -14,6 +14,7 @@ using EventHub.Web;
 using EventHub.Web.Theme;
 using EventHub.Web.Theme.Bundling;
 using IdentityServer4.Configuration;
+using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -186,6 +187,7 @@ namespace EventHub
         {
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
+            var conf = context.ServiceProvider.GetRequiredService<IConfiguration>();
 
             /*
             app.Use((context, next) =>
@@ -194,6 +196,16 @@ namespace EventHub
                 return next();
             });
             */
+            
+            app.Use(async (ctx, next) =>
+            {
+                if (ctx.Request.Headers.ContainsKey("fromingress"))
+                {
+                    ctx.SetIdentityServerOrigin(conf["App:SelfUrl"]);
+                }
+                
+                await next();
+            });
             
             if (env.IsDevelopment())
             {

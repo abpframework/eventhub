@@ -5,13 +5,26 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_input_headers "fromingress: true";
 spec:
   tls:
   - hosts:
       - {{ .Values.accountUrl }}
+      - accounttemp
     secretName: {{ .Release.Name }}-{{ .Chart.Name }}-tls
   rules:
   - host: "{{ .Values.accountUrl }}"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Release.Name }}-{{ .Chart.Name }}
+            port:
+              number: 80
+  - host: "accounttemp"
     http:
       paths:
       - path: /
