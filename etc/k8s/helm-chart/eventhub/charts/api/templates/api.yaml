@@ -1,28 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api
+  name: {{ .Release.Name }}-{{ .Chart.Name }}
 spec:
   selector:
     matchLabels:
-      app: api
+      app: {{ .Release.Name }}-{{ .Chart.Name }}
   template:
     metadata:
       labels:
-        app: api
+        app: {{ .Release.Name }}-{{ .Chart.Name }}
     spec:
       containers:
       - image: eventhub.api
         imagePullPolicy: Never
-        name: api
+        name: {{ .Release.Name }}-{{ .Chart.Name }}
         ports:
-        - name: apihttp
+        - name: http
           containerPort: 80
-        - name: apihttps
+        - name: https
           containerPort: 443
-      hostAliases:
-      - ip: 10.105.172.183
-        hostnames:
-        - "account.openeventhub.com"
-        - "openeventhub.com"
-        - "api.openeventhub.com"

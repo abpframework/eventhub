@@ -1,25 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: redis
+  name: {{ .Release.Name }}-{{ .Chart.Name }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: redis
+      app: {{ .Release.Name }}-{{ .Chart.Name }}
   template:
     metadata:
       labels:
-        app: redis
+        app: {{ .Release.Name }}-{{ .Chart.Name }}
     spec:
       containers:
         - image: redis:6.0.10-alpine
-          name: redis
+          name: {{ .Release.Name }}-{{ .Chart.Name }}
           ports:
             - name: redis
               containerPort: 6379
-          env:
-          - name: POSTGRES_USER
-            value: "root"
-          - name: POSTGRES_PASSWORD
-            value: "root"

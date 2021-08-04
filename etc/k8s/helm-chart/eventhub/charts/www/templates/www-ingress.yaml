@@ -4,9 +4,14 @@ metadata:
   name: {{ .Release.Name }}-{{ .Chart.Name }}-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
 spec:
+  tls:
+  - hosts:
+      - {{ .Values.wwwUrl }}
+    secretName: {{ .Release.Name }}-{{ .Chart.Name }}-tls
   rules:
-  - host: "{{ .Values.apiUrl }}"
+  - host: "{{ .Values.wwwUrl }}"
     http:
       paths:
       - path: /

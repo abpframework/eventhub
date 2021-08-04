@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgresql
+  name: {{ .Release.Name }}-{{ .Chart.Name }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: postgresql
+      app: {{ .Release.Name }}-{{ .Chart.Name }}
   template:
     metadata:
       labels:
-        app: postgresql
+        app: {{ .Release.Name }}-{{ .Chart.Name }}
     spec:
       containers:
         - image: postgres
-          name: postgresql
+          name: {{ .Release.Name }}-{{ .Chart.Name }}
           ports:
             - name: postgresql
               containerPort: 5432

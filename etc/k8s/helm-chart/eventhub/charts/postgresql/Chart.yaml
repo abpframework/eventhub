@@ -1,5 +1,5 @@
 apiVersion: v2
-name: database
+name: postgresql
 appVersion: "1.0"
 description: Runs PostgreSQL Instance
 version: 1.0.0

@@ -187,11 +187,13 @@ namespace EventHub
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
 
+            /*
             app.Use((context, next) =>
             {
                 context.Request.Scheme = "https";
                 return next();
             });
+            */
             
             if (env.IsDevelopment())
             {

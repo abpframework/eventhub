@@ -1,13 +1,13 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: migrator
+  name: {{ .Release.Name }}-{{ .Chart.Name }}
 spec:
   activeDeadlineSeconds: 100
   template:
     spec:
       containers:
-      - name: migrator
+      - name: {{ .Release.Name }}-{{ .Chart.Name }}
         image: eventhubmigrator
         imagePullPolicy: Never
       restartPolicy: Never

@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
@@ -150,6 +151,12 @@ namespace EventHub.Web
                     options.Scope.Add("email");
                     options.Scope.Add("phone");
                     options.Scope.Add("EventHub");
+                    
+                    options.Events.OnRedirectToIdentityProvider = redirectContext =>
+                    {
+                        redirectContext.ProtocolMessage.RedirectUri = $"{configuration["App:SelfUrl"]}/signin-oidc";
+                        return Task.CompletedTask;
+                    };
                 });
         }
 
@@ -214,6 +221,12 @@ namespace EventHub.Web
         {
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
+            
+            app.Use((context, next) =>
+            {
+                context.Request.Scheme = "https";
+                return next();
+            });
 
             if (env.IsDevelopment())
             {
