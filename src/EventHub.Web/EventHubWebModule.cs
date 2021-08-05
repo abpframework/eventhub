@@ -161,13 +161,6 @@ namespace EventHub.Web
                     options.Scope.Add("email");
                     options.Scope.Add("phone");
                     options.Scope.Add("EventHub");
-                    /*
-                    options.Events.OnRedirectToIdentityProvider = redirectContext =>
-                    {
-                        redirectContext.ProtocolMessage.RedirectUri = $"{configuration["App:SelfUrl"]}/signin-oidc";
-                        return Task.CompletedTask;
-                    };
-                    */
                 });
         }
 

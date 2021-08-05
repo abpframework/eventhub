@@ -45,7 +45,6 @@ namespace EventHub.Web
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    //webBuilder.UseUrls("http://localhost:80", "https://localhost:443");
                 })
                 .UseAutofac()
                 .UseSerilog();
