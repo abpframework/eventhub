@@ -9,11 +9,13 @@
 @using EventHub.Web.Pages.Events.Components.LocationArea
 @using EventHub.Web.Pages.Events.Components.RegistrationArea
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Options
 @using Volo.Abp.Timing
 @using Volo.Abp.Users
 @inject ICurrentUser CurrentUser
 @inject IClock Clock
 @model EventHub.Web.Pages.Events.DetailPageModel
+@inject IOptions<EventHubUrlOptions> UrlOptions
 
 @section scripts {
     <abp-script src="/Pages/Events/Detail.js"/>
@@ -27,11 +29,11 @@
     if (Model.Event.CoverImageContent is null)
     {
         // TODO(berkansasmaz): Get a default image from the design team to be used in social media posts
-        coverImageUrl = EventHubExternalUrls.EhWww + "/assets/slide.jpg";
+        coverImageUrl = UrlOptions.Value.Www + "/assets/slide.jpg";
     }
     else
     {
-        coverImageUrl = $"{EventHubExternalUrls.EhWww}/api/event/cover-picture-source/{Model.Event.Id}";
+        coverImageUrl = $"{UrlOptions.Value.Www}/api/event/cover-picture-source/{Model.Event.Id}";
     }
 
     ViewBag.Title = title;

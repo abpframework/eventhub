@@ -1,4 +1,6 @@
 using EventHub.Localization;
+using EventHub.Web;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Identity;
@@ -33,6 +35,8 @@ namespace EventHub
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            var configuration = context.Services.GetConfiguration();
+
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<EventHubDomainSharedModule>();
@@ -52,6 +56,8 @@ namespace EventHub
             {
                 options.MapCodeNamespace("EventHub", typeof(EventHubResource));
             });
+            
+            Configure<EventHubUrlOptions>(configuration.GetSection("AppUrls"));
         }
     }
 }

@@ -20,3 +20,5 @@ spec:
           containerPort: 80
         - name: https
           containerPort: 443
+        env:
+{{ include "eventhub.global.env" . | indent 8 }}

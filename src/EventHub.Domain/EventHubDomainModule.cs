@@ -1,3 +1,5 @@
+using EventHub.Emailing;
+using EventHub.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.AuditLogging;
@@ -34,7 +36,6 @@ namespace EventHub
             {
                 options.FileSets.AddEmbedded<EventHubDomainModule>();
             });
-            
 #if DEBUG
             context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
 #endif

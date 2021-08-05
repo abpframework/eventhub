@@ -121,14 +121,13 @@ namespace EventHub
 
             Configure<AppUrlOptions>(options =>
             {
-                options.Applications["MVC"].RootUrl = EventHubExternalUrls.EhAccount;
+                options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
             });
 
             Configure<IdentityServerOptions>(options =>
             {
-                options.IssuerUri = EventHubExternalUrls.EhAccount;
+                options.IssuerUri = configuration["App:SelfUrl"];
             });
-
 
             if (hostingEnvironment.IsDevelopment())
             {

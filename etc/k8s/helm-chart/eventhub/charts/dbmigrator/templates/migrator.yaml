@@ -11,8 +11,9 @@ spec:
         image: {{ .Values.containerImage }}
         imagePullPolicy: Never
         env:
+{{ include "eventhub.global.env" . | indent 8 }}
         - name: "ConnectionStrings__Default"
-          value: "Host=eh-st-postgresql;Port=5435;Database=EventHub;Username=root;Password=root"
+          value: {{ .Values.global.defaultConnString }}
         - name: "IdentityServer__Clients__EventHub_Web__RootUrl"
           value: {{ .Values.global.wwwUrlFull }}
         - name: "IdentityServer__Clients__EventHub_Blazor__RootUrl"

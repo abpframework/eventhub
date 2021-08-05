@@ -7,5 +7,8 @@ global:
   wwwUrlFull: "https://eh-st-www"
   adminUrl: eh-st-admin
   adminUrlFull: https://eh-st-admin
+  adminApiApiUrl: eh-st-admin-api
+  adminApiUrlFull: https://eh-st-admin-api
   nginxProxyBufferSize: "32k"
   nginxProxyBuffersNumber: "8"
+  defaultConnString: "Host=eh-st-postgresql;Port=5435;Database=EventHub;Username=root;Password=root"
