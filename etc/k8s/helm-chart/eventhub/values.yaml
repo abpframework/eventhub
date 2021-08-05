@@ -1,3 +1,4 @@
-accountUrl: eh-st-account
-apiUrl: eh-st-api
-wwwUrl: eh-st-www
+global:
+  accountUrl: eh-st-account
+  apiUrl: eh-st-api
+  wwwUrl: eh-st-www

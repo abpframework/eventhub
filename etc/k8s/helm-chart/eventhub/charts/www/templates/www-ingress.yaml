@@ -10,10 +10,10 @@ metadata:
 spec:
   tls:
   - hosts:
-      - {{ .Values.wwwUrl }}
+      - {{ .Values.global.wwwUrl }}
     secretName: {{ .Release.Name }}-{{ .Chart.Name }}-tls
   rules:
-  - host: "{{ .Values.wwwUrl }}"
+  - host: "{{ .Values.global.wwwUrl }}"
     http:
       paths:
       - path: /

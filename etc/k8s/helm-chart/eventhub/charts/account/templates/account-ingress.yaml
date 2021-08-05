@@ -12,21 +12,10 @@ metadata:
 spec:
   tls:
   - hosts:
-      - {{ .Values.accountUrl }}
-      - accounttemp
+      - {{ .Values.global.accountUrl }}
     secretName: {{ .Release.Name }}-{{ .Chart.Name }}-tls
   rules:
-  - host: "{{ .Values.accountUrl }}"
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: {{ .Release.Name }}-{{ .Chart.Name }}
-            port:
-              number: 80
-  - host: "accounttemp"
+  - host: "{{ .Values.global.accountUrl }}"
     http:
       paths:
       - path: /
