@@ -28,6 +28,7 @@ using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
+using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.Swashbuckle;
@@ -109,7 +110,12 @@ namespace EventHub.Web
         {
             Configure<AppUrlOptions>(options =>
             {
-                options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
+                options.Applications["MVC"].RootUrl = configuration[EventHubUrlOptions.GetWwwConfigKey()];
+            });
+            
+            Configure<AbpRemoteServiceOptions>(options =>
+            {
+                options.RemoteServices.Default.BaseUrl = configuration[EventHubUrlOptions.GetApiConfigKey()].EnsureEndsWith('/');
             });
         }
         

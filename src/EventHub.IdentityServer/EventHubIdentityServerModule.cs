@@ -1,6 +1,4 @@
-using System;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
@@ -17,13 +15,11 @@ using IdentityServer4.Configuration;
 using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Auditing;
@@ -119,14 +115,9 @@ namespace EventHub
                 options.ApplicationName = "AuthServer";
             });
 
-            Configure<AppUrlOptions>(options =>
-            {
-                options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
-            });
-
             Configure<IdentityServerOptions>(options =>
             {
-                options.IssuerUri = configuration["App:SelfUrl"];
+                options.IssuerUri = configuration["AppUrls:Account"];
             });
 
             if (hostingEnvironment.IsDevelopment())
@@ -141,8 +132,13 @@ namespace EventHub
 
             Configure<AppUrlOptions>(options =>
             {
-                options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
-                options.RedirectAllowedUrls.AddRange(configuration["App:RedirectAllowedUrls"].Split(','));
+                options.Applications["MVC"].RootUrl = configuration[EventHubUrlOptions.GetAccountConfigKey()];
+                options.RedirectAllowedUrls.AddRange(
+                    new[]
+                    {
+                        configuration[EventHubUrlOptions.GetWwwConfigKey()],
+                        configuration[EventHubUrlOptions.GetAdminConfigKey()]
+                    });
             });
 
             Configure<AbpBackgroundJobOptions>(options =>
@@ -166,10 +162,10 @@ namespace EventHub
                 {
                     builder
                         .WithOrigins(
-                            configuration["App:CorsOrigins"]
-                                .Split(",", StringSplitOptions.RemoveEmptyEntries)
-                                .Select(o => o.RemovePostFix("/"))
-                                .ToArray()
+                            configuration[EventHubUrlOptions.GetWwwConfigKey()],
+                            configuration[EventHubUrlOptions.GetApiConfigKey()],
+                            configuration[EventHubUrlOptions.GetAdminConfigKey()],
+                            configuration[EventHubUrlOptions.GetAdminApiConfigKey()]
                         )
                         .WithAbpExposedHeaders()
                         .SetIsOriginAllowedToAllowWildcardSubdomains()
@@ -186,7 +182,7 @@ namespace EventHub
         {
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
-            var conf = context.ServiceProvider.GetRequiredService<IConfiguration>();
+            var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
 
             /*
             app.Use((context, next) =>
@@ -200,7 +196,7 @@ namespace EventHub
             {
                 if (ctx.Request.Headers.ContainsKey("fromingress"))
                 {
-                    ctx.SetIdentityServerOrigin(conf["App:SelfUrl"]);
+                    ctx.SetIdentityServerOrigin(configuration[EventHubUrlOptions.GetAccountConfigKey()]);
                 }
                 
                 await next();
@@ -221,7 +217,7 @@ namespace EventHub
             app.UseCookiePolicy();
 
             app.UseCorrelationId();
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();

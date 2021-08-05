@@ -9,4 +9,12 @@
   value: "{{ .Values.global.adminUrlFull }}"
 - name: "AppUrls__AdminApi"
   value: "{{ .Values.global.adminApiUrlFull }}"
+- name: "Redis__Configuration"
+  value: "{{ .Values.global.redisConfiguration }}"
+- name: "AuthServer__Authority"
+  value: "{{ .Values.global.internalAuthServerAuthority }}"
+- name: "AuthServer__RequireHttpsMetadata"
+  value: "{{ .Values.global.internalAuthServerRequireHttpsMetadata }}"
+- name: "StringEncryption__DefaultPassPhrase"
+  value: "{{ .Values.global.stringEncryptionDefaultPassPhrase }}"
 {{- end }}
