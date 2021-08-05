@@ -12,7 +12,7 @@ spec:
         app: {{ .Release.Name }}-{{ .Chart.Name }}
     spec:
       containers:
-      - image: eventhub.www
+      - image: {{ .Values.containerImage }}
         imagePullPolicy: Never
         name: {{ .Release.Name }}-{{ .Chart.Name }}
         ports:
