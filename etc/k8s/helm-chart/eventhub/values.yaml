@@ -2,3 +2,5 @@ global:
   accountUrl: eh-st-account
   apiUrl: eh-st-api
   wwwUrl: eh-st-www
+  nginx-proxy-buffer-size: "32k"
+  nginx-proxy-buffers-number: 8

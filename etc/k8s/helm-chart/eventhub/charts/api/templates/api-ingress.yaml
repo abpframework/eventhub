@@ -4,6 +4,9 @@ metadata:
   name: {{ .Release.Name }}-{{ .Chart.Name }}-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: {{ .Values.global.nginx-proxy-buffer-size }}
+    nginx.ingress.kubernetes.io/proxy-buffers-number: {{ .Values.global.nginx-proxy-buffers-number }}
 spec:
   rules:
   - host: "{{ .Values.global.apiUrl }}"
