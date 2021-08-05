@@ -1,6 +1,11 @@
 global:
   accountUrl: eh-st-account
+  accountUrlFull: https://eh-st-account
   apiUrl: eh-st-api
+  apiUrlFull: https://eh-st-api
   wwwUrl: eh-st-www
+  wwwUrlFull: "https://eh-st-www"
+  adminUrl: eh-st-admin
+  adminUrlFull: https://eh-st-admin
   nginxProxyBufferSize: "32k"
   nginxProxyBuffersNumber: "8"

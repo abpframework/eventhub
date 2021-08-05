@@ -10,5 +10,14 @@ spec:
       - name: {{ .Release.Name }}-{{ .Chart.Name }}
         image: {{ .Values.containerImage }}
         imagePullPolicy: Never
+        env:
+        - name: "ConnectionStrings__Default"
+          value: "Host=eh-st-postgresql;Port=5435;Database=EventHub;Username=root;Password=root"
+        - name: "IdentityServer__Clients__EventHub_Web__RootUrl"
+          value: {{ .Values.global.wwwUrlFull }}
+        - name: "IdentityServer__Clients__EventHub_Blazor__RootUrl"
+          value: {{ .Values.global.adminUrlFull }}
+        - name: "IdentityServer__Clients__EventHub_Swagger__RootUrl"
+          value: {{ .Values.global.apiUrlFull }}
       restartPolicy: Never
   backoffLimit: 4
