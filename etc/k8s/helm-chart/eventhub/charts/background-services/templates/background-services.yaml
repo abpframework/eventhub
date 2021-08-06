@@ -14,11 +14,5 @@ spec:
 {{ include "eventhub.global.env" . | indent 8 }}
         - name: "ConnectionStrings__Default"
           value: {{ .Values.global.defaultConnString }}
-        - name: "IdentityServer__Clients__EventHub_Web__RootUrl"
-          value: {{ .Values.global.wwwUrl }}
-        - name: "IdentityServer__Clients__EventHub_Blazor__RootUrl"
-          value: {{ .Values.global.adminUrl }}
-        - name: "IdentityServer__Clients__EventHub_Swagger__RootUrl"
-          value: {{ .Values.global.apiUrl }}
       restartPolicy: Never
   backoffLimit: 10

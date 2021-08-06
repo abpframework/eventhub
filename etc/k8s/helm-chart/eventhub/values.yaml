@@ -28,3 +28,5 @@ admin:
   containerImage: "eventhub.admin"
 dbmigrator:
   containerImage: "eventhub.dbmigrator"
+background-services:
+  containerImage: "eventhub.background-services"

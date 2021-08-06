@@ -6,6 +6,7 @@ $apiFolder = Join-Path $slnFolder "src/EventHub.HttpApi.Host"
 $adminFolder = Join-Path $slnFolder "src/EventHub.Admin.Web"
 $adminApiFolder = Join-Path $slnFolder "src/EventHub.Admin.HttpApi.Host"
 $identityServerFolder = Join-Path $slnFolder "src/EventHub.IdentityServer"
+$backgroundServicesFolder = Join-Path $slnFolder "src/EventHub.BackgroundServices"
 
 ### DB MIGRATOR
 
@@ -48,6 +49,15 @@ Write-Host "*** BUILDING IDENTITY SERVER (ACCOUNT) ****************" -Foreground
 Set-Location $identityServerFolder
 dotnet publish -c Release
 docker build -t eventhub.account .
+
+### BACKGROUND SERVICES
+
+Write-Host "*** BUILDING BACKGROUND SERVICES ****************" -ForegroundColor Green
+Set-Location $backgroundServicesFolder
+dotnet publish -c Release
+docker build -t eventhub.background-services .
+
+### ALL COMPLETED
 
 Write-Host "ALL COMPLETED" -ForegroundColor Green
 Set-Location $currentFolder
