@@ -12,6 +12,7 @@ using EventHub.Localization;
 using EventHub.Web.Menus;
 using EventHub.Web.Theme;
 using EventHub.Web.Theme.Bundling;
+using EventHub.Web.Utils;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using StackExchange.Redis;
 using Microsoft.OpenApi.Models;
@@ -80,6 +81,7 @@ namespace EventHub.Web
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
             ConfigureNavigationServices(configuration);
+            ConfigureCookies(context);
             ConfigureSwaggerServices(context.Services);
             ConfigureRazorPageOptions();
         }
@@ -198,6 +200,11 @@ namespace EventHub.Web
                 options.Contributors.Add(new EventHubToolbarContributor());
             });
         }
+        
+        private void ConfigureCookies(ServiceConfigurationContext context)
+        {
+            context.Services.AddSameSiteCookiePolicy();
+        }
 
         private void ConfigureSwaggerServices(IServiceCollection services)
         {
@@ -244,6 +251,7 @@ namespace EventHub.Web
                 app.UseErrorPage();
             }
 
+            app.UseCookiePolicy();
             app.UseCorrelationId();
             app.UseStaticFiles();
             app.UseRouting();

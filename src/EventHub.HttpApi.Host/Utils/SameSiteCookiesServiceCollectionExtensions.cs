@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace EventHub.Utils
 {
     public static class SameSiteCookiesServiceCollectionExtensions
     {

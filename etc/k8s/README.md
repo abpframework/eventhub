@@ -6,6 +6,8 @@
 127.0.0.1 eh-st-account
 127.0.0.1 eh-st-www
 127.0.0.1 eh-st-api
+127.0.0.1 eh-st-admin
+127.0.0.1 eh-st-admin-api
 ````
 
 * Run `build-images.ps1` in the `scripts` directory.

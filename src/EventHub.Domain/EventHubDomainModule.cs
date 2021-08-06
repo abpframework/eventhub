@@ -1,5 +1,3 @@
-using EventHub.Emailing;
-using EventHub.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.AuditLogging;

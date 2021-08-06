@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using EventHub.EntityFrameworkCore;
 using EventHub.Localization;
+using EventHub.Utils;
 using EventHub.Web;
 using EventHub.Web.Theme;
 using EventHub.Web.Theme.Bundling;
@@ -70,8 +71,8 @@ namespace EventHub
         
         private X509Certificate2 GetSigningCertificate(IWebHostEnvironment hostingEnv, IConfiguration configuration)
         {
-            var fileName = "EventHub.IdentityServer.pfx";
-            var passPhrase = "e8202f07-66e5-4619-be07-72ba76fde97f";
+            var fileName = "account.openeventhub.pfx";
+            var passPhrase = "a8202f07-66e5-4619-be07-72ba76fde97f";
             var file = Path.Combine(hostingEnv.ContentRootPath, fileName);
 
             if (!File.Exists(file))
@@ -117,7 +118,7 @@ namespace EventHub
 
             Configure<IdentityServerOptions>(options =>
             {
-                options.IssuerUri = configuration["AppUrls:Account"];
+                options.IssuerUri = configuration[EventHubUrlOptions.GetAccountConfigKey()];
             });
 
             if (hostingEnvironment.IsDevelopment())
@@ -137,7 +138,9 @@ namespace EventHub
                     new[]
                     {
                         configuration[EventHubUrlOptions.GetWwwConfigKey()],
-                        configuration[EventHubUrlOptions.GetAdminConfigKey()]
+                        configuration[EventHubUrlOptions.GetAdminConfigKey()],
+                        configuration[EventHubUrlOptions.GetApiConfigKey()],
+                        configuration[EventHubUrlOptions.GetAdminApiConfigKey()]
                     });
             });
 
@@ -184,17 +187,9 @@ namespace EventHub
             var env = context.GetEnvironment();
             var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
 
-            /*
-            app.Use((context, next) =>
-            {
-                context.Request.Scheme = "https";
-                return next();
-            });
-            */
-            
             app.Use(async (ctx, next) =>
             {
-                if (ctx.Request.Headers.ContainsKey("fromingress"))
+                if (ctx.Request.Headers.ContainsKey("from-ingress"))
                 {
                     ctx.SetIdentityServerOrigin(configuration[EventHubUrlOptions.GetAccountConfigKey()]);
                 }
@@ -215,7 +210,6 @@ namespace EventHub
             }
             
             app.UseCookiePolicy();
-
             app.UseCorrelationId();
             app.UseStaticFiles();
             app.UseRouting();

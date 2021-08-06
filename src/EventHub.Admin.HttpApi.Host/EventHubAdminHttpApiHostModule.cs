@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using EventHub.Admin.Utils;
 using EventHub.EntityFrameworkCore;
+using EventHub.Web;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
@@ -54,6 +56,7 @@ namespace EventHub.Admin
             ConfigureVirtualFileSystem(context);
             ConfigureRedis(context, configuration);
             ConfigureCors(context, configuration);
+            ConfigureCookies(context);
             ConfigureSwaggerServices(context, configuration);
             ConfigureBackgroundJobs();
         }
@@ -148,10 +151,7 @@ namespace EventHub.Admin
                 {
                     builder
                         .WithOrigins(
-                            configuration["App:CorsOrigins"]
-                                .Split(",", StringSplitOptions.RemoveEmptyEntries)
-                                .Select(o => o.RemovePostFix("/"))
-                                .ToArray()
+                            configuration[EventHubUrlOptions.GetAdminConfigKey()]
                         )
                         .WithAbpExposedHeaders()
                         .SetIsOriginAllowedToAllowWildcardSubdomains()
@@ -162,6 +162,11 @@ namespace EventHub.Admin
             });
         }
 
+        private void ConfigureCookies(ServiceConfigurationContext context)
+        {
+            context.Services.AddSameSiteCookiePolicy();
+        }
+        
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
@@ -194,8 +199,9 @@ namespace EventHub.Admin
                 app.UseErrorPage();
             }
 
+            app.UseCookiePolicy();
             app.UseCorrelationId();
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();

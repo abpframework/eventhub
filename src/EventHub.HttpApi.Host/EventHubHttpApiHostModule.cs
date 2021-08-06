@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using EventHub.EntityFrameworkCore;
+using EventHub.Utils;
 using EventHub.Web;
 using Microsoft.AspNetCore.Localization;
 using StackExchange.Redis;
@@ -58,6 +59,7 @@ namespace EventHub
             ConfigureVirtualFileSystem(context);
             ConfigureRedis(context, configuration);
             ConfigureCors(context, configuration);
+            ConfigureCookies(context);
             ConfigureSwaggerServices(context, configuration);
             ConfigureBackgroundJobs();
         }
@@ -169,7 +171,10 @@ namespace EventHub
                         .AllowCredentials();
                 });
             });
-            
+        }
+
+        private void ConfigureCookies(ServiceConfigurationContext context)
+        {
             context.Services.AddSameSiteCookiePolicy();
         }
 
@@ -212,9 +217,8 @@ namespace EventHub
             }
 
             app.UseCookiePolicy();
-
             app.UseCorrelationId();
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();

@@ -1,5 +1,5 @@
 apiVersion: v2
-name: migrator
+name: dbmigrator
 appVersion: "1.0"
 description: EventHub Migrator Application
 version: 1.0.0

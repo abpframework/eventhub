@@ -16,3 +16,11 @@ global:
   internalAuthServerAuthority: "http://eh-st-account"
   internalAuthServerRequireHttpsMetadata: "false"
   stringEncryptionDefaultPassPhrase: "TxVIZFPxK33czbbv"
+account:
+  containerImage: "eventhub.account"
+api:
+  containerImage: "eventhub.api"
+www:
+  containerImage: "eventhub.www"
+dbmigrator:
+  containerImage: "eventhub.dbmigrator"
