@@ -123,7 +123,7 @@ namespace EventHub
         private static void ConfigureSwaggerServices(ServiceConfigurationContext context, IConfiguration configuration)
         {
             context.Services.AddAbpSwaggerGenWithOAuth(
-                configuration["AuthServer:Authority"],
+                configuration[EventHubUrlOptions.GetAccountConfigKey()],
                 new Dictionary<string, string>
                 {
                     {"EventHub", "EventHub API"}
