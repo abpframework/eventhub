@@ -9,7 +9,5 @@ spec:
   ports:
     - name: redis
       port: 6379
-      targetPort: 6379
   selector:
     app: {{ .Release.Name }}-{{ .Chart.Name }}
-

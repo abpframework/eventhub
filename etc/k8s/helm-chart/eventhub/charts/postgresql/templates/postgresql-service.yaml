@@ -5,11 +5,10 @@ metadata:
     name: {{ .Release.Name }}-{{ .Chart.Name }}
   name: {{ .Release.Name }}-{{ .Chart.Name }}
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - name: postgresql
-      port: 5435
-      targetPort: 5432
+      port: 5432
   selector:
     app: {{ .Release.Name }}-{{ .Chart.Name }}
 
