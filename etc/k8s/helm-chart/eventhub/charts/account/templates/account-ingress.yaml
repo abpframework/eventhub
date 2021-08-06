@@ -12,10 +12,10 @@ metadata:
 spec:
   tls:
   - hosts:
-      - {{ .Values.global.accountUrl }}
+      - {{ .Values.global.accountDomain }}
     secretName: {{ .Release.Name }}-{{ .Chart.Name }}-tls
   rules:
-  - host: "{{ .Values.global.accountUrl }}"
+  - host: "{{ .Values.global.accountDomain }}"
     http:
       paths:
       - path: /

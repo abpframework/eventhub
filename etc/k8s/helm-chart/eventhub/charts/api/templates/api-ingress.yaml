@@ -9,7 +9,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-buffers-number: "{{ .Values.global.nginxProxyBuffersNumber }}"
 spec:
   rules:
-  - host: "{{ .Values.global.apiUrl }}"
+  - host: "{{ .Values.global.apiDomain }}"
     http:
       paths:
       - path: /

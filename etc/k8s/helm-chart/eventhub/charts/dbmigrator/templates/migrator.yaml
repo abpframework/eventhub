@@ -15,10 +15,10 @@ spec:
         - name: "ConnectionStrings__Default"
           value: {{ .Values.global.defaultConnString }}
         - name: "IdentityServer__Clients__EventHub_Web__RootUrl"
-          value: {{ .Values.global.wwwUrlFull }}
+          value: {{ .Values.global.wwwUrl }}
         - name: "IdentityServer__Clients__EventHub_Blazor__RootUrl"
-          value: {{ .Values.global.adminUrlFull }}
+          value: {{ .Values.global.adminUrl }}
         - name: "IdentityServer__Clients__EventHub_Swagger__RootUrl"
-          value: {{ .Values.global.apiUrlFull }}
+          value: {{ .Values.global.apiUrl }}
       restartPolicy: Never
   backoffLimit: 4
