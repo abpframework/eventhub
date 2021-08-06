@@ -13,4 +13,4 @@
 * Run `build-images.ps1` in the `scripts` directory.
 * Run `helm install eh-st eventhub` in the `helm-chart` directory.
 
-* Browse https://eh-st-www
+* Browse https://eh-st-www and https://eh-st-admin

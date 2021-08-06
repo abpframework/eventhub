@@ -3,6 +3,8 @@ $slnFolder = Join-Path $currentFolder "../../../"
 $dbmigratorFolder = Join-Path $slnFolder "src/EventHub.DbMigrator"
 $webFolder = Join-Path $slnFolder "src/EventHub.Web"
 $apiFolder = Join-Path $slnFolder "src/EventHub.HttpApi.Host"
+$adminFolder = Join-Path $slnFolder "src/EventHub.Admin.Web"
+$adminApiFolder = Join-Path $slnFolder "src/EventHub.Admin.HttpApi.Host"
 $identityServerFolder = Join-Path $slnFolder "src/EventHub.IdentityServer"
 
 ### DB MIGRATOR
@@ -25,6 +27,20 @@ Write-Host "*** BUILDING API ****************" -ForegroundColor Green
 Set-Location $apiFolder
 dotnet publish -c Release
 docker build -t eventhub.api .
+
+### ADMIN (BLAZOR)
+
+Write-Host "*** BUILDING ADMIN (BLAZOR) ****************" -ForegroundColor Green
+Set-Location $adminFolder
+dotnet publish -c Release
+docker build -t eventhub.admin .
+
+### ADMIN API
+
+Write-Host "*** BUILDING ADMIN API ****************" -ForegroundColor Green
+Set-Location $adminApiFolder
+dotnet publish -c Release
+docker build -t eventhub.admin-api .
 
 ### IDENTITY SERVER (ACCOUNT)
 

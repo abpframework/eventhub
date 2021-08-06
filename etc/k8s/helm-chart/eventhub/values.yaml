@@ -22,5 +22,9 @@ api:
   containerImage: "eventhub.api"
 www:
   containerImage: "eventhub.www"
+admin-api:
+  containerImage: "eventhub.admin-api"
+admin:
+  containerImage: "eventhub.admin"
 dbmigrator:
   containerImage: "eventhub.dbmigrator"
