@@ -1,6 +1,7 @@
  ### Pre-requirements
 
 * Docker Desktop with Kubernetes enabled
+* Install [NGINX ingress](https://kubernetes.github.io/ingress-nginx/deploy/) for k8s
 
 ### How to run?
 
