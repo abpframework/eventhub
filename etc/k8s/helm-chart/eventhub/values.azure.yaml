@@ -14,7 +14,7 @@ global:
   nginxProxyBuffersNumber: "8"
   defaultConnString: "Host=eh-az-postgresql;Port=5432;Database=EventHub;Username=root;Password=root"
   redisConfiguration: "eh-az-redis"
-  internalAuthServerAuthority: "http://eh-az-account"
+  internalAuthServerAuthority: "http://account.openeventhub.com"
   internalAuthServerRequireHttpsMetadata: "false"
   stringEncryptionDefaultPassPhrase: "TxVIZFPxK33czbbv"
   imagePullPolicy: Always

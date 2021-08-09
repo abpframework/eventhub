@@ -1,3 +1,5 @@
+az acr login --name volocr
+
 docker tag eventhub.dbmigrator:latest volocr.azurecr.io/eventhub.dbmigrator:latest
 docker push volocr.azurecr.io/eventhub.dbmigrator:latest
 
