@@ -118,8 +118,7 @@ namespace EventHub.Web
             Configure<AbpRemoteServiceOptions>(options =>
             {
                 options.RemoteServices.Default = new RemoteServiceConfiguration(
-                    configuration[EventHubUrlOptions.GetApiConfigKey()]
-                        .Replace("https", "http")
+                    configuration[EventHubUrlOptions.GetApiInternalConfigKey()]
                         .EnsureEndsWith('/')
                     );
             });

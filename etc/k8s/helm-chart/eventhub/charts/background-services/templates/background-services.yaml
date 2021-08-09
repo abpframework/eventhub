@@ -9,7 +9,7 @@ spec:
       containers:
       - name: {{ .Release.Name }}-{{ .Chart.Name }}
         image: {{ .Values.containerImage }}
-        imagePullPolicy: Never
+        imagePullPolicy: {{ .Values.global.imagePullPolicy }}
         env:
 {{ include "eventhub.global.env" . | indent 8 }}
         - name: "ConnectionStrings__Default"

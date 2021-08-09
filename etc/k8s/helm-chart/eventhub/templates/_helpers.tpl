@@ -5,6 +5,8 @@
   value: "{{ .Values.global.wwwUrl }}"
 - name: "AppUrls__Api"
   value: "{{ .Values.global.apiUrl }}"
+- name: "AppUrls__ApiInternal"
+  value: "{{ .Values.global.apiUrlInternal }}"
 - name: "AppUrls__Admin"
   value: "{{ .Values.global.adminUrl }}"
 - name: "AppUrls__AdminApi"

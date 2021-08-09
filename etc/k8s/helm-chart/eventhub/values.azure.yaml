@@ -1,0 +1,34 @@
+global:
+  accountDomain: account.openeventhub.com
+  accountUrl: https://account.openeventhub.com
+  apiDomain: api.openeventhub.com
+  apiUrl: https://api.openeventhub.com
+  apiUrlInternal: http://eh-az-api
+  wwwDomain: openeventhub.com
+  wwwUrl: "https://openeventhub.com"
+  adminDomain: admin.openeventhub.com
+  adminUrl: https://admin.openeventhub.com
+  adminApiDomain: admin-api.openeventhub.com
+  adminApiUrl: https://admin-api.openeventhub.com
+  nginxProxyBufferSize: "32k"
+  nginxProxyBuffersNumber: "8"
+  defaultConnString: "Host=eh-az-postgresql;Port=5432;Database=EventHub;Username=root;Password=root"
+  redisConfiguration: "eh-az-redis"
+  internalAuthServerAuthority: "http://eh-az-account"
+  internalAuthServerRequireHttpsMetadata: "false"
+  stringEncryptionDefaultPassPhrase: "TxVIZFPxK33czbbv"
+  imagePullPolicy: Always
+account:
+  containerImage: "volocr.azurecr.io/eventhub.account"
+api:
+  containerImage: "volocr.azurecr.io/eventhub.api"
+www:
+  containerImage: "volocr.azurecr.io/eventhub.www"
+admin-api:
+  containerImage: "volocr.azurecr.io/eventhub.admin-api"
+admin:
+  containerImage: "volocr.azurecr.io/eventhub.admin"
+dbmigrator:
+  containerImage: "volocr.azurecr.io/eventhub.dbmigrator"
+background-services:
+  containerImage: "volocr.azurecr.io/eventhub.background-services"

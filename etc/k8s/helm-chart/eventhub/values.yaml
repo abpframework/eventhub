@@ -3,6 +3,7 @@ global:
   accountUrl: https://eh-st-account
   apiDomain: eh-st-api
   apiUrl: https://eh-st-api
+  apiUrlInternal: http://api.openeventhub.com
   wwwDomain: eh-st-www
   wwwUrl: "https://eh-st-www"
   adminDomain: eh-st-admin
@@ -16,6 +17,7 @@ global:
   internalAuthServerAuthority: "http://eh-st-account"
   internalAuthServerRequireHttpsMetadata: "false"
   stringEncryptionDefaultPassPhrase: "TxVIZFPxK33czbbv"
+  imagePullPolicy: Never
 account:
   containerImage: "eventhub.account"
 api:

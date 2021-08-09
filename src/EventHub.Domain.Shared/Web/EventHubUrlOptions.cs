@@ -7,6 +7,7 @@
         public string Account { get; set; } = "https://localhost:44313";
         public string Www { get; set; } = "https://localhost:44308";
         public string Api { get; set; } = "https://localhost:44362";
+        public string ApiInternal { get; set; } = "https://localhost:44362";
         public string Admin { get; set; } = "https://localhost:44307";
         public string AdminApi { get; set; } = "https://localhost:44305";
 
@@ -18,6 +19,11 @@
         public static string GetWwwConfigKey()
         {
             return GetConfigKey(nameof(Www));
+        }
+        
+        public static string GetApiInternalConfigKey()
+        {
+            return GetConfigKey(nameof(ApiInternal));
         }
         
         public static string GetApiConfigKey()
