@@ -1,4 +1,6 @@
 {{- define "eventhub.global.env" -}}
+- name: "DOTNET_ENVIRONMENT"
+  value: "{{ .Values.global.dotnetEnvironment }}"
 - name: "AppUrls__Account"
   value: "{{ .Values.global.accountUrl }}"
 - name: "AppUrls__Www"

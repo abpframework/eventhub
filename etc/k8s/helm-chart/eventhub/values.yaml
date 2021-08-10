@@ -1,9 +1,10 @@
 global:
+  dotnetEnvironment: 'Staging'
   accountDomain: eh-st-account
   accountUrl: https://eh-st-account
   apiDomain: eh-st-api
   apiUrl: https://eh-st-api
-  apiUrlInternal: http://api.openeventhub.com
+  apiUrlInternal: http://eh-st-api
   wwwDomain: eh-st-www
   wwwUrl: "https://eh-st-www"
   adminDomain: eh-st-admin

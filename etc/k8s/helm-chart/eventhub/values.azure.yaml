@@ -1,4 +1,5 @@
 global:
+  dotnetEnvironment: 'Production'
   accountDomain: account.openeventhub.com
   accountUrl: https://account.openeventhub.com
   apiDomain: api.openeventhub.com
