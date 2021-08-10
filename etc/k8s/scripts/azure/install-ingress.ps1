@@ -1,4 +1,5 @@
 $REGISTRY_NAME="volocr.azurecr.io"
+$ACR_URL="volocr.azurecr.io"
 $CONTROLLER_REGISTRY="k8s.gcr.io"
 $CONTROLLER_IMAGE="ingress-nginx/controller"
 $CONTROLLER_TAG="v0.48.1"
@@ -26,9 +27,6 @@ kubectl create namespace ingress-basic
 
 # Add the ingress-nginx repository
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-
-# Set variable for ACR location to use for pulling images
-$ACR_URL="volocr.azurecr.io"
 
 # Use Helm to deploy an NGINX ingress controller
 helm install nginx-ingress ingress-nginx/ingress-nginx `
