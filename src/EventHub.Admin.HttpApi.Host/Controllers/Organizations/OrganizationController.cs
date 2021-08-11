@@ -2,15 +2,17 @@ using System;
 using System.Threading.Tasks;
 using EventHub.Admin.Organizations;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 
 namespace EventHub.Admin.Controllers.Organizations
 {
+    [RemoteService(Name = EventHubAdminRemoteServiceConsts.RemoteServiceName)]
     [Controller]
     [Area("eventhub-admin")]
     [ControllerName("Organization")]
-    [Route("/api/eventhub/organizations")]
+    [Route("/api/eventhub/admin/organization")]
     public class OrganizationController : AbpController, IOrganizationAppService
     {
         private readonly IOrganizationAppService _organizationAppService;

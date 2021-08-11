@@ -49,7 +49,6 @@ namespace EventHub
             var configuration = context.Services.GetConfiguration();
             var hostingEnvironment = context.Services.GetHostingEnvironment();
 
-            ConfigureConventionalControllers();
             ConfigureAuthentication(context, configuration);
             ConfigureLocalization();
             ConfigureCache(configuration);
@@ -95,14 +94,6 @@ namespace EventHub
                             $"..{Path.DirectorySeparatorChar}EventHub.Application"));
                 });
             }
-        }
-
-        private void ConfigureConventionalControllers()
-        {
-            Configure<AbpAspNetCoreMvcOptions>(options =>
-            {
-                options.ConventionalControllers.Create(typeof(EventHubApplicationModule).Assembly);
-            });
         }
 
         private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)

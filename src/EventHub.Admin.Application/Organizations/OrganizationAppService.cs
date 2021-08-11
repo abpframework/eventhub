@@ -75,15 +75,7 @@ namespace EventHub.Admin.Organizations
         {
             var organization = await _organizationRepository.GetAsync(id);
 
-            var dto = ObjectMapper.Map<Organization, OrganizationProfileDto>(organization);
-
-            var user = await _identityUserRepository.GetAsync(organization.OwnerUserId);
-            dto.OwnerUserName = user.UserName;
-            dto.OwnerEmail = user.Email;
-
-            dto.ProfilePictureContent = await GetCoverImageAsync(organization.Id);
-
-            return dto;
+            return await CreateOrganizationProfileDto(organization);
         }
         
         public async Task<OrganizationProfileDto> GetByNameAsync(string name)
@@ -95,15 +87,7 @@ namespace EventHub.Admin.Organizations
                     .WithData("OrganizationName", name);
             }
 
-            var dto = ObjectMapper.Map<Organization, OrganizationProfileDto>(organization);
-
-            var user = await _identityUserRepository.GetAsync(organization.OwnerUserId);
-            dto.OwnerUserName = user.UserName;
-            dto.OwnerEmail = user.Email;
-
-            dto.ProfilePictureContent = await GetCoverImageAsync(organization.Id);
-
-            return dto;
+            return await CreateOrganizationProfileDto(organization);
         }
 
         [Authorize(EventHubPermissions.Organizations.Update)]
@@ -139,6 +123,18 @@ namespace EventHub.Admin.Organizations
         public async Task DeleteAsync(Guid id)
         {
             await _organizationRepository.DeleteAsync(id);
+        }
+        
+        private async Task<OrganizationProfileDto> CreateOrganizationProfileDto(Organization organization)
+        {
+            var dto = ObjectMapper.Map<Organization, OrganizationProfileDto>(organization);
+
+            var user = await _identityUserRepository.GetAsync(organization.OwnerUserId);
+            dto.OwnerUserName = user.UserName;
+            dto.OwnerEmail = user.Email;
+
+            dto.ProfilePictureContent = await GetCoverImageAsync(organization.Id);
+            return dto;
         }
 
         private async Task<byte[]> GetCoverImageAsync(Guid id)
