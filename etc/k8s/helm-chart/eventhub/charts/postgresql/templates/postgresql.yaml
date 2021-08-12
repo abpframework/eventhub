@@ -15,6 +15,12 @@ spec:
       containers:
         - image: postgres
           name: {{ .Release.Name }}-{{ .Chart.Name }}
+{{- if eq .Release.Name "eh-az" }}
+          volumeMounts:
+          - mountPath: "/var/lib/postgresql/data"
+            name: {{ .Release.Name }}-{{ .Chart.Name }}-database-volume
+            subPath: postgresql-data
+{{- end }}
           ports:
             - name: postgresql
               containerPort: 5432
@@ -23,3 +29,9 @@ spec:
             value: "root"
           - name: POSTGRES_PASSWORD
             value: "root"
+{{- if eq .Release.Name "eh-az" }}
+      volumes:
+        - name: {{ .Release.Name }}-{{ .Chart.Name }}-database-volume
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-{{ .Chart.Name }}-pvc
+{{- end }}
