@@ -6,7 +6,7 @@ global:
   apiUrl: https://api.openeventhub.com
   apiUrlInternal: http://eh-az-api
   wwwDomain: openeventhub.com
-  wwwUrl: "https://openeventhub.com"
+  wwwUrl: "https://www.openeventhub.com"
   adminDomain: admin.openeventhub.com
   adminUrl: https://admin.openeventhub.com
   adminApiDomain: admin-api.openeventhub.com
