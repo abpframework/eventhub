@@ -9,6 +9,7 @@ trigger:
 pool:
   vmImage: 'windows-latest'
 
+steps:
 - task: PowerShell@2
   inputs:
     filePath: 'etc/k8s/scripts/build-images.ps1'
