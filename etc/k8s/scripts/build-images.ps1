@@ -1,4 +1,4 @@
-$currentFolder = (Get-Item -Path "./" -Verbose).FullName
+$currentFolder = $PSScriptRoot
 $slnFolder = Join-Path $currentFolder "../../../"
 $dbmigratorFolder = Join-Path $slnFolder "src/EventHub.DbMigrator"
 $webFolder = Join-Path $slnFolder "src/EventHub.Web"
