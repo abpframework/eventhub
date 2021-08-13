@@ -1,11 +1,3 @@
-# ASP.NET
-# Build and test ASP.NET projects.
-# Add steps that publish symbols, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
-
-trigger:
-- main
-
 pool:
   vmImage: 'windows-latest'
 
@@ -13,3 +5,19 @@ steps:
 - task: PowerShell@2
   inputs:
     filePath: 'etc/k8s/scripts/build-images.ps1'
+- task: PowerShell@2
+  inputs:
+    filePath: 'etc/azure/scripts/push-images.ps1'
+- task: HelmDeploy@0
+  inputs:
+    connectionType: 'Azure Resource Manager'
+    azureSubscription: 'volosoft(fe02ef9f-9e1c-4e40-b924-505981688dd8)'
+    azureResourceGroup: 'volo'
+    kubernetesCluster: 'volo'
+    namespace: 'eventhub'
+    command: 'upgrade'
+    chartType: 'Name'
+    chartName: 'eventhub'
+    releaseName: 'eh-az'
+    valueFile: 'etc/k8s/helm-chart/eventhub/values.azure.yaml'
+    arguments: '--namespace eventhub --create-namespace'
