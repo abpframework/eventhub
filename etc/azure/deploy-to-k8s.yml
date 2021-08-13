@@ -12,7 +12,7 @@ steps:
 - task: HelmDeploy@0
   inputs:
     connectionType: 'Azure Resource Manager'
-    azureSubscription: 'volosoft(fe02ef9f-9e1c-4e40-b924-505981688dd8)'
+    azureSubscription: 'volosoft'
     azureResourceGroup: 'volo'
     kubernetesCluster: 'volo'
     useClusterAdmin: true
