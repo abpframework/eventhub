@@ -34,7 +34,6 @@ namespace EventHub
             {
                 options.FileSets.AddEmbedded<EventHubDomainModule>();
             });
-            
 #if DEBUG
             context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
 #endif

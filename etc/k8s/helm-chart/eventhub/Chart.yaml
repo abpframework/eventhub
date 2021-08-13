@@ -1,0 +1,6 @@
+apiVersion: v2
+name: eventhub
+appVersion: "1.0"
+description: EventHub solution
+version: 1.0.0
+type: application

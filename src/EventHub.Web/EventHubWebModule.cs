@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
@@ -11,6 +12,7 @@ using EventHub.Localization;
 using EventHub.Web.Menus;
 using EventHub.Web.Theme;
 using EventHub.Web.Theme.Bundling;
+using EventHub.Web.Utils;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using StackExchange.Redis;
 using Microsoft.OpenApi.Models;
@@ -27,6 +29,7 @@ using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
+using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.Swashbuckle;
@@ -78,6 +81,7 @@ namespace EventHub.Web
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
             ConfigureNavigationServices(configuration);
+            ConfigureCookies(context);
             ConfigureSwaggerServices(context.Services);
             ConfigureRazorPageOptions();
         }
@@ -108,7 +112,15 @@ namespace EventHub.Web
         {
             Configure<AppUrlOptions>(options =>
             {
-                options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
+                options.Applications["MVC"].RootUrl = configuration[EventHubUrlOptions.GetWwwConfigKey()];
+            });
+            
+            Configure<AbpRemoteServiceOptions>(options =>
+            {
+                options.RemoteServices.Default = new RemoteServiceConfiguration(
+                    configuration[EventHubUrlOptions.GetApiInternalConfigKey()]
+                        .EnsureEndsWith('/')
+                    );
             });
         }
         
@@ -187,6 +199,11 @@ namespace EventHub.Web
                 options.Contributors.Add(new EventHubToolbarContributor());
             });
         }
+        
+        private void ConfigureCookies(ServiceConfigurationContext context)
+        {
+            context.Services.AddSameSiteCookiePolicy();
+        }
 
         private void ConfigureSwaggerServices(IServiceCollection services)
         {
@@ -214,6 +231,12 @@ namespace EventHub.Web
         {
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
+            
+            app.Use((context, next) =>
+            {
+                context.Request.Scheme = "https";
+                return next();
+            });
 
             if (env.IsDevelopment())
             {
@@ -227,6 +250,7 @@ namespace EventHub.Web
                 app.UseErrorPage();
             }
 
+            app.UseCookiePolicy();
             app.UseCorrelationId();
             app.UseStaticFiles();
             app.UseRouting();

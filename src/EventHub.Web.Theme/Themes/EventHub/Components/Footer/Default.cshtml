@@ -1,7 +1,9 @@
 ﻿@using EventHub.Web
 @using Microsoft.AspNetCore.Http.Extensions
+@using Microsoft.Extensions.Options
 @using Volo.Abp.Users
 @inject ICurrentUser CurrentUser
+@inject IOptions<EventHubUrlOptions> UrlOptions
 
 <footer class="mt-5">
     <div class="container">
@@ -18,7 +20,7 @@
                     <h5>Account</h5>
                     <div class="footer-links">
 
-                        <a href="@EventHubExternalUrls.EhAccount/account/register?returnUrl=@EventHubExternalUrls.EhWww@(System.Net.WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery()))" class="d-block">Sign Up</a>
+                        <a href="@UrlOptions.Value.Account/account/register?returnUrl=@UrlOptions.Value.Www@(System.Net.WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery()))" class="d-block">Sign Up</a>
                         <a href="/account/login?returnUrl=@(System.Net.WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery()))" class="d-block">Log In</a>
 
                     </div>
@@ -51,13 +53,13 @@
                 <span class="copyright">© 2021 EventHub</span>
             </div>
             <div class="col-md text-center text-md-right">
-                <a href="@EventHubExternalUrls.EhWww/terms-service">
+                <a href="@UrlOptions.Value.Www/terms-service">
                     Terms of Service
                 </a>
                 <span>
                     <img src="/assets/seperator2.svg" class="mx-3">
                 </span>
-                <a href="@EventHubExternalUrls.EhWww/privacy-policy">
+                <a href="@UrlOptions.Value.Www/privacy-policy">
                     Privacy Policy
                 </a>
             </div>

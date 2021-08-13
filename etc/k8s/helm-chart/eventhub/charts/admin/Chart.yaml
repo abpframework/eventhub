@@ -1,0 +1,6 @@
+apiVersion: v2
+name: admin
+appVersion: "1.0"
+description: EventHub Admin Application
+version: 1.0.0
+type: application

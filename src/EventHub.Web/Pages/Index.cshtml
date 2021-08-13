@@ -6,11 +6,13 @@
 @using EventHub.Web
 @using EventHub.Web.Helpers
 @using EventHub.Web.Pages.Events.Components.EventsArea
+@using Microsoft.Extensions.Options
 @using Volo.Abp.Timing
 @using Volo.Abp.Users
 @inject ICurrentUser CurrentUser
 @inject IClock Clock
 @inject IHtmlLocalizer<EventHubResource> L
+@inject IOptions<EventHubUrlOptions> UrlOptions
 
 @section styles {
     <abp-style-bundle>
@@ -225,7 +227,7 @@
                 </p>
                 @if (!CurrentUser.IsAuthenticated)
                 {
-                    <a href="@EventHubExternalUrls.EhAccount/Account/Register?returnUrl=@EventHubExternalUrls.EhWww" class="btn btn-link btn-lg">Join EventHub</a>
+                    <a href="@UrlOptions.Value.Account/Account/Register?returnUrl=@UrlOptions.Value.Www" class="btn btn-link btn-lg">Join EventHub</a>
                 }
             </div>
         </div>

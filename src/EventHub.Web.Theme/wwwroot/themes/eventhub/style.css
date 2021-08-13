@@ -754,7 +754,7 @@ div.checkbox.switcher label, div.radio.switcher label {
     margin-right: 10px;
     width: 56px;
     height: 30px;
-    background: rgb(107 126 146 / 20%);
+    background: rgba(107, 126, 146, 0.20);
     border: 3px solid #e1e5e9;
     border-radius: 50px;
     transition: all 0.3s ease-in-out;
@@ -791,7 +791,7 @@ div.checkbox.switcher label, div.radio.switcher label {
  
 
 .image-area {
-    border: 2px dashed rgb(218 224 229);
+    border: 2px dashed rgb(218, 224, 229);
     padding: 1em;
     position: relative;
     border-radius: 10px;
@@ -802,7 +802,7 @@ div.checkbox.switcher label, div.radio.switcher label {
 
 .image-area::before {
     content: 'Uploaded image result';
-    color: rgb(218 224 229);
+    color: rgb(218, 224, 229);
     font-weight: bold;
     text-transform: uppercase;
     position: absolute;
