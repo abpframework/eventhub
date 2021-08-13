@@ -5,6 +5,7 @@ steps:
 - task: PowerShell@2
   inputs:
     filePath: 'etc/k8s/scripts/build-images.ps1'
+
 - task: PowerShell@2
   inputs:
     filePath: 'etc/azure/scripts/push-images.ps1'
@@ -14,6 +15,7 @@ steps:
     azureSubscription: 'volosoft(fe02ef9f-9e1c-4e40-b924-505981688dd8)'
     azureResourceGroup: 'volo'
     kubernetesCluster: 'volo'
+    useClusterAdmin: true
     namespace: 'eventhub'
     command: 'upgrade'
     chartType: 'Name'
@@ -21,3 +23,6 @@ steps:
     releaseName: 'eh-az'
     valueFile: 'etc/k8s/helm-chart/eventhub/values.azure.yaml'
     arguments: '--namespace eventhub --create-namespace'
+    azureContainerRegistry: 'volocr.azurecr.io'
+    azureResourceGroupForACR: 'volo'
+    azureSubscriptionForACR: 'volosoft'
