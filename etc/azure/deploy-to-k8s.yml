@@ -12,7 +12,7 @@ steps:
 - task: HelmDeploy@0
   inputs:
     connectionType: 'Azure Resource Manager'
-    azureSubscription: 'volosoft'
+    azureSubscription: 'volosoft(fe02ef9f-9e1c-4e40-b924-505981688dd8)'
     azureResourceGroup: 'volo'
     kubernetesCluster: 'volo'
     useClusterAdmin: true
@@ -23,6 +23,3 @@ steps:
     releaseName: 'eh-az'
     valueFile: 'etc/k8s/helm-chart/eventhub/values.azure.yaml'
     arguments: '--namespace eventhub --create-namespace'
-    azureContainerRegistry: 'volocr.azurecr.io'
-    azureResourceGroupForACR: 'volo'
-    azureSubscriptionForACR: 'volosoft'
