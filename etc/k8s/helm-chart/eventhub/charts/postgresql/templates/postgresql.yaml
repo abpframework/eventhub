@@ -1,8 +1,9 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ .Release.Name }}-{{ .Chart.Name }}
 spec:
+  serviceName: {{ .Release.Name }}-{{ .Chart.Name }}
   replicas: 1
   selector:
     matchLabels:
@@ -30,8 +31,13 @@ spec:
           - name: POSTGRES_PASSWORD
             value: "root"
 {{- if eq .Release.Name "eh-az" }}
-      volumes:
-        - name: {{ .Release.Name }}-{{ .Chart.Name }}-database-volume
-          persistentVolumeClaim:
-            claimName: {{ .Release.Name }}-{{ .Chart.Name }}-pvc
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ .Release.Name }}-{{ .Chart.Name }}-database-volume
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "managed-premium-retain"
+      resources:
+        requests:
+          storage: 64Gi
 {{- end }}
