@@ -11,8 +11,11 @@
 @using EventHub.Web.Theme.Themes.EventHub.Components.PageAlerts
 @using EventHub.Web
 @using Microsoft.AspNetCore.Http.Extensions
+@using Microsoft.Extensions.Options
 @inject IBrandingProvider BrandingProvider
 @inject IPageLayout PageLayout
+@inject IOptions<EventHubUrlOptions> UrlOptions
+
 @{
     Layout = null;
     var pageTitle = ViewBag.Title == null ? "EventHub" : ViewBag.Title;
@@ -47,12 +50,12 @@
     <meta property="og:url" content="@Context.Request.GetDisplayUrl()"/>
     <meta property="og:type" content="@(!string.IsNullOrWhiteSpace(ViewBag.OgType) ? ViewBag.OgType : "website")"/>
     <meta property="og:description" content="@(!string.IsNullOrWhiteSpace(ViewBag.OgDescription) ? ViewBag.OgDescription : "EventHub Description")"/>
-    <meta property="og:image" content="@(!string.IsNullOrWhiteSpace(ViewBag.OgImage) ? ViewBag.OgImage : EventHubExternalUrls.EhWww + "/assets/slide.jpg")"/>
+    <meta property="og:image" content="@(!string.IsNullOrWhiteSpace(ViewBag.OgImage) ? ViewBag.OgImage : UrlOptions.Value.Www + "/assets/slide.jpg")"/>
     <meta property="twitter:card" content="summary_large_image"/>
     <meta property="twitter:site" content="@Html.Raw("@openeventhub")"/>
     <meta property="twitter:title" content="@(!string.IsNullOrWhiteSpace(ViewBag.TwitterTitle) ? ViewBag.TwitterTitle : "EventHub")"/>
     <meta property="twitter:description" content="@(!string.IsNullOrWhiteSpace(ViewBag.TwitterDescription) ? ViewBag.TwitterDescription : "EventHub Description")"/>
-    <meta property="twitter:image" content="@(!string.IsNullOrWhiteSpace(ViewBag.TwitterImage) ? ViewBag.TwitterImage : EventHubExternalUrls.EhWww + "/assets/slide.jpg")"/>
+    <meta property="twitter:image" content="@(!string.IsNullOrWhiteSpace(ViewBag.TwitterImage) ? ViewBag.TwitterImage : UrlOptions.Value.Www + "/assets/slide.jpg")"/>
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">

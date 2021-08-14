@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}
+spec:
+  activeDeadlineSeconds: 180
+  template:
+    spec:
+      containers:
+      - name: {{ .Release.Name }}-{{ .Chart.Name }}
+        image: {{ .Values.containerImage }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+        env:
+{{ include "eventhub.global.env" . | indent 8 }}
+        - name: "ConnectionStrings__Default"
+          value: {{ .Values.global.defaultConnString }}
+        - name: "IdentityServer__Clients__EventHub_Web__RootUrl"
+          value: {{ .Values.global.wwwUrl }}
+        - name: "IdentityServer__Clients__EventHub_Blazor__RootUrl"
+          value: {{ .Values.global.adminUrl }}
+        - name: "IdentityServer__Clients__EventHub_Swagger__RootUrl"
+          value: {{ .Values.global.apiUrl }}
+      restartPolicy: Never
+  backoffLimit: 10

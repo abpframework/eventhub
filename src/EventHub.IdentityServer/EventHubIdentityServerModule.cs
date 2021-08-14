@@ -1,6 +1,5 @@
-using System;
 using System.IO;
-using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
@@ -9,16 +8,19 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using EventHub.EntityFrameworkCore;
 using EventHub.Localization;
+using EventHub.Utils;
 using EventHub.Web;
 using EventHub.Web.Theme;
 using EventHub.Web.Theme.Bundling;
 using IdentityServer4.Configuration;
+using IdentityServer4.Extensions;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using StackExchange.Redis;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Auditing;
@@ -26,6 +28,7 @@ using Volo.Abp.Autofac;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
+using Volo.Abp.IdentityServer;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation.Urls;
@@ -46,6 +49,40 @@ namespace EventHub
     {
         private const string DefaultCorsPolicyName = "Default";
 
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            var hostingEnvironment = context.Services.GetHostingEnvironment();
+
+            if (!hostingEnvironment.IsDevelopment())
+            {
+                var configuration = context.Services.GetConfiguration();
+
+                PreConfigure<AbpIdentityServerBuilderOptions>(options =>
+                {
+                    options.AddDeveloperSigningCredential = false;
+                });
+
+                PreConfigure<IIdentityServerBuilder>(builder =>
+                {
+                    builder.AddSigningCredential(GetSigningCertificate(hostingEnvironment, configuration));
+                });
+            }
+        }
+        
+        private X509Certificate2 GetSigningCertificate(IWebHostEnvironment hostingEnv, IConfiguration configuration)
+        {
+            var fileName = "account.openeventhub.pfx";
+            var passPhrase = "a8202f07-66e5-4619-be07-72ba76fde97f";
+            var file = Path.Combine(hostingEnv.ContentRootPath, fileName);
+
+            if (!File.Exists(file))
+            {
+                throw new FileNotFoundException($"Signing Certificate couldn't found: {file}");
+            }
+
+            return new X509Certificate2(file, passPhrase);
+        }
+        
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
@@ -79,16 +116,10 @@ namespace EventHub
                 options.ApplicationName = "AuthServer";
             });
 
-            Configure<AppUrlOptions>(options =>
-            {
-                options.Applications["MVC"].RootUrl = EventHubExternalUrls.EhAccount;
-            });
-
             Configure<IdentityServerOptions>(options =>
             {
-                options.IssuerUri = EventHubExternalUrls.EhAccount;
+                options.IssuerUri = configuration[EventHubUrlOptions.GetAccountConfigKey()];
             });
-
 
             if (hostingEnvironment.IsDevelopment())
             {
@@ -102,8 +133,15 @@ namespace EventHub
 
             Configure<AppUrlOptions>(options =>
             {
-                options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
-                options.RedirectAllowedUrls.AddRange(configuration["App:RedirectAllowedUrls"].Split(','));
+                options.Applications["MVC"].RootUrl = configuration[EventHubUrlOptions.GetAccountConfigKey()];
+                options.RedirectAllowedUrls.AddRange(
+                    new[]
+                    {
+                        configuration[EventHubUrlOptions.GetWwwConfigKey()],
+                        configuration[EventHubUrlOptions.GetAdminConfigKey()],
+                        configuration[EventHubUrlOptions.GetApiConfigKey()],
+                        configuration[EventHubUrlOptions.GetAdminApiConfigKey()]
+                    });
             });
 
             Configure<AbpBackgroundJobOptions>(options =>
@@ -127,10 +165,10 @@ namespace EventHub
                 {
                     builder
                         .WithOrigins(
-                            configuration["App:CorsOrigins"]
-                                .Split(",", StringSplitOptions.RemoveEmptyEntries)
-                                .Select(o => o.RemovePostFix("/"))
-                                .ToArray()
+                            configuration[EventHubUrlOptions.GetWwwConfigKey()],
+                            configuration[EventHubUrlOptions.GetApiConfigKey()],
+                            configuration[EventHubUrlOptions.GetAdminConfigKey()],
+                            configuration[EventHubUrlOptions.GetAdminApiConfigKey()]
                         )
                         .WithAbpExposedHeaders()
                         .SetIsOriginAllowedToAllowWildcardSubdomains()
@@ -139,13 +177,26 @@ namespace EventHub
                         .AllowCredentials();
                 });
             });
+            
+            context.Services.AddSameSiteCookiePolicy(); 
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
+            var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
 
+            app.Use(async (ctx, next) =>
+            {
+                if (ctx.Request.Headers.ContainsKey("from-ingress"))
+                {
+                    ctx.SetIdentityServerOrigin(configuration[EventHubUrlOptions.GetAccountConfigKey()]);
+                }
+                
+                await next();
+            });
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -157,9 +208,10 @@ namespace EventHub
             {
                 app.UseErrorPage();
             }
-
+            
+            app.UseCookiePolicy();
             app.UseCorrelationId();
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();

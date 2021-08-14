@@ -1,0 +1,6 @@
+apiVersion: v2
+name: background-services
+appVersion: "1.0"
+description: EventHub Background Services Application
+version: 1.0.0
+type: application

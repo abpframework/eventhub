@@ -14,5 +14,7 @@
         public const string CantChangeEventTiming = "EventHub:CantChangeEventTiming";
         public const string SessionTimeShouldBeInTheEventTime = "EventHub:SessionTimeShouldBeInTheEventTime";
         public const string SessionTimeConflictsWithAnExistingSession = "EventHub:SessionTimeConflictsWithAnExistingSession";
+        public const string UserNotFound = "EventHub:UserNotFound";
+        public const string OrganizationNotFound = "EventHub:OrganizationNotFound";
     }
 }

@@ -1,0 +1,35 @@
+global:
+  dotnetEnvironment: 'Staging'
+  accountDomain: eh-st-account
+  accountUrl: https://eh-st-account
+  apiDomain: eh-st-api
+  apiUrl: https://eh-st-api
+  apiUrlInternal: http://eh-st-api
+  wwwDomain: eh-st-www
+  wwwUrl: "https://eh-st-www"
+  adminDomain: eh-st-admin
+  adminUrl: https://eh-st-admin
+  adminApiDomain: eh-st-admin-api
+  adminApiUrl: https://eh-st-admin-api
+  nginxProxyBufferSize: "32k"
+  nginxProxyBuffersNumber: "8"
+  defaultConnString: "Host=eh-st-postgresql;Port=5432;Database=EventHub;Username=root;Password=root"
+  redisConfiguration: "eh-st-redis"
+  internalAuthServerAuthority: "http://eh-st-account"
+  internalAuthServerRequireHttpsMetadata: "false"
+  stringEncryptionDefaultPassPhrase: "TxVIZFPxK33czbbv"
+  imagePullPolicy: Never
+account:
+  containerImage: "eventhub.account"
+api:
+  containerImage: "eventhub.api"
+www:
+  containerImage: "eventhub.www"
+admin-api:
+  containerImage: "eventhub.admin-api"
+admin:
+  containerImage: "eventhub.admin"
+dbmigrator:
+  containerImage: "eventhub.dbmigrator"
+background-services:
+  containerImage: "eventhub.background-services"

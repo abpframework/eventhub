@@ -384,6 +384,9 @@ namespace EventHub.Migrations
                     b.Property<string>("MediumUsername")
                         .HasColumnType("text");
 
+                    b.Property<int>("MemberCount")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(32)
