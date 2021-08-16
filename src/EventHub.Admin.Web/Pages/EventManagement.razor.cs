@@ -8,6 +8,9 @@ using Volo.Abp.Application.Dtos;
 using System;
 using System.ComponentModel;
 using Microsoft.AspNetCore.Components.Web;
+using System.IO;
+using System.Globalization;
+using NUglify.Helpers;
 
 namespace EventHub.Admin.Web.Pages
 {
@@ -23,18 +26,42 @@ namespace EventHub.Admin.Web.Pages
         private EventDetailDto Event { get; set; }
         private UpdateEventDto EditingEvent { get; set; }
         private Modal EditEventModal { get; set; }
-        private string SelectedTabInEditModal { get; set; } 
+        private string SelectedTabInEditModal { get; set; }
+        private string CoverImageUrl { get; set; }
+        private IFileEntry FileEntry { get; set; }
+        private List<CountryLookupDto> Countries { get; set; }
+        private List<Language> Languages { get; set; }
 
         public EventManagement()
         {
             Filter = new EventListFilterDto();
             PageSize = LimitedResultRequestDto.DefaultMaxResultCount;
             SelectedTabInEditModal = EventEditTabs.EventInfo.ToString();
+            EditingEvent = new UpdateEventDto();
+            Countries = new List<CountryLookupDto>();
+            Languages = new List<Language>();
         }
 
         protected override async Task OnInitializedAsync()
         {
             await GetEventsAsync();
+            await FillCountriesAsync();
+            FillLanguages();
+        }
+
+        private void FillLanguages()
+        {
+            var result = CultureInfo.GetCultures(CultureTypes.NeutralCultures)
+                .DistinctBy(x => x.EnglishName)
+                .OrderBy(x => x.EnglishName)
+                .ToList();
+            result.Remove(result.Single(x => x.TwoLetterISOLanguageName == "iv")); // Invariant Language
+
+            Languages = result.Select(cultureInfo => new Language
+            {
+                Value = cultureInfo.TwoLetterISOLanguageName,
+                Text = cultureInfo.EnglishName
+            }).ToList();
         }
 
         private async Task GetEventsAsync()
@@ -66,6 +93,8 @@ namespace EventHub.Admin.Web.Pages
             Event = await EventAppService.GetAsync(EditingEventId);
 
             EditingEvent = ObjectMapper.Map<EventDetailDto, UpdateEventDto>(Event);
+            FillCoverImageUrl(EditingEvent.CoverImageContent);
+
             EditEventModal.Show();
         }
 
@@ -83,6 +112,8 @@ namespace EventHub.Admin.Web.Pages
         {
             await EventAppService.UpdateAsync(EditingEventId, EditingEvent);
             await GetEventsAsync();
+            CoverImageUrl = string.Empty;
+
             EditEventModal.Hide();
         }
 
@@ -99,6 +130,49 @@ namespace EventHub.Admin.Web.Pages
             Filter.StartTime = changedDate;
             await GetEventsAsync();
         }
+
+        private void FillCoverImageUrl(byte[] content)
+        {
+            if (content.IsNullOrEmpty())
+            {
+                return;
+            }
+
+            var imageBase64Data = Convert.ToBase64String(content);
+            var imageDataUrl = $"data:image/png;base64,{imageBase64Data}";
+            CoverImageUrl = imageDataUrl;
+        }
+
+        private async Task OnCoverImageFileChanged(FileChangedEventArgs e)
+        {
+            FileEntry = e.Files.FirstOrDefault();
+            if (FileEntry is null)
+            {
+                return;
+            }
+
+            using (var stream = new MemoryStream())
+            {
+                await FileEntry.WriteToStreamAsync(stream);
+
+                stream.Seek(0, SeekOrigin.Begin);
+                EditingEvent.CoverImageContent = stream.ToArray();
+                FillCoverImageUrl(EditingEvent.CoverImageContent);
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+
+        private void OnDeleteCoverImageButtonClicked()
+        {
+            EditingEvent.CoverImageContent = null;
+            FileEntry = new FileEntry();
+            CoverImageUrl = null;
+        }
+
+        private async Task FillCountriesAsync()
+        {
+            Countries = await EventAppService.GetCountriesLookupAsync();
+        }
     }
 
     public enum EventEditTabs : byte
@@ -106,5 +180,11 @@ namespace EventHub.Admin.Web.Pages
         EventInfo,
         Timing,
         CoverImage
+    }
+
+    public class Language
+    {
+        public string Value { get; set; }
+        public string Text { get; set; }
     }
 }

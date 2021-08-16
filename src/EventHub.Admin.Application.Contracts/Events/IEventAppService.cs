@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -12,5 +13,9 @@ namespace EventHub.Admin.Events
         Task<EventDetailDto> GetAsync(Guid id);
 
         Task UpdateAsync(Guid id, UpdateEventDto input);
+
+        Task<List<CountryLookupDto>> GetCountriesLookupAsync();
+
+        Task<byte[]> GetCoverImageAsync(Guid id);
     }
 }

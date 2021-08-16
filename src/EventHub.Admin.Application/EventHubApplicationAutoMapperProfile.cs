@@ -2,6 +2,7 @@ using AutoMapper;
 using EventHub.Admin.Events;
 using EventHub.Admin.Organizations;
 using EventHub.Admin.Organizations.Memberships;
+using EventHub.Countries;
 using EventHub.Events;
 using EventHub.Organizations;
 using EventHub.Organizations.Memberships;
@@ -22,7 +23,10 @@ namespace EventHub.Admin
 
             CreateMap<OrganizationMemberWithDetails, OrganizationMemberDto>();
 
-            CreateMap<Event, EventDetailDto>();
+            CreateMap<Event, EventDetailDto>()
+                .Ignore(x => x.CoverImageContent);
+
+            CreateMap<Country, CountryLookupDto>();
         }
     }
 }

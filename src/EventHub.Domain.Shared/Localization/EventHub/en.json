@@ -126,6 +126,14 @@
     "MaxAttendeeCount": "Max Attendee Count",
     "UpdateEvent": "Update Event",
     "EventInfo": "Event Info",
-    "Timing": "Timing"
+    "Timing": "Timing",
+    "IsOnline": "Is Online?",
+    "OnlineLink": "Online Link",
+    "Country": "Country",
+    "City": "City",
+    "Capacity": "Capacity",
+    "EndTime": "End Time",
+    "ChooseCoverImage": "Choose a cover image",
+
   }
 }

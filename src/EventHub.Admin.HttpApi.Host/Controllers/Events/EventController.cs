@@ -30,6 +30,18 @@ namespace EventHub.Admin.Controllers.Events
             return _eventAppService.GetAsync(id);
         }
 
+        [HttpGet("countries")]
+        public Task<List<CountryLookupDto>> GetCountriesLookupAsync()
+        {
+            return _eventAppService.GetCountriesLookupAsync();
+        }
+
+        [HttpGet("cover-image/{id}")]
+        public Task<byte[]> GetCoverImageAsync(Guid id)
+        {
+            return _eventAppService.GetCoverImageAsync(id);
+        }
+
         [HttpGet]
         public Task<PagedResultDto<EventInListDto>> GetListAsync(EventListFilterDto input)
         {
