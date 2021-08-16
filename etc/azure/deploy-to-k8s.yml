@@ -1,5 +1,5 @@
 variables:
-  version: '$(Date:yyyyMMdd).$(Rev:r)'
+  version: $(Build.BuildNumber)
 
 trigger: none
 
