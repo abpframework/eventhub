@@ -51,7 +51,7 @@ namespace EventHub.Web.Menus
             if (currentUser.IsAuthenticated)
             {
                 context.Menu.AddItem(new ApplicationMenuItem("Account.Manage", accountStringLocalizer["ManageYourProfile"],
-                    $"{identityServerUrl.EnsureEndsWith('/')}Account/Manage?returnUrl={_configuration[EventHubUrlOptions.GetWwwConfigKey()]}", icon: "fa fa-cog", order: 1000, null, "_blank"));
+                    $"{identityServerUrl.EnsureEndsWith('/')}Account/Manage?returnUrl={EventHubUrlOptions.GetWwwConfigValue(_configuration)}", icon: "fa fa-cog", order: 1000, null, "_blank"));
                 context.Menu.AddItem(new ApplicationMenuItem("Account.Logout", l["Logout"], url: "~/Account/Logout", icon: "fa fa-power-off", order: int.MaxValue - 1000));
             }
 
