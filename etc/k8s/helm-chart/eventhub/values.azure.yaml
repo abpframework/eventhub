@@ -19,6 +19,7 @@ global:
   internalAuthServerRequireHttpsMetadata: "false"
   stringEncryptionDefaultPassPhrase: "TxVIZFPxK33czbbv"
   imagePullPolicy: Always
+  eventHubImageVersion: latest
 account:
   containerImage: "volocr.azurecr.io/eventhub.account"
 api:

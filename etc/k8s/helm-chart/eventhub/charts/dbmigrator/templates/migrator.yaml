@@ -8,7 +8,7 @@ spec:
     spec:
       containers:
       - name: {{ .Release.Name }}-{{ .Chart.Name }}
-        image: {{ .Values.containerImage }}
+        image: {{ .Values.containerImage }}:{{ .Values.global.eventHubImageVersion }}
         imagePullPolicy: {{ .Values.global.imagePullPolicy }}
         env:
 {{ include "eventhub.global.env" . | indent 8 }}
