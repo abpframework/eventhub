@@ -7,13 +7,18 @@ steps:
 - task: PowerShell@2
   inputs:
     filePath: 'etc/k8s/scripts/build-images.ps1'
+    arguments: '-version $(Build.BuildId)'
+
 - task: Docker@2
   inputs:
     containerRegistry: 'volocr'
     command: 'login'
+
 - task: PowerShell@2
   inputs:
     filePath: 'etc/azure/scripts/push-images.ps1'
+    arguments: '-version $(Build.BuildId)'
+
 - task: HelmDeploy@0
   inputs:
     connectionType: 'Azure Resource Manager'
@@ -27,4 +32,4 @@ steps:
     chartName: 'etc/k8s/helm-chart/eventhub'
     releaseName: 'eh-az'
     valueFile: 'etc/k8s/helm-chart/eventhub/values.azure.yaml'
-    arguments: '--namespace eventhub --create-namespace'
+    arguments: '--namespace eventhub --create-namespace --set global.eventHubImageVersion=$(Build.BuildId)'
