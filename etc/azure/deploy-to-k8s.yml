@@ -18,7 +18,9 @@ steps:
   inputs:
     filePath: 'etc/azure/scripts/push-images.ps1'
     arguments: '-version $(Build.BuildId)'
-
+- task: CmdLine@2
+  inputs:
+    script: 'kubectl delete job eh-az-dbmigrator --namespace eventhub'
 - task: HelmDeploy@0
   inputs:
     connectionType: 'Azure Resource Manager'
