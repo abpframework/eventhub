@@ -5,12 +5,10 @@ steps:
 - task: PowerShell@2
   inputs:
     filePath: 'etc/k8s/scripts/build-images.ps1'
-- task: ContainerBuild@0
+- task: Docker@2
   inputs:
-    dockerRegistryServiceConnection: 'volocr'
-    repository: 'eventhub.www'
-    Dockerfile: 'src/EventHub.Web/Dockerfile'
-    tags: 'latest'
+    containerRegistry: 'volocr'
+    command: 'login'
 - task: PowerShell@2
   inputs:
     filePath: 'etc/azure/scripts/push-images.ps1'
