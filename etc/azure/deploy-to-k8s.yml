@@ -1,5 +1,5 @@
 variables:
-  version: $(Build.BuildNumber)
+  version: $(Build.BuildId)
 
 trigger: none
 
