@@ -11,5 +11,11 @@
             public const string Organizations = GroupName + ".Organizations";
             public const string OrganizationMemberships = GroupName + ".OrganizationMemberships";
         }
+
+        public static class EventManagement
+        {
+            public const string GroupName = Prefix + ".EventManagement";
+            public const string Events = GroupName + ".Events";
+        }
     }
 }

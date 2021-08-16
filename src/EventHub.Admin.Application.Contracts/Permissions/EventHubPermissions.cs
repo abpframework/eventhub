@@ -16,5 +16,11 @@
                 public const string Default = Organizations.Default + ".Memberships";
             }
         }
+
+        public static class Events
+        {
+            public const string Default = GroupName + ".Events";
+            public const string Update = Default + ".Update";
+        }
     }
 }

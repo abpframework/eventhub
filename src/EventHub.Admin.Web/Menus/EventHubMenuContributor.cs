@@ -48,6 +48,7 @@ namespace EventHub.Admin.Web.Menus
             );
 
             await AddOrganizationMenu(context, l);
+            await AddEventMenu(context, l);
         }
 
         private Task ConfigureUserMenuAsync(MenuConfigurationContext context)
@@ -84,6 +85,22 @@ namespace EventHub.Admin.Web.Menus
                 new ApplicationMenuItem(EventHubMenus.OrganizationManagement.OrganizationMemberships,
                         l["Menu:OrganizationMemberships"], url: "/organization-memberships")
                     .RequirePermissions(EventHubPermissions.Organizations.Memberships.Default));
+
+            return Task.CompletedTask;
+        }
+
+        private Task AddEventMenu(MenuConfigurationContext context, IStringLocalizer l)
+        {
+            var eventMenu = new ApplicationMenuItem(
+                EventHubMenus.EventManagement.GroupName,
+                l["Menu:EventManagement"],
+                icon: "fas fa-calendar-minus"
+            );
+
+            context.Menu.Items.Insert(3, eventMenu);
+
+            eventMenu.AddItem(new ApplicationMenuItem(EventHubMenus.EventManagement.Events, displayName: l["Menu:Events"], url: "/events"))
+                .RequirePermissions(EventHubPermissions.Events.Default);
 
             return Task.CompletedTask;
         }

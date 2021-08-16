@@ -115,6 +115,17 @@
     "Loading": "Loading",
     "OrganizationInfo": "Organization Info",
     "ProfileImage": "Profile Image",
-    "OrganizationName": "Organization Name"
+    "OrganizationName": "Organization Name",
+    "Permission:EventManagement": "Event Management",
+    "Menu:EventManagement": "Event Management",
+    "Menu:Events": "Events",
+    "Title": "Title",
+    "OrganizationDisplayName": "Organization Display Name",
+    "StartTime": "Start Time",
+    "MinAttendeeCount": "Min Attendee Count",
+    "MaxAttendeeCount": "Max Attendee Count",
+    "UpdateEvent": "Update Event",
+    "EventInfo": "Event Info",
+    "Timing": "Timing"
   }
 }

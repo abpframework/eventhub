@@ -1,6 +1,8 @@
 using AutoMapper;
+using EventHub.Admin.Events;
 using EventHub.Admin.Organizations;
 using EventHub.Admin.Organizations.Memberships;
+using EventHub.Events;
 using EventHub.Organizations;
 using EventHub.Organizations.Memberships;
 using Volo.Abp.AutoMapper;
@@ -19,6 +21,8 @@ namespace EventHub.Admin
                 .Ignore(x => x.ProfilePictureContent);
 
             CreateMap<OrganizationMemberWithDetails, OrganizationMemberDto>();
+
+            CreateMap<Event, EventDetailDto>();
         }
     }
 }

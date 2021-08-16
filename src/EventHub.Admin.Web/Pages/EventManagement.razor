@@ -1,0 +1,138 @@
+﻿@page "/events"
+@using Microsoft.AspNetCore.Authorization
+@using EventHub.Admin.Permissions
+@using EventHub.Admin.Events
+@inherits EventHubComponentBase
+@attribute [Authorize(EventHubPermissions.Events.Default)]
+@inject IEventAppService EventAppService
+
+<Card>
+    <CardHeader>
+        @* ************************* PAGE HEADER ************************* *@
+        <h2>@L["Events"]</h2>
+    </CardHeader>
+
+    <CardBody>
+        @* ************************* SEARCH ************************* *@
+        <Form>
+            <div id="FilterSection" class="row mt-3">
+                <Column ColumnSize="ColumnSize.Is3">
+                    <Field>
+                        <FieldLabel>@L["Title"]</FieldLabel>
+                        <TextEdit TValue="string" KeyPress="OnKeyPress" @bind-Text="@Filter.Title"/>
+                    </Field>
+                </Column>
+                <Column ColumnSize="ColumnSize.Is3">
+                    <Field>
+                        <FieldLabel>@L["OrganizationDisplayName"]</FieldLabel>
+                        <TextEdit TValue="string" KeyPress="OnKeyPress" @bind-Text="@Filter.OrganizationDisplayName"/>
+                    </Field>
+                </Column>
+                <Column ColumnSize="ColumnSize.Is3">
+                    <Field>
+                        <FieldLabel>@L["StartTime"]</FieldLabel>
+                        <DateEdit TValue="DateTime?" Date="@Filter.StartTime" DateChanged="OnSelectedDateChanged"/>
+                    </Field>
+                </Column>
+                <Column ColumnSize="ColumnSize.Is3">
+                    <Field>
+                        <FieldLabel>@L["MinAttendeeCount"]</FieldLabel>
+                        <NumericEdit TValue="int?" KeyPress="OnKeyPress" @bind-Value="@Filter.MinAttendeeCount"/>
+                    </Field>
+                </Column>
+                <Column ColumnSize="ColumnSize.Is3">
+                    <Field>
+                        <FieldLabel>@L["MaxAttendeeCount"]</FieldLabel>
+                        <NumericEdit TValue="int?" KeyPress="OnKeyPress" @bind-Value="@Filter.MaxAttendeeCount"/>
+                    </Field>
+                </Column>
+            </div>
+        </Form>
+
+        @* ************************* DATA GRID ************************* *@
+        <DataGrid TItem="EventInListDto"
+                  Data="EventList"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  PageSize="PageSize"
+                  Responsive="true">
+            <DataGridColumns>
+                <DataGridEntityActionsColumn TItem="EventInListDto">
+                    <DisplayTemplate>
+                        <EntityActions TItem="EventInListDto">
+                            <EntityAction TItem="EventInListDto"
+                                          RequiredPolicy="@EventHubPermissions.Events.Update"
+                                          Clicked="() => OpenEditEventModal(context)"
+                                          Text="@L["Edit"]">
+                            </EntityAction>
+                        </EntityActions>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+
+                <DataGridColumn TItem="EventInListDto"
+                                Field="Title"
+                                Caption="@L["Title"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="EventInListDto"
+                                Field="OrganizationDisplayName"
+                                Caption="@L["OrganizationDisplayName"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="EventInListDto"
+                                Field="AttendeeCount"
+                                Caption="@L["AttendeeCount"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="EventInListDto"
+                                Field="StartTime"
+                                Caption="@L["StartTime"]">
+                </DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+@* ************************* EDIT MODAL ************************* *@
+
+<Modal @ref="EditEventModal" Closing="@OnEditModalClosing">
+    <ModalContent Centered="true" Size="ModalSize.Large">
+        <Form id="EditEventForm">
+            <ModalHeader>
+                <ModalTitle>@L["UpdateEvent"]</ModalTitle>
+                <CloseButton Clicked="() => EditEventModal.Hide()" />
+            </ModalHeader>
+            <ModalBody>
+                <Tabs SelectedTab="@SelectedTabInEditModal" SelectedTabChanged="@OnSelectedTabChangedInEditModal">
+                    <Items>
+                        <Tab Name="@EventEditTabs.EventInfo.ToString()">@L["EventInfo"]</Tab>
+                        <Tab Name="@EventEditTabs.Timing.ToString()">@L["Timing"]</Tab>
+                        <Tab Name="@EventEditTabs.CoverImage.ToString()">@L["CoverImage"]</Tab>
+                    </Items>
+                    <Content>
+                        <TabPanel Name="@EventEditTabs.EventInfo.ToString()">
+                            EventInfo
+                        </TabPanel>
+                        <TabPanel Name="@EventEditTabs.Timing.ToString()">
+                            Timing
+                        </TabPanel>
+                        <TabPanel Name="@EventEditTabs.CoverImage.ToString()">
+                            CoverImage
+                        </TabPanel>
+                    </Content>
+                </Tabs>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="() => EditEventModal.Hide()">
+                    @L["Cancel"]
+                </Button>
+                <Button Type="ButtonType.Submit" PreventDefaultOnSubmit="true" Color="Color.Primary"
+                        Clicked="UpdateEventAsync">
+                    <i class="fa-check fa"></i> @L["Save"]
+                </Button>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>

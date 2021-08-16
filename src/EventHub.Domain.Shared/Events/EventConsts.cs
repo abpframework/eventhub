@@ -2,6 +2,8 @@
 {
     public static class EventConsts
     {
+        public const string DefaultSorting = "Title desc";
+
         public const int UrlCodeLength = 8;
         public const int MaxTitleInUrlLength = 60;
         public const int MaxUrlLength = MaxTitleInUrlLength + 1 + UrlCodeLength; //Format: {Title}-{UrlCode}
