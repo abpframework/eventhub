@@ -27,6 +27,7 @@ steps:
 
 - task: Kubernetes@1
   displayName: Delete migrator job
+  continueOnError: true
   inputs:
     connectionType: 'Azure Resource Manager'
     azureSubscriptionEndpoint: 'volosoft (fe02ef9f-9e1c-4e40-b924-505981688dd8)'
