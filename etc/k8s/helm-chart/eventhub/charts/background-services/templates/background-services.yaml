@@ -1,18 +1,21 @@
-apiVersion: batch/v1
-kind: Job
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: {{ .Release.Name }}-{{ .Chart.Name }}
 spec:
-  activeDeadlineSeconds: 180
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-{{ .Chart.Name }}
   template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-{{ .Chart.Name }}
     spec:
       containers:
-      - name: {{ .Release.Name }}-{{ .Chart.Name }}
-        image: {{ .Values.containerImage }}:{{ .Values.global.eventHubImageVersion }}
+      - image: {{ .Values.containerImage }}:{{ .Values.global.eventHubImageVersion }}
         imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+        name: {{ .Release.Name }}-{{ .Chart.Name }}
         env:
 {{ include "eventhub.global.env" . | indent 8 }}
         - name: "ConnectionStrings__Default"
           value: {{ .Values.global.defaultConnString }}
-      restartPolicy: Never
-  backoffLimit: 10
