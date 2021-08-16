@@ -22,7 +22,7 @@ steps:
     namespace: 'eventhub'
     command: 'upgrade'
     chartType: 'Name'
-    chartName: 'eventhub'
+    chartName: 'etc/k8s/helm-chart/eventhub'
     releaseName: 'eh-az'
     valueFile: 'etc/k8s/helm-chart/eventhub/values.azure.yaml'
     arguments: '--namespace eventhub --create-namespace'
