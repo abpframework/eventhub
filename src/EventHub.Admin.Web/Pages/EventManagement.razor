@@ -6,6 +6,7 @@
 @inherits EventHubComponentBase
 @attribute [Authorize(EventHubPermissions.Events.Default)]
 @inject IEventAppService EventAppService
+@inject NavigationManager NavigationManager
 
 <Card>
     <CardHeader>
@@ -66,6 +67,11 @@
                                           RequiredPolicy="@EventHubPermissions.Events.Update"
                                           Clicked="() => OpenEditEventModal(context)"
                                           Text="@L["Edit"]">
+                            </EntityAction>
+                            <EntityAction TItem="EventInListDto"
+                                          RequiredPolicy="@EventHubPermissions.Events.Registrations.Default"
+                                          Clicked="@(() => NavigationManager.NavigateTo($"/events/{context.Id}/attendees"))"
+                                          Text="@L["Attendees"]">
                             </EntityAction>
                         </EntityActions>
                     </DisplayTemplate>

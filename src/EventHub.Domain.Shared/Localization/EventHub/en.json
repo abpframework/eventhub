@@ -134,6 +134,13 @@
     "Capacity": "Capacity",
     "EndTime": "End Time",
     "ChooseCoverImage": "Choose a cover image",
-
+    "Permission:RegistrationManagement": "Registration Management",
+    "Permission:AddAttendee": "Add Attendee",
+    "Permission:RemoveAttendee": "Remove Attendee",
+    "Attendees": "Attendees",
+    "AddNewUser": "Add New User",
+    "AttendeeRemoveConfirmationMessage": "Are you sure you want to remove this item?",
+    "RemoveUser": "Remove User",
+    "AddAttendee": "Add Attendee" 
   }
 }

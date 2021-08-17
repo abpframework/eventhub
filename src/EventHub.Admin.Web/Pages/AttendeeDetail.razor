@@ -1,0 +1,160 @@
+﻿@page "/events/{EventId:guid}/attendees"
+@using EventHub.Admin.Web.Components.UserPicker
+@using EventHub.Admin.Events.Registrations
+@using EventHub.Admin.Permissions
+@using EventHub.Admin.Users
+@inherits EventHubComponentBase
+@inject IEventRegistrationAppService EventRegistrationAppService
+@inject IUserAppService UserAppService
+
+<!--<UserPicker />-->
+<Card>
+    <CardHeader>
+        @* ************************* PAGE HEADER ************************* *@
+        <h2>@L["Attendees"]</h2>
+
+        <Paragraph Alignment="TextAlignment.Right">
+            @if (CanAddAttendee)
+            {
+                <Button Color="Color.Primary"
+                    Clicked="OpenAddAttendeeModal">
+                    @L["AddNewUser"]
+                </Button>
+            }
+        </Paragraph>
+    </CardHeader>
+
+    <CardBody>
+        @* ************************* DATA GRID ************************* *@
+        <DataGrid TItem="EventAttendeeDto"
+                  Data="AttendeeList"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  PageSize="PageSize"
+                  Responsive="true">
+            <DataGridColumns>
+                <DataGridEntityActionsColumn TItem="EventAttendeeDto">
+                    <DisplayTemplate>
+                        <EntityActions TItem="EventAttendeeDto">
+                            <EntityAction TItem="EventAttendeeDto"
+                                          RequiredPolicy="@EventHubPermissions.Events.Registrations.RemoveAttendee"
+                                          Clicked="() => RemoveAttendeeAsync(context)"
+                                          ConfirmationMessage="@(() => L["AttendeeRemoveConfirmationMessage"])"
+                                          Text="@L["RemoveUser"]">
+                            </EntityAction>
+                        </EntityActions>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+
+                <DataGridColumn TItem="EventAttendeeDto"
+                                Field="UserName"
+                                Caption="@L["Username"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="EventAttendeeDto"
+                                Field="Name"
+                                Caption="@L["Name"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="EventAttendeeDto"
+                                Field="Surname"
+                                Caption="@L["Surname"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="EventAttendeeDto"
+                                Field="Email"
+                                Caption="@L["Email"]">
+                </DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+
+<Modal @ref="@AddAttendeeModal" Closing="@ClosingAddAttendeeModal">
+    <ModalContent Centered="true">
+        <ModalHeader>
+            <ModalTitle>@L["AddAttendee"]</ModalTitle>
+            <CloseButton Clicked="CloseAddAttendeeModalAsync" />
+        </ModalHeader>
+        <ModalBody>
+            <Form>
+                <div id="UserFilterSection" class="row mt-3">
+                    <Column ColumnSize="ColumnSize.Is3">
+                        <Field>
+                            <FieldLabel>@L["Username"]</FieldLabel>
+                            <TextEdit TValue="string" KeyPress="OnKeyPressed" @bind-Text="@Filter.Username" />
+                        </Field>
+                    </Column>
+                    <Column ColumnSize="ColumnSize.Is3">
+                        <Field>
+                            <FieldLabel>@L["Name"]</FieldLabel>
+                            <TextEdit TValue="string" KeyPress="OnKeyPressed" @bind-Text="@Filter.Name" />
+                        </Field>
+                    </Column>
+                    <Column ColumnSize="ColumnSize.Is3">
+                        <Field>
+                            <FieldLabel>@L["Surname"]</FieldLabel>
+                            <TextEdit TValue="string" KeyPress="OnKeyPressed" @bind-Text="@Filter.Surname" />
+                        </Field>
+                    </Column>
+                    <Column ColumnSize="ColumnSize.Is3">
+                        <Field>
+                            <FieldLabel>@L["Email"]</FieldLabel>
+                            <TextEdit TValue="string" KeyPress="OnKeyPressed" @bind-Text="@Filter.Email" />
+                        </Field>
+                    </Column>
+                </div>
+            </Form>
+
+            <DataGrid TItem="UserDto"
+                      Data="UserList"
+                      ReadData="OnDataGridReadForUsersAsync"
+                      TotalItems="UserListTotalCount"
+                      ShowPager="true"
+                      PageSize="PageSize"
+                      Responsive="true">
+                <DataGridColumns>
+                    <DataGridColumn Sortable="false" TItem="UserDto" Field="@nameof(UserDto.Id)">
+                        <CaptionTemplate>
+                            <Check TValue="bool" @bind-Checked="@AllUserSelected"></Check>
+                        </CaptionTemplate>
+                        <DisplayTemplate>
+                            @if (SelectAllUsers.ContainsKey(context.Id))
+                            {
+                                <Check TValue="bool" @bind-Checked="@SelectAllUsers[context.Id]"></Check>
+                            }
+                        </DisplayTemplate>
+                    </DataGridColumn>
+
+                    <DataGridColumn TItem="UserDto" Field="@nameof(UserDto.Username)" Caption="@L["UserName"].Value">
+                        <DisplayTemplate>
+                            @(context.Username)
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    
+                    <DataGridColumn TItem="UserDto" Field="@nameof(UserDto.Name)" Caption="@L["Name"].Value">
+                        <DisplayTemplate>
+                            @(context.Name)
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    
+                    <DataGridColumn TItem="UserDto" Field="@nameof(UserDto.Surname)" Caption="@L["Surname"].Value">
+                        <DisplayTemplate>
+                            @(context.Surname)
+                        </DisplayTemplate>
+                    </DataGridColumn>
+
+                    <DataGridColumn TItem="UserDto" Field="@nameof(UserDto.Email)" Caption="@L["Email"].Value">
+                        <DisplayTemplate>
+                            @(context.Email)
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                </DataGridColumns>
+            </DataGrid>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="CloseAddAttendeeModalAsync">@L["Cancel"]</Button>
+            <Button Color="Color.Primary" Clicked="AddSelectedUsersToEventAsync">@L["Save"]</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+

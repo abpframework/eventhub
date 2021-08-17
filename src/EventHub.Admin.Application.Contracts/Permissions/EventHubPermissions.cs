@@ -21,6 +21,13 @@
         {
             public const string Default = GroupName + ".Events";
             public const string Update = Default + ".Update";
+
+            public class Registrations
+            {
+                public const string Default = Events.Default + ".Registrations";
+                public const string AddAttendee = Default + ".AddAttendee";
+                public const string RemoveAttendee = Default + ".RemoveAttendee";
+            }
         }
     }
 }

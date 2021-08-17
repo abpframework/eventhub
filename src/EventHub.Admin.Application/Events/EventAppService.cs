@@ -66,8 +66,7 @@ namespace EventHub.Admin.Events
                             OrganizationDisplayName = organization.DisplayName,
                             AttendeeCount = (from eventRegistration in eventRegistrationQueryable
                                              where eventRegistration.EventId == @event.Id
-                                             group @event by @event.Id into g
-                                             select g.Key).Count()
+                                             select @eventRegistration).Count()
                         })
                 .WhereIf(!string.IsNullOrWhiteSpace(input.Title), x => x.Title.ToLower().Contains(input.Title.ToLower()))
                 .WhereIf(!string.IsNullOrWhiteSpace(input.OrganizationDisplayName), x => x.OrganizationDisplayName.ToLower().Contains(input.OrganizationDisplayName.ToLower()))
