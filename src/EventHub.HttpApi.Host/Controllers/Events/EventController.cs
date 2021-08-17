@@ -69,6 +69,13 @@ namespace EventHub.Controllers.Events
             await _eventAppService.UpdateAsync(id, input);
         }
 
+        [HttpPost]
+        [Route("{id}/sessions")]
+        public async Task AddSessionAsync(Guid id, AddSessionDto input)
+        {
+            await _eventAppService.AddSessionAsync(id, input);
+        }
+
         [HttpGet]
         [Route("cover-image/{id}")]
         public async Task<byte[]> GetCoverImageAsync(Guid id)
