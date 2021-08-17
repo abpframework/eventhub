@@ -19,6 +19,7 @@ global:
   internalAuthServerRequireHttpsMetadata: "false"
   stringEncryptionDefaultPassPhrase: "TxVIZFPxK33czbbv"
   imagePullPolicy: Never
+  eventHubImageVersion: latest
 account:
   containerImage: "eventhub.account"
 api:

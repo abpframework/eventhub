@@ -118,7 +118,7 @@ namespace EventHub
 
             Configure<IdentityServerOptions>(options =>
             {
-                options.IssuerUri = configuration[EventHubUrlOptions.GetAccountConfigKey()];
+                options.IssuerUri = EventHubUrlOptions.GetAccountConfigValue(configuration);
             });
 
             if (hostingEnvironment.IsDevelopment())
@@ -133,14 +133,13 @@ namespace EventHub
 
             Configure<AppUrlOptions>(options =>
             {
-                options.Applications["MVC"].RootUrl = configuration[EventHubUrlOptions.GetAccountConfigKey()];
+                options.Applications["MVC"].RootUrl = EventHubUrlOptions.GetAccountConfigValue(configuration);
                 options.RedirectAllowedUrls.AddRange(
                     new[]
                     {
-                        configuration[EventHubUrlOptions.GetWwwConfigKey()],
-                        configuration[EventHubUrlOptions.GetAdminConfigKey()],
-                        configuration[EventHubUrlOptions.GetApiConfigKey()],
-                        configuration[EventHubUrlOptions.GetAdminApiConfigKey()]
+                        EventHubUrlOptions.GetWwwConfigValue(configuration),
+                        EventHubUrlOptions.GetApiConfigValue(configuration),
+                        EventHubUrlOptions.GetAdminApiConfigValue(configuration)
                     });
             });
 
@@ -165,10 +164,10 @@ namespace EventHub
                 {
                     builder
                         .WithOrigins(
-                            configuration[EventHubUrlOptions.GetWwwConfigKey()],
-                            configuration[EventHubUrlOptions.GetApiConfigKey()],
-                            configuration[EventHubUrlOptions.GetAdminConfigKey()],
-                            configuration[EventHubUrlOptions.GetAdminApiConfigKey()]
+                            EventHubUrlOptions.GetWwwConfigValue(configuration),
+                            EventHubUrlOptions.GetApiConfigValue(configuration),
+                            EventHubUrlOptions.GetAdminConfigValue(configuration),
+                            EventHubUrlOptions.GetAdminApiConfigValue(configuration)
                         )
                         .WithAbpExposedHeaders()
                         .SetIsOriginAllowedToAllowWildcardSubdomains()
@@ -191,7 +190,7 @@ namespace EventHub
             {
                 if (ctx.Request.Headers.ContainsKey("from-ingress"))
                 {
-                    ctx.SetIdentityServerOrigin(configuration[EventHubUrlOptions.GetAccountConfigKey()]);
+                    ctx.SetIdentityServerOrigin(EventHubUrlOptions.GetAccountConfigValue(configuration));
                 }
                 
                 await next();

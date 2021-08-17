@@ -112,7 +112,7 @@ namespace EventHub.Admin
         private static void ConfigureSwaggerServices(ServiceConfigurationContext context, IConfiguration configuration)
         {
             context.Services.AddAbpSwaggerGenWithOAuth(
-                configuration[EventHubUrlOptions.GetAccountConfigKey()],
+                EventHubUrlOptions.GetAccountConfigValue(configuration),
                 new Dictionary<string, string>
                 {
                     {"EventHubAdmin", "EventHub Admin API"}
@@ -151,7 +151,7 @@ namespace EventHub.Admin
                 {
                     builder
                         .WithOrigins(
-                            configuration[EventHubUrlOptions.GetAdminConfigKey()]
+                            EventHubUrlOptions.GetAdminConfigValue(configuration)
                         )
                         .WithAbpExposedHeaders()
                         .SetIsOriginAllowedToAllowWildcardSubdomains()

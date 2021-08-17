@@ -1,49 +1,65 @@
-﻿namespace EventHub.Web
+﻿using Microsoft.Extensions.Configuration;
+
+namespace EventHub.Web
 {
     public class EventHubUrlOptions
     {
         private const string ConfigurationName = "AppUrls";
+        private const string AccountDefaultValue = "https://localhost:44313";
+        private const string AdminDefaultValue = "https://localhost:44307";
+        private const string WwwDefaultValue = "https://localhost:44308";
+        private const string ApiDefaultValue = "https://localhost:44362";
+        private const string ApiInternalDefaultValue = ApiDefaultValue;
+        private const string AdminApiDefaultValue = "https://localhost:44305";
 
-        public string Account { get; set; } = "https://localhost:44313";
-        public string Www { get; set; } = "https://localhost:44308";
-        public string Api { get; set; } = "https://localhost:44362";
-        public string ApiInternal { get; set; } = "https://localhost:44362";
-        public string Admin { get; set; } = "https://localhost:44307";
-        public string AdminApi { get; set; } = "https://localhost:44305";
+        public string Account { get; set; } = AccountDefaultValue;
+        public string Www { get; set; } = WwwDefaultValue;
+        public string Api { get; set; } = ApiDefaultValue;
+        public string ApiInternal { get; set; } = ApiInternalDefaultValue;
+        public string Admin { get; set; } = AdminDefaultValue;
+        public string AdminApi { get; set; } = AdminApiDefaultValue;
 
-        public static string GetAccountConfigKey()
+        public static string GetAccountConfigValue(IConfiguration configuration)
         {
-            return GetConfigKey(nameof(Account));
+            return GetConfigValue(configuration, nameof(Account), AccountDefaultValue);
         }
         
-        public static string GetWwwConfigKey()
+        public static string GetWwwConfigValue(IConfiguration configuration)
         {
-            return GetConfigKey(nameof(Www));
+            return GetConfigValue(configuration, nameof(Www), WwwDefaultValue);
         }
         
-        public static string GetApiInternalConfigKey()
+        public static string GetApiInternalConfigValue(IConfiguration configuration)
         {
-            return GetConfigKey(nameof(ApiInternal));
+            return GetConfigValue(configuration, nameof(ApiInternal), ApiInternalDefaultValue);
+        }
+
+        public static string GetApiConfigValue(IConfiguration configuration)
+        {
+            return GetConfigValue(configuration, nameof(Api), ApiDefaultValue);
         }
         
-        public static string GetApiConfigKey()
+        public static string GetAdminConfigValue(IConfiguration configuration)
         {
-            return GetConfigKey(nameof(Api));
+            return GetConfigValue(configuration, nameof(Admin), AdminDefaultValue);
         }
-        
-        public static string GetAdminConfigKey()
+
+        public static string GetAdminApiConfigValue(IConfiguration configuration)
         {
-            return GetConfigKey(nameof(Admin));
+            return GetConfigValue(configuration, nameof(AdminApi), AdminApiDefaultValue);
         }
-        
-        public static string GetAdminApiConfigKey()
-        {
-            return GetConfigKey(nameof(AdminApi));
-        }
-        
+
         private static string GetConfigKey(string appName)
         {
             return $"{ConfigurationName}:{appName}";
+        }
+        
+        private static string GetConfigValue(
+            IConfiguration configuration,
+            string appName,
+            string defaultValue)
+        {
+            return configuration[GetConfigKey(appName)] ?? defaultValue;
         }
     }
 }
