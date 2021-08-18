@@ -5,7 +5,8 @@ namespace EventHub.Admin.Events
 {
     public class EventListFilterDto : PagedAndSortedResultRequestDto
     {
-        public DateTime? StartTime { get; set; }
+        public DateTime? MinStartTime { get; set; }
+        public DateTime? MaxStartTime { get; set; }
 
         public string Title { get; set; }
 

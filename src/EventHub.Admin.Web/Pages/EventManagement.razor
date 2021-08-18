@@ -32,8 +32,14 @@
                 </Column>
                 <Column ColumnSize="ColumnSize.Is3">
                     <Field>
-                        <FieldLabel>@L["StartTime"]</FieldLabel>
-                        <DateEdit TValue="DateTime?" Date="@Filter.StartTime" DateChanged="OnSelectedDateChanged"/>
+                        <FieldLabel>@L["MinStartTime"]</FieldLabel>
+                        <DateEdit TValue="DateTime?" Date="@Filter.MinStartTime" DateChanged="OnSelectedDateChangedForMinStartTime" />
+                    </Field>
+                </Column>
+                <Column ColumnSize="ColumnSize.Is3">
+                    <Field>
+                        <FieldLabel>@L["MaxEndTime"]</FieldLabel>
+                        <DateEdit TValue="DateTime?" Date="@Filter.MaxStartTime" DateChanged="OnSelectedDateChangedForMaxStartTime" />
                     </Field>
                 </Column>
                 <Column ColumnSize="ColumnSize.Is3">

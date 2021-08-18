@@ -73,7 +73,7 @@ namespace EventHub.Admin.Web.Pages
         }
         private async Task RemoveAttendeeAsync(EventAttendeeDto attendee)
         {
-            await EventRegistrationAppService.RemoveAttendeeAsync(EventId, attendee.Id);
+            await EventRegistrationAppService.UnRegisterAttendeeAsync(EventId, attendee.Id);
             await GetAttendeesAsync();
         }
 
@@ -87,8 +87,13 @@ namespace EventHub.Admin.Web.Pages
                     .Select(x => x.Key)
                     .ToList();
 
-                await EventRegistrationAppService.RegisterUsersAsync(EventId, selectedUserIds);
+                var removedAttendees = SelectedUserIds.Except(selectedUserIds).ToList();
+                foreach (var attendeeId in removedAttendees)
+                {
+                    await EventRegistrationAppService.UnRegisterAttendeeAsync(EventId, attendeeId);
+                }
 
+                await EventRegistrationAppService.RegisterUsersAsync(EventId, selectedUserIds);
                 await UserPickerModalRef.CloseUserPickerModalAsync();
 
                 await GetAttendeesAsync();

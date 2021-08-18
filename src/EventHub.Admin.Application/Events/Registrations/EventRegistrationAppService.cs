@@ -10,17 +10,17 @@ using Volo.Abp.Identity;
 using EventHub.Events.Registrations;
 using Microsoft.AspNetCore.Authorization;
 using EventHub.Events;
+using Volo.Abp;
 
 namespace EventHub.Admin.Events.Registrations
 {
-    //[Authorize(EventHubPermissions.Events.Registrations.Default)]
+    [Authorize(EventHubPermissions.Events.Registrations.Default)]
     public class EventRegistrationAppService : EventHubAdminAppService, IEventRegistrationAppService
     {
         private readonly IRepository<IdentityUser, Guid> _userRepository;
         private readonly IRepository<EventRegistration, Guid> _eventRegistrationRepository;
         private readonly IRepository<Event, Guid> _eventRepository;
         private readonly EventRegistrationManager _eventRegistrationManager;
-
 
         public EventRegistrationAppService(
             IRepository<IdentityUser, Guid> userRepository, 
@@ -61,16 +61,13 @@ namespace EventHub.Admin.Events.Registrations
             );
         }
 
-        //[Authorize(EventHubPermissions.Events.Registrations.RemoveAttendee)]
-        public async Task RemoveAttendeeAsync(Guid eventId, Guid attendeeId)
+        [Authorize(EventHubPermissions.Events.Registrations.RemoveAttendee)]
+        public async Task UnRegisterAttendeeAsync(Guid eventId, Guid attendeeId)
         {
-            await _eventRegistrationManager.UnregisterAsync(
-                await _eventRepository.GetAsync(eventId),
-                await _userRepository.GetAsync(attendeeId)
-            );
+            await _eventRegistrationRepository.DeleteAsync(x => x.EventId == eventId && x.UserId == attendeeId);
         }
 
-        //[Authorize(EventHubPermissions.Events.Registrations.AddAttendee)]
+        [Authorize(EventHubPermissions.Events.Registrations.AddAttendee)]
         public async Task RegisterUsersAsync(Guid eventId, List<Guid> userIds)
         {
             if (userIds == null || !userIds.Any())
@@ -83,11 +80,15 @@ namespace EventHub.Admin.Events.Registrations
             var userQueryable = await _userRepository.GetQueryableAsync();
             var query = userQueryable.Where(user => userIds.Contains(user.Id));
 
+            await CheckEventCapacityAsync(@event);
+            
             var users = await AsyncExecuter.ToListAsync(query);
-
             foreach (var user in users)
             {
-                await _eventRegistrationManager.RegisterAsync(@event, user);
+                if (!await _eventRegistrationManager.IsRegisteredAsync(@event, user))
+                {
+                    await _eventRegistrationRepository.InsertAsync(await _eventRegistrationManager.CreateAsync(@event.Id, user.Id));
+                }
             }
         }
 
@@ -103,6 +104,17 @@ namespace EventHub.Admin.Events.Registrations
                 select user.Id;
 
             return await AsyncExecuter.ToListAsync(query);
+        }
+
+        private async Task CheckEventCapacityAsync(Event @event)
+        {
+            var registrationCount = await _eventRegistrationRepository.CountAsync(x => x.EventId == @event.Id);
+
+            if (@event.Capacity != null && registrationCount >= @event.Capacity)
+            {
+                throw new BusinessException(EventHubErrorCodes.CapacityOfEventFull)
+                    .WithData("EventTitle", @event.Title);
+            }
         }
     }
 }

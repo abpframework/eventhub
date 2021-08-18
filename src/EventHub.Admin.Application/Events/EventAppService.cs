@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
+using EventHub.Admin.Permissions;
 using EventHub.Countries;
 using EventHub.Events;
 using EventHub.Events.Registrations;
 using EventHub.Organizations;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Domain.Repositories;
 
 namespace EventHub.Admin.Events
 {
-    //[Authorize(EventHubPermissions.Events.Default)]
+    [Authorize(EventHubPermissions.Events.Default)]
     public class EventAppService : EventHubAdminAppService, IEventAppService
     {
         private readonly IRepository<Event, Guid> _eventRepository;
@@ -70,7 +72,8 @@ namespace EventHub.Admin.Events
                         })
                 .WhereIf(!string.IsNullOrWhiteSpace(input.Title), x => x.Title.ToLower().Contains(input.Title.ToLower()))
                 .WhereIf(!string.IsNullOrWhiteSpace(input.OrganizationDisplayName), x => x.OrganizationDisplayName.ToLower().Contains(input.OrganizationDisplayName.ToLower()))
-                .WhereIf(input.StartTime.HasValue, x => x.StartTime > input.StartTime)
+                .WhereIf(input.MinStartTime.HasValue, x => x.StartTime >= input.MinStartTime)
+                .WhereIf(input.MaxStartTime.HasValue, x => x.StartTime <= input.MaxStartTime)
                 .WhereIf(input.MinAttendeeCount.HasValue, x => x.AttendeeCount >= input.MinAttendeeCount)
                 .WhereIf(input.MaxAttendeeCount.HasValue, x => x.AttendeeCount <= input.MaxAttendeeCount);
 
@@ -83,7 +86,7 @@ namespace EventHub.Admin.Events
             return new PagedResultDto<EventInListDto>(totalCount, events);
         }
 
-        //[Authorize(EventHubPermissions.Events.Update)]
+        [Authorize(EventHubPermissions.Events.Update)]
         public async Task UpdateAsync(Guid id, UpdateEventDto input)
         {
             var @event = await _eventRepository.GetAsync(id);

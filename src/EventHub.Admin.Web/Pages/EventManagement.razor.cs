@@ -125,9 +125,15 @@ namespace EventHub.Admin.Web.Pages
             }
         }
 
-        private async Task OnSelectedDateChanged(DateTime? changedDate)
+        private async Task OnSelectedDateChangedForMinStartTime(DateTime? minStartTime)
         {
-            Filter.StartTime = changedDate;
+            Filter.MinStartTime = minStartTime;
+            await GetEventsAsync();
+        }
+
+        private async Task OnSelectedDateChangedForMaxStartTime(DateTime? maxStartTime)
+        {
+            Filter.MaxStartTime = maxStartTime;
             await GetEventsAsync();
         }
 

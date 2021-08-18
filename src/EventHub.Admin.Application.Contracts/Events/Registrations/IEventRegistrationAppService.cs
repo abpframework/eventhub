@@ -10,7 +10,7 @@ namespace EventHub.Admin.Events.Registrations
     {
         Task<PagedResultDto<EventAttendeeDto>> GetAttendeesAsync(GetEventRegistrationListInput input);
 
-        Task RemoveAttendeeAsync(Guid eventId, Guid attendeeId);
+        Task UnRegisterAttendeeAsync(Guid eventId, Guid attendeeId);
 
         Task RegisterUsersAsync(Guid eventId, List<Guid> userIds);
 

@@ -43,9 +43,9 @@ namespace EventHub.Admin.Controllers.Events.Registrations
         }
 
         [HttpDelete]
-        public Task RemoveAttendeeAsync(Guid eventId, Guid attendeeId)
+        public Task UnRegisterAttendeeAsync(Guid eventId, Guid attendeeId)
         {
-            return _eventRegistrationAppService.RemoveAttendeeAsync(eventId, attendeeId);
+            return _eventRegistrationAppService.UnRegisterAttendeeAsync(eventId, attendeeId);
         }
     }
 }
