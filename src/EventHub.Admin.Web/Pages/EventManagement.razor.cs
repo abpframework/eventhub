@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Components.Web;
 using System.IO;
 using System.Globalization;
 using NUglify.Helpers;
+using Volo.Abp;
 
 namespace EventHub.Admin.Web.Pages
 {
@@ -110,10 +111,15 @@ namespace EventHub.Admin.Web.Pages
 
         private async Task UpdateEventAsync()
         {
+            if (!EditingEvent.IsOnline && (!EditingEvent.CountryId.HasValue || string.IsNullOrWhiteSpace(EditingEvent.City)))
+            {
+                throw new UserFriendlyException(L["CountryAndCityRequiredForUpdateInPersonEvent"]);
+            }
+
             await EventAppService.UpdateAsync(EditingEventId, EditingEvent);
             await GetEventsAsync();
-            CoverImageUrl = string.Empty;
 
+            CoverImageUrl = string.Empty;
             EditEventModal.Hide();
         }
 

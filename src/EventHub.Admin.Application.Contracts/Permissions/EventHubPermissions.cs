@@ -29,5 +29,10 @@
                 public const string RemoveAttendee = Default + ".RemoveAttendee";
             }
         }
+
+        public static class Users
+        {
+            public const string Default = GroupName + ".Users";
+        }
     }
 }

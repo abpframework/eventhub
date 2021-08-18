@@ -3,6 +3,7 @@
 @using EventHub.Admin.Permissions
 @using EventHub.Admin.Events
 @using EventHub.Events
+@using Volo.Abp.AspNetCore.Components.Notifications
 @inherits EventHubComponentBase
 @attribute [Authorize(EventHubPermissions.Events.Default)]
 @inject IEventAppService EventAppService
@@ -10,12 +11,10 @@
 
 <Card>
     <CardHeader>
-        @* ************************* PAGE HEADER ************************* *@
         <h2>@L["Events"]</h2>
     </CardHeader>
 
     <CardBody>
-        @* ************************* SEARCH ************************* *@
         <Form>
             <div id="FilterSection" class="row mt-3">
                 <Column ColumnSize="ColumnSize.Is3">
@@ -57,7 +56,6 @@
             </div>
         </Form>
 
-        @* ************************* DATA GRID ************************* *@
         <DataGrid TItem="EventInListDto"
                   Data="EventList"
                   ReadData="OnDataGridReadAsync"
@@ -76,7 +74,7 @@
                             </EntityAction>
                             <EntityAction TItem="EventInListDto"
                                           RequiredPolicy="@EventHubPermissions.Events.Registrations.Default"
-                                          Clicked="@(() => NavigationManager.NavigateTo($"/events/{context.Id}/attendees"))"
+                                          Clicked="@(() => NavigationManager.NavigateTo($"/event/{context.Id}/attendees"))"
                                           Text="@L["Attendees"]">
                             </EntityAction>
                         </EntityActions>
@@ -106,8 +104,6 @@
         </DataGrid>
     </CardBody>
 </Card>
-
-@* ************************* EDIT MODAL ************************* *@
 
 <Modal @ref="EditEventModal" Closing="@OnEditModalClosing">
     <ModalContent Centered="true" Size="ModalSize.Large">
@@ -177,7 +173,7 @@
                                 {
                                     <Validation>
                                         <Field>
-                                            <FieldLabel>@L["OnlineLink"]</FieldLabel>
+                                            <FieldLabel>@L["OnlineLink"] *</FieldLabel>
                                             <MemoEdit @bind-Text="@EditingEvent.OnlineLink">
                                                 <Feedback>
                                                     <ValidationError/>
@@ -190,7 +186,7 @@
                                 {
                                     <Validation>
                                         <Field>
-                                            <FieldLabel>@L["Country"]</FieldLabel>
+                                            <FieldLabel>@L["Country"] *</FieldLabel>
                                             <Select @bind-SelectedValue="@EditingEvent.CountryId">
                                                 @if (Countries != null && Countries.Any())
                                                 {
@@ -205,7 +201,7 @@
 
                                     <Validation>
                                         <Field>
-                                            <FieldLabel>@L["City"]</FieldLabel>
+                                            <FieldLabel>@L["City"] *</FieldLabel>
                                             <TextEdit TValue="string" @bind-Text="@EditingEvent.City">
                                                 <Feedback>
                                                     <ValidationError/>

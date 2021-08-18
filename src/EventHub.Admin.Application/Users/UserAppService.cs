@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
+using EventHub.Admin.Permissions;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 
 namespace EventHub.Admin.Users
 {
+    [Authorize(EventHubPermissions.Users.Default)]
     public class UserAppService : EventHubAdminAppService, IUserAppService
     {
         private readonly IRepository<IdentityUser, Guid> _identityUserRepository;
@@ -35,7 +38,6 @@ namespace EventHub.Admin.Users
             query = query.PageBy(input);
 
             var users = await AsyncExecuter.ToListAsync(query);
-
             return new PagedResultDto<UserDto>(totalCount, ObjectMapper.Map<List<IdentityUser>, List<UserDto>>(users));
         }
     }

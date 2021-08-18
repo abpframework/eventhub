@@ -143,6 +143,6 @@
     "RemoveUser": "Remove User",
     "AddAttendee": "Add Attendee",
     "AddUser": "Add User",
-
+    "CountryAndCityRequiredForUpdateInPersonEvent": "You need to select a country and city to update the event."
   }
 }

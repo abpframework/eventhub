@@ -19,9 +19,11 @@ namespace EventHub.Admin.Permissions
             var eventPermissions = eventHubGroup.AddPermission(EventHubPermissions.Events.Default, L("Permission:EventManagement"));
             eventPermissions.AddChild(EventHubPermissions.Events.Update, L("Permission:Edit"));
 
-            var eventRegistrationPermission = eventHubGroup.AddPermission(EventHubPermissions.Events.Registrations.Default, L("Permission:RegistrationManagement"));
-            eventRegistrationPermission.AddChild(EventHubPermissions.Events.Registrations.AddAttendee, L("Permission:AddAttendee"));
-            eventRegistrationPermission.AddChild(EventHubPermissions.Events.Registrations.RemoveAttendee, L("Permission:RemoveAttendee"));
+            var eventRegistrationPermissions = eventHubGroup.AddPermission(EventHubPermissions.Events.Registrations.Default, L("Permission:RegistrationManagement"));
+            eventRegistrationPermissions.AddChild(EventHubPermissions.Events.Registrations.AddAttendee, L("Permission:AddAttendee"));
+            eventRegistrationPermissions.AddChild(EventHubPermissions.Events.Registrations.RemoveAttendee, L("Permission:RemoveAttendee"));
+
+            var userPermissions = eventHubGroup.AddPermission(EventHubPermissions.Users.Default, L("Permission:UserManagement"));
         }
 
         private static LocalizableString L(string name)

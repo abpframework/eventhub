@@ -32,8 +32,8 @@
                         </CaptionTemplate>
                         <DisplayTemplate>
                             @if (SelectAllUsers.ContainsKey(context.Id))
-                                {
-                            <Check TValue="bool" @bind-Checked="@SelectAllUsers[context.Id]"></Check>
+                            {
+                                <Check TValue="bool" @bind-Checked="@SelectAllUsers[context.Id]"></Check>
                             }
                         </DisplayTemplate>
                     </DataGridColumn>
