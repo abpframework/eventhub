@@ -7,17 +7,15 @@
 @inject IEventRegistrationAppService EventRegistrationAppService
 @inject IUserAppService UserAppService
 
-<!--<UserPicker />-->
 <Card>
     <CardHeader>
-        @* ************************* PAGE HEADER ************************* *@
         <h2>@L["Attendees"]</h2>
 
         <Paragraph Alignment="TextAlignment.Right">
             @if (CanAddAttendee)
             {
                 <Button Color="Color.Primary"
-                    Clicked="() => AddAttendeeModal.Show()">
+                    Clicked="OpenUserPickerModal">
                     @L["AddNewUser"]
                 </Button>
             }
@@ -25,7 +23,6 @@
     </CardHeader>
 
     <CardBody>
-        @* ************************* DATA GRID ************************* *@
         <DataGrid TItem="EventAttendeeDto"
                   Data="AttendeeList"
                   ReadData="OnDataGridReadAsync"
@@ -69,6 +66,4 @@
 </Card>
 
 
-<Modal @ref="@AddAttendeeModal" Closing="@ClosingUserPickerModal">
-    <UserPicker @ref="UserPickerModalRef" UserPickerModal="AddAttendeeModal" SelectedUserIds="SelectedUserIds" SaveFormAsync="AddSelectedUsersToEventAsync"></UserPicker>
-</Modal>
+<UserPicker @ref="UserPickerModalRef" SelectedUserIds="SelectedUserIds" SaveFormAsync="AddSelectedUsersToEventAsync" />

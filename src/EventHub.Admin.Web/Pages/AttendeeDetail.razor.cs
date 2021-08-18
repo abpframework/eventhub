@@ -23,7 +23,6 @@ namespace EventHub.Admin.Web.Pages
         private int TotalCount { get; set; }
         private int PageSize { get; }
         private bool CanAddAttendee { get; set; }
-        private Modal AddAttendeeModal { get; set; }
         private GetEventRegistrationListInput Filter { get; set; }
 
         public UserPicker UserPickerModalRef { get; set; }
@@ -90,7 +89,7 @@ namespace EventHub.Admin.Web.Pages
 
                 await EventRegistrationAppService.RegisterUsersAsync(EventId, selectedUserIds);
 
-                AddAttendeeModal.Hide();
+                await UserPickerModalRef.CloseUserPickerModalAsync();
 
                 await GetAttendeesAsync();
                 await InvokeAsync(StateHasChanged);
@@ -101,9 +100,9 @@ namespace EventHub.Admin.Web.Pages
             }
         }
 
-        private void ClosingUserPickerModal(ModalClosingEventArgs eventArgs)
+        private async Task OpenUserPickerModal()
         {
-            eventArgs.Cancel = eventArgs.CloseReason == CloseReason.FocusLostClosing;
+            await UserPickerModalRef.OpenUserPickerModalAsync();
         }
     }
 }

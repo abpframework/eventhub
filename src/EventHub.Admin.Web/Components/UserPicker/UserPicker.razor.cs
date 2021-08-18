@@ -13,7 +13,6 @@ namespace EventHub.Admin.Web.Components.UserPicker
 {
     public partial class UserPicker
     {
-        [Parameter]
         public Modal UserPickerModal { get; set; }
 
         [Parameter]
@@ -29,8 +28,8 @@ namespace EventHub.Admin.Web.Components.UserPicker
         private string CurrentSorting { get; set; }
         private int TotalCount { get; set; }
         private int PageSize { get; }
+        
         public Dictionary<Guid, bool> SelectAllUsers = new();
-
         private bool AllUserSelected
         {
             get => SelectAllUsers.All(x => x.Value);
@@ -102,6 +101,13 @@ namespace EventHub.Admin.Web.Components.UserPicker
             await InvokeAsync(StateHasChanged);
         }
 
+        public Task OpenUserPickerModalAsync()
+        {
+            UserPickerModal.Show();
+
+            return Task.CompletedTask;
+        }
+
         public Task CloseUserPickerModalAsync()
         {
             UserPickerModal.Hide();
@@ -112,6 +118,11 @@ namespace EventHub.Admin.Web.Components.UserPicker
         private async Task SaveUserPickerFormAsync()
         {
             await SaveFormAsync.InvokeAsync();
+        }
+
+        private void ClosingUserPickerModal(ModalClosingEventArgs eventArgs)
+        {
+            eventArgs.Cancel = eventArgs.CloseReason == CloseReason.FocusLostClosing;
         }
     }
 }
