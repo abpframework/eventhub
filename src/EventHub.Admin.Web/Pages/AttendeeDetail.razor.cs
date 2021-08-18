@@ -8,9 +8,8 @@ using Blazorise;
 using Volo.Abp.Application.Dtos;
 using Blazorise.DataGrid;
 using EventHub.Admin.Permissions;
-using EventHub.Admin.Users;
+using EventHub.Admin.Web.Components.UserPicker;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components.Web;
 
 namespace EventHub.Admin.Web.Pages
 {
@@ -25,28 +24,15 @@ namespace EventHub.Admin.Web.Pages
         private int PageSize { get; }
         private bool CanAddAttendee { get; set; }
         private Modal AddAttendeeModal { get; set; }
-        private GetUnregisteredUserEventInput Filter { get; set; }
-        private IReadOnlyList<UserDto> UserList { get; set; }
-        private int UserListTotalCount { get; set; }
+        private GetEventRegistrationListInput Filter { get; set; }
 
-        private Dictionary<Guid, bool> SelectAllUsers = new();
-
-        private bool AllUserSelected
-        {
-            get => SelectAllUsers.All(x => x.Value);
-            set
-            {
-                foreach (var key in SelectAllUsers.Keys)
-                {
-                    SelectAllUsers[key] = value;
-                }
-            }
-        }
-
+        public UserPicker UserPickerModalRef { get; set; }
+        private List<Guid> SelectedUserIds { get; set; }
         public AttendeeDetail()
         {
             PageSize = LimitedResultRequestDto.DefaultMaxResultCount;
-            Filter = new GetUnregisteredUserEventInput();
+            Filter = new GetEventRegistrationListInput();
+            SelectedUserIds = new List<Guid>();
         }
 
         protected override async Task OnInitializedAsync()
@@ -57,10 +43,17 @@ namespace EventHub.Admin.Web.Pages
 
         private async Task GetAttendeesAsync()
         {
-            var result = await EventRegistrationAppService.GetAttendeesAsync(EventId);
+            Filter.EventId = EventId;
+            Filter.MaxResultCount = PageSize;
+            Filter.SkipCount = CurrentPage * PageSize;
+            Filter.Sorting = CurrentSorting;
+
+            var result = await EventRegistrationAppService.GetAttendeesAsync(Filter);
 
             AttendeeList = result.Items;
             TotalCount = (int)result.TotalCount;
+
+            SelectedUserIds = await EventRegistrationAppService.GetAllAttendeeIdsAsync(EventId);
         }
 
         private async Task SetPermissionsAsync()
@@ -85,67 +78,19 @@ namespace EventHub.Admin.Web.Pages
             await GetAttendeesAsync();
         }
 
-        private async Task OpenAddAttendeeModal()
-        {
-            AddAttendeeModal.Show();
-            await GetUsersAsync();
-        }
-
-        private async Task GetUsersAsync()
-        {
-            Filter.EventId = EventId;
-            Filter.MaxResultCount = PageSize;
-            Filter.SkipCount = CurrentPage * PageSize;
-            Filter.Sorting = CurrentSorting;
-
-            var result = await UserAppService.GetUnregisteredUsersOfEventAsync(Filter);
-            UserList = result.Items;
-            UserListTotalCount = (int)result.TotalCount;
-
-            FillSelectedUserList();
-        }
-
-        private void FillSelectedUserList()
-        {
-            SelectAllUsers = new Dictionary<Guid, bool>();
-
-            foreach (var user in UserList)
-            {
-                SelectAllUsers.Add(user.Id, false);
-            }
-        }
-
-        private async Task OnKeyPressed(KeyboardEventArgs e)
-        {
-            if (e.Code is "Enter" or "NumpadEnter")
-            {
-                await GetUsersAsync();
-            }
-        }
-
-        private async Task OnDataGridReadForUsersAsync(DataGridReadDataEventArgs<UserDto> e)
-        {
-            CurrentSorting = e.Columns
-                .Where(c => c.Direction != SortDirection.None)
-                .Select(c => c.Field + (c.Direction == SortDirection.Descending ? " DESC" : ""))
-                .JoinAsString(",");
-            CurrentPage = e.Page - 1;
-
-            await GetUsersAsync();
-            await InvokeAsync(StateHasChanged);
-        }
-
         private async Task AddSelectedUsersToEventAsync()
         {
             try
             {
-                var selectedUserIds= SelectAllUsers
+                var selectedUserIds = UserPickerModalRef
+                    .SelectAllUsers
                     .Where(x => x.Value)
                     .Select(x => x.Key)
                     .ToList();
 
                 await EventRegistrationAppService.RegisterUsersAsync(EventId, selectedUserIds);
-                await CloseAddAttendeeModalAsync();
+
+                AddAttendeeModal.Hide();
 
                 await GetAttendeesAsync();
                 await InvokeAsync(StateHasChanged);
@@ -156,15 +101,9 @@ namespace EventHub.Admin.Web.Pages
             }
         }
 
-        private void ClosingAddAttendeeModal(ModalClosingEventArgs eventArgs)
+        private void ClosingUserPickerModal(ModalClosingEventArgs eventArgs)
         {
             eventArgs.Cancel = eventArgs.CloseReason == CloseReason.FocusLostClosing;
-        }
-
-        private Task CloseAddAttendeeModalAsync()
-        {
-            AddAttendeeModal.Hide();
-            return Task.CompletedTask;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using EventHub.Admin.Permissions;
 using Volo.Abp.Application.Dtos;
@@ -33,18 +34,25 @@ namespace EventHub.Admin.Events.Registrations
             _eventRegistrationManager = eventRegistrationManager;
         }
 
-        public async Task<PagedResultDto<EventAttendeeDto>> GetAttendeesAsync(Guid eventId)
+        public async Task<PagedResultDto<EventAttendeeDto>> GetAttendeesAsync(GetEventRegistrationListInput input)
         {
             var eventRegistrationQueryable = await _eventRegistrationRepository.GetQueryableAsync();
             var userQueryable = await _userRepository.GetQueryableAsync();
 
             var query = from eventRegistration in eventRegistrationQueryable
                 join user in userQueryable on eventRegistration.UserId equals user.Id
-                where eventRegistration.EventId == eventId
+                where eventRegistration.EventId == input.EventId
                 orderby eventRegistration.CreationTime descending
                 select user;
 
             var totalCount = await AsyncExecuter.CountAsync(query);
+
+            if (!string.IsNullOrWhiteSpace(input.Sorting))
+            {
+                query = query.OrderBy(input.Sorting);
+            }
+
+            query = query.PageBy(input);
             var users = await AsyncExecuter.ToListAsync(query.Take(10));
 
             return new PagedResultDto<EventAttendeeDto>(
@@ -81,6 +89,20 @@ namespace EventHub.Admin.Events.Registrations
             {
                 await _eventRegistrationManager.RegisterAsync(@event, user);
             }
+        }
+
+        public async Task<List<Guid>> GetAllAttendeeIdsAsync(Guid eventId)
+        {
+            var eventRegistrationQueryable = await _eventRegistrationRepository.GetQueryableAsync();
+            var userQueryable = await _userRepository.GetQueryableAsync();
+
+            var query = from eventRegistration in eventRegistrationQueryable
+                join user in userQueryable on eventRegistration.UserId equals user.Id
+                where eventRegistration.EventId == eventId
+                orderby eventRegistration.CreationTime descending
+                select user.Id;
+
+            return await AsyncExecuter.ToListAsync(query);
         }
     }
 }

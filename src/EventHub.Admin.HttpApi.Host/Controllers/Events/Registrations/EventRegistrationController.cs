@@ -25,9 +25,15 @@ namespace EventHub.Admin.Controllers.Events.Registrations
         }
 
         [HttpGet("{eventId}")]
-        public Task<PagedResultDto<EventAttendeeDto>> GetAttendeesAsync(Guid eventId)
+        public Task<List<Guid>> GetAllAttendeeIdsAsync(Guid eventId)
         {
-            return _eventRegistrationAppService.GetAttendeesAsync(eventId);
+            return _eventRegistrationAppService.GetAllAttendeeIdsAsync(eventId);
+        }
+
+        [HttpGet]
+        public Task<PagedResultDto<EventAttendeeDto>> GetAttendeesAsync(GetEventRegistrationListInput input)
+        {
+            return _eventRegistrationAppService.GetAttendeesAsync(input);
         }
 
         [HttpPost]
@@ -36,7 +42,7 @@ namespace EventHub.Admin.Controllers.Events.Registrations
             return _eventRegistrationAppService.RegisterUsersAsync(eventId, userIds);
         }
 
-        [HttpGet]
+        [HttpDelete]
         public Task RemoveAttendeeAsync(Guid eventId, Guid attendeeId)
         {
             return _eventRegistrationAppService.RemoveAttendeeAsync(eventId, attendeeId);

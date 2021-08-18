@@ -22,9 +22,9 @@ namespace EventHub.Admin.Controllers.Users
         }
 
         [HttpGet]
-        public Task<PagedResultDto<UserDto>> GetUnregisteredUsersOfEventAsync(GetUnregisteredUserEventInput input)
+        public Task<PagedResultDto<UserDto>> GetListAsync(GetUserListInput input)
         {
-            return _userAppService.GetUnregisteredUsersOfEventAsync(input);
+            return _userAppService.GetListAsync(input);
         }
     }
 }

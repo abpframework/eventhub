@@ -17,7 +17,7 @@
             @if (CanAddAttendee)
             {
                 <Button Color="Color.Primary"
-                    Clicked="OpenAddAttendeeModal">
+                    Clicked="() => AddAttendeeModal.Show()">
                     @L["AddNewUser"]
                 </Button>
             }
@@ -69,92 +69,6 @@
 </Card>
 
 
-<Modal @ref="@AddAttendeeModal" Closing="@ClosingAddAttendeeModal">
-    <ModalContent Centered="true">
-        <ModalHeader>
-            <ModalTitle>@L["AddAttendee"]</ModalTitle>
-            <CloseButton Clicked="CloseAddAttendeeModalAsync" />
-        </ModalHeader>
-        <ModalBody>
-            <Form>
-                <div id="UserFilterSection" class="row mt-3">
-                    <Column ColumnSize="ColumnSize.Is3">
-                        <Field>
-                            <FieldLabel>@L["Username"]</FieldLabel>
-                            <TextEdit TValue="string" KeyPress="OnKeyPressed" @bind-Text="@Filter.Username" />
-                        </Field>
-                    </Column>
-                    <Column ColumnSize="ColumnSize.Is3">
-                        <Field>
-                            <FieldLabel>@L["Name"]</FieldLabel>
-                            <TextEdit TValue="string" KeyPress="OnKeyPressed" @bind-Text="@Filter.Name" />
-                        </Field>
-                    </Column>
-                    <Column ColumnSize="ColumnSize.Is3">
-                        <Field>
-                            <FieldLabel>@L["Surname"]</FieldLabel>
-                            <TextEdit TValue="string" KeyPress="OnKeyPressed" @bind-Text="@Filter.Surname" />
-                        </Field>
-                    </Column>
-                    <Column ColumnSize="ColumnSize.Is3">
-                        <Field>
-                            <FieldLabel>@L["Email"]</FieldLabel>
-                            <TextEdit TValue="string" KeyPress="OnKeyPressed" @bind-Text="@Filter.Email" />
-                        </Field>
-                    </Column>
-                </div>
-            </Form>
-
-            <DataGrid TItem="UserDto"
-                      Data="UserList"
-                      ReadData="OnDataGridReadForUsersAsync"
-                      TotalItems="UserListTotalCount"
-                      ShowPager="true"
-                      PageSize="PageSize"
-                      Responsive="true">
-                <DataGridColumns>
-                    <DataGridColumn Sortable="false" TItem="UserDto" Field="@nameof(UserDto.Id)">
-                        <CaptionTemplate>
-                            <Check TValue="bool" @bind-Checked="@AllUserSelected"></Check>
-                        </CaptionTemplate>
-                        <DisplayTemplate>
-                            @if (SelectAllUsers.ContainsKey(context.Id))
-                            {
-                                <Check TValue="bool" @bind-Checked="@SelectAllUsers[context.Id]"></Check>
-                            }
-                        </DisplayTemplate>
-                    </DataGridColumn>
-
-                    <DataGridColumn TItem="UserDto" Field="@nameof(UserDto.Username)" Caption="@L["UserName"].Value">
-                        <DisplayTemplate>
-                            @(context.Username)
-                        </DisplayTemplate>
-                    </DataGridColumn>
-                    
-                    <DataGridColumn TItem="UserDto" Field="@nameof(UserDto.Name)" Caption="@L["Name"].Value">
-                        <DisplayTemplate>
-                            @(context.Name)
-                        </DisplayTemplate>
-                    </DataGridColumn>
-                    
-                    <DataGridColumn TItem="UserDto" Field="@nameof(UserDto.Surname)" Caption="@L["Surname"].Value">
-                        <DisplayTemplate>
-                            @(context.Surname)
-                        </DisplayTemplate>
-                    </DataGridColumn>
-
-                    <DataGridColumn TItem="UserDto" Field="@nameof(UserDto.Email)" Caption="@L["Email"].Value">
-                        <DisplayTemplate>
-                            @(context.Email)
-                        </DisplayTemplate>
-                    </DataGridColumn>
-                </DataGridColumns>
-            </DataGrid>
-        </ModalBody>
-        <ModalFooter>
-            <Button Color="Color.Secondary" Clicked="CloseAddAttendeeModalAsync">@L["Cancel"]</Button>
-            <Button Color="Color.Primary" Clicked="AddSelectedUsersToEventAsync">@L["Save"]</Button>
-        </ModalFooter>
-    </ModalContent>
+<Modal @ref="@AddAttendeeModal" Closing="@ClosingUserPickerModal">
+    <UserPicker @ref="UserPickerModalRef" UserPickerModal="AddAttendeeModal" SelectedUserIds="SelectedUserIds" SaveFormAsync="AddSelectedUsersToEventAsync"></UserPicker>
 </Modal>
-

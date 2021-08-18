@@ -141,6 +141,8 @@
     "AddNewUser": "Add New User",
     "AttendeeRemoveConfirmationMessage": "Are you sure you want to remove this item?",
     "RemoveUser": "Remove User",
-    "AddAttendee": "Add Attendee" 
+    "AddAttendee": "Add Attendee",
+    "AddUser": "Add User",
+
   }
 }

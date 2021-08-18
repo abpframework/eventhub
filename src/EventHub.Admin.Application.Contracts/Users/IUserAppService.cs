@@ -7,6 +7,6 @@ namespace EventHub.Admin.Users
 {
     public interface IUserAppService : IApplicationService
     {
-        Task<PagedResultDto<UserDto>> GetUnregisteredUsersOfEventAsync(GetUnregisteredUserEventInput input);
+        Task<PagedResultDto<UserDto>> GetListAsync(GetUserListInput input);
     }
 }
