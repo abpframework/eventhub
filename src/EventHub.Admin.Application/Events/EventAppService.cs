@@ -98,15 +98,7 @@ namespace EventHub.Admin.Events
             @event.SetTime(input.StartTime, @event.EndTime);
             await _eventManager.SetCapacityAsync(@event, input.Capacity);
 
-            var blobName = id.ToString();
-            if (input.CoverImageContent.IsNullOrEmpty())
-            {
-                await _eventBlobContainer.DeleteAsync(blobName);
-            }
-            else
-            {
-                await _eventBlobContainer.SaveAsync(blobName, input.CoverImageContent, overrideExisting: true);
-            }
+            await SetCoverImageAsync(blobName: id.ToString(), input.CoverImageContent);
 
             await _eventRepository.UpdateAsync(@event);
         }
@@ -129,6 +121,11 @@ namespace EventHub.Admin.Events
             var countries = await AsyncExecuter.ToListAsync(query);
 
             return ObjectMapper.Map<List<Country>, List<CountryLookupDto>>(countries);
+        }
+
+        private async Task SetCoverImageAsync(string blobName, byte[] coverImageContent, bool overrideExisting = true)
+        {
+            await _eventBlobContainer.SaveAsync(blobName, coverImageContent, overrideExisting: true);
         }
     }
 }

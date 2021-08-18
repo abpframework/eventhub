@@ -37,7 +37,7 @@
                 </Column>
                 <Column ColumnSize="ColumnSize.Is3">
                     <Field>
-                        <FieldLabel>@L["MaxEndTime"]</FieldLabel>
+                        <FieldLabel>@L["MaxStartTime"]</FieldLabel>
                         <DateEdit TValue="DateTime?" Date="@Filter.MaxStartTime" DateChanged="OnSelectedDateChangedForMaxStartTime" />
                     </Field>
                 </Column>
@@ -148,8 +148,8 @@
                                     <Field>
                                         <FieldLabel>@L["IsOnline"]</FieldLabel>
                                         <Select @bind-SelectedValue="@EditingEvent.IsOnline">
-                                            <SelectItem Value="@Boolean.TrueString">Online</SelectItem>
-                                            <SelectItem Value="@Boolean.FalseString">In Person</SelectItem>
+                                            <SelectItem Value="@Boolean.TrueString">@L["Online"]</SelectItem>
+                                            <SelectItem Value="@Boolean.FalseString">@L["InPerson"]</SelectItem>
                                         </Select>
                                     </Field>
                                 </Validation>

@@ -127,7 +127,7 @@
     "UpdateEvent": "Update Event",
     "EventInfo": "Event Info",
     "Timing": "Timing",
-    "IsOnline": "Is Online?",
+    "IsOnline": "Is Online",
     "OnlineLink": "Online Link",
     "Country": "Country",
     "City": "City",
@@ -143,6 +143,13 @@
     "RemoveUser": "Remove User",
     "AddAttendee": "Add Attendee",
     "AddUser": "Add User",
-    "CountryAndCityRequiredForUpdateInPersonEvent": "You need to select a country and city to update the event."
+    "CountryAndCityRequiredForUpdateInPersonEvent": "You need to select a country and city to update the event.",
+    "Permission:UserManagement": "User Management",
+    "Cancel": "Cancel",
+    "Save": "Save",
+    "MinStartTime": "Min Start Time",
+    "MaxStartTime": "Max Start Time",
+    "Online": "Online",
+    "InPerson": "In Person" 
   }
 }
