@@ -73,7 +73,7 @@ namespace EventHub.Admin.Web.Pages
         }
         private async Task RemoveAttendeeAsync(EventAttendeeDto attendee)
         {
-            await EventRegistrationAppService.UnRegisterAttendeeAsync(EventId, attendee.Id);
+            await EventRegistrationAppService.UnRegisterAttendeeAsync(EventId, attendee.UserId);
             await GetAttendeesAsync();
         }
 

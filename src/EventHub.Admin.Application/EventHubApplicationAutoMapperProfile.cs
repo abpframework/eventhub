@@ -13,7 +13,7 @@ using Volo.Abp.Identity;
 
 namespace EventHub.Admin
 {
-  public class EventHubAdminApplicationAutoMapperProfile : Profile
+    public class EventHubAdminApplicationAutoMapperProfile : Profile
     {
         public EventHubAdminApplicationAutoMapperProfile()
         {
@@ -31,7 +31,10 @@ namespace EventHub.Admin
 
             CreateMap<Country, CountryLookupDto>();
 
-            CreateMap<IdentityUser, EventAttendeeDto>();
+            CreateMap<IdentityUser, EventAttendeeDto>()
+                .ForMember(eventAttendee => eventAttendee.UserId,
+                    opt => opt.MapFrom(user => user.Id));
+
             CreateMap<IdentityUser, UserDto>();
         }
     }

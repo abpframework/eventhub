@@ -80,15 +80,10 @@ namespace EventHub.Admin.Events.Registrations
             var userQueryable = await _userRepository.GetQueryableAsync();
             var query = userQueryable.Where(user => userIds.Contains(user.Id));
 
-            await CheckEventCapacityAsync(@event);
-            
             var users = await AsyncExecuter.ToListAsync(query);
             foreach (var user in users)
             {
-                if (!await _eventRegistrationManager.IsRegisteredAsync(@event, user))
-                {
-                    await _eventRegistrationRepository.InsertAsync(await _eventRegistrationManager.CreateAsync(@event.Id, user.Id));
-                }
+                await _eventRegistrationManager.RegisterAsync(@event, user);
             }
         }
 
@@ -104,17 +99,6 @@ namespace EventHub.Admin.Events.Registrations
                 select user.Id;
 
             return await AsyncExecuter.ToListAsync(query);
-        }
-
-        private async Task CheckEventCapacityAsync(Event @event)
-        {
-            var registrationCount = await _eventRegistrationRepository.CountAsync(x => x.EventId == @event.Id);
-
-            if (@event.Capacity != null && registrationCount >= @event.Capacity)
-            {
-                throw new BusinessException(EventHubErrorCodes.CapacityOfEventFull)
-                    .WithData("EventTitle", @event.Title);
-            }
         }
     }
 }

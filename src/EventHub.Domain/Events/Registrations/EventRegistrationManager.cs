@@ -16,11 +16,6 @@ namespace EventHub.Events.Registrations
             _eventRegistrationRepository = eventRegistrationRepository;
         }
 
-        public async Task<EventRegistration> CreateAsync(Guid eventId, Guid userId)
-        {
-            return new EventRegistration(GuidGenerator.Create(), eventId, userId);
-        }
-
         public async Task RegisterAsync(
             Event @event,
             IdentityUser user)

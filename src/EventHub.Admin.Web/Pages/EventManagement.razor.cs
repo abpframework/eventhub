@@ -185,18 +185,18 @@ namespace EventHub.Admin.Web.Pages
         {
             Countries = await EventAppService.GetCountriesLookupAsync();
         }
-    }
 
-    public enum EventEditTabs : byte
-    {
-        EventInfo,
-        Timing,
-        CoverImage
-    }
+        private enum EventEditTabs : byte
+        {
+            EventInfo,
+            Timing,
+            CoverImage
+        }
 
-    public class Language
-    {
-        public string Value { get; set; }
-        public string Text { get; set; }
+        private class Language
+        {
+            public string Value { get; set; }
+            public string Text { get; set; }
+        }
     }
 }
