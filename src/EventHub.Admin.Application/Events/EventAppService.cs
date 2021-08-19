@@ -125,7 +125,7 @@ namespace EventHub.Admin.Events
 
         private async Task SetCoverImageAsync(string blobName, byte[] coverImageContent, bool overrideExisting = true)
         {
-            await _eventBlobContainer.SaveAsync(blobName, coverImageContent, overrideExisting: true);
+            await _eventBlobContainer.SaveAsync(blobName, coverImageContent, overrideExisting);
         }
     }
 }
