@@ -114,7 +114,7 @@ namespace EventHub
         private static void ConfigureSwaggerServices(ServiceConfigurationContext context, IConfiguration configuration)
         {
             context.Services.AddAbpSwaggerGenWithOAuth(
-                configuration[EventHubUrlOptions.GetAccountConfigKey()],
+                EventHubUrlOptions.GetAccountConfigValue(configuration),
                 new Dictionary<string, string>
                 {
                     {"EventHub", "EventHub API"}
@@ -153,7 +153,7 @@ namespace EventHub
                 {
                     builder
                         .WithOrigins(
-                            configuration[EventHubUrlOptions.GetWwwConfigKey()]
+                            EventHubUrlOptions.GetWwwConfigValue(configuration)
                         )
                         .WithAbpExposedHeaders()
                         .SetIsOriginAllowedToAllowWildcardSubdomains()

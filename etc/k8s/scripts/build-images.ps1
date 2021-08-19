@@ -1,3 +1,5 @@
+param ($version='latest')
+
 $currentFolder = $PSScriptRoot
 $slnFolder = Join-Path $currentFolder "../../../"
 $dbmigratorFolder = Join-Path $slnFolder "src/EventHub.DbMigrator"
@@ -13,49 +15,49 @@ $backgroundServicesFolder = Join-Path $slnFolder "src/EventHub.BackgroundService
 Write-Host "*** BUILDING DB MIGRATOR ****************" -ForegroundColor Green
 Set-Location $dbmigratorFolder
 dotnet publish -c Release
-docker build -t eventhub.dbmigrator .
+docker build -t eventhub.dbmigrator:$version .
 
 ### WEB (WWW)
 
 Write-Host "*** BUILDING WEB (WWW) ****************" -ForegroundColor Green
 Set-Location $webFolder
 dotnet publish -c Release
-docker build -t eventhub.www .
+docker build -t eventhub.www:$version .
 
 ### API
 
 Write-Host "*** BUILDING API ****************" -ForegroundColor Green
 Set-Location $apiFolder
 dotnet publish -c Release
-docker build -t eventhub.api .
+docker build -t eventhub.api:$version .
 
 ### ADMIN (BLAZOR)
 
 Write-Host "*** BUILDING ADMIN (BLAZOR) ****************" -ForegroundColor Green
 Set-Location $adminFolder
 dotnet publish -c Release
-docker build -t eventhub.admin .
+docker build -t eventhub.admin:$version .
 
 ### ADMIN API
 
 Write-Host "*** BUILDING ADMIN API ****************" -ForegroundColor Green
 Set-Location $adminApiFolder
 dotnet publish -c Release
-docker build -t eventhub.admin-api .
+docker build -t eventhub.admin-api:$version .
 
 ### IDENTITY SERVER (ACCOUNT)
 
 Write-Host "*** BUILDING IDENTITY SERVER (ACCOUNT) ****************" -ForegroundColor Green
 Set-Location $identityServerFolder
 dotnet publish -c Release
-docker build -t eventhub.account .
+docker build -t eventhub.account:$version .
 
 ### BACKGROUND SERVICES
 
 Write-Host "*** BUILDING BACKGROUND SERVICES ****************" -ForegroundColor Green
 Set-Location $backgroundServicesFolder
 dotnet publish -c Release
-docker build -t eventhub.background-services .
+docker build -t eventhub.background-services:$version .
 
 ### ALL COMPLETED
 

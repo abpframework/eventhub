@@ -112,13 +112,13 @@ namespace EventHub.Web
         {
             Configure<AppUrlOptions>(options =>
             {
-                options.Applications["MVC"].RootUrl = configuration[EventHubUrlOptions.GetWwwConfigKey()];
+                options.Applications["MVC"].RootUrl = EventHubUrlOptions.GetWwwConfigValue(configuration);
             });
             
             Configure<AbpRemoteServiceOptions>(options =>
             {
                 options.RemoteServices.Default = new RemoteServiceConfiguration(
-                    configuration[EventHubUrlOptions.GetApiInternalConfigKey()]
+                    EventHubUrlOptions.GetApiInternalConfigValue(configuration)
                         .EnsureEndsWith('/')
                     );
             });
