@@ -5,27 +5,25 @@ using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using EventHub.Admin.Permissions;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Identity;
 using EventHub.Events.Registrations;
 using Microsoft.AspNetCore.Authorization;
 using EventHub.Events;
-using Volo.Abp;
+using EventHub.Users;
 
 namespace EventHub.Admin.Events.Registrations
 {
     [Authorize(EventHubPermissions.Events.Registrations.Default)]
     public class EventRegistrationAppService : EventHubAdminAppService, IEventRegistrationAppService
     {
-        private readonly IRepository<IdentityUser, Guid> _userRepository;
-        private readonly IRepository<EventRegistration, Guid> _eventRegistrationRepository;
-        private readonly IRepository<Event, Guid> _eventRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IEventRegistrationRepository _eventRegistrationRepository;
+        private readonly IEventRepository _eventRepository;
         private readonly EventRegistrationManager _eventRegistrationManager;
 
         public EventRegistrationAppService(
-            IRepository<IdentityUser, Guid> userRepository, 
-            IRepository<EventRegistration, Guid> eventRegistrationRepository,
-            IRepository<Event, Guid> eventRepository,
+            IUserRepository userRepository, 
+            IEventRegistrationRepository eventRegistrationRepository,
+            IEventRepository eventRepository,
             EventRegistrationManager eventRegistrationManager)
         {
             _userRepository = userRepository;
@@ -36,29 +34,11 @@ namespace EventHub.Admin.Events.Registrations
 
         public async Task<PagedResultDto<EventAttendeeDto>> GetAttendeesAsync(GetEventRegistrationListInput input)
         {
-            var eventRegistrationQueryable = await _eventRegistrationRepository.GetQueryableAsync();
-            var userQueryable = await _userRepository.GetQueryableAsync();
+            var totalCount = await _eventRegistrationRepository.GetCountAsync(input.EventId);
+            var items = await _eventRegistrationRepository.GetListAsync(input.EventId, input.Sorting, input.SkipCount, input.MaxResultCount);
+            var users = ObjectMapper.Map<List<EventRegistrationWithDetails>, List<EventAttendeeDto>>(items);
 
-            var query = from eventRegistration in eventRegistrationQueryable
-                join user in userQueryable on eventRegistration.UserId equals user.Id
-                where eventRegistration.EventId == input.EventId
-                orderby eventRegistration.CreationTime descending
-                select user;
-
-            var totalCount = await AsyncExecuter.CountAsync(query);
-
-            if (!string.IsNullOrWhiteSpace(input.Sorting))
-            {
-                query = query.OrderBy(input.Sorting);
-            }
-
-            query = query.PageBy(input);
-            var users = await AsyncExecuter.ToListAsync(query.Take(10));
-
-            return new PagedResultDto<EventAttendeeDto>(
-                totalCount,
-                ObjectMapper.Map<List<IdentityUser>, List<EventAttendeeDto>>(users)
-            );
+            return new PagedResultDto<EventAttendeeDto>(totalCount, users);
         }
 
         [Authorize(EventHubPermissions.Events.Registrations.RemoveAttendee)]

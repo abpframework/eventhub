@@ -6,6 +6,7 @@ using EventHub.Admin.Organizations.Memberships;
 using EventHub.Admin.Users;
 using EventHub.Countries;
 using EventHub.Events;
+using EventHub.Events.Registrations;
 using EventHub.Organizations;
 using EventHub.Organizations.Memberships;
 using Volo.Abp.AutoMapper;
@@ -36,6 +37,10 @@ namespace EventHub.Admin
                     opt => opt.MapFrom(user => user.Id));
 
             CreateMap<IdentityUser, UserDto>();
+
+            CreateMap<EventWithDetails, EventInListDto>();
+
+            CreateMap<EventRegistrationWithDetails, EventAttendeeDto>();
         }
     }
 }

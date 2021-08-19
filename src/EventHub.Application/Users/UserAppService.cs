@@ -8,9 +8,9 @@ namespace EventHub.Users
 {
     public class UserAppService : EventHubAppService, IUserAppService
     {
-        private readonly IRepository<IdentityUser, Guid> _userRepository;
+        private readonly IUserRepository _userRepository;
         
-        public UserAppService(IRepository<IdentityUser, Guid> userRepository)
+        public UserAppService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }

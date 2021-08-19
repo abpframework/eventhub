@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 using EventHub.Admin.Permissions;
 using EventHub.Countries;
 using EventHub.Events;
-using EventHub.Events.Registrations;
-using EventHub.Organizations;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.BlobStoring;
@@ -18,25 +16,18 @@ namespace EventHub.Admin.Events
     [Authorize(EventHubPermissions.Events.Default)]
     public class EventAppService : EventHubAdminAppService, IEventAppService
     {
-        private readonly IRepository<Event, Guid> _eventRepository;
-        private readonly IRepository<EventRegistration, Guid> _eventRegistrationRepository;
-        private readonly IRepository<Organization, Guid> _organizationRepository;
+        private readonly IEventRepository _eventRepository;
         private readonly IBlobContainer<EventCoverImageContainer> _eventBlobContainer;
         private readonly EventManager _eventManager;
         private readonly IRepository<Country, Guid> _countryRepository;
 
-
         public EventAppService(
-            IRepository<Event, Guid> eventRepository,
-            IRepository<EventRegistration, Guid> eventRegistrationRepository,
-            IRepository<Organization, Guid> organizationRepository,
+            IEventRepository eventRepository,
             IBlobContainer<EventCoverImageContainer> eventBlobContainer,
-            EventManager eventManager, 
+            EventManager eventManager,
             IRepository<Country, Guid> countryRepository)
         {
             _eventRepository = eventRepository;
-            _eventRegistrationRepository = eventRegistrationRepository;
-            _organizationRepository = organizationRepository;
             _eventBlobContainer = eventBlobContainer;
             _eventManager = eventManager;
             _countryRepository = countryRepository;
@@ -54,34 +45,14 @@ namespace EventHub.Admin.Events
 
         public async Task<PagedResultDto<EventInListDto>> GetListAsync(EventListFilterDto input)
         {
-            var eventQueryable = await _eventRepository.GetQueryableAsync();
-            var eventRegistrationQueryable = await _eventRegistrationRepository.GetQueryableAsync();
-            var organizationQueryable = await _organizationRepository.GetQueryableAsync();
+            var totalCount = await _eventRepository.GetCountAsync(input.Title, input.OrganizationDisplayName, input.MinAttendeeCount,
+                input.MaxAttendeeCount, input.MinStartTime, input.MaxStartTime);
 
-            var query = (from @event in eventQueryable
-                        join organization in organizationQueryable on @event.OrganizationId equals organization.Id
-                        select new EventInListDto
-                        {
-                            Id = @event.Id,
-                            Title = @event.Title,
-                            StartTime = @event.StartTime,
-                            OrganizationDisplayName = organization.DisplayName,
-                            AttendeeCount = (from eventRegistration in eventRegistrationQueryable
-                                             where eventRegistration.EventId == @event.Id
-                                             select @eventRegistration).Count()
-                        })
-                .WhereIf(!string.IsNullOrWhiteSpace(input.Title), x => x.Title.ToLower().Contains(input.Title.ToLower()))
-                .WhereIf(!string.IsNullOrWhiteSpace(input.OrganizationDisplayName), x => x.OrganizationDisplayName.ToLower().Contains(input.OrganizationDisplayName.ToLower()))
-                .WhereIf(input.MinStartTime.HasValue, x => x.StartTime >= input.MinStartTime)
-                .WhereIf(input.MaxStartTime.HasValue, x => x.StartTime <= input.MaxStartTime)
-                .WhereIf(input.MinAttendeeCount.HasValue, x => x.AttendeeCount >= input.MinAttendeeCount)
-                .WhereIf(input.MaxAttendeeCount.HasValue, x => x.AttendeeCount <= input.MaxAttendeeCount);
+            var items = await _eventRepository.GetListAsync(input.Sorting, input.SkipCount, input.MaxResultCount,
+                input.Title, input.OrganizationDisplayName, input.MinAttendeeCount, input.MaxAttendeeCount,
+                input.MinStartTime, input.MaxStartTime);
 
-            var totalCount = await AsyncExecuter.CountAsync(query);
-            query = query.OrderBy(string.IsNullOrWhiteSpace(input.Sorting) ? EventConsts.DefaultSorting : input.Sorting);
-            query = query.PageBy(input);
-
-            var events = await AsyncExecuter.ToListAsync(query);
+            var events = ObjectMapper.Map<List<EventWithDetails>, List<EventInListDto>>(items);
 
             return new PagedResultDto<EventInListDto>(totalCount, events);
         }
@@ -115,8 +86,8 @@ namespace EventHub.Admin.Events
             var countriesQueryable = await _countryRepository.GetQueryableAsync();
 
             var query = from country in countriesQueryable
-                orderby country.Name
-                select country;
+                        orderby country.Name
+                        select country;
 
             var countries = await AsyncExecuter.ToListAsync(query);
 

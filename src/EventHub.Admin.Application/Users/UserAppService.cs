@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Dynamic.Core;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using EventHub.Admin.Permissions;
+using EventHub.Users;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 
 namespace EventHub.Admin.Users
@@ -14,31 +11,20 @@ namespace EventHub.Admin.Users
     [Authorize(EventHubPermissions.Users.Default)]
     public class UserAppService : EventHubAdminAppService, IUserAppService
     {
-        private readonly IRepository<IdentityUser, Guid> _identityUserRepository;
+        private readonly IUserRepository _userRepository;
 
-        public UserAppService(IRepository<IdentityUser, Guid> identityUserRepository)
+        public UserAppService(IUserRepository userRepository)
         {
-            _identityUserRepository = identityUserRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<PagedResultDto<UserDto>> GetListAsync(GetUserListInput input)
         {
-            var identityUserQueryable = await _identityUserRepository.GetQueryableAsync();
+            var totalCount = await _userRepository.GetCountAsync(input.Username);
+            var items = await _userRepository.GetListAsync(input.Sorting, input.SkipCount, input.MaxResultCount, input.Username);
+            var users = ObjectMapper.Map<List<IdentityUser>, List<UserDto>>(items);
 
-            var query = identityUserQueryable
-                .WhereIf(!string.IsNullOrWhiteSpace(input.Username), user => user.UserName.ToLower().Contains(input.Username.ToLower()));
-
-            var totalCount = await AsyncExecuter.CountAsync(query);
-
-            if (!string.IsNullOrWhiteSpace(input.Sorting))
-            {
-                query = query.OrderBy(input.Sorting);
-            }
-
-            query = query.PageBy(input);
-
-            var users = await AsyncExecuter.ToListAsync(query);
-            return new PagedResultDto<UserDto>(totalCount, ObjectMapper.Map<List<IdentityUser>, List<UserDto>>(users));
+            return new PagedResultDto<UserDto>(totalCount, users);
         }
     }
 }
