@@ -16,6 +16,7 @@
 ````
 
 * Run `build-images.ps1` in the `scripts` directory.
-* Run `helm install eh-st eventhub` in the `helm-chart` directory.
+* Run `deploy-staging.ps1` in the `helm-chart` directory. It is deployed with the `eventhub` namespace.
+* *You may wait ~30 seconds on first run for preparing the database*.
 * Browse https://eh-st-www and https://eh-st-admin
 * Username: `admin`, password: `1q2w3E*`.
