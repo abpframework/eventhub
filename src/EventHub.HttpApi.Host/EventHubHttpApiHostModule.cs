@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using EventHub.EntityFrameworkCore;
+using EventHub.Organizations;
 using EventHub.Utils;
 using EventHub.Web;
 using Microsoft.AspNetCore.Localization;
@@ -61,6 +62,16 @@ namespace EventHub
             ConfigureCookies(context);
             ConfigureSwaggerServices(context, configuration);
             ConfigureBackgroundJobs();
+            ConfigureAutoApiControllers();
+        }
+        
+        private void ConfigureAutoApiControllers()
+        {
+            Configure<AbpAspNetCoreMvcOptions>(options =>
+            {
+                options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(CreateOrganizationDto));
+                options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(UpdateOrganizationDto));
+            });
         }
 
         private void ConfigureBackgroundJobs()
@@ -79,10 +90,14 @@ namespace EventHub
         private void ConfigureVirtualFileSystem(ServiceConfigurationContext context)
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
-
-            if (hostingEnvironment.IsDevelopment())
+            
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                Configure<AbpVirtualFileSystemOptions>(options =>
+                options.FileSets.AddEmbedded<EventHubHttpApiHostModule>(
+                    baseNamespace: "EventHub",
+                    baseFolder: "/Controllers/Organizations/ProfilePictures");
+
+                if (hostingEnvironment.IsDevelopment())
                 {
                     options.FileSets.ReplaceEmbeddedByPhysical<EventHubDomainSharedModule>(
                         Path.Combine(hostingEnvironment.ContentRootPath,
@@ -96,8 +111,8 @@ namespace EventHub
                     options.FileSets.ReplaceEmbeddedByPhysical<EventHubApplicationModule>(
                         Path.Combine(hostingEnvironment.ContentRootPath,
                             $"..{Path.DirectorySeparatorChar}EventHub.Application"));
-                });
-            }
+                }
+            });
         }
 
         private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)

@@ -33,6 +33,7 @@
     <Content Remove="Logs\**" />
     <EmbeddedResource Remove="Logs\**" />
     <None Remove="Logs\**" />
+    <EmbeddedResource Include="Controllers\Organizations\ProfilePictures\**\*.*" />
   </ItemGroup>
 
 </Project>

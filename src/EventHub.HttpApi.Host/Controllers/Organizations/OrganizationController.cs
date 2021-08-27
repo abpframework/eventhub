@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.Content;
+using Volo.Abp.VirtualFileSystem;
 
 namespace EventHub.Controllers.Organizations
 {
@@ -15,10 +17,14 @@ namespace EventHub.Controllers.Organizations
     public class OrganizationController : AbpController, IOrganizationAppService
     {
         private readonly IOrganizationAppService _organizationAppService;
+        private readonly IVirtualFileProvider _virtualFileProvider;
 
-        public OrganizationController(IOrganizationAppService organizationAppService)
+        public OrganizationController(
+            IOrganizationAppService organizationAppService, 
+            IVirtualFileProvider virtualFileProvider)
         {
             _organizationAppService = organizationAppService;
+            _virtualFileProvider = virtualFileProvider;
         }
 
         [HttpPost]
@@ -59,6 +65,25 @@ namespace EventHub.Controllers.Organizations
         public async Task UpdateAsync(Guid id, UpdateOrganizationDto input)
         {
             await _organizationAppService.UpdateAsync(id, input);
+        }
+
+        [HttpGet]
+        [Route("profile-picture/{id}")]
+        public async Task<IRemoteStreamContent> GetProfilePictureAsync(Guid id)
+        {
+            var remoteStreamContent = await _organizationAppService.GetProfilePictureAsync(id);
+
+            if (remoteStreamContent is null)
+            {
+                await using var stream = _virtualFileProvider.GetFileInfo("/Controllers/Organizations/ProfilePictures/eh-organization.png").CreateReadStream();
+                remoteStreamContent = new RemoteStreamContent(stream);
+                await stream.FlushAsync();
+            }
+            
+            Response.Headers.Add("Accept-Ranges", "bytes");
+            Response.ContentType = remoteStreamContent.ContentType;
+
+            return remoteStreamContent;
         }
     }
 }
