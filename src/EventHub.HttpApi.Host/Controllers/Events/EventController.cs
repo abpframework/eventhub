@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.Content;
+using Volo.Abp.VirtualFileSystem;
 
 namespace EventHub.Controllers.Events
 {
@@ -16,10 +18,14 @@ namespace EventHub.Controllers.Events
     public class EventController : AbpController, IEventAppService
     {
         private readonly IEventAppService _eventAppService;
+        private readonly IVirtualFileProvider _virtualFileProvider;
 
-        public EventController(IEventAppService eventAppService)
+        public EventController(
+            IEventAppService eventAppService, 
+            IVirtualFileProvider virtualFileProvider)
         {
             _eventAppService = eventAppService;
+            _virtualFileProvider = virtualFileProvider;
         }
 
         [HttpPost]
@@ -71,9 +77,21 @@ namespace EventHub.Controllers.Events
 
         [HttpGet]
         [Route("cover-image/{id}")]
-        public async Task<byte[]> GetCoverImageAsync(Guid id)
+        public async Task<IRemoteStreamContent> GetCoverImageAsync(Guid id)
         {
-            return await _eventAppService.GetCoverImageAsync(id);
+            var remoteStreamContent = await _eventAppService.GetCoverImageAsync(id);
+
+            if (remoteStreamContent is null)
+            {
+                var stream = _virtualFileProvider.GetFileInfo("/Images/eh-event.png").CreateReadStream();
+                remoteStreamContent = new RemoteStreamContent(stream);
+                await stream.FlushAsync();
+            }
+            
+            Response.Headers.Add("Accept-Ranges", "bytes");
+            Response.ContentType = remoteStreamContent.ContentType;
+
+            return remoteStreamContent;
         }
     }
 }

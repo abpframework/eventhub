@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using EventHub.EntityFrameworkCore;
+using EventHub.Events;
 using EventHub.Organizations;
 using EventHub.Utils;
 using EventHub.Web;
@@ -71,6 +72,8 @@ namespace EventHub
             {
                 options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(CreateOrganizationDto));
                 options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(UpdateOrganizationDto));
+                options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(CreateEventDto));
+                options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(UpdateEventDto));
             });
         }
 
@@ -95,7 +98,7 @@ namespace EventHub
             {
                 options.FileSets.AddEmbedded<EventHubHttpApiHostModule>(
                     baseNamespace: "EventHub",
-                    baseFolder: "/Controllers/Organizations/ProfilePictures");
+                    baseFolder: "/Images");
 
                 if (hostingEnvironment.IsDevelopment())
                 {

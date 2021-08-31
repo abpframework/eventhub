@@ -52,7 +52,7 @@ namespace EventHub.Web.Pages.Organizations
                 }
 
                 await _organizationAppService.CreateAsync(createOrganizationDto);
-                await memoryStream.FlushAsync();
+                await memoryStream.DisposeAsync();
 
                 return RedirectToPage("./Profile", new {name = Organization.Name});
             }

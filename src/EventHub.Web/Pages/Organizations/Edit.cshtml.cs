@@ -56,6 +56,7 @@ namespace EventHub.Web.Pages.Organizations
                 }
                 
                 await _organizationAppService.UpdateAsync(Organization.Id, updateOrganizationDto);
+                await memoryStream.DisposeAsync();
                 
                 return RedirectToPage("./Profile", new { name = Name });
             }

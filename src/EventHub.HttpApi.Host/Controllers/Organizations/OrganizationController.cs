@@ -75,7 +75,7 @@ namespace EventHub.Controllers.Organizations
 
             if (remoteStreamContent is null)
             {
-                await using var stream = _virtualFileProvider.GetFileInfo("/Controllers/Organizations/ProfilePictures/eh-organization.png").CreateReadStream();
+                var stream = _virtualFileProvider.GetFileInfo("/Images/eh-organization.png").CreateReadStream();
                 remoteStreamContent = new RemoteStreamContent(stream);
                 await stream.FlushAsync();
             }

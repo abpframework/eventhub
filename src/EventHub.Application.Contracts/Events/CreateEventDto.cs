@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
+using Volo.Abp.Content;
 
 namespace EventHub.Events
 {
@@ -24,7 +25,7 @@ namespace EventHub.Events
         public string Description { get; set; }
         
         [CanBeNull] 
-        public byte[] CoverImageContent { get; set; }
+        public IRemoteStreamContent CoverImageStreamContent { get; set; }
 
         public bool IsOnline { get; set; }
         

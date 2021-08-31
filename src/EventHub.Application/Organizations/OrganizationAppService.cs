@@ -146,22 +146,7 @@ namespace EventHub.Organizations
 
             await _organizationRepository.UpdateAsync(organization);
         }
-
-        private async Task SaveProfilePictureAsync(Guid id, IRemoteStreamContent streamContent)
-        {
-            var organization = await _organizationRepository.GetAsync(x => x.Id == id);
-
-            if (organization.OwnerUserId != CurrentUser.GetId())
-            {
-                throw new AbpAuthorizationException(EventHubErrorCodes.NotAuthorizedToUpdateOrganizationProfile)
-                    .WithData("Name", organization.DisplayName);
-            }
-
-            var blobName = id.ToString();
-
-            await _organizationBlobContainer.SaveAsync(blobName, streamContent.GetStream(), overrideExisting: true);
-        }
-
+        
         public async Task<IRemoteStreamContent> GetProfilePictureAsync(Guid id)
         {
             var blobName = id.ToString();
@@ -174,6 +159,13 @@ namespace EventHub.Organizations
             }
 
             return new RemoteStreamContent(pictureContent, blobName);
+        }
+
+        private async Task SaveProfilePictureAsync(Guid id, IRemoteStreamContent streamContent)
+        {
+            var blobName = id.ToString();
+
+            await _organizationBlobContainer.SaveAsync(blobName, streamContent.GetStream(), overrideExisting: true);
         }
     }
 }
