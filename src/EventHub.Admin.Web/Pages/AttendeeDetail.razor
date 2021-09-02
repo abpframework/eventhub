@@ -1,0 +1,69 @@
+﻿@page "/event/{EventId:guid}/attendees"
+@using EventHub.Admin.Web.Components.UserPicker
+@using EventHub.Admin.Events.Registrations
+@using EventHub.Admin.Permissions
+@using EventHub.Admin.Users
+@inherits EventHubComponentBase
+@inject IEventRegistrationAppService EventRegistrationAppService
+@inject IUserAppService UserAppService
+
+<Card>
+    <CardHeader>
+        <h2>@L["Attendees"]</h2>
+
+        <Paragraph Alignment="TextAlignment.Right">
+            @if (CanAddAttendee)
+            {
+                <Button Color="Color.Primary"
+                    Clicked="OpenUserPickerModal">
+                    @L["AddNewUser"]
+                </Button>
+            }
+        </Paragraph>
+    </CardHeader>
+
+    <CardBody>
+        <DataGrid TItem="EventAttendeeDto"
+                  Data="AttendeeList"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  PageSize="PageSize"
+                  Responsive="true">
+            <DataGridColumns>
+                <DataGridEntityActionsColumn TItem="EventAttendeeDto">
+                    <DisplayTemplate>
+                        <EntityActions TItem="EventAttendeeDto">
+                            <EntityAction TItem="EventAttendeeDto"
+                                          RequiredPolicy="@EventHubPermissions.Events.Registrations.RemoveAttendee"
+                                          Clicked="() => RemoveAttendeeAsync(context)"
+                                          ConfirmationMessage="@(() => L["AttendeeRemoveConfirmationMessage"])"
+                                          Text="@L["RemoveUser"]">
+                            </EntityAction>
+                        </EntityActions>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+
+                <DataGridColumn TItem="EventAttendeeDto"
+                                Field="UserName"
+                                Caption="@L["UserName"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="EventAttendeeDto"
+                                Field="Name"
+                                Caption="@L["Name"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="EventAttendeeDto"
+                                Field="Surname"
+                                Caption="@L["Surname"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="EventAttendeeDto"
+                                Field="Email"
+                                Caption="@L["Email"]">
+                </DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+
+<UserPicker @ref="UserPickerModalRef" SelectedUserIds="SelectedUserIds" SaveFormAsync="AddSelectedUsersToEventAsync" />

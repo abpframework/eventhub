@@ -2,6 +2,8 @@
 {
     public static class EventConsts
     {
+        public const string DefaultSorting = "Title desc";
+
         public const int UrlCodeLength = 8;
         public const int MaxTitleInUrlLength = 60;
         public const int MaxUrlLength = MaxTitleInUrlLength + 1 + UrlCodeLength; //Format: {Title}-{UrlCode}
@@ -24,5 +26,7 @@
         public const int MaxTimingChangeCountForUser = 2;
         
         public const int MaxCoverImageFileSize = 5 * 1024 * 1024;
+
+        public static string[] AllowedCoverImageExtensions = { ".jpg", ".png" };
     }
 }
