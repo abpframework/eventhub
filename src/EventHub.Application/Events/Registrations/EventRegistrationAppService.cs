@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EventHub.Users;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Users;
 using Volo.Abp.Identity;
 
@@ -13,16 +13,16 @@ namespace EventHub.Events.Registrations
     public class EventRegistrationAppService : EventHubAppService, IEventRegistrationAppService
     {
         private readonly EventRegistrationManager _eventRegistrationManager;
-        private readonly IRepository<IdentityUser, Guid> _userRepository;
-        private readonly IRepository<Event, Guid> _eventRepository;
-        private readonly IRepository<EventRegistration, Guid> _eventRegistrationRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IEventRepository _eventRepository;
+        private readonly IEventRegistrationRepository _eventRegistrationRepository;
         private readonly EventRegistrationNotifier _eventRegistrationNotifier;
 
         public EventRegistrationAppService(
             EventRegistrationManager eventRegistrationManager,
-            IRepository<IdentityUser, Guid> userRepository,
-            IRepository<Event, Guid> eventRepository,
-            IRepository<EventRegistration, Guid> eventRegistrationRepository, 
+            IUserRepository userRepository,
+            IEventRepository eventRepository,
+            IEventRegistrationRepository eventRegistrationRepository, 
             EventRegistrationNotifier eventRegistrationNotifier)
         {
             _eventRegistrationManager = eventRegistrationManager;

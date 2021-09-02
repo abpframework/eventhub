@@ -5,6 +5,7 @@ using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using EventHub.Admin.Permissions;
 using EventHub.Organizations;
+using EventHub.Users;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -18,12 +19,12 @@ namespace EventHub.Admin.Organizations
     public class OrganizationAppService : EventHubAdminAppService, IOrganizationAppService
     {
         private readonly IRepository<Organization, Guid> _organizationRepository;
-        private readonly IRepository<IdentityUser, Guid> _identityUserRepository;
+        private readonly IUserRepository _identityUserRepository;
         private readonly IBlobContainer<OrganizationProfilePictureContainer> _organizationBlobContainer;
 
         public OrganizationAppService(
             IRepository<Organization, Guid> organizationRepository,
-            IRepository<IdentityUser, Guid> identityUserRepository,
+            IUserRepository identityUserRepository,
             IBlobContainer<OrganizationProfilePictureContainer> organizationBlobContainer)
         {
             _organizationRepository = organizationRepository;

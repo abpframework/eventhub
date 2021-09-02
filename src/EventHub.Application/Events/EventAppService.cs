@@ -20,20 +20,20 @@ namespace EventHub.Events
     {
         private readonly EventManager _eventManager;
         private readonly EventRegistrationManager _eventRegistrationManager;
-        private readonly IRepository<EventRegistration, Guid> _eventRegistrationRepository;
-        private readonly IRepository<Event, Guid> _eventRepository;
+        private readonly IEventRegistrationRepository _eventRegistrationRepository;
+        private readonly IEventRepository _eventRepository;
         private readonly IRepository<Organization, Guid> _organizationRepository;
-        private readonly IRepository<IdentityUser, Guid> _userRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IRepository<Country, Guid> _countriesRepository;
         private readonly IBlobContainer<EventCoverImageContainer> _eventBlobContainer;
 
         public EventAppService(
             EventManager eventManager,
             EventRegistrationManager eventRegistrationManager,
-            IRepository<EventRegistration, Guid> eventRegistrationRepository,
-            IRepository<Event, Guid> eventRepository,
+            IEventRegistrationRepository eventRegistrationRepository,
+            IEventRepository eventRepository,
             IRepository<Organization, Guid> organizationRepository,
-            IRepository<IdentityUser, Guid> userRepository,
+            IUserRepository userRepository,
             IRepository<Country, Guid> countriesRepository,
             IBlobContainer<EventCoverImageContainer> eventBlobContainer)
         {

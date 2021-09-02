@@ -17,17 +17,17 @@ namespace EventHub.Organizations
     public class OrganizationAppService : EventHubAppService, IOrganizationAppService
     {
         private readonly IRepository<Organization, Guid> _organizationRepository;
-        private readonly IRepository<OrganizationMembership, Guid>  _organizationMembershipsRepository;
+        private readonly IOrganizationMembershipRepository  _organizationMembershipsRepository;
         private readonly OrganizationManager _organizationManager;
         private readonly IBlobContainer<OrganizationProfilePictureContainer> _organizationBlobContainer;
-        private readonly IRepository<IdentityUser, Guid> _userRepository;
+        private readonly IUserRepository _userRepository;
 
         public OrganizationAppService(
             IRepository<Organization, Guid> organizationRepository,
-            IRepository<OrganizationMembership, Guid> organizationMembershipsRepository,
+            IOrganizationMembershipRepository organizationMembershipsRepository,
             OrganizationManager organizationManager,
-            IBlobContainer<OrganizationProfilePictureContainer> organizationBlobContainer, 
-            IRepository<IdentityUser, Guid> userRepository)
+            IBlobContainer<OrganizationProfilePictureContainer> organizationBlobContainer,
+            IUserRepository userRepository)
         {
             _organizationRepository = organizationRepository;
             _organizationMembershipsRepository = organizationMembershipsRepository;
