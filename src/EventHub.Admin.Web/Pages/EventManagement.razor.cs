@@ -12,6 +12,7 @@ using System.IO;
 using System.Globalization;
 using NUglify.Helpers;
 using Volo.Abp;
+using Volo.Abp.Content;
 
 namespace EventHub.Admin.Web.Pages
 {
@@ -92,9 +93,10 @@ namespace EventHub.Admin.Web.Pages
         {
             EditingEventId = input.Id;
             Event = await EventAppService.GetAsync(EditingEventId);
-
             EditingEvent = ObjectMapper.Map<EventDetailDto, UpdateEventDto>(Event);
-            FillCoverImageUrl(EditingEvent.CoverImageContent);
+            
+            FileEntry = new FileEntry();
+            CoverImageUrl = UrlOptions.Value.AdminApi.EnsureEndsWith('/') + "api/eventhub/admin/event/cover-image/" + EditingEventId;
 
             EditEventModal.Show();
         }
@@ -143,16 +145,15 @@ namespace EventHub.Admin.Web.Pages
             await GetEventsAsync();
         }
 
-        private void FillCoverImageUrl(byte[] content)
+        private void SetCoverImageUrl(string contentType, byte[] content)
         {
             if (content.IsNullOrEmpty())
             {
                 return;
             }
 
-            var imageBase64Data = Convert.ToBase64String(content);
-            var imageDataUrl = $"data:image/png;base64,{imageBase64Data}";
-            CoverImageUrl = imageDataUrl;
+            contentType = string.IsNullOrWhiteSpace(contentType) ? "image/png" : contentType;
+            CoverImageUrl = $"data:{contentType};base64,{Convert.ToBase64String(content)}";
         }
 
         private async Task OnCoverImageFileChanged(FileChangedEventArgs e)
@@ -163,20 +164,23 @@ namespace EventHub.Admin.Web.Pages
                 return;
             }
 
-            using (var stream = new MemoryStream())
-            {
-                await FileEntry.WriteToStreamAsync(stream);
+            var stream = new MemoryStream();
+            await FileEntry.WriteToStreamAsync(stream);
+            stream.Seek(0, SeekOrigin.Begin);
 
-                stream.Seek(0, SeekOrigin.Begin);
-                EditingEvent.CoverImageContent = stream.ToArray();
-                FillCoverImageUrl(EditingEvent.CoverImageContent);
-                await InvokeAsync(StateHasChanged);
-            }
+            EditingEvent.CoverImageStreamContent = new RemoteStreamContent(stream)
+            {
+                ContentType = FileEntry.Type,
+                FileName = FileEntry.Name
+            };
+
+            SetCoverImageUrl(FileEntry.Type, stream.ToArray());
+            await InvokeAsync(StateHasChanged);
         }
 
         private void OnDeleteCoverImageButtonClicked()
         {
-            EditingEvent.CoverImageContent = null;
+            EditingEvent.CoverImageStreamContent = null;
             FileEntry = new FileEntry();
             CoverImageUrl = null;
         }

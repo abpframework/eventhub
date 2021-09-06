@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using EventHub.Admin.Events;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.Content;
+using Volo.Abp.VirtualFileSystem;
 
 namespace EventHub.Admin.Controllers.Events
 {
@@ -17,10 +20,12 @@ namespace EventHub.Admin.Controllers.Events
     public class EventController : AbpController, IEventAppService
     {
         private readonly IEventAppService _eventAppService;
-
-        public EventController(IEventAppService eventAppService)
+        private readonly IVirtualFileProvider _virtualFileProvider;
+        
+        public EventController(IEventAppService eventAppService, IVirtualFileProvider virtualFileProvider)
         {
             _eventAppService = eventAppService;
+            _virtualFileProvider = virtualFileProvider;
         }
 
         [HttpGet("{id}")]
@@ -36,9 +41,28 @@ namespace EventHub.Admin.Controllers.Events
         }
 
         [HttpGet("cover-image/{id}")]
-        public Task<byte[]> GetCoverImageAsync(Guid id)
+        [AllowAnonymous]
+        public async Task<IRemoteStreamContent> GetCoverImageAsync(Guid id)
         {
-            return _eventAppService.GetCoverImageAsync(id);
+            var remoteStreamContent = await _eventAppService.GetCoverImageAsync(id);
+            if (remoteStreamContent is null)
+            {
+                var stream = _virtualFileProvider
+                    .GetFileInfo("/Images/eh-event.png")
+                    .CreateReadStream();
+                
+                remoteStreamContent = new RemoteStreamContent(stream)
+                {
+                    ContentType = "image/png"
+                };
+                
+                await stream.FlushAsync();
+            }
+            
+            Response.Headers.Add("Accept-Ranges", "bytes");
+            Response.ContentType = remoteStreamContent.ContentType;
+
+            return remoteStreamContent;
         }
 
         [HttpGet]

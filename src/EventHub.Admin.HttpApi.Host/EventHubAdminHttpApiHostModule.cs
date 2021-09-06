@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using EventHub.Admin.Events;
 using EventHub.Admin.Organizations;
 using EventHub.Admin.Utils;
 using EventHub.EntityFrameworkCore;
@@ -69,6 +70,7 @@ namespace EventHub.Admin
             Configure<AbpAspNetCoreMvcOptions>(options =>
             {
                 options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(UpdateOrganizationDto));
+                options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(UpdateEventDto));
             });
         }
 

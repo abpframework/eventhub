@@ -3,11 +3,14 @@
 @using EventHub.Admin.Permissions
 @using EventHub.Admin.Events
 @using EventHub.Events
+@using EventHub.Web
+@using Microsoft.Extensions.Options
 @using Volo.Abp.AspNetCore.Components.Notifications
 @inherits EventHubComponentBase
 @attribute [Authorize(EventHubPermissions.Events.Default)]
 @inject IEventAppService EventAppService
 @inject NavigationManager NavigationManager
+@inject IOptions<EventHubUrlOptions> UrlOptions
 
 <Card>
     <CardHeader>

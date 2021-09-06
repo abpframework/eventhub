@@ -26,8 +26,7 @@ namespace EventHub.Admin
 
             CreateMap<OrganizationMemberWithDetails, OrganizationMemberDto>();
 
-            CreateMap<Event, EventDetailDto>()
-                .Ignore(x => x.CoverImageContent);
+            CreateMap<Event, EventDetailDto>();
 
             CreateMap<Country, CountryLookupDto>();
 
