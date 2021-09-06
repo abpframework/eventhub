@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using EventHub.Countries;
 using EventHub.Events.Registrations;
 using EventHub.Organizations;
+using EventHub.Users;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;

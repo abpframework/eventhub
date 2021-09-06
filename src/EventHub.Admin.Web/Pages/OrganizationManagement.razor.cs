@@ -9,6 +9,7 @@ using Blazorise.DataGrid;
 using EventHub.Admin.Organizations;
 using Microsoft.AspNetCore.Components.Web;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Content;
 
 namespace EventHub.Admin.Web.Pages
 {
@@ -73,7 +74,9 @@ namespace EventHub.Admin.Web.Pages
         {
             EditingOrganizationId = input.Id;
             Organization = await OrganizationAppService.GetAsync(EditingOrganizationId);
-            FillProfileImageUrl(Organization.ProfilePictureContent);
+
+            FileEntry = new FileEntry();
+            ProfileImageUrl = UrlOptions.Value.AdminApi.EnsureEndsWith('/') + "api/eventhub/admin/organization/cover-image/" + EditingOrganizationId;
 
             EditingOrganization = ObjectMapper.Map<OrganizationProfileDto, UpdateOrganizationDto>(Organization);
             EditOrganizationModal.Show();
@@ -88,7 +91,7 @@ namespace EventHub.Admin.Web.Pages
 
         private void OnDeleteCoverImageButtonClicked()
         {
-            EditingOrganization.ProfilePictureContent = null;
+            EditingOrganization.ProfilePictureStreamContent = null;
             FileEntry = new FileEntry();
             ProfileImageUrl = null;
             IsLoadingProfileImage = false;
@@ -110,23 +113,26 @@ namespace EventHub.Admin.Web.Pages
 
             IsLoadingProfileImage = true;
 
-            using (var stream = new MemoryStream())
-            {
-                await FileEntry.WriteToStreamAsync(stream);
+            var stream = new MemoryStream();
+            await FileEntry.WriteToStreamAsync(stream);
+            stream.Seek(0, SeekOrigin.Begin);
 
-                stream.Seek(0, SeekOrigin.Begin);
-                EditingOrganization.ProfilePictureContent = stream.ToArray();
-                FillProfileImageUrl(EditingOrganization.ProfilePictureContent);
-                await InvokeAsync(StateHasChanged);
-            }
+            EditingOrganization.ProfilePictureStreamContent = new RemoteStreamContent(stream)
+            {
+                ContentType = FileEntry.Type,
+                FileName = FileEntry.Name
+            };
+
+            SetProfileImageUrl(FileEntry.Type, stream.ToArray());
+            await InvokeAsync(StateHasChanged);
         }
 
-        private void FillProfileImageUrl(byte[] content)
+        private void SetProfileImageUrl(string contentType, byte[] content)
         {
             if (content != null)
             {
-                var imageBase64Data = Convert.ToBase64String(content);
-                var imageDataUrl = $"data:image/png;base64,{imageBase64Data}";
+                contentType = string.IsNullOrWhiteSpace(contentType) ? "image/png" : contentType;
+                var imageDataUrl = $"data:{contentType};base64,{Convert.ToBase64String(content)}";
                 ProfileImageUrl = imageDataUrl;
             }
         }

@@ -1,10 +1,14 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using EventHub.Admin.Organizations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.Content;
+using Volo.Abp.VirtualFileSystem;
 
 namespace EventHub.Admin.Controllers.Organizations
 {
@@ -16,10 +20,12 @@ namespace EventHub.Admin.Controllers.Organizations
     public class OrganizationController : AbpController, IOrganizationAppService
     {
         private readonly IOrganizationAppService _organizationAppService;
-
-        public OrganizationController(IOrganizationAppService organizationAppService)
+        private readonly IVirtualFileProvider _virtualFileProvider;
+        
+        public OrganizationController(IOrganizationAppService organizationAppService, IVirtualFileProvider virtualFileProvider)
         {
             _organizationAppService = organizationAppService;
+            _virtualFileProvider = virtualFileProvider;
         }
 
         [HttpGet]
@@ -53,6 +59,31 @@ namespace EventHub.Admin.Controllers.Organizations
         public Task DeleteAsync(Guid id)
         {
             return _organizationAppService.DeleteAsync(id);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("cover-image/{id}")]
+        public async Task<IRemoteStreamContent> GetCoverImageAsync(Guid id)
+        {
+            var remoteStreamContent = await _organizationAppService.GetCoverImageAsync(id);
+            if (remoteStreamContent is null)
+            {
+                var stream = _virtualFileProvider
+                    .GetFileInfo("/Images/eh-organization.png")
+                    .CreateReadStream();
+                
+                remoteStreamContent = new RemoteStreamContent(stream)
+                {
+                    ContentType = "image/png"
+                };
+                await stream.FlushAsync();
+            }
+            
+            Response.Headers.Add("Accept-Ranges", "bytes");
+            Response.ContentType = remoteStreamContent.ContentType;
+
+            return remoteStreamContent;
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Content;
 
 namespace EventHub.Admin.Organizations
 {
@@ -16,5 +17,7 @@ namespace EventHub.Admin.Organizations
         Task<OrganizationProfileDto> UpdateAsync(Guid id, UpdateOrganizationDto input);
 
         Task DeleteAsync(Guid id);
+
+        Task<IRemoteStreamContent> GetCoverImageAsync(Guid id);
     }
 }

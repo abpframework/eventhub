@@ -33,6 +33,7 @@
         <Content Remove="Logs\**" />
         <EmbeddedResource Remove="Logs\**" />
         <None Remove="Logs\**" />
+        <EmbeddedResource Include="Images\**\*.*" />
     </ItemGroup>
 
 </Project>

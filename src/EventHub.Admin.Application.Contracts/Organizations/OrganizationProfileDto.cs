@@ -9,8 +9,6 @@ namespace EventHub.Admin.Organizations
 
         public string DisplayName { get; set; }
 
-        public byte[] ProfilePictureContent { get; set; }
-
         public string OwnerUserName { get; set; }
 
         public string OwnerEmail { get; set; }

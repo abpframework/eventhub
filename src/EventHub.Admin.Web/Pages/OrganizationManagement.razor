@@ -4,12 +4,15 @@
 @using Microsoft.AspNetCore.Authorization
 @using EventHub.Admin.Organizations
 @using EventHub.Organizations
+@using EventHub.Web
+@using Microsoft.Extensions.Options
 @using Volo.Abp.AspNetCore.Components.Notifications
 @inherits EventHubComponentBase
 @inject NavigationManager NavigationManager
 @attribute [Authorize(EventHubPermissions.Organizations.Default)]
 @inject IOrganizationAppService OrganizationAppService
 @inject IUiNotificationService UiNotificationService
+@inject IOptions<EventHubUrlOptions> UrlOptions
 
 <Card>
     <CardHeader>
