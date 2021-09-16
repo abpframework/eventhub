@@ -2,6 +2,7 @@
 
 * Docker Desktop with Kubernetes enabled
 * Install [NGINX ingress](https://kubernetes.github.io/ingress-nginx/deploy/) for k8s
+* Install [Helm](https://helm.sh/docs/intro/install/) for running helm charts
 
 ### How to run?
 
