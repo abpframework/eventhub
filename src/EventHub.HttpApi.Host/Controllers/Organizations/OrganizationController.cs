@@ -28,7 +28,7 @@ namespace EventHub.Controllers.Organizations
         }
 
         [HttpPost]
-        public async Task CreateAsync(CreateOrganizationDto input)
+        public async Task CreateAsync([FromForm] CreateOrganizationDto input)
         {
             await _organizationAppService.CreateAsync(input);
         }
@@ -62,7 +62,7 @@ namespace EventHub.Controllers.Organizations
 
         [HttpPut]
         [Route("{id}")]
-        public async Task UpdateAsync(Guid id, UpdateOrganizationDto input)
+        public async Task UpdateAsync(Guid id, [FromForm] UpdateOrganizationDto input)
         {
             await _organizationAppService.UpdateAsync(id, input);
         }

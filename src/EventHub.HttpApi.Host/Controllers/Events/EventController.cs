@@ -29,7 +29,7 @@ namespace EventHub.Controllers.Events
         }
 
         [HttpPost]
-        public async Task<EventDto> CreateAsync(CreateEventDto input)
+        public async Task<EventDto> CreateAsync([FromForm] CreateEventDto input)
         {
             return await _eventAppService.CreateAsync(input);
         }
@@ -70,7 +70,7 @@ namespace EventHub.Controllers.Events
 
         [HttpPut]
         [Route("{id}")]
-        public async Task UpdateAsync(Guid id, UpdateEventDto input)
+        public async Task UpdateAsync(Guid id, [FromForm] UpdateEventDto input)
         {
             await _eventAppService.UpdateAsync(id, input);
         }
