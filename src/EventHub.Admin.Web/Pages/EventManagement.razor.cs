@@ -10,7 +10,6 @@ using System.ComponentModel;
 using Microsoft.AspNetCore.Components.Web;
 using System.IO;
 using System.Globalization;
-using NUglify.Helpers;
 using Volo.Abp;
 
 namespace EventHub.Admin.Web.Pages
