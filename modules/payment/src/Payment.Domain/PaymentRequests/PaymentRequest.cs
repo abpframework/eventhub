@@ -7,8 +7,10 @@ namespace Payment.PaymentRequests
 {
     public class PaymentRequest : CreationAuditedAggregateRoot<Guid>
     {
+        [CanBeNull]
         public string CustomerId { get; private set; }
         
+        [CanBeNull]
         public string ProductId { get; private set; }
         
         [NotNull]
@@ -20,13 +22,15 @@ namespace Payment.PaymentRequests
 
         public PaymentRequest(
             Guid id,
-            [NotNull] string productName,
+            [CanBeNull] string customerId,
             [CanBeNull] string productId,
+            [NotNull] string productName,
             decimal amount) 
             : base(id)
         {
-            ProductName = Check.NotNullOrWhiteSpace(productName, nameof(productName));
+            CustomerId = customerId;
             ProductId = productId;
+            ProductName = Check.NotNullOrWhiteSpace(productName, nameof(productName));
             Amount = amount;
         }
     }
