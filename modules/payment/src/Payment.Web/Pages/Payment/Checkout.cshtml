@@ -1,0 +1,34 @@
+﻿@page
+@using Microsoft.Extensions.Localization
+@using Payment.Localization
+@using Payment.Web.Pages.Payment
+@model Payment.Web.Pages.Payment.CheckoutPageModel
+@inject IStringLocalizer<PaymentResource> L
+
+@section scripts {
+    <abp-script-bundle name="@typeof(CheckoutPageModel).FullName">
+        <abp-script src="/client-proxies/Payment-proxy.js" />
+    </abp-script-bundle>
+}
+
+<h1>Checkout</h1>
+
+<abp-card>
+    <abp-card-header>
+        <h2>Product Information</h2>
+    </abp-card-header>
+    <abp-card-body>
+        <ul>
+            <li>Product name: @Model.PaymentRequest.ProductName</li>
+            <li>Amount: @Model.PaymentRequest.Amount</li>
+        </ul>
+    </abp-card-body>
+</abp-card>
+
+<abp-card>
+    <abp-card-body>
+        <form method="post">
+            <abp-button type="submit" button-type="Primary">Complete the payment</abp-button>
+        </form>
+    </abp-card-body>
+</abp-card>

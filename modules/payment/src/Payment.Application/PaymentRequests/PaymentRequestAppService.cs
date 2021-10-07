@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Payment.PaymentRequests
 {
@@ -10,7 +11,14 @@ namespace Payment.PaymentRequests
         {
             _paymentRequestRepository = paymentRequestRepository;
         }
-        
+
+        public async Task<PaymentRequestDto> GetAsync(Guid id)
+        {
+            var paymentRequest = await _paymentRequestRepository.GetAsync(id);
+            
+            return ObjectMapper.Map<PaymentRequest, PaymentRequestDto>(paymentRequest);
+        }
+
         public async Task<PaymentRequestDto> CreateAsync(PaymentRequestCreationDto input)
         {
             var paymentRequest = new PaymentRequest(
