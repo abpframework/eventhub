@@ -49,7 +49,7 @@ namespace EventHub.Admin.Controllers.Organizations
         }
 
         [HttpPut]
-        public Task<OrganizationProfileDto> UpdateAsync(Guid id, UpdateOrganizationDto input)
+        public Task<OrganizationProfileDto> UpdateAsync(Guid id, [FromForm] UpdateOrganizationDto input)
         {
             return _organizationAppService.UpdateAsync(id, input);
         }

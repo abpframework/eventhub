@@ -72,7 +72,7 @@ namespace EventHub.Admin.Controllers.Events
         }
 
         [HttpPut]
-        public Task UpdateAsync(Guid id, UpdateEventDto input)
+        public Task UpdateAsync(Guid id, [FromForm] UpdateEventDto input)
         {
             return _eventAppService.UpdateAsync(id, input);
         }
