@@ -41,6 +41,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "www", "www", "{D3FD0217-A8C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "admin", "admin", "{FC718EF0-43EB-4767-9578-95FA0B3727A5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payment.HttpApi.Client", "src\Payment.HttpApi.Client\Payment.HttpApi.Client.csproj", "{3FF65447-69D5-4115-8398-8156FB381215}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +93,10 @@ Global
 		{3B7B6317-1B85-4164-8E11-75574F80AE17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B7B6317-1B85-4164-8E11-75574F80AE17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B7B6317-1B85-4164-8E11-75574F80AE17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FF65447-69D5-4115-8398-8156FB381215}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FF65447-69D5-4115-8398-8156FB381215}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FF65447-69D5-4115-8398-8156FB381215}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FF65447-69D5-4115-8398-8156FB381215}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -113,6 +119,7 @@ Global
 		{D3FD0217-A8C7-4BAF-BF77-962F1B055515} = {CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}
 		{90CB5DC4-C040-45C7-8900-9688B26405BC} = {D3FD0217-A8C7-4BAF-BF77-962F1B055515}
 		{FC718EF0-43EB-4767-9578-95FA0B3727A5} = {CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}
+		{3FF65447-69D5-4115-8398-8156FB381215} = {4EF8B98A-E7A3-48A6-9C1F-10DE32001213}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6AAFA1C6-603E-13FA-45E5-7910AA9F661D}

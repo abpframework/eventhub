@@ -1,0 +1,53 @@
+{
+  "modules": {
+    "Payment": {
+      "rootPath": "Payment",
+      "remoteServiceName": "Payment",
+      "controllers": {
+        "Payment.Samples.SampleController": {
+          "controllerName": "Sample",
+          "controllerGroupName": "Sample",
+          "type": "Payment.Samples.SampleController",
+          "interfaces": [
+            {
+              "type": "Payment.Samples.ISampleAppService"
+            }
+          ],
+          "actions": {
+            "GetAsync": {
+              "uniqueName": "GetAsync",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/Payment/sample",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "Payment.Samples.SampleDto",
+                "typeSimple": "Payment.Samples.SampleDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Payment.Samples.ISampleAppService"
+            },
+            "GetAuthorizedAsync": {
+              "uniqueName": "GetAuthorizedAsync",
+              "name": "GetAuthorizedAsync",
+              "httpMethod": "GET",
+              "url": "api/Payment/sample/authorized",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "Payment.Samples.SampleDto",
+                "typeSimple": "Payment.Samples.SampleDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Payment.Samples.ISampleAppService"
+            }
+          }
+        }
+      }
+    }
+  },
+  "types": {}
+}
