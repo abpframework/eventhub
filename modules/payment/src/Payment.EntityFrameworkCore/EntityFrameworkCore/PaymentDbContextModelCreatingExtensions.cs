@@ -16,8 +16,9 @@ namespace Payment.EntityFrameworkCore
             {
                 b.ToTable(PaymentDbProperties.DbTablePrefix + "PaymentRequests", PaymentDbProperties.DbSchema);
                 b.ConfigureByConvention();
+                b.Property(x => x.CustomerId).HasMaxLength(PaymentRequestConsts.MaxCustomerIdLength);
+                b.Property(x => x.ProductId).HasMaxLength(PaymentRequestConsts.MaxProductIdLength);
                 b.Property(x => x.ProductName).IsRequired().HasMaxLength(PaymentRequestConsts.MaxProductNameLength);
-                b.Property(x => x.ProductId).IsRequired().HasMaxLength(PaymentRequestConsts.MaxProductIdLength);
 
                 b.HasIndex(x => x.CustomerId);
                 b.HasIndex(x => x.State);
