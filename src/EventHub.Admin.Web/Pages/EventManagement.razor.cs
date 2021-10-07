@@ -10,6 +10,7 @@ using System.ComponentModel;
 using Microsoft.AspNetCore.Components.Web;
 using System.IO;
 using System.Globalization;
+using EventHub.Events;
 using NUglify.Helpers;
 using Volo.Abp;
 using Volo.Abp.Content;
@@ -33,6 +34,7 @@ namespace EventHub.Admin.Web.Pages
         private IFileEntry FileEntry { get; set; }
         private List<CountryLookupDto> Countries { get; set; }
         private List<Language> Languages { get; set; }
+        private bool DisabledCoverImageButton { get; set; }
 
         public EventManagement()
         {
@@ -96,7 +98,7 @@ namespace EventHub.Admin.Web.Pages
             EditingEvent = ObjectMapper.Map<EventDetailDto, UpdateEventDto>(Event);
             
             FileEntry = new FileEntry();
-            CoverImageUrl = UrlOptions.Value.AdminApi.EnsureEndsWith('/') + "api/eventhub/admin/event/cover-image/" + EditingEventId;
+            await SetCoverImageUrlAsync();
 
             EditEventModal.Show();
         }
@@ -122,6 +124,7 @@ namespace EventHub.Admin.Web.Pages
             await GetEventsAsync();
 
             CoverImageUrl = string.Empty;
+            DisabledCoverImageButton = false;
             EditEventModal.Hide();
         }
 
@@ -145,17 +148,6 @@ namespace EventHub.Admin.Web.Pages
             await GetEventsAsync();
         }
 
-        private void SetCoverImageUrl(string contentType, byte[] content)
-        {
-            if (content.IsNullOrEmpty())
-            {
-                return;
-            }
-
-            contentType = string.IsNullOrWhiteSpace(contentType) ? "image/png" : contentType;
-            CoverImageUrl = $"data:{contentType};base64,{Convert.ToBase64String(content)}";
-        }
-
         private async Task OnCoverImageFileChanged(FileChangedEventArgs e)
         {
             FileEntry = e.Files.FirstOrDefault();
@@ -174,6 +166,18 @@ namespace EventHub.Admin.Web.Pages
                 FileName = FileEntry.Name
             };
 
+            void SetCoverImageUrl(string contentType, byte[] content)
+            {
+                if (content.IsNullOrEmpty())
+                {
+                    return;
+                }
+
+                contentType = string.IsNullOrWhiteSpace(contentType) ? "image/png" : contentType;
+                CoverImageUrl = $"data:{contentType};base64,{Convert.ToBase64String(content)}";
+                DisabledCoverImageButton = false;
+            }
+            
             SetCoverImageUrl(FileEntry.Type, stream.ToArray());
             await InvokeAsync(StateHasChanged);
         }
@@ -183,11 +187,25 @@ namespace EventHub.Admin.Web.Pages
             EditingEvent.CoverImageStreamContent = null;
             FileEntry = new FileEntry();
             CoverImageUrl = null;
+            DisabledCoverImageButton = true;
         }
 
         private async Task FillCountriesAsync()
         {
             Countries = await EventAppService.GetCountriesLookupAsync();
+        }
+        
+        private async Task SetCoverImageUrlAsync()
+        {
+            var imageRemoteStreamContent = await EventAppService.GetCoverImageAsync(id: EditingEventId);
+
+            if (imageRemoteStreamContent.ContentLength <= 0)
+            {
+                CoverImageUrl = "/assets/eh-event.png";
+                DisabledCoverImageButton = true;
+                return;
+            }
+            CoverImageUrl = UrlOptions.Value.AdminApi.EnsureEndsWith('/') + "api/eventhub/admin/event/cover-image/" + EditingEventId;
         }
 
         private enum EventEditTabs : byte

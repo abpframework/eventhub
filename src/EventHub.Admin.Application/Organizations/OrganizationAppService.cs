@@ -78,7 +78,7 @@ namespace EventHub.Admin.Organizations
 
             return await CreateOrganizationProfileDto(organization);
         }
-        
+
         public async Task<OrganizationProfileDto> GetByNameAsync(string name)
         {
             var organization = await _organizationRepository.FindAsync(x => x.Name.ToLower() == name.ToLower());
@@ -110,6 +110,10 @@ namespace EventHub.Admin.Organizations
             {
                 await SaveCoverImageAsync(organization.Id, input.ProfilePictureStreamContent);
             }
+            else
+            {
+                await DeleteCoverImageAsync(blobName: id.ToString());
+            }
 
             await _organizationRepository.UpdateAsync(organization);
 
@@ -121,7 +125,7 @@ namespace EventHub.Admin.Organizations
         {
             await _organizationRepository.DeleteAsync(id);
         }
-        
+
         private async Task<OrganizationProfileDto> CreateOrganizationProfileDto(Organization organization)
         {
             var dto = ObjectMapper.Map<Organization, OrganizationProfileDto>(organization);
@@ -138,7 +142,7 @@ namespace EventHub.Admin.Organizations
         {
             var blobName = id.ToString();
             var coverImageStream = await _organizationBlobContainer.GetOrNullAsync(blobName);
-            
+
             if (coverImageStream is null)
             {
                 return null;
@@ -152,6 +156,11 @@ namespace EventHub.Admin.Organizations
             var blobName = id.ToString();
 
             await _organizationBlobContainer.SaveAsync(blobName, coverImageContent.GetStream(), overrideExisting: true);
+        }
+
+        private async Task DeleteCoverImageAsync(string blobName)
+        {
+            await _organizationBlobContainer.DeleteAsync(blobName);
         }
     }
 }

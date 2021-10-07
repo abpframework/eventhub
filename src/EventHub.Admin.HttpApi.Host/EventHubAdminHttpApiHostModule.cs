@@ -93,10 +93,6 @@ namespace EventHub.Admin
 
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<EventHubAdminHttpApiHostModule>(
-                    baseNamespace: "EventHub.Admin",
-                    baseFolder: "/Images");
-
                 if (hostingEnvironment.IsDevelopment())
                 {
                     options.FileSets.ReplaceEmbeddedByPhysical<EventHubDomainSharedModule>(

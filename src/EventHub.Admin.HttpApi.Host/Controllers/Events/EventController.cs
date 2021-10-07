@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using EventHub.Admin.Events;
+using EventHub.Events;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
@@ -47,16 +48,7 @@ namespace EventHub.Admin.Controllers.Events
             var remoteStreamContent = await _eventAppService.GetCoverImageAsync(id);
             if (remoteStreamContent is null)
             {
-                var stream = _virtualFileProvider
-                    .GetFileInfo("/Images/eh-event.png")
-                    .CreateReadStream();
-                
-                remoteStreamContent = new RemoteStreamContent(stream)
-                {
-                    ContentType = "image/png"
-                };
-                
-                await stream.FlushAsync();
+                return null;
             }
             
             Response.Headers.Add("Accept-Ranges", "bytes");

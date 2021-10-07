@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using EventHub.Admin.Organizations;
+using EventHub.Organizations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
@@ -69,15 +70,7 @@ namespace EventHub.Admin.Controllers.Organizations
             var remoteStreamContent = await _organizationAppService.GetCoverImageAsync(id);
             if (remoteStreamContent is null)
             {
-                var stream = _virtualFileProvider
-                    .GetFileInfo("/Images/eh-organization.png")
-                    .CreateReadStream();
-                
-                remoteStreamContent = new RemoteStreamContent(stream)
-                {
-                    ContentType = "image/png"
-                };
-                await stream.FlushAsync();
+                return null;
             }
             
             Response.Headers.Add("Accept-Ranges", "bytes");

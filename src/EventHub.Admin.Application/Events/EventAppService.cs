@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using EventHub.Admin.Permissions;
 using EventHub.Countries;
@@ -72,6 +71,10 @@ namespace EventHub.Admin.Events
             {
                 await SetCoverImageAsync(blobName: id.ToString(), input.CoverImageStreamContent);
             }
+            else
+            {
+                await DeleteCoverImageAsync(blobName: id.ToString());
+            }
 
             await _eventRepository.UpdateAsync(@event);
         }
@@ -106,6 +109,11 @@ namespace EventHub.Admin.Events
         private async Task SetCoverImageAsync(string blobName, IRemoteStreamContent streamContent, bool overrideExisting = true)
         {
             await _eventBlobContainer.SaveAsync(blobName, streamContent.GetStream(), overrideExisting);
+        }
+        
+        private async Task DeleteCoverImageAsync(string blobName)
+        {
+            await _eventBlobContainer.DeleteAsync(blobName);
         }
     }
 }

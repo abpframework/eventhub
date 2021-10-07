@@ -31,6 +31,7 @@ namespace EventHub.Admin.Web.Pages
         private IFileEntry FileEntry { get; set; }
         private bool IsLoadingProfileImage { get; set; }
         private string SelectedTabInEditModal { get; set; }
+        private bool DisabledProfileImageButton { get; set; }
 
         public OrganizationManagement()
         {
@@ -76,7 +77,7 @@ namespace EventHub.Admin.Web.Pages
             Organization = await OrganizationAppService.GetAsync(EditingOrganizationId);
 
             FileEntry = new FileEntry();
-            ProfileImageUrl = UrlOptions.Value.AdminApi.EnsureEndsWith('/') + "api/eventhub/admin/organization/cover-image/" + EditingOrganizationId;
+            await SetProfileImageUrlAsync();
 
             EditingOrganization = ObjectMapper.Map<OrganizationProfileDto, UpdateOrganizationDto>(Organization);
             EditOrganizationModal.Show();
@@ -87,6 +88,9 @@ namespace EventHub.Admin.Web.Pages
             await OrganizationAppService.UpdateAsync(EditingOrganizationId, EditingOrganization);
             await GetOrganizationsAsync();
             EditOrganizationModal.Hide();
+
+            ProfileImageUrl = null;
+            DisabledProfileImageButton = false;
         }
 
         private void OnDeleteCoverImageButtonClicked()
@@ -94,6 +98,7 @@ namespace EventHub.Admin.Web.Pages
             EditingOrganization.ProfilePictureStreamContent = null;
             FileEntry = new FileEntry();
             ProfileImageUrl = null;
+            DisabledProfileImageButton = true;
             IsLoadingProfileImage = false;
         }
 
@@ -123,18 +128,19 @@ namespace EventHub.Admin.Web.Pages
                 FileName = FileEntry.Name
             };
 
+            void SetProfileImageUrl(string contentType, byte[] content)
+            {
+                if (content != null)
+                {
+                    contentType = string.IsNullOrWhiteSpace(contentType) ? "image/png" : contentType;
+                    var imageDataUrl = $"data:{contentType};base64,{Convert.ToBase64String(content)}";
+                    ProfileImageUrl = imageDataUrl;
+                    DisabledProfileImageButton = false;
+                }
+            }
+            
             SetProfileImageUrl(FileEntry.Type, stream.ToArray());
             await InvokeAsync(StateHasChanged);
-        }
-
-        private void SetProfileImageUrl(string contentType, byte[] content)
-        {
-            if (content != null)
-            {
-                contentType = string.IsNullOrWhiteSpace(contentType) ? "image/png" : contentType;
-                var imageDataUrl = $"data:{contentType};base64,{Convert.ToBase64String(content)}";
-                ProfileImageUrl = imageDataUrl;
-            }
         }
 
         private void OnProgressedForProfileImage(FileProgressedEventArgs e)
@@ -162,6 +168,18 @@ namespace EventHub.Admin.Web.Pages
             {
                 await GetOrganizationsAsync();
             }
+        }
+        
+        private async Task SetProfileImageUrlAsync()
+        {
+            var imageRemoteStreamContent = await OrganizationAppService.GetCoverImageAsync(id: EditingOrganizationId);
+            if (imageRemoteStreamContent.ContentLength <= 0)
+            {
+                ProfileImageUrl = "assets/eh-organization.png";
+                DisabledProfileImageButton = true;
+                return;
+            }
+            ProfileImageUrl = UrlOptions.Value.AdminApi.EnsureEndsWith('/') + "api/eventhub/admin/organization/cover-image/" + EditingOrganizationId;
         }
     }
 
