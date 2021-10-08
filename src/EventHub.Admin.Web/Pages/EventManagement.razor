@@ -3,11 +3,14 @@
 @using EventHub.Admin.Permissions
 @using EventHub.Admin.Events
 @using EventHub.Events
+@using EventHub.Web
+@using Microsoft.Extensions.Options
 @using Volo.Abp.AspNetCore.Components.Notifications
 @inherits EventHubComponentBase
 @attribute [Authorize(EventHubPermissions.Events.Default)]
 @inject IEventAppService EventAppService
 @inject NavigationManager NavigationManager
+@inject IOptions<EventHubUrlOptions> UrlOptions
 
 <Card>
     <CardHeader>
@@ -263,13 +266,13 @@
                                         <FileEdit MaxMessageSize="@EventConsts.MaxCoverImageFileSize" Filter="@string.Join(", ", EventConsts.AllowedCoverImageExtensions)" Changed="@OnCoverImageFileChanged" AutoReset="true"/>
                                     </FieldBody>
                                     <Column ColumnSize="ColumnSize.Is3">
-                                        @if (!string.IsNullOrEmpty(CoverImageUrl))
+                                        @if (DisabledCoverImageButton)
                                         {
-                                            <Button Color="Color.Warning" Clicked="@OnDeleteCoverImageButtonClicked">@L["DeleteCoverImage"]</Button>
+                                            <Button disabled Color="Color.Secondary" Clicked="@OnDeleteCoverImageButtonClicked">@L["DeleteCoverImage"]</Button>
                                         }
                                         else
                                         {
-                                            <Button disabled Color="Color.Secondary" Clicked="@OnDeleteCoverImageButtonClicked">@L["DeleteCoverImage"]</Button>
+                                            <Button Color="Color.Warning" Clicked="@OnDeleteCoverImageButtonClicked">@L["DeleteCoverImage"]</Button>
                                         }
                                     </Column>
                                 </Field>

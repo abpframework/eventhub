@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
+using Volo.Abp.Content;
 
 namespace EventHub.Organizations
 {
@@ -18,7 +19,7 @@ namespace EventHub.Organizations
         public string Description { get; set; }
         
         [CanBeNull]
-        public byte[] ProfilePictureContent { get; set; }
+        public RemoteStreamContent ProfilePictureStreamContent { get; set; }
 
         [StringLength(OrganizationConsts.MaxWebsiteLength)]
         public string Website { get; set; }

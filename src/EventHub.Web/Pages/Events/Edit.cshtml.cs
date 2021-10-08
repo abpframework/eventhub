@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
+using Volo.Abp.Content;
 using Volo.Abp.Users;
 
 namespace EventHub.Web.Pages.Events
@@ -29,7 +30,6 @@ namespace EventHub.Web.Pages.Events
         public List<SelectListItem> Organizations { get; private set; }
         public List<SelectListItem> Countries { get; private set; }
         public List<SelectListItem> Languages { get; private set; }
-        public byte[] CoverImageContent { get; private set; }
 
         private readonly IEventAppService _eventAppService;
         private readonly IOrganizationAppService _organizationAppService;
@@ -46,7 +46,7 @@ namespace EventHub.Web.Pages.Events
         {
             var urlCode = EventUrlCodeHelper.GetCodeFromUrl(Url);
             var eventDetailDto = await _eventAppService.GetByUrlCodeAsync(urlCode);
-            CoverImageContent = eventDetailDto.CoverImageContent;
+
             Event = ObjectMapper.Map<EventDetailDto, EditEventViewModel>(eventDetailDto);
             
             await FillOrganizationsAsync();
@@ -60,19 +60,22 @@ namespace EventHub.Web.Pages.Events
             {
                 ValidateModel();
 
-                var input = ObjectMapper.Map<EditEventViewModel, UpdateEventDto>(Event);
+                var updateEventDto = ObjectMapper.Map<EditEventViewModel, UpdateEventDto>(Event);
                 
+                await using var memoryStream = new MemoryStream();
                 if (Event.CoverImageFile != null && Event.CoverImageFile.Length > 0)
                 {
-                    using (var memoryStream = new MemoryStream())
+                    await Event.CoverImageFile.CopyToAsync(memoryStream);
+                    updateEventDto.CoverImageStreamContent = new RemoteStreamContent(memoryStream)
                     {
-                        await Event.CoverImageFile.CopyToAsync(memoryStream);
-                        input.CoverImageContent = memoryStream.ToArray();
-                    }
+                        ContentType = Event.CoverImageFile.ContentType,
+                        FileName = Event.CoverImageFile.FileName,
+                    };
                 }
                 
-                await _eventAppService.UpdateAsync(Event.Id, input);
-                
+                await _eventAppService.UpdateAsync(Event.Id, updateEventDto);
+                await memoryStream.DisposeAsync();
+
                 return RedirectToPage("./Detail", new { url = Url });
             }
             catch (Exception exception)

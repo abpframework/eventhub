@@ -14,13 +14,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
+using Volo.Abp.Content;
 using Volo.Abp.Users;
 
 namespace EventHub.Web.Pages.Events
 {
     public class NewPageModel : EventHubPageModel
     {
-        [BindProperty] public NewEventViewModel Event { get; set; }
+        [BindProperty] 
+        public NewEventViewModel Event { get; set; }
 
         public List<SelectListItem> Organizations { get; private set; }
         public List<SelectListItem> Countries { get; private set; }
@@ -56,18 +58,22 @@ namespace EventHub.Web.Pages.Events
             {
                 ValidateModel();
 
-                var input = ObjectMapper.Map<NewEventViewModel, CreateEventDto>(Event);
+                var createEventDto = ObjectMapper.Map<NewEventViewModel, CreateEventDto>(Event);
 
+                await using var memoryStream = new MemoryStream();
                 if (Event.CoverImageFile != null && Event.CoverImageFile.Length > 0)
                 {
-                    using (var memoryStream = new MemoryStream())
+                    await Event.CoverImageFile.CopyToAsync(memoryStream);
+
+                    createEventDto.CoverImageStreamContent = new RemoteStreamContent(memoryStream)
                     {
-                        await Event.CoverImageFile.CopyToAsync(memoryStream);
-                        input.CoverImageContent = memoryStream.ToArray();
-                    }
+                        ContentType = Event.CoverImageFile.ContentType,
+                        FileName = Event.CoverImageFile.FileName
+                    };
                 }
 
-                var eventDto = await _eventAppService.CreateAsync(input);
+                var eventDto = await _eventAppService.CreateAsync(createEventDto);
+                await memoryStream.DisposeAsync();
 
                 return RedirectToPage("/Events/Detail", new {url = eventDto.UrlCode});
             }
