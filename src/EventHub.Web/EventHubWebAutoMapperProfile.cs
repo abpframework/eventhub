@@ -13,7 +13,7 @@ namespace EventHub.Web
         {
             CreateMap<NewPageModel.CreateOrganizationViewModel, CreateOrganizationDto>();
             CreateMap<Pages.Events.NewPageModel.NewEventViewModel, CreateEventDto>()
-                .Ignore(x => x.CoverImageContent);
+                .Ignore(x => x.CoverImageStreamContent);
             CreateMap<OrganizationProfileDto, EditOrganizationViewModel>();
             CreateMap<EditOrganizationViewModel, UpdateOrganizationDto>();
             CreateMap<EventDetailDto, EditPageModel.EditEventViewModel>();

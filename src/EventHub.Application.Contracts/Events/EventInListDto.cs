@@ -16,8 +16,6 @@ namespace EventHub.Events
         public DateTime StartTime { get; set; }
 
         public DateTime EndTime { get; set; }
-        
-        public byte[] CoverImageContent { get; set; }
 
         public bool IsOnline { get; set; }
         
