@@ -4,6 +4,7 @@ using EventHub.Events.Registrations;
 using EventHub.Organizations;
 using EventHub.Organizations.Memberships;
 using Microsoft.EntityFrameworkCore;
+using System;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
@@ -59,6 +60,10 @@ namespace EventHub.EntityFrameworkCore
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            //allows to use DateTime with timezone (by default)
+            //See: https://www.npgsql.org/efcore/release-notes/6.0.html#opting-out-of-the-new-timestamp-mapping-logic
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true); 
 
             builder.ConfigurePermissionManagement();
             builder.ConfigureSettingManagement();
