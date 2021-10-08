@@ -66,11 +66,8 @@ namespace EventHub.Web.Pages.Events
                 if (Event.CoverImageFile != null && Event.CoverImageFile.Length > 0)
                 {
                     await Event.CoverImageFile.CopyToAsync(memoryStream);
-                    updateEventDto.CoverImageStreamContent = new RemoteStreamContent(memoryStream)
-                    {
-                        ContentType = Event.CoverImageFile.ContentType,
-                        FileName = Event.CoverImageFile.FileName,
-                    };
+
+                    updateEventDto.CoverImageStreamContent = new RemoteStreamContent(memoryStream, fileName: Event.CoverImageFile.FileName, contentType: Event.CoverImageFile.ContentType);
                 }
                 
                 await _eventAppService.UpdateAsync(Event.Id, updateEventDto);

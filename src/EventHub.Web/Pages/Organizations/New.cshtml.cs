@@ -44,11 +44,7 @@ namespace EventHub.Web.Pages.Organizations
                 {
                     await Organization.ProfilePictureFile.CopyToAsync(memoryStream);
 
-                    createOrganizationDto.ProfilePictureStreamContent = new RemoteStreamContent(memoryStream)
-                    {
-                        ContentType = Organization.ProfilePictureFile.ContentType,
-                        FileName = Organization.ProfilePictureFile.FileName
-                    };
+                    createOrganizationDto.ProfilePictureStreamContent = new RemoteStreamContent(memoryStream, fileName: Organization.ProfilePictureFile.FileName, contentType: Organization.ProfilePictureFile.ContentType);
                 }
 
                 await _organizationAppService.CreateAsync(createOrganizationDto);

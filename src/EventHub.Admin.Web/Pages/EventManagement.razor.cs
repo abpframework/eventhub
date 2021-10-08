@@ -159,11 +159,7 @@ namespace EventHub.Admin.Web.Pages
             await FileEntry.WriteToStreamAsync(stream);
             stream.Seek(0, SeekOrigin.Begin);
 
-            EditingEvent.CoverImageStreamContent = new RemoteStreamContent(stream)
-            {
-                ContentType = FileEntry.Type,
-                FileName = FileEntry.Name
-            };
+            EditingEvent.CoverImageStreamContent = new RemoteStreamContent(stream, fileName: FileEntry.Name, contentType: FileEntry.Type);
 
             void SetCoverImageUrl(string contentType, byte[] content)
             {

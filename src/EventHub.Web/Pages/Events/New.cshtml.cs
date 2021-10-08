@@ -65,11 +65,7 @@ namespace EventHub.Web.Pages.Events
                 {
                     await Event.CoverImageFile.CopyToAsync(memoryStream);
 
-                    createEventDto.CoverImageStreamContent = new RemoteStreamContent(memoryStream)
-                    {
-                        ContentType = Event.CoverImageFile.ContentType,
-                        FileName = Event.CoverImageFile.FileName
-                    };
+                    createEventDto.CoverImageStreamContent = new RemoteStreamContent(memoryStream, fileName: Event.CoverImageFile.FileName, contentType: Event.CoverImageFile.ContentType);
                 }
 
                 var eventDto = await _eventAppService.CreateAsync(createEventDto);
