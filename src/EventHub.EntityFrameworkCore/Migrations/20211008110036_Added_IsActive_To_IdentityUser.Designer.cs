@@ -13,7 +13,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace EventHub.Migrations
 {
     [DbContext(typeof(EventHubDbContext))]
-    [Migration("20211008103457_Added_IsActive_To_IdentityUser")]
+    [Migration("20211008110036_Added_IsActive_To_IdentityUser")]
     partial class Added_IsActive_To_IdentityUser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
