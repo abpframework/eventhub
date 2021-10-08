@@ -5,7 +5,7 @@ using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Payment.PaymentRequests
 {
-    public class PaymentRequest : CreationAuditedAggregateRoot<Guid>
+    public class PaymentRequest : CreationAuditedAggregateRoot<Guid>, ISoftDelete
     {
         [CanBeNull]
         public string CustomerId { get; private set; }
@@ -19,6 +19,8 @@ namespace Payment.PaymentRequests
         public decimal Amount { get; private set; }
 
         public PaymentRequestState State { get; set; }
+
+        public bool IsDeleted { get; set; }
 
         public PaymentRequest(
             Guid id,

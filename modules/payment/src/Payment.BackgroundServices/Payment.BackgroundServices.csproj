@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    
+    <Import Project="..\..\common.props" />
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <RootNamespace>Payment</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Payment.Domain\Payment.Domain.csproj" />
+    </ItemGroup>
+
+</Project>
