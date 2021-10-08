@@ -22,6 +22,11 @@ namespace Payment.PaymentRequests
 
         public bool IsDeleted { get; set; }
 
+        private PaymentRequest()
+        {
+            
+        }
+
         public PaymentRequest(
             Guid id,
             [CanBeNull] string customerId,
