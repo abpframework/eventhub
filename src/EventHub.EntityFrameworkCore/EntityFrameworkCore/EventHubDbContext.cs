@@ -61,10 +61,6 @@ namespace EventHub.EntityFrameworkCore
         {
             base.OnModelCreating(builder);
 
-            //allows to use DateTime with timezone (by default)
-            //See: https://www.npgsql.org/efcore/release-notes/6.0.html#opting-out-of-the-new-timestamp-mapping-logic
-            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true); 
-
             builder.ConfigurePermissionManagement();
             builder.ConfigureSettingManagement();
             builder.ConfigureBackgroundJobs();
