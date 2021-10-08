@@ -288,7 +288,7 @@ namespace EventHub.Migrations
                 table: "AbpUsers",
                 type: "boolean",
                 nullable: false,
-                defaultValue: false);
+                defaultValue: true);
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "CreationTime",
