@@ -122,11 +122,7 @@ namespace EventHub.Admin.Web.Pages
             await FileEntry.WriteToStreamAsync(stream);
             stream.Seek(0, SeekOrigin.Begin);
 
-            EditingOrganization.ProfilePictureStreamContent = new RemoteStreamContent(stream)
-            {
-                ContentType = FileEntry.Type,
-                FileName = FileEntry.Name
-            };
+            EditingOrganization.ProfilePictureStreamContent = new RemoteStreamContent(stream, fileName: FileEntry.Name, contentType: FileEntry.Type);
 
             void SetProfileImageUrl(string contentType, byte[] content)
             {
