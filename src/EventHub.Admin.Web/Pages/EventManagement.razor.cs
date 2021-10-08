@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Components.Web;
 using System.IO;
 using System.Globalization;
 using EventHub.Events;
-using NUglify.Helpers;
 using Volo.Abp;
 using Volo.Abp.Content;
 

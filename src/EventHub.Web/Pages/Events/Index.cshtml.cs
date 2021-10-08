@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Events;
 using Microsoft.AspNetCore.Mvc;
-using NUglify.Helpers;
 
 namespace EventHub.Web.Pages.Events
 {
