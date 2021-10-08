@@ -1,0 +1,17 @@
+﻿@page
+@using Microsoft.Extensions.Localization
+@using Payment.Localization
+@using Payment.Web.Pages.Payment
+@model Payment.Web.Pages.Payment.IndexModel
+@inject IStringLocalizer<PaymentResource> L
+
+@section scripts {
+    <abp-script-bundle name="@typeof(IndexModel).FullName">
+        <abp-script src="/client-proxies/Payment-proxy.js" />
+    </abp-script-bundle>
+}
+
+@{
+}
+<h1>Payment</h1>
+<p>@L["SamplePageMessage"]</p>
