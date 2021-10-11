@@ -47,10 +47,10 @@ namespace EventHub.Web.Pages.Organizations
                     createOrganizationDto.ProfilePictureStreamContent = new RemoteStreamContent(memoryStream, fileName: Organization.ProfilePictureFile.FileName, contentType: Organization.ProfilePictureFile.ContentType);
                 }
 
-                await _organizationAppService.CreateAsync(createOrganizationDto);
+                var organization = await _organizationAppService.CreateAsync(createOrganizationDto);
                 await memoryStream.DisposeAsync();
 
-                return RedirectToPage("./Profile", new {name = Organization.Name});
+                return RedirectToPage("./Profile", new {name = organization.Name});
             }
             catch (Exception exception)
             {

@@ -53,9 +53,8 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    <div class="form-label-group">
-                                         <textarea rows="3" type="text" id="inputDescription" asp-for="Event.Description" class="form-control" placeholder="Description"></textarea>
-                                        <label for="inputDescription">Description</label>
+                                    <div class="form-label-group form-floating">
+                                        <textarea rows="5" type="text" id="inputDescription" asp-for="Event.Description" class="form-control" placeholder="Description"></textarea>
                                         <span asp-validation-for="Event.Description" class="text-danger"></span>
                                     </div>
                                 </div>

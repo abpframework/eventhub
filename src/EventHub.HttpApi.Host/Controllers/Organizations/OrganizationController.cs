@@ -28,9 +28,9 @@ namespace EventHub.Controllers.Organizations
         }
 
         [HttpPost]
-        public async Task CreateAsync([FromForm] CreateOrganizationDto input)
+        public async Task<OrganizationDto> CreateAsync([FromForm] CreateOrganizationDto input)
         {
-            await _organizationAppService.CreateAsync(input);
+            return await _organizationAppService.CreateAsync(input);
         }
 
         [HttpGet]

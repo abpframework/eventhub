@@ -59,7 +59,7 @@
                                 @if (Model.IsOrganizationOwner)
                                 {
                                     <a href="/organization/edit/@Model.Organization.Name" class="btn btn-primary mt-4 text-white">
-                                        <i class="far fa-edit"></i> edit
+                                        <i class="far fa-edit"></i> Edit
                                     </a>
                                 }
                                 @await Component.InvokeAsync(typeof(JoinAreaViewComponent), new {organizationId = Model.Organization.Id})
