@@ -21,7 +21,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="detail-image">
-                    <img class="detail-img" src="@(UrlOptions.Value.ApiInternal.EnsureEndsWith('/') + $"api/eventhub/organization/profile-picture/{Model.Organization.Id}")" alt="@Model.Organization.Name">
+                    <img class="detail-img" src="@(UrlOptions.Value.Api.EnsureEndsWith('/') + $"api/eventhub/organization/profile-picture/{Model.Organization.Id}")" alt="@Model.Organization.Name">
                 </div>
             </div>
 

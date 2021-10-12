@@ -29,7 +29,7 @@
                                     <div class="row">
                                         <div class="col-4">
                                             <div class="image-area">
-                                                <img id="imageResult" src="@(UrlOptions.Value.ApiInternal.EnsureEndsWith('/') + $"api/eventhub/organization/profile-picture/{Model.Organization.Id}")" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
+                                                <img id="imageResult" src="@(UrlOptions.Value.Api.EnsureEndsWith('/') + $"api/eventhub/organization/profile-picture/{Model.Organization.Id}")" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
                                             </div>
                                         </div>
                                 
