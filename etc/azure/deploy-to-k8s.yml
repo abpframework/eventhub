@@ -7,6 +7,10 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    useGlobalJson: true
 - task: PowerShell@2
   displayName: Build docker images
   inputs:
