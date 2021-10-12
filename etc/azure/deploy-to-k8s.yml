@@ -6,8 +6,8 @@ trigger: none
 pool:
   vmImage: 'ubuntu-latest'
 
-
 steps:
+# TODO: Once similar UseDotNet@2 task is set in Azure configuration it should be removed.
 - task: UseDotNet@2
   displayName: 'Use .NET sdk'
   inputs:
