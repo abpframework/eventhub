@@ -40,8 +40,6 @@
     $('#SearchButton').on('click', '', function () {
         var language = $('#LanguageSelect').find(":selected").val();
         var countryId = $('#CountrySelect').find(":selected").val();
-        console.log(language)
-        console.log(countryId)
         var location = "/Events?"
 
         if (minDate.length > 0 && !isNullOrEmpty(minDate)) {
