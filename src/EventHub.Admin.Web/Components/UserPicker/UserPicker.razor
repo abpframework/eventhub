@@ -3,7 +3,7 @@
 @inject IUserAppService UserAppService
 
 <Modal @ref="@UserPickerModal" Closing="@ClosingUserPickerModal">
-    <ModalContent Centered="true">
+    <ModalContent Centered="true" size="@ModalSize.Large">
         <ModalHeader>
             <ModalTitle>@L["AddUser"]</ModalTitle>
             <CloseButton Clicked="CloseUserPickerModalAsync" />
@@ -23,8 +23,7 @@
                       ReadData="OnDataGridReadAsync"
                       TotalItems="TotalCount"
                       ShowPager="true"
-                      PageSize="PageSize"
-                      Responsive="true">
+                      PageSize="PageSize">
                 <DataGridColumns>
                     <DataGridColumn Sortable="false" TItem="UserDto" Field="@nameof(UserDto.Id)">
                         <CaptionTemplate>
