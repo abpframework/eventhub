@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using EventHub.Admin.Events;
-using EventHub.Events;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Content;
-using Volo.Abp.VirtualFileSystem;
 
 namespace EventHub.Admin.Controllers.Events
 {
@@ -21,12 +19,10 @@ namespace EventHub.Admin.Controllers.Events
     public class EventController : AbpController, IEventAppService
     {
         private readonly IEventAppService _eventAppService;
-        private readonly IVirtualFileProvider _virtualFileProvider;
         
-        public EventController(IEventAppService eventAppService, IVirtualFileProvider virtualFileProvider)
+        public EventController(IEventAppService eventAppService)
         {
             _eventAppService = eventAppService;
-            _virtualFileProvider = virtualFileProvider;
         }
 
         [HttpGet("{id}")]

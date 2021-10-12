@@ -1,15 +1,12 @@
 using System;
-using System.IO;
 using System.Threading.Tasks;
 using EventHub.Admin.Organizations;
-using EventHub.Organizations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Content;
-using Volo.Abp.VirtualFileSystem;
 
 namespace EventHub.Admin.Controllers.Organizations
 {
@@ -21,12 +18,10 @@ namespace EventHub.Admin.Controllers.Organizations
     public class OrganizationController : AbpController, IOrganizationAppService
     {
         private readonly IOrganizationAppService _organizationAppService;
-        private readonly IVirtualFileProvider _virtualFileProvider;
         
-        public OrganizationController(IOrganizationAppService organizationAppService, IVirtualFileProvider virtualFileProvider)
+        public OrganizationController(IOrganizationAppService organizationAppService)
         {
             _organizationAppService = organizationAppService;
-            _virtualFileProvider = virtualFileProvider;
         }
 
         [HttpGet]
