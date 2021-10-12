@@ -108,7 +108,7 @@ p {
     }
 
     .navbar-expand-lg .navbar-nav .active .nav-link {
-        background-image: url(../../../../assets/underline.svg);
+        background-image: url(/assets/underline.svg);
         background-repeat: no-repeat;
         background-size: inherit;
         background-position: center 28px;
@@ -421,7 +421,7 @@ p {
 .form-select {
     background-color: #EFEFF4;
     border: 1px solid #EFEFF4;
-    background-image: url("../../../../assets/select-arrow.svg");
+    background-image: url("/assets/select-arrow.svg");
     background-position: right 20px center;
     background-repeat: no-repeat;
     background-size: 10px;
@@ -456,7 +456,7 @@ p {
     border: 0;
     width: 6px;
     height: 4px;
-    background: url(../../../../assets/dropdown-arrow.svg) center center no-repeat;
+    background: url(/assets/dropdown-arrow.svg) center center no-repeat;
     background-size: contain;
     top: 2px;
     position: relative;
@@ -595,13 +595,13 @@ footer .footer-links a:hover {
 .inner-banner {
     text-align: center;
     height: 250px;
-    background: url(../../../../assets/inner-banner.png) center center no-repeat;
+    background: url(/assets/inner-banner.png) center center no-repeat;
     background-size: cover;
     margin-bottom: 30px;
 }
 
 .inner-banner.inner-banner-2 {
-    background-image: url(../../../../assets/inner-banner-2.png);
+    background-image: url(/assets/inner-banner-2.png);
 }
 
 .inner-banner h1 {
