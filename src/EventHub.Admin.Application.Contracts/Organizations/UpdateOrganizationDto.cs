@@ -16,7 +16,7 @@ namespace EventHub.Admin.Organizations
         public string Description { get; set; }
         
         [CanBeNull]
-        public RemoteStreamContent ProfilePictureStreamContent { get; set; }
+        public IRemoteStreamContent ProfilePictureStreamContent { get; set; }
 
         [CanBeNull]
         [StringLength(OrganizationConsts.MaxWebsiteLength)]

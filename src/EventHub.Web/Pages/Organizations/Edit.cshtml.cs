@@ -48,7 +48,7 @@ namespace EventHub.Web.Pages.Organizations
                 if (Organization.ProfilePictureFile != null && Organization.ProfilePictureFile.Length > 0)
                 {
                     await Organization.ProfilePictureFile.CopyToAsync(memoryStream);
-                    
+                    memoryStream.Position = 0;
                     updateOrganizationDto.ProfilePictureStreamContent = new RemoteStreamContent(memoryStream, fileName: Organization.ProfilePictureFile.FileName, contentType: Organization.ProfilePictureFile.ContentType);
                 }
                 
