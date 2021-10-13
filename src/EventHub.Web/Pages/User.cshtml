@@ -62,17 +62,6 @@
                         </li>
                     </ul>
                 </abp-column>
-                @if (CurrentUser.IsAuthenticated)
-                    {
-                        @if (CurrentUser.Id == Model.User.Id)
-                        {
-                            <abp-column size="_4">
-                                <div class="text-right">
-                                    <a abp-button="Primary" size="Small" href="@Url.Page("/Organizations/New")">@L["CreateAnOrganization"]</a>
-                                </div>
-                            </abp-column>
-                        }
-                    }
             </abp-row>
             <div class="tab-content profile-content py-4">
                 <div id="UpcomingEvents" class="tab-pane fade show active">
@@ -134,7 +123,9 @@
                                                 </h3>
                                             </div>
                                         </div>
-                                        <partial name="~/Pages/Organizations/Components/OrganizationsArea/_organizationListSection.cshtml" model="@Model.Organizations"/>
+                                        <div class="row">
+                                            <partial name="~/Pages/Organizations/Components/OrganizationsArea/_organizationListSection.cshtml" model="@Model.Organizations"/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

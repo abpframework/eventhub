@@ -121,8 +121,7 @@ namespace EventHub.Admin.Web.Pages
             var stream = new MemoryStream();
             await FileEntry.WriteToStreamAsync(stream);
             stream.Seek(0, SeekOrigin.Begin);
-
-            EditingOrganization.ProfilePictureStreamContent = new RemoteStreamContent(stream, fileName: FileEntry.Name, contentType: FileEntry.Type);
+            EditingOrganization.ProfilePictureStreamContent = new RemoteStreamContent(stream);
 
             void SetProfileImageUrl(string contentType, byte[] content)
             {
@@ -135,7 +134,9 @@ namespace EventHub.Admin.Web.Pages
                 }
             }
             
-            SetProfileImageUrl(FileEntry.Type, stream.ToArray());
+            SetProfileImageUrl(EditingOrganization.ProfilePictureStreamContent.ContentType, stream.ToArray());
+
+            await stream.FlushAsync();
             await InvokeAsync(StateHasChanged);
         }
 

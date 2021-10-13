@@ -38,7 +38,7 @@ namespace EventHub.Organizations
         }
 
         [Authorize]
-        public async Task CreateAsync(CreateOrganizationDto input)
+        public async Task<OrganizationDto> CreateAsync(CreateOrganizationDto input)
         {
             var organization = await _organizationManager.CreateAsync(
                 CurrentUser.GetId(),
@@ -60,6 +60,8 @@ namespace EventHub.Organizations
             {
                 await SaveProfilePictureAsync(organization.Id, input.ProfilePictureStreamContent);
             }
+            
+            return ObjectMapper.Map<Organization, OrganizationDto>(organization);
         }
 
         public async Task<PagedResultDto<OrganizationInListDto>> GetListAsync(OrganizationListFilterDto input)

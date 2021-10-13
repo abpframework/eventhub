@@ -159,7 +159,7 @@ namespace EventHub.Admin.Web.Pages
             await FileEntry.WriteToStreamAsync(stream);
             stream.Seek(0, SeekOrigin.Begin);
 
-            EditingEvent.CoverImageStreamContent = new RemoteStreamContent(stream, fileName: FileEntry.Name, contentType: FileEntry.Type);
+            EditingEvent.CoverImageStreamContent = new RemoteStreamContent(stream);
 
             void SetCoverImageUrl(string contentType, byte[] content)
             {
@@ -173,7 +173,9 @@ namespace EventHub.Admin.Web.Pages
                 DisabledCoverImageButton = false;
             }
             
-            SetCoverImageUrl(FileEntry.Type, stream.ToArray());
+            SetCoverImageUrl(EditingEvent.CoverImageStreamContent.ContentType, stream.ToArray());
+            
+            await stream.FlushAsync();
             await InvokeAsync(StateHasChanged);
         }
 

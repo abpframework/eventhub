@@ -7,7 +7,7 @@
 {
     <div class="col-lg-4 col-md-6 organization">
         <div class="card">
-            <div class="event-thumbnail" style="background-image: url(@(UrlOptions.Value.ApiInternal.EnsureEndsWith('/') + $"api/eventhub/organization/profile-picture/{organization.Id}"));" alt="@organization.Name">
+            <div class="event-thumbnail" style="background-image: url(@(UrlOptions.Value.Api.EnsureEndsWith('/') + $"api/eventhub/organization/profile-picture/{organization.Id}"));" alt="@organization.Name">
             </div>
             <div class="card-body">
                 <div class="event-container">
