@@ -1,7 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Volo.Abp;
-using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.Identity;
 
@@ -9,9 +7,9 @@ namespace EventHub.Events.Registrations
 {
     public class EventRegistrationManager : DomainService
     {
-        private readonly IRepository<EventRegistration, Guid> _eventRegistrationRepository;
+        private readonly IEventRegistrationRepository _eventRegistrationRepository;
 
-        public EventRegistrationManager(IRepository<EventRegistration, Guid> eventRegistrationRepository)
+        public EventRegistrationManager(IEventRegistrationRepository eventRegistrationRepository)
         {
             _eventRegistrationRepository = eventRegistrationRepository;
         }
@@ -30,7 +28,7 @@ namespace EventHub.Events.Registrations
                 return;
             }
             
-            var registrationCount = await _eventRegistrationRepository.CountAsync(x => x.EventId == @event.Id);
+            var registrationCount = await _eventRegistrationRepository.GetCountAsync(@event.Id);
 
             if (@event.Capacity != null &&  registrationCount >= @event.Capacity)
             {
@@ -66,7 +64,7 @@ namespace EventHub.Events.Registrations
             IdentityUser user)
         {
             return await _eventRegistrationRepository
-                .AnyAsync(x => x.EventId == @event.Id && x.UserId == user.Id);
+                .ExistsAsync(@event.Id, user.Id);
         }
 
         public bool IsPastEvent(Event @event)

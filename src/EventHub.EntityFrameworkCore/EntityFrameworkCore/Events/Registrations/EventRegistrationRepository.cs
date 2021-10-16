@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity;
@@ -56,6 +57,12 @@ namespace EventHub.EntityFrameworkCore.Events.Registrations
                 .PageBy(skipCount, maxResultCount);
 
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public async Task<bool> ExistsAsync(Guid eventId, Guid userId)
+        {
+            var dbSet = await GetDbSetAsync();
+            return await dbSet.AnyAsync(x => x.EventId == eventId && x.UserId == userId);
         }
     }
 }
