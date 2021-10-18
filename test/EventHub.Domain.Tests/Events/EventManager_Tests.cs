@@ -9,14 +9,14 @@ using Xunit;
 
 namespace EventHub.Events
 {
-    public class EventManagerTests : EventHubDomainTestBase
+    public class EventManager_Tests : EventHubDomainTestBase
     {
         private readonly EventHubTestData _testData;
         private readonly EventManager _eventManager;
         private readonly IRepository<Organization, Guid> _organizationRepository;
         private readonly IRepository<Event, Guid> _eventRepository;
 
-        public EventManagerTests()
+        public EventManager_Tests()
         {
             _testData = GetRequiredService<EventHubTestData>();
             _eventManager = GetRequiredService<EventManager>();
