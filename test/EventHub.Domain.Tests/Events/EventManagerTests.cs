@@ -49,18 +49,21 @@ namespace EventHub.Events
         [Fact]
         public async Task Should_Update_The_Event_Capacity()
         {
+            const int newCapacity = 42;
+
             await WithUnitOfWorkAsync(async () =>
             {
-                var @event = await _eventRepository.GetAsync(_testData.AbpMicroservicesFutureEventId);
-                var newCapacity = @event.Capacity.HasValue ? @event.Capacity.Value + 1 : 42;
-
+                var @event = await _eventRepository.GetAsync(
+                    _testData.AbpMicroservicesFutureEventId);
                 await _eventManager.SetCapacityAsync(
                     @event,
                     newCapacity
                 );
-                
-                @event.Capacity.ShouldBe(newCapacity);
             });
+            
+            var @event = await _eventRepository.GetAsync(
+                _testData.AbpMicroservicesFutureEventId);
+            @event.Capacity.ShouldBe(newCapacity);
         }
         
         [Fact]
