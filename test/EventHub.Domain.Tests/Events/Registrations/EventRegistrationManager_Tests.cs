@@ -7,13 +7,13 @@ using Xunit;
 
 namespace EventHub.Events.Registrations
 {
-    public class EventRegistrationManagerTests : EventHubDomainTestBase
+    public class EventRegistrationManager_Tests : EventHubDomainTestBase
     {
         private readonly EventRegistrationManager _eventRegistrationManager;
         private readonly IRepository<EventRegistration, Guid> _eventRegistrationRepository;
         private readonly EventHubTestData _testData;
 
-        public EventRegistrationManagerTests()
+        public EventRegistrationManager_Tests()
         {
             _eventRegistrationManager = GetRequiredService<EventRegistrationManager>();
             _eventRegistrationRepository = GetRequiredService<IRepository<EventRegistration, Guid>>();
