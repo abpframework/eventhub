@@ -1,8 +1,35 @@
 ﻿@page
 @using Payment.Web.Pages.Payment
+@using Payment.PaymentRequests
 @inherits Payment.Web.Pages.PaymentPageBase
 @model Payment.Web.Pages.Payment.CheckoutCallbackModel
 @{
-	PageLayout.Content.Title = L["Redirecting"];
+	PageLayout.Content.Title = L["PaymentResult"] + L["Enum:PaymentRequestState:" + Model.PaymentRequest.State];
 }
-<p>@L["Redirecting"]</p>
+
+<abp-card>
+	<abp-card-header>
+		<h2>@L["PaymentResult"]</h2>
+	</abp-card-header>
+
+	<abp-card-body>
+
+		@if (Model.PaymentRequest.State == PaymentRequestState.Completed)
+		{
+			<abp-alert alert-type="Success" dismissible="false">
+				<h1><i class="bi-check-circle-fill"></i></h1>
+				@L["YourPaymentCompletedSuccessfully"]
+			</abp-alert>
+		}
+		else
+		{
+			<abp-alert alert-type="Danger" dismissible="false">
+				<h1><i class="bi-check-circle-fill"></i></h1>
+				@L["YourPaymentFailed"]
+			</abp-alert>
+
+			<abp-button text="@L["GoBack"]"/>
+		}
+
+	</abp-card-body>
+</abp-card>

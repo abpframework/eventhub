@@ -9,5 +9,9 @@ namespace Payment.PaymentRequests
         Task<PaymentRequestDto> GetAsync(Guid id);
 
         Task<PaymentRequestDto> CreateAsync(PaymentRequestCreationDto input);
+
+        Task<StartPaymentResultDto> StartPaymentAsync(StartPaymentDto input);
+
+        Task<PaymentRequestDto> CompleteAsync(string token);
     }
 }

@@ -1,7 +1,9 @@
 {
   "culture": "en",
   "texts": {
-    "MyAccount":  "My account",
-    "SamplePageMessage": "A sample page for the Payment module"
+    "MyAccount": "My account",
+    "SamplePageMessage": "A sample page for the Payment module",
+    "YourPaymentCompletedSuccessfully": "Your payment has been completed successfully!",
+    "YourPaymentFailed": "Your payment has been failed unfortunetely!"
   }
 }
