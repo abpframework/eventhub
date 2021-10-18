@@ -18,5 +18,10 @@ namespace Payment.Web.PaymentRequest
         {
             return new Uri(urlOptions.Applications["MVC"].RootUrl.EnsureEndsWith('/') + "Payment/Checkout?paymentRequestId=" + paymentRequestId);
         }
+
+        public Uri BuildReturnUrl(Guid paymentRequestId)
+        {
+            return new Uri(urlOptions.Applications["MVC"].RootUrl.EnsureEndsWith('/') + "Payment/CheckoutCallback?paymentRequestId=" + paymentRequestId);
+        }
     }
 }

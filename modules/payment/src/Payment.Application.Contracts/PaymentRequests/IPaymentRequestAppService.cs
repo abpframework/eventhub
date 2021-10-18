@@ -7,7 +7,7 @@ namespace Payment.PaymentRequests
     public interface IPaymentRequestAppService : IApplicationService
     {
         Task<PaymentRequestDto> GetAsync(Guid id);
-        
+
         Task<PaymentRequestDto> CreateAsync(PaymentRequestCreationDto input);
     }
 }

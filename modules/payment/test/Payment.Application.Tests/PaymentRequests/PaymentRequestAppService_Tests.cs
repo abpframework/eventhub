@@ -21,12 +21,12 @@ namespace Payment.PaymentRequests
                 new PaymentRequestCreationDto
                 {
                     ProductName = "My product 1",
-                    Amount = 99.99m
+                    Price = 99.99m
                 }
             );
             
             result.Id.ShouldNotBe(Guid.Empty);
-            result.Amount.ShouldBe(99.99m);
+            result.Price.ShouldBe(99.99m);
             result.ProductName.ShouldBe("My product 1");
         }
     }

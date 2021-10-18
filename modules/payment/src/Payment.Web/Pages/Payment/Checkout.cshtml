@@ -1,9 +1,7 @@
 ﻿@page
-@using Microsoft.Extensions.Localization
-@using Payment.Localization
 @using Payment.Web.Pages.Payment
+@inherits Payment.Web.Pages.PaymentPageBase
 @model Payment.Web.Pages.Payment.CheckoutPageModel
-@inject IStringLocalizer<PaymentResource> L
 
 @section scripts {
     <abp-script-bundle name="@typeof(CheckoutPageModel).FullName">
@@ -20,7 +18,7 @@
     <abp-card-body>
         <ul>
             <li>Product name: @Model.PaymentRequest.ProductName</li>
-            <li>Amount: @Model.PaymentRequest.Amount</li>
+            <li>Amount: @Model.PaymentRequest.Price</li>
         </ul>
     </abp-card-body>
 </abp-card>

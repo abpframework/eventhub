@@ -9,14 +9,16 @@ namespace Payment.PaymentRequests
     {
         [CanBeNull]
         public string CustomerId { get; private set; }
-        
+
         [CanBeNull]
         public string ProductId { get; private set; }
-        
+
         [NotNull]
         public string ProductName { get; private set; }
-        
-        public decimal Amount { get; private set; }
+
+        public decimal Price { get; private set; }
+
+        public string Currency { get; private set; }
 
         public PaymentRequestState State { get; set; }
 
@@ -24,7 +26,7 @@ namespace Payment.PaymentRequests
 
         private PaymentRequest()
         {
-            
+
         }
 
         public PaymentRequest(
@@ -32,13 +34,15 @@ namespace Payment.PaymentRequests
             [CanBeNull] string customerId,
             [CanBeNull] string productId,
             [NotNull] string productName,
-            decimal amount) 
+            decimal price,
+            [NotNull] string currency)
             : base(id)
         {
             CustomerId = customerId;
             ProductId = productId;
             ProductName = Check.NotNullOrWhiteSpace(productName, nameof(productName));
-            Amount = amount;
+            Price = price;
+            Currency = currency;
         }
     }
 }

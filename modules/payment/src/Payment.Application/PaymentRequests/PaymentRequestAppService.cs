@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Options;
+using System;
 using System.Threading.Tasks;
 
 namespace Payment.PaymentRequests
@@ -6,16 +7,20 @@ namespace Payment.PaymentRequests
     public class PaymentRequestAppService : PaymentAppService, IPaymentRequestAppService
     {
         private readonly IPaymentRequestRepository _paymentRequestRepository;
+        private readonly PaymentOptions _paymentOptions;
 
-        public PaymentRequestAppService(IPaymentRequestRepository paymentRequestRepository)
+        public PaymentRequestAppService(
+            IPaymentRequestRepository paymentRequestRepository,
+            IOptions<PaymentOptions> paymentOptions)
         {
             _paymentRequestRepository = paymentRequestRepository;
+            _paymentOptions = paymentOptions.Value;
         }
 
         public async Task<PaymentRequestDto> GetAsync(Guid id)
         {
             var paymentRequest = await _paymentRequestRepository.GetAsync(id);
-            
+         
             return ObjectMapper.Map<PaymentRequest, PaymentRequestDto>(paymentRequest);
         }
 
@@ -26,7 +31,8 @@ namespace Payment.PaymentRequests
                 input.CustomerId,
                 input.ProductId,
                 input.ProductName,
-                input.Amount
+                input.Price,
+                input.Currency ?? _paymentOptions.DefaultCurrency
             );
 
             await _paymentRequestRepository.InsertAsync(paymentRequest);
