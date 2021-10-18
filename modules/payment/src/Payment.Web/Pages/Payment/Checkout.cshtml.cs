@@ -27,6 +27,11 @@ namespace Payment.Web.Pages.Payment
         public async Task OnPostAsync()
         {
             PaymentRequest = await _paymentRequestAppService.GetAsync(PaymentRequestId);
+
+            // TODO: Redirect from here.
+
+
+
         }
     }
 }
