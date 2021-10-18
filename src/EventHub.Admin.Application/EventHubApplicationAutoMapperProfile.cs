@@ -22,13 +22,11 @@ namespace EventHub.Admin
 
             CreateMap<Organization, OrganizationProfileDto>()
                 .Ignore(x => x.OwnerUserName)
-                .Ignore(x => x.OwnerEmail)
-                .Ignore(x => x.ProfilePictureContent);
+                .Ignore(x => x.OwnerEmail);
 
             CreateMap<OrganizationMemberWithDetails, OrganizationMemberDto>();
 
-            CreateMap<Event, EventDetailDto>()
-                .Ignore(x => x.CoverImageContent);
+            CreateMap<Event, EventDetailDto>();
 
             CreateMap<Country, CountryLookupDto>();
 

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using EventHub.Admin.Events;
+using EventHub.Admin.Organizations;
 using EventHub.Admin.Utils;
 using EventHub.EntityFrameworkCore;
 using EventHub.Web;
@@ -17,6 +19,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using Volo.Abp;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
@@ -59,6 +62,16 @@ namespace EventHub.Admin
             ConfigureCookies(context);
             ConfigureSwaggerServices(context, configuration);
             ConfigureBackgroundJobs();
+            ConfigureAutoApiControllers();
+        }
+        
+        private void ConfigureAutoApiControllers()
+        {
+            Configure<AbpAspNetCoreMvcOptions>(options =>
+            {
+                options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(UpdateOrganizationDto));
+                options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(UpdateEventDto));
+            });
         }
 
         private void ConfigureBackgroundJobs()
@@ -78,9 +91,9 @@ namespace EventHub.Admin
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
 
-            if (hostingEnvironment.IsDevelopment())
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                Configure<AbpVirtualFileSystemOptions>(options =>
+                if (hostingEnvironment.IsDevelopment())
                 {
                     options.FileSets.ReplaceEmbeddedByPhysical<EventHubDomainSharedModule>(
                         Path.Combine(hostingEnvironment.ContentRootPath,
@@ -94,8 +107,8 @@ namespace EventHub.Admin
                     options.FileSets.ReplaceEmbeddedByPhysical<EventHubAdminApplicationModule>(
                         Path.Combine(hostingEnvironment.ContentRootPath,
                             $"..{Path.DirectorySeparatorChar}EventHub.Admin.Application"));
-                });
-            }
+                }
+            });
         }
 
         private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)

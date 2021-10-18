@@ -9,6 +9,7 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.PostgreSql;
+using System;
 
 namespace EventHub.EntityFrameworkCore
 {
@@ -28,6 +29,10 @@ namespace EventHub.EntityFrameworkCore
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             EventHubEfCoreEntityExtensionMappings.Configure();
+
+            //allows to use DateTime with timezone (by default)
+            //See: https://www.npgsql.org/efcore/release-notes/6.0.html#opting-out-of-the-new-timestamp-mapping-logic
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)

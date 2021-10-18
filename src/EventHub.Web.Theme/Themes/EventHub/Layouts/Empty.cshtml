@@ -57,7 +57,9 @@
     <div class="@containerClass">
         @(await Component.InvokeAsync<PageAlertsViewComponent>())
         @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.First, StandardLayouts.Empty)
-        @RenderBody()
+        <div class="render-wrapper">
+            @RenderBody()
+        </div>
         @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.Last, StandardLayouts.Empty)
     </div>
 

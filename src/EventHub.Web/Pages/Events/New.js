@@ -13,9 +13,13 @@ $(function () {
     $('#Event_IsOnline').on('change', '', function () {
         var isOnline = $("#Event_IsOnline option:selected").val()
         if (isOnline === "True") {
+            $("#Event_CountryId").attr("required", false);
+            $("#inputCity").attr("required", false);
             $(".event-link-group").show();
             $(".event-location-group").hide();
         } else {
+            $("#Event_CountryId").attr("required", true);
+            $("#inputCity").attr("required", true);
             $(".event-link-group").hide();
             $(".event-location-group").show();
         }

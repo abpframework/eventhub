@@ -75,7 +75,9 @@
 @(await Component.InvokeAsync<MainNavbarViewComponent>())
 @(await Component.InvokeAsync<PageAlertsViewComponent>())
 @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.First, StandardLayouts.Application)
-@RenderBody()
+<div class="render-wrapper">
+    @RenderBody()
+</div>
 @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.Last, StandardLayouts.Application)
 @(await Component.InvokeAsync<FooterViewComponent>())
 <abp-script-bundle name="@EventHubThemeBundles.Scripts.Global"/>

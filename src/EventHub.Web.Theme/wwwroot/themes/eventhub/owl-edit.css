@@ -44,7 +44,7 @@
     height: 40px;
     top:0;
     left: 0;
-    background-image: url(../../../../assets/slider-right.svg);
+    background-image: url(/assets/slider-right.svg);
     background-position: center;
     background-repeat: no-repeat; 
 }
@@ -56,7 +56,7 @@
     height: 40px;
     top:0;
     left: 0;
-    background-image: url(../../../../assets/slider-left.svg);
+    background-image: url(/assets/slider-left.svg);
     background-position: center;
     background-repeat: no-repeat; 
 }
@@ -79,7 +79,7 @@
     height: 15px;
     top:0;
     left: 0;
-    background-image: url(../../../../assets/owl-2-right.svg);
+    background-image: url(/assets/owl-2-right.svg);
     background-position: center;
     background-repeat: no-repeat; 
 }
@@ -91,7 +91,7 @@
     height: 15px;
     top:0;
     left: 0;
-    background-image: url(../../../../assets/owl-2-left.svg);
+    background-image: url(/assets/owl-2-left.svg);
     background-position: center;
     background-repeat: no-repeat; 
 }

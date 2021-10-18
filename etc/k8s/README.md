@@ -6,7 +6,7 @@
 
 ### How to run?
 
-* Add entries to the hosts file (in Windows: `C:\Windows\System32\drivers\etc\hosts`):
+* Add entries to the hosts file (in Windows: `C:\Windows\System32\drivers\etc\hosts`, in MacOs: `/etc/hosts`):
 
 ````
 127.0.0.1 eh-st-account
@@ -17,6 +17,7 @@
 ````
 
 * Run `build-images.ps1` in the `scripts` directory.
+* Run `minikube-load-images.ps1` in the `scripts` directory(only for `minikube`). 
 * Run `deploy-staging.ps1` in the `helm-chart` directory. It is deployed with the `eventhub` namespace.
 * *You may wait ~30 seconds on first run for preparing the database*.
 * Browse https://eh-st-www and https://eh-st-admin

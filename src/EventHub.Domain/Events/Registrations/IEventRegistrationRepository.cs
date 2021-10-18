@@ -17,5 +17,7 @@ namespace EventHub.Events.Registrations
             int maxResultCount = int.MaxValue, 
             CancellationToken cancellationToken = default
         );
+
+        Task<bool> ExistsAsync(Guid eventId, Guid userId);
     }
 }

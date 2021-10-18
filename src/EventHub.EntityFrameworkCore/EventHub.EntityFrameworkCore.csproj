@@ -1,26 +1,27 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>EventHub</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0-rc.1.*" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.BlobStoring.Database.EntityFrameworkCore" Version="4.4.0-rc.1" />
+    <PackageReference Include="Volo.Abp.BlobStoring.Database.EntityFrameworkCore" Version="5.0.0-beta.1" />
     <ProjectReference Include="..\EventHub.Domain\EventHub.Domain.csproj" />
-    <PackageReference Include="Volo.Abp.EntityFrameworkCore.PostgreSql" Version="4.4.0-rc.1" />
-    <PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="4.4.0-rc.1" />
-    <PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" Version="4.4.0-rc.1" />
-    <PackageReference Include="Volo.Abp.Identity.EntityFrameworkCore" Version="4.4.0-rc.1" />
-    <PackageReference Include="Volo.Abp.IdentityServer.EntityFrameworkCore" Version="4.4.0-rc.1" />
-    <PackageReference Include="Volo.Abp.BackgroundJobs.EntityFrameworkCore" Version="4.4.0-rc.1" />
-    <PackageReference Include="Volo.Abp.AuditLogging.EntityFrameworkCore" Version="4.4.0-rc.1" />
+	  <PackageReference Include="Volo.Abp.EntityFrameworkCore.PostgreSql" Version="5.0.0-beta.1" />
+	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.0-rc.*" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="5.0.0-beta.1" />
+    <PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" Version="5.0.0-beta.1" />
+    <PackageReference Include="Volo.Abp.Identity.EntityFrameworkCore" Version="5.0.0-beta.1" />
+    <PackageReference Include="Volo.Abp.IdentityServer.EntityFrameworkCore" Version="5.0.0-beta.1" />
+    <PackageReference Include="Volo.Abp.BackgroundJobs.EntityFrameworkCore" Version="5.0.0-beta.1" />
+    <PackageReference Include="Volo.Abp.AuditLogging.EntityFrameworkCore" Version="5.0.0-beta.1" />
   </ItemGroup>
 
 </Project>

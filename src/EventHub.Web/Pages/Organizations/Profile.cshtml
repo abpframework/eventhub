@@ -1,13 +1,16 @@
 ﻿@page "/organizations/{name}"
 @inject IHtmlLocalizer<EventHubResource> L
 @using EventHub.Localization
+@using EventHub.Web
 @using EventHub.Web.Pages.Events.Components.EventsArea
 @using EventHub.Web.Pages.Organizations.Components.JoinArea
 @using EventHub.Web.Pages.Organizations.Components.MembersArea
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Options
 @using Volo.Abp.Timing
 @model EventHub.Web.Pages.Organizations.ProfilePageModel
 @inject IClock Clock
+@inject IOptions<EventHubUrlOptions> UrlOptions
 
 @section scripts {
     <abp-script src="/Pages/Organizations/Profile.js"/>
@@ -18,14 +21,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="detail-image">
-                    @if (Model.Organization.ProfilePictureContent == null)
-                    {
-                        <img class="detail-img" src="/assets/eh-organization-big.png" alt="@Model.Organization.Name">
-                    }
-                    else
-                    {
-                        <img class="detail-img" src="@($"data:image/png;base64,{Convert.ToBase64String(Model.Organization.ProfilePictureContent)}")" alt="@Model.Organization.Name">
-                    }
+                    <img class="detail-img" src="@(UrlOptions.Value.Api.EnsureEndsWith('/') + $"api/eventhub/organization/profile-picture/{Model.Organization.Id}")" alt="@Model.Organization.Name">
                 </div>
             </div>
 
@@ -63,7 +59,7 @@
                                 @if (Model.IsOrganizationOwner)
                                 {
                                     <a href="/organization/edit/@Model.Organization.Name" class="btn btn-primary mt-4 text-white">
-                                        <i class="far fa-edit"></i> edit
+                                        <i class="far fa-edit"></i> Edit
                                     </a>
                                 }
                                 @await Component.InvokeAsync(typeof(JoinAreaViewComponent), new {organizationId = Model.Organization.Id})

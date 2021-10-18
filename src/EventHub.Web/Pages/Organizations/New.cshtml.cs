@@ -9,13 +9,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
+using Volo.Abp.Content;
 
 namespace EventHub.Web.Pages.Organizations
 {
     [Authorize]
     public class NewPageModel : EventHubPageModel
     {
-        [BindProperty] public CreateOrganizationViewModel Organization { get; set; }
+        [BindProperty] 
+        public CreateOrganizationViewModel Organization { get; set; }
 
         private readonly IOrganizationAppService _organizationAppService;
 
@@ -35,20 +37,21 @@ namespace EventHub.Web.Pages.Organizations
             {
                 ValidateModel();
 
-                var input = ObjectMapper.Map<CreateOrganizationViewModel, CreateOrganizationDto>(Organization);
-
+                var createOrganizationDto = ObjectMapper.Map<CreateOrganizationViewModel, CreateOrganizationDto>(Organization);
+                
+                await using var memoryStream = new MemoryStream();
                 if (Organization.ProfilePictureFile != null && Organization.ProfilePictureFile.Length > 0)
                 {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        await Organization.ProfilePictureFile.CopyToAsync(memoryStream);
-                        input.ProfilePictureContent = memoryStream.ToArray();
-                    }
+                    await Organization.ProfilePictureFile.CopyToAsync(memoryStream);
+                    memoryStream.Position = 0;
+                    
+                    createOrganizationDto.ProfilePictureStreamContent = new RemoteStreamContent(memoryStream, fileName: Organization.ProfilePictureFile.FileName, contentType: Organization.ProfilePictureFile.ContentType);
                 }
 
-                await _organizationAppService.CreateAsync(input);
+                var organization = await _organizationAppService.CreateAsync(createOrganizationDto);
+                await memoryStream.DisposeAsync();
 
-                return RedirectToPage("./Profile", new {name = Organization.Name});
+                return RedirectToPage("./Profile", new {name = organization.Name});
             }
             catch (Exception exception)
             {

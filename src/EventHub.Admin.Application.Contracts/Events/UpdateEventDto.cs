@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using EventHub.Events;
 using JetBrains.Annotations;
+using Volo.Abp.Content;
 
 namespace EventHub.Admin.Events
 {
@@ -24,7 +25,7 @@ namespace EventHub.Admin.Events
         public DateTime EndTime { get; set; }
 
         [CanBeNull]
-        public byte[] CoverImageContent { get; set; }
+        public RemoteStreamContent CoverImageStreamContent { get; set; }
 
         public bool IsOnline { get; set; }
 

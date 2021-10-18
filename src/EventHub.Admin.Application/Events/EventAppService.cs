@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using EventHub.Admin.Permissions;
 using EventHub.Countries;
@@ -9,6 +8,7 @@ using EventHub.Events;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.BlobStoring;
+using Volo.Abp.Content;
 using Volo.Abp.Domain.Repositories;
 
 namespace EventHub.Admin.Events
@@ -36,9 +36,7 @@ namespace EventHub.Admin.Events
         public async Task<EventDetailDto> GetAsync(Guid id)
         {
             var @event = await _eventRepository.GetAsync(id);
-
             var eventDetailDto = ObjectMapper.Map<Event, EventDetailDto>(@event);
-            eventDetailDto.CoverImageContent = await GetCoverImageAsync(id);
 
             return eventDetailDto;
         }
@@ -69,16 +67,30 @@ namespace EventHub.Admin.Events
             @event.SetTime(input.StartTime, @event.EndTime);
             await _eventManager.SetCapacityAsync(@event, input.Capacity);
 
-            await SetCoverImageAsync(blobName: id.ToString(), input.CoverImageContent);
+            if (input.CoverImageStreamContent != null && input.CoverImageStreamContent.ContentLength > 0)
+            {
+                await SetCoverImageAsync(blobName: id.ToString(), input.CoverImageStreamContent);
+            }
+            else
+            {
+                await DeleteCoverImageAsync(blobName: id.ToString());
+            }
 
             await _eventRepository.UpdateAsync(@event);
         }
 
-        public async Task<byte[]> GetCoverImageAsync(Guid id)
+        [AllowAnonymous]
+        public async Task<IRemoteStreamContent> GetCoverImageAsync(Guid id)
         {
             var blobName = id.ToString();
+            var coverImageStream = await _eventBlobContainer.GetOrNullAsync(blobName);
 
-            return await _eventBlobContainer.GetAllBytesOrNullAsync(blobName);
+            if (coverImageStream == null)
+            {
+                return null;
+            }
+
+            return new RemoteStreamContent(coverImageStream);
         }
 
         public async Task<List<CountryLookupDto>> GetCountriesLookupAsync()
@@ -94,9 +106,14 @@ namespace EventHub.Admin.Events
             return ObjectMapper.Map<List<Country>, List<CountryLookupDto>>(countries);
         }
 
-        private async Task SetCoverImageAsync(string blobName, byte[] coverImageContent, bool overrideExisting = true)
+        private async Task SetCoverImageAsync(string blobName, IRemoteStreamContent streamContent, bool overrideExisting = true)
         {
-            await _eventBlobContainer.SaveAsync(blobName, coverImageContent, overrideExisting);
+            await _eventBlobContainer.SaveAsync(blobName, streamContent.GetStream(), overrideExisting);
+        }
+        
+        private async Task DeleteCoverImageAsync(string blobName)
+        {
+            await _eventBlobContainer.DeleteAsync(blobName);
         }
     }
 }
