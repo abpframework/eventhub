@@ -9,13 +9,15 @@ using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Payment.Permissions;
+using Volo.Abp.AspNetCore.Mvc;
 
 namespace Payment.Web
 {
     [DependsOn(
         typeof(PaymentApplicationContractsModule),
         typeof(AbpAspNetCoreMvcUiThemeSharedModule),
-        typeof(AbpAutoMapperModule)
+        typeof(AbpAutoMapperModule),
+        typeof(AbpAspNetCoreMvcModule)
         )]
     public class PaymentWebModule : AbpModule
     {
