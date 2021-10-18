@@ -10,14 +10,14 @@ using Xunit;
 
 namespace EventHub.Events.Registrations
 {
-    public class EventRegistrationAppServiceTests : EventHubApplicationTestBase
+    public class EventRegistrationAppService_Tests : EventHubApplicationTestBase
     {
         private readonly IEventRegistrationAppService _eventRegistrationAppService;
         private readonly IRepository<EventRegistration, Guid> _eventRegistrationRepository;
         private readonly EventHubTestData _testData;
         private ICurrentUser _currentUser;
 
-        public EventRegistrationAppServiceTests()
+        public EventRegistrationAppService_Tests()
         {
             _eventRegistrationAppService = GetRequiredService<IEventRegistrationAppService>();
             _eventRegistrationRepository = GetRequiredService<IRepository<EventRegistration, Guid>>();
