@@ -19,7 +19,7 @@
 			<ul>
 				<li>@L["ProductName"]: @Model.PaymentRequest.ProductName</li>
 				<li>@L["Price"]: @Model.PaymentRequest.Price @Model.PaymentRequest.Currency</li>
-				<li>@L["State"]: @Model.PaymentRequest.State</li>
+				<li>@L["State"]: @L["Enum:PaymentRequestState:" + Model.PaymentRequest.State]</li>
 			</ul>
 		</abp-card-body>
 		<abp-card-footer>

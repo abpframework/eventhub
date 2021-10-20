@@ -2,15 +2,20 @@
 {
   "culture": "en",
   "texts": {
+    "CompletePayment": "Complete the Payment",
+    "Enum:PaymentRequestState:Completed": "Completed",
+    "Enum:PaymentRequestState:Failed": "Failed",
+    "Enum:PaymentRequestState:Waiting": "Waiting",
+    "GoBack": "Go Back",
     "MyAccount": "My account",
-    "SamplePageMessage": "A sample page for the Payment module",
-    "YourPaymentCompletedSuccessfully": "Your payment has been completed successfully!",
-    "YourPaymentFailed": "Your payment has been failed unfortunetely!",
     "PaymentRequestIsNotWaiting": "The state isn't 'Waiting', so you can't pay this Payment Request at this time.",
-    "ProductName": "Product Name",
+    "PaymentResult": "Payment Result",
     "Price": "Price",
-    "Status": "State",
     "ProductInformation": "Product Information",
-    "CompletePayment": "Complete the Payment"
+    "ProductName": "Product Name",
+    "SamplePageMessage": "A sample page for the Payment module",
+    "Status": "State",
+    "YourPaymentCompletedSuccessfully": "Your payment has been completed successfully!",
+    "YourPaymentFailed": "Your payment has been failed unfortunetely!"
   }
 }
