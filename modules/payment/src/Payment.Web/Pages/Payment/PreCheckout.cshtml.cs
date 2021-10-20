@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Payment.Web.Pages.Payment
 {
-    public class CheckoutPageModel : PaymentPageModel
+    public class PreCheckoutPageModel : PaymentPageModel
     {
         [BindProperty(SupportsGet = true)]
         public Guid PaymentRequestId { get; set; }
@@ -16,7 +16,7 @@ namespace Payment.Web.Pages.Payment
         private readonly IPaymentRequestAppService _paymentRequestAppService;
         private readonly IPaymentUrlBuilder _paymentUrlBuilder;
 
-        public CheckoutPageModel(
+        public PreCheckoutPageModel(
             IPaymentRequestAppService paymentRequestAppService,
             IPaymentUrlBuilder paymentUrlBuilder)
         {

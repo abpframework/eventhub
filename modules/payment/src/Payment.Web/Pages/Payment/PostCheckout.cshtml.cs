@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Payment.Web.Pages.Payment
 {
-    public class CheckoutCallbackModel : PaymentPageModel
+    public class PostCheckoutPageModel : PaymentPageModel
     {
         [BindProperty(SupportsGet = true)]
         public string Token { get; set; }
@@ -16,7 +16,7 @@ namespace Payment.Web.Pages.Payment
         private readonly IPaymentRequestAppService _paymentRequestAppService;
         private readonly PaymentWebOptions _paymentWebOptions;
 
-        public CheckoutCallbackModel(
+        public PostCheckoutPageModel(
             IPaymentRequestAppService appService,
             IOptions<PaymentWebOptions> paymentWebOptions)
         {

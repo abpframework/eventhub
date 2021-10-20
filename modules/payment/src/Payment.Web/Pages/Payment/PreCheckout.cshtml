@@ -1,10 +1,10 @@
 ﻿@page
 @using Payment.Web.Pages.Payment
 @inherits Payment.Web.Pages.PaymentPageBase
-@model Payment.Web.Pages.Payment.CheckoutPageModel
+@model Payment.Web.Pages.Payment.PreCheckoutPageModel
 
 @section scripts {
-    <abp-script-bundle name="@typeof(CheckoutPageModel).FullName">
+    <abp-script-bundle name="@typeof(PreCheckoutPageModel).FullName">
         <abp-script src="/client-proxies/Payment-proxy.js" />
     </abp-script-bundle>
 }
