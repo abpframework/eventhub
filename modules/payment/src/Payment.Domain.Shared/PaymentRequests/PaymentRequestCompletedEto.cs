@@ -8,6 +8,7 @@ namespace Payment.PaymentRequests
     public class PaymentRequestCompletedEto : EtoBase, IHasExtraProperties
     {
         public Guid PaymentRequestId { get; set; }
+        
         public ExtraPropertyDictionary ExtraProperties { get; set; }
     }
 }
