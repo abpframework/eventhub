@@ -120,8 +120,14 @@ namespace Payment.PaymentRequests
 
             var paymentRequest = await _paymentRequestRepository.GetAsync(paymentRequestId);
 
-            paymentRequest.State = order.Status == PayPalConsts.OrderStatus.Approved || order.Status == PayPalConsts.OrderStatus.Completed ?
-                 PaymentRequestState.Completed : PaymentRequestState.Failed;
+            if (order.Status == PayPalConsts.OrderStatus.Approved || order.Status == PayPalConsts.OrderStatus.Completed)
+            {
+                paymentRequest.SetAsCompleted();
+            }
+            else
+            {
+                paymentRequest.SetAsFailed(order.Status);
+            }
 
             paymentRequest.ExtraProperties.Add(PayPalConsts.OrderIdPropertyName, order.Id);
 
