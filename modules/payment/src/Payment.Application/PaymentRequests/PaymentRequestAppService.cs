@@ -57,8 +57,6 @@ namespace Payment.PaymentRequests
                 CheckoutPaymentIntent = "CAPTURE",
                 ApplicationContext = new ApplicationContext
                 {
-                    //ReturnUrl = _paymentUrlBuilder.BuildReturnUrl(PaymentRequest.Id).AbsoluteUri,
-                    //CancelUrl = _paymentUrlBuilder.BuildCheckoutUrl(PaymentRequest.Id).AbsoluteUri,
                     ReturnUrl = input.ReturnUrl,
                     CancelUrl = input.CancelUrl,
                 },
