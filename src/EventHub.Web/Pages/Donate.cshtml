@@ -1,0 +1,32 @@
+﻿@page
+@using EventHub.Localization
+@using EventHub.Web.Pages
+@using Microsoft.Extensions.Localization
+
+@model DonateModel
+@inject IStringLocalizer<EventHubResource> L
+
+<main class="static-page container mt-5">
+	<form method="post">
+		<abp-card>
+			<abp-card-header>
+				<abp-card-title>
+					@L["Donation"]
+				</abp-card-title>
+			</abp-card-header>
+
+			<abp-card-body>
+				@L["DonationDescription"]
+
+				<hr />
+
+				<abp-input asp-for="Amount" />
+
+			</abp-card-body>
+
+			<abp-card-footer>
+				<abp-button type="submit" size="Block" button-type="Outline_Primary" text="@L["Donate"]" />
+			</abp-card-footer>
+		</abp-card>
+	</form>
+</main>
