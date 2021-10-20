@@ -40,9 +40,9 @@ namespace Payment.PaymentRequests
             [NotNull] string currency)
             : base(id)
         {
-            CustomerId = customerId;
-            ProductId = productId;
-            ProductName = Check.NotNullOrWhiteSpace(productName, nameof(productName));
+            CustomerId = Check.NotNullOrEmpty(customerId, nameof(customerId), maxLength: PaymentRequestConsts.MaxCustomerIdLength);
+            ProductId = Check.NotNullOrEmpty(productId, nameof(productId), maxLength: PaymentRequestConsts.MaxProductIdLength);
+            ProductName = Check.NotNullOrWhiteSpace(productName, nameof(productName), maxLength: PaymentRequestConsts.MaxProductNameLength);
             Price = price;
             Currency = currency;
         }
