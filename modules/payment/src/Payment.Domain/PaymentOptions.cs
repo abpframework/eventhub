@@ -2,6 +2,6 @@
 {
     public class PaymentOptions
     {
-        public string DefaultCurrency { get; set; } = "USD"
+        public string DefaultCurrency { get; set; } = "USD";
     }
 }
