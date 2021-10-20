@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using JetBrains.Annotations;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
@@ -49,14 +50,37 @@ namespace Payment.PaymentRequests
 
         public virtual void SetAsCompleted()
         {
+            if (State == PaymentRequestState.Completed)
+            {
+                return;
+            }
+
             State = PaymentRequestState.Completed;
             FailReason = null;
+
+            AddDistributedEvent(new PaymentRequestCompletedEto
+            {
+                PaymentRequestId = Id,
+                ExtraProperties = ExtraProperties
+            });
         }
 
         public virtual void SetAsFailed(string failReason)
         {
+            if (State != PaymentRequestState.Failed)
+            {
+                return;
+            }
+
             State = PaymentRequestState.Failed;
             FailReason = failReason;
+
+            AddDistributedEvent(new PaymentRequestFailedEto
+            {
+                PaymentRequestId = Id,
+                FailReason = failReason,
+                ExtraProperties = ExtraProperties
+            });
         }
     }
 }
