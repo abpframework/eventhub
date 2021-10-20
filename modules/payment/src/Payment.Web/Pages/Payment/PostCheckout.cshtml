@@ -7,29 +7,31 @@
 	PageLayout.Content.Title = L["PaymentResult"] + L["Enum:PaymentRequestState:" + Model.PaymentRequest.State];
 }
 
-<abp-card>
-	<abp-card-header>
-		<h2>@L["PaymentResult"]</h2>
-	</abp-card-header>
+<main class="static-page container mt-5">
+	<abp-card class="m-5">
+		<abp-card-header>
+			<h2>@L["PaymentResult"]</h2>
+		</abp-card-header>
 
-	<abp-card-body>
+		<abp-card-body>
 
-		@if (Model.PaymentRequest.State == PaymentRequestState.Completed)
-		{
-			<abp-alert alert-type="Success" dismissible="false">
-				<h1><i class="bi-check-circle-fill"></i></h1>
-				@L["YourPaymentCompletedSuccessfully"]
-			</abp-alert>
-		}
-		else
-		{
-			<abp-alert alert-type="Danger" dismissible="false">
-				<h1><i class="bi-check-circle-fill"></i></h1>
-				@L["YourPaymentFailed"]
-			</abp-alert>
+			@if (Model.PaymentRequest.State == PaymentRequestState.Completed)
+			{
+				<abp-alert alert-type="Success" dismissible="false">
+					<i class="bi-check-circle-fill"></i>
+					@L["YourPaymentCompletedSuccessfully"]
+				</abp-alert>
+			}
+			else
+			{
+				<abp-alert alert-type="Danger" dismissible="false">
+					<h1><i class="bi-check-circle-fill"></i></h1>
+					@L["YourPaymentFailed"]
+				</abp-alert>
 
-			<abp-button text="@L["GoBack"]"/>
-		}
+				<abp-button href="@Model.GoBackLink" text="@L["GoBack"]" />
+			}
 
-	</abp-card-body>
-</abp-card>
+		</abp-card-body>
+	</abp-card>
+</main>

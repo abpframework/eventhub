@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Payment.PaymentRequests;
+using Payment.Web.PaymentRequest;
 using System;
 using System.Threading.Tasks;
 
@@ -13,15 +14,20 @@ namespace Payment.Web.Pages.Payment
 
         public PaymentRequestDto PaymentRequest { get; protected set; }
 
+        public string GoBackLink { get; set; }
+
         private readonly IPaymentRequestAppService _paymentRequestAppService;
         private readonly PaymentWebOptions _paymentWebOptions;
+        private readonly IPaymentUrlBuilder _paymentUrlBuilder;
 
         public PostCheckoutPageModel(
             IPaymentRequestAppService appService,
-            IOptions<PaymentWebOptions> paymentWebOptions)
+            IOptions<PaymentWebOptions> paymentWebOptions,
+            IPaymentUrlBuilder paymentUrlBuilder)
         {
             _paymentRequestAppService = appService;
             _paymentWebOptions = paymentWebOptions.Value;
+            _paymentUrlBuilder = paymentUrlBuilder;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -32,6 +38,8 @@ namespace Payment.Web.Pages.Payment
             }
 
             PaymentRequest = await _paymentRequestAppService.CompleteAsync(Token);
+
+            GoBackLink = _paymentUrlBuilder.BuildReturnUrl(PaymentRequest.Id).AbsoluteUri;
 
             if (PaymentRequest.State == PaymentRequestState.Completed 
                 && !_paymentWebOptions.PaymentSuccessfulCallbackUrl.IsNullOrWhiteSpace())

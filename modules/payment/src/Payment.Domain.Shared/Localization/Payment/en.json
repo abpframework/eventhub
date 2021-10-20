@@ -1,9 +1,16 @@
+
 {
   "culture": "en",
   "texts": {
     "MyAccount": "My account",
     "SamplePageMessage": "A sample page for the Payment module",
     "YourPaymentCompletedSuccessfully": "Your payment has been completed successfully!",
-    "YourPaymentFailed": "Your payment has been failed unfortunetely!"
+    "YourPaymentFailed": "Your payment has been failed unfortunetely!",
+    "PaymentRequestIsNotWaiting": "The state isn't 'Waiting', so you can't pay this Payment Request at this time.",
+    "ProductName": "Product Name",
+    "Price": "Price",
+    "Status": "State",
+    "ProductInformation": "Product Information",
+    "CompletePayment": "Complete the Payment"
   }
 }

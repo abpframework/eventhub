@@ -3,6 +3,7 @@ using Payment.PaymentRequests;
 using Payment.Web.PaymentRequest;
 using System;
 using System.Threading.Tasks;
+using Volo.Abp;
 
 namespace Payment.Web.Pages.Payment
 {
@@ -21,19 +22,28 @@ namespace Payment.Web.Pages.Payment
             IPaymentUrlBuilder paymentUrlBuilder)
         {
             _paymentRequestAppService = paymentRequestAppService;
-            this._paymentUrlBuilder = paymentUrlBuilder;
+            _paymentUrlBuilder = paymentUrlBuilder;
         }
         
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
             PaymentRequest = await _paymentRequestAppService.GetAsync(PaymentRequestId);
+
+            return Page();
         }
         
         public async Task OnPostAsync()
         {
+            PaymentRequest = await _paymentRequestAppService.GetAsync(PaymentRequestId);
+
+            if (PaymentRequest.CreationTime.AddMinutes(15) >= Clock.Now)
+            {
+                throw new UserFriendlyException("Payment requiest is timed out.");
+            }
+
             var result = await _paymentRequestAppService.StartPaymentAsync(new StartPaymentDto
             {
-                PaymentRequestId = PaymentRequestId,
+                PaymentRequestId = PaymentRequest.Id,
                 ReturnUrl = _paymentUrlBuilder.BuildReturnUrl(PaymentRequestId).AbsoluteUri,
                 CancelUrl = _paymentUrlBuilder.BuildCheckoutUrl(PaymentRequestId).AbsoluteUri
             });
