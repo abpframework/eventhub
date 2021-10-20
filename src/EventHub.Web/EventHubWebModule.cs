@@ -36,6 +36,7 @@ using Volo.Abp.Swashbuckle;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
+using Payment.Web;
 
 namespace EventHub.Web
 {
@@ -51,7 +52,8 @@ namespace EventHub.Web
         typeof(AbpHttpClientIdentityModelWebModule),
         typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpSwashbuckleModule),
-        typeof(AbpAccountApplicationContractsModule)
+        typeof(AbpAccountApplicationContractsModule),
+        typeof(PaymentWebModule)
         )]
     public class EventHubWebModule : AbpModule
     {

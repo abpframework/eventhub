@@ -1,12 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
+using Payment;
 
 namespace EventHub
 {
     [DependsOn(
         typeof(EventHubApplicationContractsModule),
-        typeof(AbpHttpClientModule)
+        typeof(AbpHttpClientModule),
+        typeof(PaymentHttpApiClientModule)
     )]
     public class EventHubHttpApiClientModule : AbpModule
     {

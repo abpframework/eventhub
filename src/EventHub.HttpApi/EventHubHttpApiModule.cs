@@ -8,7 +8,8 @@ namespace EventHub
 {
     [DependsOn(
         typeof(EventHubApplicationContractsModule),
-        typeof(AbpAspNetCoreMvcModule)
+        typeof(AbpAspNetCoreMvcModule),
+        typeof(EventHubHttpApiModule)
         )]
     public class EventHubHttpApiModule : AbpModule
     {

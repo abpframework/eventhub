@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\EventHub.Domain\EventHub.Domain.csproj" />
     <ProjectReference Include="..\EventHub.Application.Contracts\EventHub.Application.Contracts.csproj" />
+    <ProjectReference Include="..\..\modules\payment\src\Payment.Application\Payment.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>

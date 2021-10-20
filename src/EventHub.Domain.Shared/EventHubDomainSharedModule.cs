@@ -13,6 +13,7 @@ using Volo.Abp.SettingManagement;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Abp.BlobStoring.Database;
+using Payment;
 
 namespace EventHub
 {
@@ -23,7 +24,8 @@ namespace EventHub
         typeof(AbpIdentityServerDomainSharedModule),
         typeof(AbpPermissionManagementDomainSharedModule),
         typeof(AbpSettingManagementDomainSharedModule),
-        typeof(BlobStoringDatabaseDomainSharedModule)
+        typeof(BlobStoringDatabaseDomainSharedModule),
+        typeof(PaymentDomainSharedModule)
         )]
     public class EventHubDomainSharedModule : AbpModule
     {
