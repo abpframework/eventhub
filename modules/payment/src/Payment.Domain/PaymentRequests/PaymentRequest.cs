@@ -25,6 +25,7 @@ namespace Payment.PaymentRequests
 
         public bool IsDeleted { get; set; }
 
+        [CanBeNull]
         public string FailReason { get; protected set; }
 
         private PaymentRequest()

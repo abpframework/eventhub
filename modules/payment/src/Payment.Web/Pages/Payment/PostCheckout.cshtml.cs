@@ -39,7 +39,7 @@ namespace Payment.Web.Pages.Payment
 
             PaymentRequest = await _paymentRequestAppService.CompleteAsync(Token);
 
-            GoBackLink = _paymentUrlBuilder.BuildReturnUrl(PaymentRequest.Id).AbsoluteUri;
+            GoBackLink = _paymentUrlBuilder.BuildCheckoutUrl(PaymentRequest.Id).AbsoluteUri;
 
             if (PaymentRequest.State == PaymentRequestState.Completed 
                 && !_paymentWebOptions.PaymentSuccessfulCallbackUrl.IsNullOrWhiteSpace())

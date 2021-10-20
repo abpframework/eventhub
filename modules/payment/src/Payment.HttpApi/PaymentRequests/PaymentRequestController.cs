@@ -5,7 +5,7 @@ using Volo.Abp;
 
 namespace Payment.PaymentRequests
 {
-	[RemoteService(Name = PaymentRemoteServiceConsts.RemoteServiceName)]
+    [RemoteService(Name = PaymentRemoteServiceConsts.RemoteServiceName)]
     [Area("payment")]
     [Route("api/payment/requests")]
     public class PaymentRequestController : PaymentController, IPaymentRequestAppService
