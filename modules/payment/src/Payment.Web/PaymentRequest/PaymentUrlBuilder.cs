@@ -16,12 +16,12 @@ namespace Payment.Web.PaymentRequest
 
         public virtual Uri BuildCheckoutUrl(Guid paymentRequestId)
         {
-            return new Uri(urlOptions.Applications["MVC"].RootUrl.EnsureEndsWith('/') + "Payment/Checkout?paymentRequestId=" + paymentRequestId);
+            return new Uri(urlOptions.Applications["MVC"].RootUrl.EnsureEndsWith('/') + "Payment/PreCheckout?paymentRequestId=" + paymentRequestId);
         }
 
         public Uri BuildReturnUrl(Guid paymentRequestId)
         {
-            return new Uri(urlOptions.Applications["MVC"].RootUrl.EnsureEndsWith('/') + "Payment/CheckoutCallback?paymentRequestId=" + paymentRequestId);
+            return new Uri(urlOptions.Applications["MVC"].RootUrl.EnsureEndsWith('/') + "Payment/PostCheckout?paymentRequestId=" + paymentRequestId);
         }
     }
 }
