@@ -3,6 +3,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace Payment.PaymentRequests
 {
+    [Serializable]
     public class PaymentRequestDto : CreationAuditedEntityDto<Guid>
     {
         public string CustomerId { get; set; }

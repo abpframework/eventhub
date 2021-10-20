@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Payment.PaymentRequests
 {
+    [Serializable]
     public class StartPaymentDto
     {
         public Guid PaymentRequestId { get; set; }

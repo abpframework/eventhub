@@ -1,10 +1,12 @@
 using JetBrains.Annotations;
+using System;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 
 namespace Payment.PaymentRequests
 {
+    [Serializable]
     public class PaymentRequestCreationDto : ExtensibleObject
     {
         [DynamicMaxLength(typeof(PaymentRequestConsts), nameof(PaymentRequestConsts.MaxCustomerIdLength))]
