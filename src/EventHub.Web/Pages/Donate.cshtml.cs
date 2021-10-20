@@ -24,6 +24,7 @@ namespace EventHub.Web.Pages
             _paymentUrlBuilder = paymentUrlBuilder;
         }
 
+        [BindProperty]
         public decimal Amount { get; set; } = 5;
 
         public async Task<IActionResult> OnPostAsync()
