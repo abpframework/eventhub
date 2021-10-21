@@ -18,15 +18,19 @@
 			@if (Model.PaymentRequest.State == PaymentRequestState.Completed)
 			{
 				<abp-alert alert-type="Success" dismissible="false">
-					<i class="bi-check-circle-fill"></i>
-					@L["YourPaymentCompletedSuccessfully"]
+					<h3 class="d-inline">
+						<i class="fa fa-check-circle"></i>
+						@L["YourPaymentCompletedSuccessfully"]
+					</h3>>
 				</abp-alert>
 			}
 			else
 			{
 				<abp-alert alert-type="Danger" dismissible="false">
-					<h1><i class="bi-check-circle-fill"></i></h1>
-					@L["YourPaymentFailed"]
+					<h3 class="d-inline">
+						<i class="fa fa-times"></i>
+						@L["YourPaymentFailed"]
+					</h3>
 				</abp-alert>
 
 				<abp-button href="@Model.GoBackLink" text="@L["GoBack"]" />
