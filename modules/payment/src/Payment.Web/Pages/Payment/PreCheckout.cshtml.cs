@@ -11,7 +11,7 @@ namespace Payment.Web.Pages.Payment
     {
         [BindProperty(SupportsGet = true)]
         public Guid PaymentRequestId { get; set; }
-        
+
         public PaymentRequestDto PaymentRequest { get; set; }
 
         private readonly IPaymentRequestAppService _paymentRequestAppService;
@@ -24,14 +24,14 @@ namespace Payment.Web.Pages.Payment
             _paymentRequestAppService = paymentRequestAppService;
             _paymentUrlBuilder = paymentUrlBuilder;
         }
-        
+
         public async Task<IActionResult> OnGetAsync()
         {
             PaymentRequest = await _paymentRequestAppService.GetAsync(PaymentRequestId);
 
             return Page();
         }
-        
+
         public async Task OnPostAsync()
         {
             PaymentRequest = await _paymentRequestAppService.GetAsync(PaymentRequestId);
