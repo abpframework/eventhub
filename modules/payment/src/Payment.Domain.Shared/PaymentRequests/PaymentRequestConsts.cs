@@ -2,8 +2,8 @@
 {
     public static class PaymentRequestConsts
     {
-        public const int MaxCustomerIdLength = 100;
-        public const int MaxProductIdLength = 100;
-        public const int MaxProductNameLength = 200;
+        public static int MaxCustomerIdLength { get; set; } = 100;
+        public static int MaxProductIdLength { get; set; } = 100;
+        public static int MaxProductNameLength { get; set; } = 200;
     }
 }
