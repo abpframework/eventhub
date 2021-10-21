@@ -49,6 +49,20 @@ TODO
    }
    ```
 
-   
 
-   
+
+
+---
+
+
+
+## Distributed Events
+
+- `Payment.Completed` (**PaymentRequestCompletedEto**): Published when a payment is completed. Completion can be triggered via webhook or callback. Source doesn't affect to the event. Event will be triggered once.
+  - `PaymentRequestId`: Represents PaymentRequest entity Id.
+  - `ExtraProperties`: Represents ExtraProperties of PaymentRequest entity. You can use this properties to find your related objects to that payment.
+- `Payment.Failed`(**PaymentRequestFailedEto**): Published when a payment is failed. 
+  - `PaymentRequestId`: Represents PaymentRequest entity Id.
+  - `FailReason`: Reason of failure from payment provider (PayPal)
+  - `ExtraProperties`: Represents ExtraProperties of PaymentRequest entity.
+
