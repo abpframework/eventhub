@@ -36,11 +36,6 @@ namespace Payment.Web.Pages.Payment
         {
             PaymentRequest = await _paymentRequestAppService.GetAsync(PaymentRequestId);
 
-            if (PaymentRequest.CreationTime.AddMinutes(15) >= Clock.Now)
-            {
-                throw new UserFriendlyException("Payment requiest is timed out.");
-            }
-
             var result = await _paymentRequestAppService.StartPaymentAsync(new StartPaymentDto
             {
                 PaymentRequestId = PaymentRequest.Id,
