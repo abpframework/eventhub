@@ -46,5 +46,13 @@ namespace Payment.PaymentRequests.ClientProxies
                 { typeof(StartPaymentDto), input }
             });
         }
+
+        public virtual async Task<bool> HandleWebhookAsync(string payload)
+        {
+            return await RequestAsync<bool>(nameof(HandleWebhookAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(string), payload }
+            });
+        }
     }
 }

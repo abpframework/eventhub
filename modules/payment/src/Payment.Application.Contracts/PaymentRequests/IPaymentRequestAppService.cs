@@ -13,5 +13,7 @@ namespace Payment.PaymentRequests
         Task<StartPaymentResultDto> StartPaymentAsync(StartPaymentDto input);
 
         Task<PaymentRequestDto> CompleteAsync(string token);
+
+        Task<bool> HandleWebhookAsync(string payload);
     }
 }

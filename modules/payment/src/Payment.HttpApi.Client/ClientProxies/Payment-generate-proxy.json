@@ -161,6 +161,43 @@
               },
               "allowAnonymous": null,
               "implementFrom": "Payment.PaymentRequests.IPaymentRequestAppService"
+            },
+            "HandleWebhookAsyncByPayload": {
+              "uniqueName": "HandleWebhookAsyncByPayload",
+              "name": "HandleWebhookAsync",
+              "httpMethod": "POST",
+              "url": "api/payment/requests/webhook",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "payload",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "payload",
+                  "name": "payload",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Boolean",
+                "typeSimple": "boolean"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Payment.PaymentRequests.IPaymentRequestAppService"
             }
           }
         }

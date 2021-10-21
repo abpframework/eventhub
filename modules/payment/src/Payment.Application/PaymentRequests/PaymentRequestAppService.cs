@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Linq;
 using Payment.PayPal;
 using PayPalCheckoutSdk.Core;
 using PayPalCheckoutSdk.Orders;
@@ -28,7 +29,7 @@ namespace Payment.PaymentRequests
         public async Task<PaymentRequestDto> GetAsync(Guid id)
         {
             var paymentRequest = await _paymentRequestRepository.GetAsync(id);
-         
+
             return ObjectMapper.Map<PaymentRequest, PaymentRequestDto>(paymentRequest);
         }
 
@@ -114,11 +115,38 @@ namespace Payment.PaymentRequests
 
             var order = (await _payPalHttpClient.Execute(request)).Result<Order>();
 
+            var paymentRequest = await UpdatePaymentRequestStateAsync(order);
+
+            return ObjectMapper.Map<PaymentRequest, PaymentRequestDto>(paymentRequest);
+        }
+
+        public async Task<bool> HandleWebhookAsync(string payload)
+        {
+            var jObject = JObject.Parse(payload);
+
+            //// TODO: Find way to parse with System.Text.Json instead of Newtonsoft
+            var order = jObject["resource"].ToObject<Order>();
+
+            var request = new OrdersGetRequest(order.Id);
+
+            // Ensure order object comes from PayPal
+            var response = await _payPalHttpClient.Execute(request);
+            order = response.Result<Order>();
+
+            await UpdatePaymentRequestStateAsync(order);
+
+            // PayPal doesn't accept Http 204 (NoContent) result and tries to execute webhook again.
+            // So with following value, API returns Http 200 (OK) result.
+            return true;
+        }
+
+        private async Task<PaymentRequest> UpdatePaymentRequestStateAsync(Order order)
+        {
             var paymentRequestId = Guid.Parse(order.PurchaseUnits.First().ReferenceId);
 
             var paymentRequest = await _paymentRequestRepository.GetAsync(paymentRequestId);
 
-            if (order.Status == PayPalConsts.OrderStatus.Approved || order.Status == PayPalConsts.OrderStatus.Completed)
+            if (order.Status == PayPalConsts.OrderStatus.Completed || order.Status == PayPalConsts.OrderStatus.Approved)
             {
                 paymentRequest.SetAsCompleted();
             }
@@ -127,11 +155,12 @@ namespace Payment.PaymentRequests
                 paymentRequest.SetAsFailed(order.Status);
             }
 
-            paymentRequest.ExtraProperties.Add(PayPalConsts.OrderIdPropertyName, order.Id);
+            paymentRequest.ExtraProperties[PayPalConsts.OrderIdPropertyName] = order.Id;
+            paymentRequest.ExtraProperties[nameof(order.Status)] = order.Status;
 
             await _paymentRequestRepository.UpdateAsync(paymentRequest);
 
-            return ObjectMapper.Map<PaymentRequest, PaymentRequestDto>(paymentRequest);
+            return paymentRequest;
         }
     }
 }

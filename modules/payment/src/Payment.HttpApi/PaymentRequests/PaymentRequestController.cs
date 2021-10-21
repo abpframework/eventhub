@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using System;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
 
@@ -42,6 +45,17 @@ namespace Payment.PaymentRequests
         public Task<StartPaymentResultDto> StartPaymentAsync(StartPaymentDto input)
         {
             return PaymentRequestAppService.StartPaymentAsync(input);
+        }
+
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [HttpPost]
+        [Route("webhook")]
+        public async Task<bool> HandleWebhookAsync(string payload)
+        {
+            var bytes = await Request.Body.GetAllBytesAsync();
+            payload = Encoding.UTF8.GetString(bytes);
+
+            return await PaymentRequestAppService.HandleWebhookAsync(payload);
         }
     }
 }
