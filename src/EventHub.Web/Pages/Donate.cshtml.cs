@@ -17,7 +17,7 @@ namespace EventHub.Web.Pages
         private readonly IPaymentUrlBuilder _paymentUrlBuilder;
 
         public DonateModel(
-            IPaymentRequestAppService paymentRequestAppService, 
+            IPaymentRequestAppService paymentRequestAppService,
             IPaymentUrlBuilder paymentUrlBuilder)
         {
             _paymentRequestAppService = paymentRequestAppService;
@@ -34,7 +34,7 @@ namespace EventHub.Web.Pages
                 CustomerId = CurrentUser.IsAuthenticated ? CurrentUser.Id.ToString() : Request.HttpContext.Connection.Id,
                 Price = Amount,
                 ProductId = "eventhub.donation",
-                ProductName = $"EventHub Donation | " + CurrentUser.UserName ?? Request.HttpContext.Connection.Id,
+                ProductName = $"EventHub Donation | " + (CurrentUser.UserName.IsNullOrWhiteSpace() ? "#" + Guid.NewGuid() : CurrentUser.UserName),
             });
 
             return Redirect(_paymentUrlBuilder.BuildCheckoutUrl(paymentRequest.Id).AbsoluteUri);
