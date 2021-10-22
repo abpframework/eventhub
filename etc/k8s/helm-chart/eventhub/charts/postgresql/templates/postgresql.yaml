@@ -14,7 +14,7 @@ spec:
         app: {{ .Release.Name }}-{{ .Chart.Name }}
     spec:
       containers:
-        - image: postgres
+        - image: postgres@13.4-alpine
           name: {{ .Release.Name }}-{{ .Chart.Name }}
 {{- if eq .Release.Name "eh-az" }}
           volumeMounts:
