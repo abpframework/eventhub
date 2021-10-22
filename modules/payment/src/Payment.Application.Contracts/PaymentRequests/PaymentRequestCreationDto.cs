@@ -25,7 +25,7 @@ namespace Payment.PaymentRequests
         /// 3 Letter Language Code in ISO 4217 Standards.
         /// For example: USD, EUR.
         /// </summary>
-        [StringLength(3)]
+        [StringLength(PaymentRequestConsts.MaxCurrencyLength)]
         [CanBeNull]
         public string Currency { get; set; }
     }
