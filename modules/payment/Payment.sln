@@ -49,6 +49,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payment.Admin.Application.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payment.Admin.Application", "src\Payment.Admin.Application\Payment.Admin.Application.csproj", "{267E26D0-3401-4945-AD58-30FE482566DD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payment.Admin.HttpApi", "src\Payment.Admin.HttpApi\Payment.Admin.HttpApi.csproj", "{046100DA-71ED-43C5-8C33-D424D678DBEA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payment.Admin.HttpApi.Client", "src\Payment.Admin.HttpApi.Client\Payment.Admin.HttpApi.Client.csproj", "{A791943D-3F0B-41E3-AE73-15A60180B4A5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -115,6 +119,14 @@ Global
 		{267E26D0-3401-4945-AD58-30FE482566DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{267E26D0-3401-4945-AD58-30FE482566DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{267E26D0-3401-4945-AD58-30FE482566DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{046100DA-71ED-43C5-8C33-D424D678DBEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{046100DA-71ED-43C5-8C33-D424D678DBEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{046100DA-71ED-43C5-8C33-D424D678DBEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{046100DA-71ED-43C5-8C33-D424D678DBEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A791943D-3F0B-41E3-AE73-15A60180B4A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A791943D-3F0B-41E3-AE73-15A60180B4A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A791943D-3F0B-41E3-AE73-15A60180B4A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A791943D-3F0B-41E3-AE73-15A60180B4A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -141,6 +153,8 @@ Global
 		{98CAA357-46A3-48EC-B5D9-27C706862351} = {E46CF089-D16A-4761-BE24-1B1B1D49225A}
 		{B4D6C73B-2848-4B0C-BFA5-7EBEA59F6A75} = {5B39D229-146D-423E-9E50-91471851824E}
 		{267E26D0-3401-4945-AD58-30FE482566DD} = {5B39D229-146D-423E-9E50-91471851824E}
+		{046100DA-71ED-43C5-8C33-D424D678DBEA} = {5B39D229-146D-423E-9E50-91471851824E}
+		{A791943D-3F0B-41E3-AE73-15A60180B4A5} = {5B39D229-146D-423E-9E50-91471851824E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6AAFA1C6-603E-13FA-45E5-7910AA9F661D}
