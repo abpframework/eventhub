@@ -69,9 +69,8 @@ namespace EventHub.EntityFrameworkCore
             builder.ConfigureIdentity();
             builder.ConfigureIdentityServer();
             builder.ConfigureBlobStoring();
-
-            builder.ConfigureEventHub();
             builder.ConfigurePayment();
+            builder.ConfigureEventHub();
         }
     }
 }
