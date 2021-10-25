@@ -12,7 +12,14 @@
             <div class="card-body">
                 <div class="event-container">
                     <div class="event-info">
-                        <h5>@organization.DisplayName</h5>
+                        <h5>
+                            @organization.DisplayName
+                            @if (organization.IsPremium)
+                            {
+                                <span class="align-top text-dark font-weight-bold" style="font-size: x-small" abp-badge-pill="Warning"> Premium </span>
+                            }
+                        </h5>
+                       
                         <p>
                             @organization.Description
                         </p>
