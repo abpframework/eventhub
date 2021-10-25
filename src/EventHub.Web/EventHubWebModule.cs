@@ -134,6 +134,7 @@ namespace EventHub.Web
                 options.Conventions.AuthorizePage("/Events/Edit");
                 options.Conventions.AuthorizePage("/Organizations/New");
                 options.Conventions.AuthorizePage("/Organizations/Edit");
+                options.Conventions.AuthorizePage("/Pricing");
             });
         }
 
