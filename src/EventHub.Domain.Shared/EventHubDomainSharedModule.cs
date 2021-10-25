@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using EventHub.Localization;
+using EventHub.Organizations;
 using EventHub.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AuditLogging;
@@ -26,7 +28,7 @@ namespace EventHub
         typeof(AbpSettingManagementDomainSharedModule),
         typeof(BlobStoringDatabaseDomainSharedModule),
         typeof(PaymentDomainSharedModule)
-        )]
+    )]
     public class EventHubDomainSharedModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -58,8 +60,23 @@ namespace EventHub
             {
                 options.MapCodeNamespace("EventHub", typeof(EventHubResource));
             });
-            
+
             Configure<EventHubUrlOptions>(configuration.GetSection("AppUrls"));
+
+            context.Services.AddOptions<List<OrganizationPlanInfoOptions>>()
+                .Bind(configuration.GetSection(OrganizationPlanInfoOptions.OrganizationPlanInfo))
+                .Validate(config =>
+                {
+                    foreach (var planInfo in config)
+                    {
+                        if (planInfo.IsActive)
+                        {
+                            return planInfo.OnePremiumPeriodAsMonth > planInfo.CanBeExtendedAfterHowManyMonths;
+                        }
+                    }
+
+                    return true;
+                }, "OnePremiumPeriodAsMonth must be greater than CanBeExtendedAfterHowManyMonths.");
         }
     }
 }
