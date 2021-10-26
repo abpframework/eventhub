@@ -69,9 +69,9 @@ namespace EventHub.Organizations
             return this;
         }
 
-        internal Organization UpgradeToPremium(IClock clock)
+        internal Organization UpgradeToPremium(DateTime endDate)
         {
-            SetPremiumStatus(true, clock.Now.AddYears(1));
+            SetPremiumStatus(true, endDate);
 
             return this;
         }

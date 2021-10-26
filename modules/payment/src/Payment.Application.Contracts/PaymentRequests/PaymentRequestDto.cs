@@ -1,10 +1,11 @@
 using System;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Data;
 
 namespace Payment.PaymentRequests
 {
     [Serializable]
-    public class PaymentRequestDto : CreationAuditedEntityDto<Guid>
+    public class PaymentRequestDto : CreationAuditedEntityDto<Guid>, IHasExtraProperties
     {
         public string CustomerId { get; set; }
 
@@ -17,5 +18,12 @@ namespace Payment.PaymentRequests
         public string Currency { get; set; }
 
         public PaymentRequestState State { get; set; }
+
+        public ExtraPropertyDictionary ExtraProperties { get; set; }
+
+        public PaymentRequestDto()
+        {
+            ExtraProperties = new ExtraPropertyDictionary();
+        }
     }
 }

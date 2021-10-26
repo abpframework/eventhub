@@ -2,9 +2,7 @@
 @using EventHub.Localization
 @using EventHub.Organizations
 @using Microsoft.AspNetCore.Mvc.Localization
-@using Microsoft.Extensions.Options
 @model EventHub.Web.Pages.Pricing
-@inject IOptionsSnapshot<List<OrganizationPlanInfoOptions>> OrganizationPlanInfoOptionsSnapshot
 @inject IHtmlLocalizer<EventHubResource> L
 
 @section styles {
@@ -39,12 +37,11 @@
           </div>
         </div>
         <div class="px-md-3 px-lg-5">
-          <a class="btn btn-outline-primary btn-lg rounded-pill">Default</a>
+          <a class="btn btn-outline-danger btn-lg rounded-pill disabled">Default</a>
         </div>
       </div>
 
-      @*TODO: Multiple plans are not supported at this time.*@
-      @foreach (var plan in OrganizationPlanInfoOptionsSnapshot.Value.Where(x => x.IsActive))
+      @foreach (var plan in Model.OrganizationPlanInfos.Where(x => x.IsActive))
       {
         <div class="d-flex col-md flex-column py-4">
           <div class="display-1 text-primary my-4"><i class="lnr lnr-store text-big"></i></div>
@@ -65,11 +62,15 @@
             
             @if (Model.Organization.IsPremium)
             {
-              <a class="btn btn-success btn-lg rounded-pill">Current Plan</a>
+              <a class="btn btn-success btn-lg rounded-pill disabled">Current Plan</a>
             }
             else
             {
-              <a href="javascript:void(0)" class="btn btn-primary btn-lg rounded-pill">Buy Now</a>
+              <form id="Upgrade" method="post" asp-page-handler="Upgrade">
+                <abp-input asp-for="TargetPlanToUpgrade" value="@plan.PlanType"></abp-input>
+                <abp-input asp-for="OrganizationName"></abp-input>
+                <a onclick="document.getElementById('Upgrade').submit()" class="btn btn-primary btn-lg rounded-pill">Upgrade To @plan.PlanType</a>
+              </form>
             }
           </div>
         </div>

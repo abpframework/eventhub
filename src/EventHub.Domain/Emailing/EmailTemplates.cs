@@ -11,5 +11,9 @@ namespace EventHub.Emailing
         public const string NewEventCreated = "EventHub.Event.NewEventCreated";
 
         public const string EventTimingChanged = "EventHub.Event.EventTimingChanged";
+        
+        public const string PaymentRequestCompleted = "EventHub.Event.PaymentRequestCompleted";
+        
+        public const string PaymentRequestFailed = "EventHub.Event.PaymentRequestFailed";
     }
 }

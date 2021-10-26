@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp.Data;
 
 namespace Payment.PaymentRequests
 {
@@ -43,6 +44,11 @@ namespace Payment.PaymentRequests
                 input.Price,
                 input.Currency ?? _paymentOptions.DefaultCurrency
             );
+            
+            foreach (var extraProperty in input.ExtraProperties)
+            {
+                paymentRequest.SetProperty(extraProperty.Key, extraProperty.Value);
+            }
 
             await _paymentRequestRepository.InsertAsync(paymentRequest);
 

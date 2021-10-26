@@ -1,0 +1,103 @@
+@page
+@using EventHub.Organizations
+@using Microsoft.AspNetCore.Http
+@using Microsoft.Extensions.Options
+@using Newtonsoft.Json
+@using Payment.Web.Pages.Payment
+@using Payment.PaymentRequests
+@inherits Payment.Web.Pages.PaymentPageBase
+@model Payment.Web.Pages.Payment.PreCheckoutPageModel
+@inject IOptionsSnapshot<List<OrganizationPlanInfoOptions>> OrganizationPlanInfoOptionsSnapshot
+
+@{
+    var isExistExtraProperties = Model.PaymentRequest.ExtraProperties.TryGetValue(nameof(PaymentRequestProductExtraParameterConfiguration), out var ExtraProperties);
+    if (!isExistExtraProperties)
+    {
+        throw new BadHttpRequestException("");
+    }
+    
+    var paymentRequestProductExtraParameterConfiguration = JsonConvert.DeserializeObject<PaymentRequestProductExtraParameterConfiguration>(ExtraProperties.ToString());
+    if (paymentRequestProductExtraParameterConfiguration is null)
+    {
+        throw new BadHttpRequestException("");
+    }
+    var organizationName = paymentRequestProductExtraParameterConfiguration.OrganizationName;
+    var targetPlanType = paymentRequestProductExtraParameterConfiguration.TargetPlanType;
+    var planInfo = OrganizationPlanInfoOptionsSnapshot.Value.First(o => o.PlanType == targetPlanType);
+
+}
+@section scripts {
+    <abp-script-bundle name="@typeof(PreCheckoutPageModel).FullName">
+        <abp-script src="/client-proxies/Payment-proxy.js" />
+    </abp-script-bundle>
+}
+
+<div class="container px-3 my-5 clearfix">
+    <abp-card>
+        <abp-card-header><h5>Shopping Cart</h5></abp-card-header>
+        <abp-card-body>
+
+            <div class="table-responsive">
+                <table class="table table-bordered m-0">
+                    <thead>
+                    <tr>
+                        <th class="text-center py-3 px-4" style="min-width: 400px;">Product Name &amp; Details</th>
+                        <th class="text-center py-3 px-4" style="width: 100px;">Total</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr>
+                        <td class="p-4">
+                            <div class="media align-items-center">
+                                <div class="media-body">
+                                    <p class="">@Model.PaymentRequest.ProductName</p>
+                                    <small>
+                                        <span class="text-muted">Plan: @targetPlanType</span>
+                                        <span class="text-muted ml-1">End date: @DateTime.Now.AddMonths(planInfo.OnePremiumPeriodAsMonth).ToShortDateString()</span>
+                                        <span class="text-muted ml-1">Current State:  @L["Enum:PaymentRequestState:" + Model.PaymentRequest.State]</span>
+                                        <span class="ui-product-color ui-product-color-sm align-text-bottom" style="background:#e81e2c;"></span> &nbsp;
+                                    </small>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-center font-weight-semibold align-middle">@Model.PaymentRequest.Price @Model.PaymentRequest.Currency</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="d-flex flex-wrap justify-content-between align-items-center pb-4">
+                <abp-container>
+                    <abp-row class="float-right">
+                        <abp-column>
+                            <div class="text-right mt-4">
+                                <label class="text-muted font-weight-normal m-0">Total price</label>
+                                <div class="text-large"><strong>@Model.PaymentRequest.Price @Model.PaymentRequest.Currency</strong></div>
+                            </div>
+                        </abp-column>
+                    </abp-row>
+                </abp-container>
+            </div>
+
+            <abp-container class="float-right">
+                <abp-row>
+                    <abp-column class="float-right">
+                        <form method="post">
+                            @if (Model.PaymentRequest.State != PaymentRequestState.Waiting)
+                            {
+                                <abp-alert alert-type="Info">Current State: @Model.PaymentRequest.State</abp-alert>
+                                <abp-alert alert-type="Warning">@L["PaymentRequestIsNotWaiting"]</abp-alert>
+                            }
+                            else
+                            {
+                                <abp-button class="mt-2 float-right" offset="_10" size="Large" type="submit" button-type="Primary">@L["Checkout"]</abp-button>
+                                <a href="@Url.Page("/Pricing", new { organizationName = organizationName })" class="btn btn-lg btn-default md-btn-flat mt-2 mr-3 float-right">Back to pricing</a>
+                            }
+                        </form>
+                    </abp-column>
+                </abp-row>
+            </abp-container>
+        </abp-card-body>
+    </abp-card>
+</div>
