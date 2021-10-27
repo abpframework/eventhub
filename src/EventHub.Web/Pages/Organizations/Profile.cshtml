@@ -77,7 +77,7 @@
                                                 @if (Model.Organization.IsPremium)
                                                 {
                                                     <span>Premium end date: @Model.Organization.PremiumEndDate!.Value.ToShortDateString()</span>
-                                                    @if (PremiumPlanInfoOptionsSnapshot.Value.IsExtendable && Model.Organization.PremiumEndDate!.Value.IsBetween(DateTime.Now, DateTime.Now.AddMonths(12 - 1)))
+                                                    @if (PremiumPlanInfoOptionsSnapshot.Value.IsExtendable && Model.Organization.PremiumEndDate!.Value.IsBetween(DateTime.Now, DateTime.Now.AddMonths(PremiumPlanInfoOptionsSnapshot.Value.OnePremiumPeriodAsMonth - PremiumPlanInfoOptionsSnapshot.Value.CanBeExtendedAfterHowManyMonths)))
                                                     {
                                                         <a href="@Url.Page("/Pricing", new { organizationName = Model.Organization.Name })" class="btn btn-primary btn-block mt-3">
                                                             <i class="fas fa-handshake"></i> @L["ExtendNow"].Value
