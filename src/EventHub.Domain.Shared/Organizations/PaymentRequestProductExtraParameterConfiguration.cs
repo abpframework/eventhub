@@ -5,5 +5,7 @@ namespace EventHub.Organizations
         public string OrganizationName { get; set; }
 
         public OrganizationPlanType TargetPlanType { get; set; }
+
+        public bool IsExtend { get; set; }
     }
 }

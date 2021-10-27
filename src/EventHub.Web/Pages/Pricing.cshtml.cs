@@ -56,12 +56,8 @@ namespace EventHub.Web.Pages
 
         public async Task<IActionResult> OnPostUpgradeAsync()
         {
-            var organization = await _organizationAppService.GetProfileAsync(OrganizationName);
-            if (organization.OwnerUserName != CurrentUser.UserName)
-            {
-                throw new AbpAuthorizationException();
-            }
-            
+            var organization = await GetOrganizationProfileAsync();
+
             var plan =  _organizationPlanInfoOptionsSnapshot.Value.FirstOrDefault(x => x.PlanType == TargetPlanToUpgrade && x.IsActive);
             if (plan is null)
             {
@@ -69,12 +65,49 @@ namespace EventHub.Web.Pages
                 return Page();
             }
             
+            var paymentRequest = await CreatePaymentRequestAsync(plan, organization);
+
+            return Redirect(_paymentUrlBuilder.BuildCheckoutUrl(paymentRequest.Id).AbsoluteUri);
+        }
+        
+        public async Task<IActionResult> OnPostExtendAsync()
+        {
+            var organization = await GetOrganizationProfileAsync();
+
+            var plan =  _organizationPlanInfoOptionsSnapshot.Value.FirstOrDefault(x => x.PlanType == TargetPlanToUpgrade && x.IsActive);
+            if (plan is null)
+            {
+                Alerts.Danger("Premium plan is currently inactive!");
+                return Page();
+            }
+            
+            var paymentRequest = await CreatePaymentRequestAsync(plan, organization, true);
+
+            return Redirect(_paymentUrlBuilder.BuildCheckoutUrl(paymentRequest.Id).AbsoluteUri);
+        }
+
+        private async Task<OrganizationProfileDto> GetOrganizationProfileAsync()
+        {
+            var organization = await _organizationAppService.GetProfileAsync(OrganizationName);
+            if (organization.OwnerUserName != CurrentUser.UserName)
+            {
+                throw new AbpAuthorizationException();
+            }
+
+            return organization;
+        }
+
+        private async Task<PaymentRequestDto> CreatePaymentRequestAsync(
+            OrganizationPlanInfoOptions plan,
+            OrganizationProfileDto organization, 
+            bool isExtend = false)
+        {
             var paymentRequest = await _paymentRequestAppService.CreateAsync(new PaymentRequestCreationDto
             {
                 CustomerId = CurrentUser.GetId().ToString(),
                 Price = plan.Price,
-                ProductId = OrganizationPlanInfoOptions.GetProductId(plan, false),
-                ProductName = OrganizationPlanInfoOptions.GetProductName(plan, organization.Name, false),
+                ProductId = OrganizationPlanInfoOptions.GetProductId(plan, isExtend),
+                ProductName = OrganizationPlanInfoOptions.GetProductName(plan, organization.Name, isExtend),
                 ExtraProperties =
                 {
                     {
@@ -82,13 +115,14 @@ namespace EventHub.Web.Pages
                         new PaymentRequestProductExtraParameterConfiguration
                         {
                             OrganizationName = OrganizationName,
-                            TargetPlanType = TargetPlanToUpgrade
+                            TargetPlanType = TargetPlanToUpgrade,
+                            IsExtend = isExtend
                         }
                     }
                 }
             });
-
-            return Redirect(_paymentUrlBuilder.BuildCheckoutUrl(paymentRequest.Id).AbsoluteUri);
+            
+            return paymentRequest;
         }
     }
 }

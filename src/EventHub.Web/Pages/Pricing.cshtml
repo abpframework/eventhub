@@ -45,7 +45,13 @@
       {
         <div class="d-flex col-md flex-column py-4">
           <div class="display-1 text-primary my-4"><i class="lnr lnr-store text-big"></i></div>
-          <h5 class="m-0">@plan.PlanType</h5>
+          <h5 class="m-0">
+            @plan.PlanType
+            @if (Model.Organization.IsPremium)
+            {
+              <span class="align-top text-dark font-weight-bold" style="font-size: x-small" abp-badge-pill="Info"> Current Plan </span>
+            }
+          </h5>
           <div class="flex-grow-1">
             <div class="py-4 my-2">
               <span class="d-inline-block text-muted text-big align-middle mr-2">$</span>
@@ -59,10 +65,14 @@
             </div>
           </div>
           <div class="px-md-3 px-lg-5">
-            
+
             @if (Model.Organization.IsPremium)
             {
-              <a class="btn btn-success btn-lg rounded-pill disabled">Current Plan</a>
+              <form id="Extend" method="post" asp-page-handler="Extend">
+                <abp-input asp-for="TargetPlanToUpgrade" value="@plan.PlanType"></abp-input>
+                <abp-input asp-for="OrganizationName"></abp-input>
+                <a onclick="document.getElementById('Extend').submit()" class="btn btn-primary btn-lg rounded-pill">Extend Now</a>
+              </form>
             }
             else
             {

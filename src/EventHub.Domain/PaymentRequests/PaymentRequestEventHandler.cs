@@ -15,7 +15,7 @@ using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Identity;
 using Volo.Abp.TextTemplating;
 
-namespace EventHub.PaymentRequest
+namespace EventHub.PaymentRequests
 {
     public class PaymentRequestEventHandler : IDistributedEventHandler<PaymentRequestCompletedEto>,
         IDistributedEventHandler<PaymentRequestFailedEto>, ITransientDependency
@@ -24,7 +24,7 @@ namespace EventHub.PaymentRequest
         private readonly ITemplateRenderer _templateRenderer;
         private readonly IRepository<IdentityUser, Guid> _userRepository;
         private readonly IRepository<Organization, Guid> _organizationRepository;
-        private readonly IRepository<Payment.PaymentRequests.PaymentRequest, Guid> _paymentRequestRepository;
+        private readonly IRepository<PaymentRequest, Guid> _paymentRequestRepository;
         private readonly IOptionsSnapshot<List<OrganizationPlanInfoOptions>> _organizationPlanInfoOptionsSnapshot;
         private readonly ILogger<PaymentRequestEventHandler> _logger;
         
@@ -33,7 +33,7 @@ namespace EventHub.PaymentRequest
             ITemplateRenderer templateRenderer,
             IRepository<IdentityUser, Guid> userRepository,
             IRepository<Organization, Guid> organizationRepository,
-            IRepository<Payment.PaymentRequests.PaymentRequest, Guid> paymentRequestRepository,
+            IRepository<PaymentRequest, Guid> paymentRequestRepository,
             IOptionsSnapshot<List<OrganizationPlanInfoOptions>> organizationPlanInfoOptionsSnapshot,
             ILogger<PaymentRequestEventHandler> logger)
         {
@@ -78,8 +78,15 @@ namespace EventHub.PaymentRequest
                 return;
             }
 
-            var plan = _organizationPlanInfoOptionsSnapshot.Value.First(x => x.PlanType == paymentRequestProductExtraParameter.TargetPlanType);
-            organization.UpgradeToPremium(DateTime.Now.AddMonths(plan.OnePremiumPeriodAsMonth));
+            var targetPlan = _organizationPlanInfoOptionsSnapshot.Value.First(x => x.PlanType == paymentRequestProductExtraParameter.TargetPlanType);
+            if (paymentRequestProductExtraParameter.IsExtend)
+            {
+                organization.UpgradeToPremium(organization.PremiumEndDate!.Value.AddMonths(targetPlan.OnePremiumPeriodAsMonth));
+            }
+            else
+            {
+                organization.UpgradeToPremium(DateTime.Now.AddMonths(targetPlan.OnePremiumPeriodAsMonth));
+            }
             await _organizationRepository.UpdateAsync(organization, true);
 
             var templateModel = new

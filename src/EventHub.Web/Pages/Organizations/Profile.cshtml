@@ -68,19 +68,16 @@
                                         <i class="far fa-edit"></i> Edit
                                     </a>
 
-                                    <abp-card class="detail-head mt-4 font-weight-bold">
+                                    <abp-card class="detail-head mt-4 font-weight-bold text-center">
                                         <abp-card-body>
                                             @if (Model.Organization.IsPremium)
                                             {
-                                                <p>License end date: @Model.Organization.PremiumEndDate!.Value</p>
+                                                <span>Premium end date: @Model.Organization.PremiumEndDate!.Value.ToShortDateString()</span>
                                                 @if (Model.Organization.PremiumEndDate!.Value.IsBetween(DateTime.Now, DateTime.Now.AddMonths(12 - 1)))
                                                 {
-                                                    <abp-button id="OrganizationJoinButton"
-                                                                button-type="Primary"
-                                                                size="Block"
-                                                                icon="fas fa-handshake"
-                                                                text="@L["ExtendNow"].Value"
-                                                                data-url="@Url.Action("Join", "OrganizationMembership", new { organizationId = Model.Organization.Id })"/>
+                                                    <a href="@Url.Page("/Pricing", new { organizationName = Model.Organization.Name })" class="btn btn-primary btn-block mt-3">
+                                                        <i class="fas fa-handshake"></i> @L["ExtendNow"].Value
+                                                    </a>
                                                 }
                                             }
                                             else
