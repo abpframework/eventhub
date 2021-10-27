@@ -76,7 +76,7 @@
 													<table class="image_block" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
 														<tr>
 															<td style="padding-left:40px;padding-right:40px;width:100%;">
-																<div align="center" style="line-height:10px"><a href="{{app_url}}" target="_blank" style="outline:none" tabindex="-1"><img src="{{{{app_url}}}}//assets/eventhub-logo.svg" style="display: block; height: auto; border: 0; width: 352px; max-width: 100%;" width="352" alt="EventHub" title="EventHub"></a></div>
+																<div align="center" style="line-height:10px"><a href="{{app_url}}" target="_blank" style="outline:none" tabindex="-1"><img src="{{app_url}}//assets/eventhub-logo.svg" style="display: block; height: auto; border: 0; width: 352px; max-width: 100%;" width="352" alt="EventHub" title="EventHub"></a></div>
 															</td>
 														</tr>
 													</table>
@@ -109,7 +109,7 @@
 															<td style="padding-bottom:25px;padding-left:40px;padding-right:40px;padding-top:10px;">
 																<div style="font-family: sans-serif">
 																	<div style="font-size: 12px; font-family: Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif; color: #555555; line-height: 1.5;">
-																		<p style="margin: 0; font-size: 14px; text-align: center;">We found that your {{model.licenseType}} payment transaction has not been completed.&nbsp;We want to help you take the next step and start your {{model.licenseType}} now.</p>
+																		<p style="margin: 0; font-size: 14px; text-align: center;">We found that your {{model.license_type}} payment transaction has not been completed.&nbsp;We want to help you take the next step and start your {{model.license_type}} now.</p>
 																	</div>
 																</div>
 															</td>
@@ -138,7 +138,7 @@
 															</td>
 														</tr>
 													</table>
-													<table class="text_block" width="100%" border="0" cellpadding="30" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+													<table class="text_block" width="100%" border="0" cellpadding="20" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
 														<tr>
 															<td>
 																<div style="font-family: sans-serif">
@@ -149,12 +149,12 @@
 															</td>
 														</tr>
 													</table>
-													<table class="text_block" width="100%" border="0" cellpadding="45" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+													<table class="text_block" width="100%" border="0" cellpadding="15" cellspacing="15" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
 														<tr>
 															<td>
 																<div style="font-family: sans-serif">
-																	<div style="font-size: 12px; color: #555555; line-height: 1.2; font-family: Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;">
-																		<p style="margin: 0; font-size: 12px; text-align: center;"><span style="font-size:14px;">{{model.failReason}}</span></p>
+																	<div style="font-size: 12px; color: #555555; line-height: 0.5; font-family: Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;">
+																		<p style="margin: 1; font-size: 12px; text-align: center;"><span style="font-size:14px;">{{model.fail_reason}}</span></p>
 																	</div>
 																</div>
 															</td>

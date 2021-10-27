@@ -132,7 +132,7 @@
 															<td style="padding-bottom:10px;padding-left:40px;padding-right:40px;padding-top:10px;">
 																<div style="font-family: sans-serif">
 																	<div style="font-size: 12px; font-family: Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif; color: #555555; line-height: 1.5;">
-																		<p style="margin: 0; font-size: 14px; text-align: center;">Your organization has been activated.</p>
+																		<p style="margin: 0; font-size: 14px; text-align: center;">Your organization has been {{model.plan_info}}.</p>
 																	</div>
 																</div>
 															</td>
@@ -190,7 +190,7 @@
 																			<div style="font-family: sans-serif">
 																				<div style="font-size: 12px; color: #555555; line-height: 1.5; font-family: Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;">
 																					<p style="margin: 0; font-size: 16px; text-align: center;"><span style="color:#a2a9ad;"><strong>Organization name</strong></span></p>
-																					<p style="margin: 0; font-size: 16px; text-align: center;"><span style="color:#2b303a;"><span style="font-size:20px;"><strong>{{model.organizationName}}</strong></span></span></p>
+																					<p style="margin: 0; font-size: 16px; text-align: center;"><span style="color:#2b303a;"><span style="font-size:20px;"><strong>{{model.organization_name}}</strong></span></span></p>
 																				</div>
 																			</div>
 																		</td>
@@ -223,7 +223,7 @@
 																			<div style="font-family: sans-serif">
 																				<div style="font-size: 12px; color: #555555; line-height: 1.5; font-family: Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;">
 																					<p style="margin: 0; font-size: 16px; text-align: center; mso-line-height-alt: 18px;"><span style="color:#a2a9ad;font-size:12px;"><strong>TOTAL</strong></span></p>
-																					<p style="margin: 0; font-size: 16px; text-align: center;"><span style="color:#2b303a;"><span style="font-size:20px;"><strong>{{model.Price}} <strong>{{model.Currency}}</strong></strong></span></span></p>
+																					<p style="margin: 0; font-size: 16px; text-align: center;"><span style="color:#2b303a;"><span style="font-size:20px;"><strong>{{model.price}} <strong>{{model.currency}}</strong></strong></span></span></p>
 																				</div>
 																			</div>
 																		</td>
@@ -253,7 +253,7 @@
 														<tr>
 															<td style="padding-left:10px;padding-right:10px;padding-top:40px;text-align:center;">
 																<div align="center">
-																	<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{app_url}}/organizations/{{model.organizationName}}" style="height:58px;width:160px;v-text-anchor:middle;" arcsize="104%" stroke="false" fillcolor="#d54560"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#ffffff; font-family:Tahoma, sans-serif; font-size:14px"><![endif]--><a href="{app_url}}/organizations/{{model.organizationName}}" target="_blank" style="text-decoration:none;display:inline-block;color:#ffffff;background-color:#d54560;border-radius:60px;width:auto;border-top:1px solid #d54560;border-right:1px solid #d54560;border-bottom:1px solid #d54560;border-left:1px solid #d54560;padding-top:15px;padding-bottom:15px;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;text-align:center;mso-border-alt:none;word-break:keep-all;"><span style="padding-left:30px;padding-right:30px;font-size:14px;display:inline-block;letter-spacing:normal;"><span style="font-size: 12px; line-height: 2; word-break: break-word; mso-line-height-alt: 24px;"><span style="font-size: 14px; line-height: 28px;" data-mce-style="font-size: 14px; line-height: 28px;">My Organization</span></span></span></a>
+																	<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{app_url}}/organizations/{{model.organization_name}}" style="height:58px;width:160px;v-text-anchor:middle;" arcsize="104%" stroke="false" fillcolor="#d54560"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#ffffff; font-family:Tahoma, sans-serif; font-size:14px"><![endif]--><a href="{{app_url}}/organizations/{{model.organization_name}}" target="_blank" style="text-decoration:none;display:inline-block;color:#ffffff;background-color:#d54560;border-radius:60px;width:auto;border-top:1px solid #d54560;border-right:1px solid #d54560;border-bottom:1px solid #d54560;border-left:1px solid #d54560;padding-top:15px;padding-bottom:15px;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;text-align:center;mso-border-alt:none;word-break:keep-all;"><span style="padding-left:30px;padding-right:30px;font-size:14px;display:inline-block;letter-spacing:normal;"><span style="font-size: 12px; line-height: 2; word-break: break-word; mso-line-height-alt: 24px;"><span style="font-size: 14px; line-height: 28px;" data-mce-style="font-size: 14px; line-height: 28px;">My Organization</span></span></span></a>
 																	<!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
 																</div>
 															</td>

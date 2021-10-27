@@ -1,5 +1,6 @@
 @page
 @using EventHub.Organizations
+@using EventHub.Web.PaymentRequests
 @using Microsoft.AspNetCore.Http
 @using Microsoft.Extensions.Options
 @using Newtonsoft.Json
@@ -7,23 +8,22 @@
 @using Payment.PaymentRequests
 @inherits Payment.Web.Pages.PaymentPageBase
 @model Payment.Web.Pages.Payment.PreCheckoutPageModel
-@inject IOptionsSnapshot<List<OrganizationPlanInfoOptions>> OrganizationPlanInfoOptionsSnapshot
+@inject IOptionsSnapshot<PremiumPlanInfoOptions> PremiumPlanInfoOptionsSnapshot
 
 @{
-    var isExistExtraProperties = Model.PaymentRequest.ExtraProperties.TryGetValue(nameof(PaymentRequestProductExtraParameterConfiguration), out var ExtraProperties);
+    var isExistExtraProperties = Model.PaymentRequest.ExtraProperties.TryGetValue(nameof(OrganizationPaymentRequestExtraParameterConfiguration), out var ExtraProperties);
     if (!isExistExtraProperties)
     {
         throw new BadHttpRequestException("");
     }
     
-    var paymentRequestProductExtraParameterConfiguration = JsonConvert.DeserializeObject<PaymentRequestProductExtraParameterConfiguration>(ExtraProperties.ToString());
-    if (paymentRequestProductExtraParameterConfiguration is null)
+    var organizationPaymentRequestExtraParameterConfiguration = JsonConvert.DeserializeObject<OrganizationPaymentRequestExtraParameterConfiguration>(ExtraProperties.ToString());
+    if (organizationPaymentRequestExtraParameterConfiguration is null)
     {
         throw new BadHttpRequestException("");
     }
-    var organizationName = paymentRequestProductExtraParameterConfiguration.OrganizationName;
-    var targetPlanType = paymentRequestProductExtraParameterConfiguration.TargetPlanType;
-    var planInfo = OrganizationPlanInfoOptionsSnapshot.Value.First(o => o.PlanType == targetPlanType);
+    var organizationName = organizationPaymentRequestExtraParameterConfiguration.OrganizationName;
+    var planInfo = PremiumPlanInfoOptionsSnapshot.Value;
 
 }
 @section scripts {
@@ -53,10 +53,10 @@
                                 <div class="media-body">
                                     <p class="font-weight-bolder">@Model.PaymentRequest.ProductName</p>
                                     <small>
-                                        @if (!paymentRequestProductExtraParameterConfiguration.IsExtend)
+                                        @if (!organizationPaymentRequestExtraParameterConfiguration.IsExtend)
                                         {
                                             <span class="text-muted">Operation: Upgrade</span>
-                                            <span class="text-muted">Target Plan: @targetPlanType</span>
+                                            <span class="text-muted">Target Plan: @OrganizationPlanType.Premium</span>
                                             <span class="text-muted ml-1">End date: @DateTime.Now.AddMonths(planInfo.OnePremiumPeriodAsMonth).ToShortDateString()</span>
                                         }
                                         else

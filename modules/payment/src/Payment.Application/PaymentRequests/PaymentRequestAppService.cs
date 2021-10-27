@@ -13,9 +13,9 @@ namespace Payment.PaymentRequests
 {
     public class PaymentRequestAppService : PaymentAppService, IPaymentRequestAppService
     {
-        private readonly IPaymentRequestRepository _paymentRequestRepository;
-        private readonly PaymentOptions _paymentOptions;
-        private readonly PayPalHttpClient _payPalHttpClient;
+        protected readonly IPaymentRequestRepository _paymentRequestRepository;
+        protected readonly PaymentOptions _paymentOptions;
+        protected readonly PayPalHttpClient _payPalHttpClient;
 
         public PaymentRequestAppService(
             IPaymentRequestRepository paymentRequestRepository,

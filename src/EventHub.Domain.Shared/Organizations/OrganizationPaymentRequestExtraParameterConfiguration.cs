@@ -1,11 +1,11 @@
 namespace EventHub.Organizations
 {
-    public class PaymentRequestProductExtraParameterConfiguration
+    public class OrganizationPaymentRequestExtraParameterConfiguration
     {
         public string OrganizationName { get; set; }
-
-        public OrganizationPlanType TargetPlanType { get; set; }
-
+        
         public bool IsExtend { get; set; }
+
+        public int PremiumPeriodAsMonth { get; set; }
     }
 }

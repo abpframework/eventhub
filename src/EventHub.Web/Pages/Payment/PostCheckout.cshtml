@@ -15,18 +15,18 @@
 @{
     PageLayout.Content.Title = L["PaymentResult"] + L["Enum:PaymentRequestState:" + Model.PaymentRequest.State];
     
-    var isExistExtraProperties = Model.PaymentRequest.ExtraProperties.TryGetValue(nameof(PaymentRequestProductExtraParameterConfiguration), out var ExtraProperties);
+    var isExistExtraProperties = Model.PaymentRequest.ExtraProperties.TryGetValue(nameof(OrganizationPaymentRequestExtraParameterConfiguration), out var ExtraProperties);
     if (!isExistExtraProperties)
     {
         throw new BadHttpRequestException("");
     }
     
-    var paymentRequestProductExtraParameterConfiguration = JsonConvert.DeserializeObject<PaymentRequestProductExtraParameterConfiguration>(ExtraProperties.ToString());
-    if (paymentRequestProductExtraParameterConfiguration is null)
+    var organizationPaymentExtraParameterConfiguration = JsonConvert.DeserializeObject<OrganizationPaymentRequestExtraParameterConfiguration>(ExtraProperties.ToString());
+    if (organizationPaymentExtraParameterConfiguration is null)
     {
         throw new BadHttpRequestException("");
     }
-    var organizationName = paymentRequestProductExtraParameterConfiguration.OrganizationName;
+    var organizationName = organizationPaymentExtraParameterConfiguration.OrganizationName;
 }
 
 <main class="static-page container mt-5 text-center">

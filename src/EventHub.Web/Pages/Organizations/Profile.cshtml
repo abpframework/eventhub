@@ -5,12 +5,14 @@
 @using EventHub.Web.Pages.Events.Components.EventsArea
 @using EventHub.Web.Pages.Organizations.Components.JoinArea
 @using EventHub.Web.Pages.Organizations.Components.MembersArea
+@using EventHub.Web.PaymentRequests
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.Extensions.Options
 @using Volo.Abp.Timing
 @model EventHub.Web.Pages.Organizations.ProfilePageModel
 @inject IClock Clock
 @inject IOptions<EventHubUrlOptions> UrlOptions
+@inject IOptionsSnapshot<PremiumPlanInfoOptions> PremiumPlanInfoOptionsSnapshot
 
 @section scripts {
     <abp-script src="/Pages/Organizations/Profile.js"/>
@@ -68,26 +70,36 @@
                                         <i class="far fa-edit"></i> Edit
                                     </a>
 
-                                    <abp-card class="detail-head mt-4 font-weight-bold text-center">
-                                        <abp-card-body>
-                                            @if (Model.Organization.IsPremium)
-                                            {
-                                                <span>Premium end date: @Model.Organization.PremiumEndDate!.Value.ToShortDateString()</span>
-                                                @if (Model.Organization.PremiumEndDate!.Value.IsBetween(DateTime.Now, DateTime.Now.AddMonths(12 - 1)))
+                                    @if (PremiumPlanInfoOptionsSnapshot.Value.IsActive)
+                                    {
+                                        <abp-card class="detail-head mt-4 font-weight-bold text-center">
+                                            <abp-card-body>
+                                                @if (Model.Organization.IsPremium)
                                                 {
-                                                    <a href="@Url.Page("/Pricing", new { organizationName = Model.Organization.Name })" class="btn btn-primary btn-block mt-3">
-                                                        <i class="fas fa-handshake"></i> @L["ExtendNow"].Value
+                                                    <span>Premium end date: @Model.Organization.PremiumEndDate!.Value.ToShortDateString()</span>
+                                                    @if (PremiumPlanInfoOptionsSnapshot.Value.IsExtendable && Model.Organization.PremiumEndDate!.Value.IsBetween(DateTime.Now, DateTime.Now.AddMonths(12 - 1)))
+                                                    {
+                                                        <a href="@Url.Page("/Pricing", new { organizationName = Model.Organization.Name })" class="btn btn-primary btn-block mt-3">
+                                                            <i class="fas fa-handshake"></i> @L["ExtendNow"].Value
+                                                        </a>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <a href="@Url.Page("/Pricing", new { organizationName = Model.Organization.Name })" class="btn btn-primary btn-block">
+                                                        <i class="fas fa-handshake"></i> @L["UpgradeToPremium"].Value
                                                     </a>
                                                 }
-                                            }
-                                            else
-                                            {
-                                                <a href="@Url.Page("/Pricing", new { organizationName = Model.Organization.Name })" class="btn btn-primary btn-block">
-                                                    <i class="fas fa-handshake"></i> @L["UpgradeToPremium"].Value
-                                                </a>
-                                            }
-                                        </abp-card-body>
-                                    </abp-card>
+                                            </abp-card-body>
+                                        </abp-card>   
+                                    }else if (Model.Organization.IsPremium)
+                                    {
+                                        <abp-card class="detail-head mt-4 font-weight-bold text-center">
+                                            <abp-card-body>
+                                                <span>Premium end date: @Model.Organization.PremiumEndDate!.Value.ToShortDateString()</span>
+                                            </abp-card-body>
+                                        </abp-card>
+                                    }
                                 }
                                 @await Component.InvokeAsync(typeof(JoinAreaViewComponent), new {organizationId = Model.Organization.Id})
                                 @await Component.InvokeAsync(typeof(MembersAreaViewComponent),
