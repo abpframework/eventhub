@@ -87,6 +87,7 @@ namespace EventHub.Organizations
                     }
 
                     organization.DowngradeToPremium();
+                    organization.IsSendPremiumReminderEmail = false;
                     await organizationRepository.UpdateAsync(organization);
                 }
                 catch (Exception ex)
