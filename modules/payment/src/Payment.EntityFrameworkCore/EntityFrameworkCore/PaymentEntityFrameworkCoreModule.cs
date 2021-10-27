@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Payment.EntityFrameworkCore.Repositories;
+using Payment.PaymentRequests;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
@@ -14,9 +16,7 @@ namespace Payment.EntityFrameworkCore
         {
             context.Services.AddAbpDbContext<PaymentDbContext>(options =>
             {
-                /* Add custom repositories here. Example:
-                 * options.AddRepository<Question, EfCoreQuestionRepository>();
-                 */
+                options.AddRepository<PaymentRequest, PaymentRequestRepository>();
             });
         }
     }
