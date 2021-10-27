@@ -33,6 +33,8 @@ namespace EventHub.Organizations
 
         public DateTime? PremiumEndDate { get; private set; }
 
+        public bool IsSendPremiumReminderEmail { get; set; }
+
         private Organization()
         {
         }
@@ -76,8 +78,13 @@ namespace EventHub.Organizations
             return this;
         }
         
-        internal Organization DowngradeToPremium(IClock clock)
+        public Organization DowngradeToPremium()
         {
+            if (!IsPremium)
+            {
+                return this;
+            }
+            
             SetPremiumStatus(false);
 
             return this;

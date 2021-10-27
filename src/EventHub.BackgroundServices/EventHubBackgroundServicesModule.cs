@@ -1,5 +1,6 @@
 ﻿using EventHub.EntityFrameworkCore;
 using EventHub.Events;
+using EventHub.Organizations;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -45,6 +46,8 @@ namespace EventHub
             context.AddBackgroundWorker<EventReminderWorker>();
             context.AddBackgroundWorker<NewEventWorker>();
             context.AddBackgroundWorker<EventTimingChangeWorker>();
+            
+            context.AddBackgroundWorker<OrganizationPremiumEndDateWorker>();
         }
     }
 }

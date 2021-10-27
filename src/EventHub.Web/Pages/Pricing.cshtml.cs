@@ -45,17 +45,17 @@ namespace EventHub.Web.Pages
 
         public async Task OnGetAsync()
         {
+            Organization = await _organizationAppService.GetProfileAsync(OrganizationName);
+            if (CurrentUser.UserName != Organization.OwnerUserName)
+            {
+                throw new AbpAuthorizationException();
+            }
+            
             if (_premiumPlanInfoOptionsSnapshot.Value.IsActive)
             {
                 PremiumPlanInfo = _premiumPlanInfoOptionsSnapshot.Value;
             }
 
-            Organization = await _organizationAppService.GetProfileAsync(OrganizationName);
-
-            if (CurrentUser.UserName != Organization.OwnerUserName)
-            {
-                throw new AbpAuthorizationException();
-            }
         }
 
         public async Task<IActionResult> OnPostUpgradeAsync()

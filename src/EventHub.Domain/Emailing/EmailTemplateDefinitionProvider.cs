@@ -73,6 +73,15 @@ namespace EventHub.Emailing
                         isInlineLocalized: true
                     )
             );
+            
+            context.Add(
+                new TemplateDefinition(
+                        EmailTemplates.PremiumEndDateReminder)
+                    .WithVirtualFilePath(
+                        "/Emailing/Templates/PremiumEndDateReminder.tpl",
+                        isInlineLocalized: true
+                    )
+            );
         }
     }
 }
