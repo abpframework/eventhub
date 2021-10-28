@@ -114,7 +114,7 @@ namespace EventHub.Organizations.PaymentRequests
             {
                 OrganizationName = paymentRequestProductExtraParameter.OrganizationName,
                 LicenseType = OrganizationPlanType.Premium,
-                FailReason = eventData.FailReason
+                FailReason = eventData.FailReason.IsNullOrWhiteSpace() ? "An unknown error has occurred. Please contact us." : eventData.FailReason
             };
             
             await _emailSender.QueueAsync(
