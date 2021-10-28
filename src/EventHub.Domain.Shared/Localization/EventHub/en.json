@@ -150,6 +150,7 @@
     "MinStartTime": "Min Start Time",
     "MaxStartTime": "Max Start Time",
     "Online": "Online",
-    "InPerson": "In Person" 
+    "InPerson": "In Person",
+    "UpgradeToPremium": "Upgrade To Premium"
   }
 }

@@ -55,15 +55,13 @@
                                     <small>
                                         @if (!organizationPaymentRequestExtraParameterConfiguration.IsExtend)
                                         {
-                                            <span class="text-muted">Operation: Upgrade</span>
                                             <span class="text-muted">Target Plan: @OrganizationPlanType.Premium</span>
                                             <span class="text-muted ml-1">End date: @DateTime.Now.AddMonths(planInfo.OnePremiumPeriodAsMonth).ToShortDateString()</span>
                                         }
                                         else
                                         {
-                                            <span class="text-muted">Operation: Extend</span>
+                                            <span class="text-muted">Plan: @OrganizationPlanType.Premium</span>
                                         }
-                                        <span class="text-muted ml-1">Current State:  @L["Enum:PaymentRequestState:" + Model.PaymentRequest.State]</span>
                                         <span class="ui-product-color ui-product-color-sm align-text-bottom" style="background:#e81e2c;"></span> &nbsp;
                                     </small>
                                 </div>
