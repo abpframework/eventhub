@@ -1,26 +1,86 @@
 ﻿@page "/Payment/Requests"
-@using global::Payment.Admin.Payments
 @using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
-@using Blazorise
+@using global::Payment.Admin.Payments
+@using global::Payment.PaymentRequests
 @using Volo.Abp.Application.Dtos
+@using Blazorise
 @using Volo.Abp.BlazoriseUI.Components.ObjectExtending
 @inherits PaymentAdminComponentBase
 
-@* ************************* PAGE HEADER ************************* *@
-<PageHeader Title="@L["PaymentRequests"]" BreadcrumbItems="@BreadcrumbItems" Toolbar="@Toolbar">
-</PageHeader>
-
-@* ************************* DATA GRID ************************* *@
 <Card>
+    <CardHeader>
+        <h2>@L["PaymentRequests"]</h2>
+    </CardHeader>
+    
     <CardBody>
-        <AbpExtensibleDataGrid TItem="PaymentRequestWithDetailsDto"
-                               Data="@Entities"
-                               ReadData="@OnDataGridReadAsync"
-                               TotalItems="@TotalCount"
-                               ShowPager="true"
-                               PageSize="@PageSize"
-                               CurrentPage="@CurrentPage"
-                               Columns="@PaymentRequestTableColumns">
-        </AbpExtensibleDataGrid>
+        <Form>
+            <div id="FilterSection" class="row mt-3">
+                <Column ColumnSize="ColumnSize.Is3">
+                    <FieldLabel>@L["ProductName"]</FieldLabel>
+                    <TextEdit TValue="string" KeyPress="OnKeyPress" @bind-Text="@GetListInput.ProductName" />
+                </Column>
+                <Column ColumnSize="ColumnSize.Is3">
+                    <FieldLabel>@L["Status"]</FieldLabel>
+                    <Select TValue="PaymentRequestState?" @SelectedValue="@GetListInput.Status" SelectedValueChanged="@OnPaymentRequestStateChanged">
+                        @* <SelectItem Value="@((PaymentRequestState?)null)"></SelectItem> *@
+                        @foreach (PaymentRequestState state in Enum.GetValues(typeof(PaymentRequestState)))
+                        {
+                            <SelectItem Value="@((int) state)">@state.ToString()</SelectItem>
+                        }
+                    </Select>
+                </Column>
+                <Column ColumnSize="ColumnSize.Is3">
+                    <Field>
+                        <FieldLabel>@L["MinCreationTime"]</FieldLabel>
+                        <DateEdit TValue="DateTime?" Date="@GetListInput.MinCreationTime" DateChanged="OnSelectedDateChangedForMinCreationTime" />
+                    </Field>
+                </Column>
+                <Column ColumnSize="ColumnSize.Is3">
+                    <Field>
+                        <FieldLabel>@L["MaxCreationTime"]</FieldLabel>
+                        <DateEdit TValue="DateTime?" Date="@GetListInput.MaxCreationTime" DateChanged="OnSelectedDateChangedForMaxCreationTime" />
+                    </Field>
+                </Column>
+            </div>
+        </Form>
+        
+        <DataGrid TItem="PaymentRequestWithDetailsDto"
+                  Data="PaymentRequests"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  PageSize="PageSize"
+                  Responsive="true">
+            <DataGridColumns>
+                <DataGridColumn TItem="PaymentRequestWithDetailsDto"
+                                Field="ProductName"
+                                Caption="@L["ProductName"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="PaymentRequestWithDetailsDto"
+                                Field="CustomerId"
+                                Caption="@L["CustomerId"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="PaymentRequestWithDetailsDto"
+                                Field="Currency"
+                                Caption="@L["Currency"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="PaymentRequestWithDetailsDto"
+                                Field="Price"
+                                Caption="@L["Price"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="PaymentRequestWithDetailsDto"
+                                Field="State"
+                                Caption="@L["State"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="PaymentRequestWithDetailsDto"
+                                Field="FailReason"
+                                Caption="@L["FailReason"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="PaymentRequestWithDetailsDto"
+                                Field="CreationTime"
+                                Caption="@L["CreationTime"]">
+                </DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
     </CardBody>
 </Card>

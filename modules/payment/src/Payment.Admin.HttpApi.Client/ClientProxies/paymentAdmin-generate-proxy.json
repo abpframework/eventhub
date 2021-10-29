@@ -33,7 +33,7 @@
               "parameters": [
                 {
                   "nameOnMethod": "input",
-                  "name": "Filter",
+                  "name": "ProductName",
                   "jsonName": null,
                   "type": "System.String",
                   "typeSimple": "string",
@@ -45,7 +45,7 @@
                 },
                 {
                   "nameOnMethod": "input",
-                  "name": "CreationDateMax",
+                  "name": "MaxCreationTime",
                   "jsonName": null,
                   "type": "System.DateTime?",
                   "typeSimple": "string?",
@@ -57,7 +57,7 @@
                 },
                 {
                   "nameOnMethod": "input",
-                  "name": "CreationDateMin",
+                  "name": "MinCreationTime",
                   "jsonName": null,
                   "type": "System.DateTime?",
                   "typeSimple": "string?",

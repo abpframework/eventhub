@@ -12,17 +12,17 @@ namespace Payment.PaymentRequests
             int skipCount,
             int maxResultCount,
             string sorting,
-            string filter,
-            DateTime? creationDateMax = null,
-            DateTime? creationDateMin = null,
+            string productName = null,
+            DateTime? maxCreationTime = null,
+            DateTime? minCreationTime = null,
             PaymentRequestState? state = null,
             CancellationToken cancellationToken = default
         );
 
         Task<int> GetCountAsync(
-            string filter,
-            DateTime? creationDateMax = null,
-            DateTime? creationDateMin = null,
+            string productName = null,
+            DateTime? maxCreationTime = null,
+            DateTime? minCreationTime = null,
             PaymentRequestState? state = null,
             CancellationToken cancellationToken = default
         );

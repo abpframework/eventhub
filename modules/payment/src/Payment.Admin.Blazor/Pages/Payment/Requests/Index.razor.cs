@@ -5,27 +5,21 @@ using System.Threading.Tasks;
 using Blazorise;
 using Blazorise.DataGrid;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Payment.Admin.Payments;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.AspNetCore.Components.Web.Extensibility.TableColumns;
-using Volo.Abp.AspNetCore.Components.Web.Theming.PageToolbars;
-using BreadcrumbItem = Volo.Abp.BlazoriseUI.BreadcrumbItem;
+using Payment.PaymentRequests;
 
 namespace Payment.Admin.Pages.Payment.Requests
 {
     public partial class Index
     {
-        [Inject] protected IPaymentRequestAdminAppService PaymentRequestAdminAppService { get; set; }
+        [Inject] 
+        protected IPaymentRequestAdminAppService PaymentRequestAdminAppService { get; set; }
         
-        protected PageToolbar Toolbar { get; } = new();
+        protected IReadOnlyList<PaymentRequestWithDetailsDto> PaymentRequests { get; set; }
 
-        protected TableColumnDictionary TableColumns { get; } = new();
-
-        protected List<TableColumn> PaymentRequestTableColumns => TableColumns.Get<Index>();
-
-        protected List<BreadcrumbItem> BreadcrumbItems { get; } = new();
-
-        protected IReadOnlyList<PaymentRequestWithDetailsDto> Entities = Array.Empty<PaymentRequestWithDetailsDto>();
+        protected PaymentRequestGetListInput GetListInput { get; set; }
 
         protected virtual int PageSize { get; } = LimitedResultRequestDto.DefaultMaxResultCount;
 
@@ -35,63 +29,18 @@ namespace Payment.Admin.Pages.Payment.Requests
 
         protected int? TotalCount { get; set; }
 
-        protected PaymentRequestGetListInput GetListInput { get; } = new();
-
+        public Index()
+        {
+            GetListInput = new();
+        }
+        
         protected override async Task OnInitializedAsync()
         {
-            await SetBreadCrumbsAsync();
-            await SetTableColumnsAsync();
+            await GetPaymentRequestsAsync();
             await InvokeAsync(StateHasChanged);
         }
 
-        private ValueTask SetBreadCrumbsAsync()
-        {
-            BreadcrumbItems.Add(new BreadcrumbItem(L["Menu:PaymentManagement"]));
-            BreadcrumbItems.Add(new BreadcrumbItem(L["Menu:PaymentRequests"]));
-            return ValueTask.CompletedTask;
-        }
-
-        protected virtual ValueTask SetTableColumnsAsync()
-        {
-            PaymentRequestTableColumns
-                .AddRange(new TableColumn[]
-                {
-                    new TableColumn
-                    {
-                        Title = L["DisplayName:CreationTime"],
-                        Data = nameof(PaymentRequestWithDetailsDto.CreationTime)
-                    },
-                    new TableColumn
-                    {
-                        Title = L["DisplayName:Price"],
-                        Data = nameof(PaymentRequestWithDetailsDto.Price)
-                    },
-                    new TableColumn
-                    {
-                        Title = L["DisplayName:Currency"],
-                        Data = nameof(PaymentRequestWithDetailsDto.Currency)
-                    },
-                    new TableColumn
-                    {
-                        Title = L["DisplayName:State"],
-                        Data = nameof(PaymentRequestWithDetailsDto.State)
-                    },
-                    new TableColumn
-                    {
-                        Title = L["DisplayName:ProductName"],
-                        Data = nameof(PaymentRequestWithDetailsDto.ProductName)
-                    },
-                    new TableColumn
-                    {
-                        Title = L["DisplayName:FailReason"],
-                        Data = nameof(PaymentRequestWithDetailsDto.FailReason)
-                    }
-                });
-
-            return ValueTask.CompletedTask;
-        }
-
-        protected virtual async Task GetEntitiesAsync()
+        protected virtual async Task GetPaymentRequestsAsync()
         {
             try
             {
@@ -100,8 +49,9 @@ namespace Payment.Admin.Pages.Payment.Requests
                 GetListInput.MaxResultCount = PageSize;
 
                 var result = await PaymentRequestAdminAppService.GetListAsync(GetListInput);
-                Entities = result.Items.As<IReadOnlyList<PaymentRequestWithDetailsDto>>();
+                PaymentRequests = result.Items.As<IReadOnlyList<PaymentRequestWithDetailsDto>>();
                 TotalCount = (int?) result.TotalCount;
+                await InvokeAsync(StateHasChanged);
             }
             catch (Exception ex)
             {
@@ -118,8 +68,37 @@ namespace Payment.Admin.Pages.Payment.Requests
 
             CurrentPage = e.Page;
 
-            await GetEntitiesAsync();
+            await GetPaymentRequestsAsync();
             await InvokeAsync(StateHasChanged);
+        }
+        
+        private async Task OnKeyPress(KeyboardEventArgs e)
+        {
+            if (e.Code is "Enter" or "NumpadEnter")
+            {
+                await GetPaymentRequestsAsync();
+            }
+        }
+        
+        private async Task OnSelectedDateChangedForMinCreationTime(DateTime? minCreationTime)
+        {
+            GetListInput.MinCreationTime = minCreationTime;
+            await GetPaymentRequestsAsync();
+        }
+
+        private async Task OnSelectedDateChangedForMaxCreationTime(DateTime? maxCreationTime)
+        {
+            GetListInput.MaxCreationTime = maxCreationTime;
+            await GetPaymentRequestsAsync();
+        }
+        
+        private async Task OnPaymentRequestStateChanged(PaymentRequestState? status)
+        {
+            Console.WriteLine("Status changed!");
+            Console.WriteLine(status);
+            
+            GetListInput.Status = status;
+            await GetPaymentRequestsAsync();
         }
     }
 }

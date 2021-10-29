@@ -21,16 +21,16 @@ namespace Payment.Admin.Payments
                 input.SkipCount,
                 input.MaxResultCount,
                 input.Sorting,
-                input.Filter,
-                input.CreationDateMax,
-                input.CreationDateMin,
+                input.ProductName,
+                input.MaxCreationTime,
+                input.MinCreationTime,
                 input.Status
             );
 
             var totalCount = await PaymentRequestRepository.GetCountAsync(
-                input.Filter,
-                input.CreationDateMax,
-                input.CreationDateMin,
+                input.ProductName,
+                input.MaxCreationTime,
+                input.MinCreationTime,
                 input.Status
             );
 
