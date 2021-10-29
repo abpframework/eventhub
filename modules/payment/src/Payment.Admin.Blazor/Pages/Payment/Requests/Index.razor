@@ -25,7 +25,7 @@
                         <option value="@((PaymentRequestState?) null)">-</option>
                         @foreach (var item in PaymentRequestStates)
                         {
-                            <SelectItem Value="@item">@L["PaymentType:" + item]</SelectItem>
+                            <SelectItem Value="@item">@L["Enum:PaymentRequestState:" + item]</SelectItem>
                         }
                     </Select>
                 </Field>

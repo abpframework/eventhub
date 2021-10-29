@@ -8,8 +8,8 @@ namespace Payment.Admin.Permissions
     {
         public override void Define(IPermissionDefinitionContext context)
         {
-            var paymentGroup = context.AddGroup(PaymentAdminPermissions.GroupName, L("Permission:Payment"));
-            paymentGroup.AddPermission(PaymentAdminPermissions.Request.Default, L("Permission:RequestManagement"));
+            var paymentGroup = context.AddGroup(PaymentAdminPermissions.GroupName, L("Permission:PaymentManagement"));
+            paymentGroup.AddPermission(PaymentAdminPermissions.Request.Default, L("Permission:PaymentRequest"));
         }
         
         private static LocalizableString L(string name)
