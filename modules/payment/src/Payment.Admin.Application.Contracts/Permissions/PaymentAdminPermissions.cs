@@ -2,7 +2,7 @@
 {
     public class PaymentAdminPermissions
     {
-        public const string GroupName = "Payment";
+        public const string GroupName = "PaymentAdmin";
 
         public static class Request
         {

@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Components.Web;
 using Payment.Admin.Payments;
 using Volo.Abp.Application.Dtos;
 using Payment.PaymentRequests;
+using Volo.Abp.AspNetCore.Components.Web.Extensibility.TableColumns;
+using Volo.Abp.BlazoriseUI.Components;
 
 namespace Payment.Admin.Pages.Payment.Requests
 {
@@ -19,6 +21,8 @@ namespace Payment.Admin.Pages.Payment.Requests
         
         protected IReadOnlyList<PaymentRequestWithDetailsDto> PaymentRequests { get; set; }
 
+        protected IReadOnlyList<PaymentRequestState> PaymentRequestStates => Enum.GetValues<PaymentRequestState>();
+
         protected PaymentRequestGetListInput GetListInput { get; set; }
 
         protected virtual int PageSize { get; } = LimitedResultRequestDto.DefaultMaxResultCount;
@@ -28,7 +32,7 @@ namespace Payment.Admin.Pages.Payment.Requests
         protected string CurrentSorting { get; set; }
 
         protected int? TotalCount { get; set; }
-
+        
         public Index()
         {
             GetListInput = new();
@@ -39,7 +43,7 @@ namespace Payment.Admin.Pages.Payment.Requests
             await GetPaymentRequestsAsync();
             await InvokeAsync(StateHasChanged);
         }
-
+        
         protected virtual async Task GetPaymentRequestsAsync()
         {
             try
@@ -72,31 +76,8 @@ namespace Payment.Admin.Pages.Payment.Requests
             await InvokeAsync(StateHasChanged);
         }
         
-        private async Task OnKeyPress(KeyboardEventArgs e)
-        {
-            if (e.Code is "Enter" or "NumpadEnter")
-            {
-                await GetPaymentRequestsAsync();
-            }
-        }
-        
-        private async Task OnSelectedDateChangedForMinCreationTime(DateTime? minCreationTime)
-        {
-            GetListInput.MinCreationTime = minCreationTime;
-            await GetPaymentRequestsAsync();
-        }
-
-        private async Task OnSelectedDateChangedForMaxCreationTime(DateTime? maxCreationTime)
-        {
-            GetListInput.MaxCreationTime = maxCreationTime;
-            await GetPaymentRequestsAsync();
-        }
-        
         private async Task OnPaymentRequestStateChanged(PaymentRequestState? status)
         {
-            Console.WriteLine("Status changed!");
-            Console.WriteLine(status);
-            
             GetListInput.Status = status;
             await GetPaymentRequestsAsync();
         }
