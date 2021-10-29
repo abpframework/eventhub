@@ -7,7 +7,8 @@ namespace Payment.Admin
 {
     [DependsOn(
         typeof(PaymentAdminApplicationContractsModule),
-        typeof(AbpHttpClientModule))]
+        typeof(AbpHttpClientModule)
+    )]
     public class PaymentAdminHttpApiClientModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

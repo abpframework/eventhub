@@ -7,6 +7,7 @@ using IdentityModel;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Payment.Admin;
 using Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme;
@@ -22,7 +23,8 @@ namespace EventHub.Admin.Web
         typeof(AbpAutofacWebAssemblyModule),
         typeof(EventHubAdminHttpApiClientModule),
         typeof(AbpAspNetCoreComponentsWebAssemblyBasicThemeModule),
-        typeof(AbpIdentityBlazorWebAssemblyModule)
+        typeof(AbpIdentityBlazorWebAssemblyModule),
+        typeof(PaymentAdminBlazorModule)
     )]
     public class EventHubBlazorModule : AbpModule
     {

@@ -18,7 +18,7 @@ namespace Payment.Admin
             context.Services.AddAutoMapperObjectMapper<PaymentAdminApplicationModule>();
             Configure<AbpAutoMapperOptions>(options =>
             {
-                options.AddMaps<PaymentAdminApplicationModule>(validate: true);
+                options.AddProfile<PaymentAdminApplicationAutoMapperProfile>(validate: true);
             });
         }
     }

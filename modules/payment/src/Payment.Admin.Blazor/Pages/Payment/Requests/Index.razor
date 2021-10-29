@@ -1,0 +1,26 @@
+﻿@page "/Payment/Requests"
+@using global::Payment.Admin.Payments
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using Blazorise
+@using Volo.Abp.Application.Dtos
+@using Volo.Abp.BlazoriseUI.Components.ObjectExtending
+@inherits PaymentAdminComponentBase
+
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["PaymentRequests"]" BreadcrumbItems="@BreadcrumbItems" Toolbar="@Toolbar">
+</PageHeader>
+
+@* ************************* DATA GRID ************************* *@
+<Card>
+    <CardBody>
+        <AbpExtensibleDataGrid TItem="PaymentRequestWithDetailsDto"
+                               Data="@Entities"
+                               ReadData="@OnDataGridReadAsync"
+                               TotalItems="@TotalCount"
+                               ShowPager="true"
+                               PageSize="@PageSize"
+                               CurrentPage="@CurrentPage"
+                               Columns="@PaymentRequestTableColumns">
+        </AbpExtensibleDataGrid>
+    </CardBody>
+</Card>

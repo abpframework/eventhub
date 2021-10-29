@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EventHub.Admin.HttpApi.Client\EventHub.Admin.HttpApi.Client.csproj" />
+    <ProjectReference Include="..\..\modules\payment\src\Payment.Admin.Blazor\Payment.Admin.Blazor.csproj" />
   </ItemGroup>
 
   <ItemGroup>

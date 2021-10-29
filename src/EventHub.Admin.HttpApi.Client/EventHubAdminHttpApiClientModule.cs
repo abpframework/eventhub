@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Payment.Admin;
 using Volo.Abp.Account;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
@@ -10,17 +11,16 @@ namespace EventHub.Admin
         typeof(EventHubAdminApplicationContractsModule),
         typeof(AbpAccountHttpApiClientModule),
         typeof(AbpIdentityHttpApiClientModule),
-        typeof(AbpPermissionManagementHttpApiClientModule)
+        typeof(AbpPermissionManagementHttpApiClientModule),
+        typeof(PaymentAdminHttpApiClientModule)
         )]
     public class EventHubAdminHttpApiClientModule : AbpModule
     {
-        public const string RemoteServiceName = "Default";
-
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddHttpClientProxies(
                 typeof(EventHubAdminApplicationContractsModule).Assembly,
-                RemoteServiceName
+                EventHubAdminRemoteServiceConsts.RemoteServiceName
             );
         }
     }
