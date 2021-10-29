@@ -55,6 +55,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payment.Admin.HttpApi.Clien
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payment.Admin.Blazor", "src\Payment.Admin.Blazor\Payment.Admin.Blazor.csproj", "{7C6D6C96-0816-43F3-81C8-44CBC18434DE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payment.Admin.Application.Tests", "test\Payment.Admin.Application.Tests\Payment.Admin.Application.Tests.csproj", "{E31DBDFE-1CC7-4E1B-B65C-C3810BF85981}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -133,6 +135,10 @@ Global
 		{7C6D6C96-0816-43F3-81C8-44CBC18434DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C6D6C96-0816-43F3-81C8-44CBC18434DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C6D6C96-0816-43F3-81C8-44CBC18434DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E31DBDFE-1CC7-4E1B-B65C-C3810BF85981}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E31DBDFE-1CC7-4E1B-B65C-C3810BF85981}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E31DBDFE-1CC7-4E1B-B65C-C3810BF85981}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E31DBDFE-1CC7-4E1B-B65C-C3810BF85981}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -162,6 +168,7 @@ Global
 		{046100DA-71ED-43C5-8C33-D424D678DBEA} = {5B39D229-146D-423E-9E50-91471851824E}
 		{A791943D-3F0B-41E3-AE73-15A60180B4A5} = {5B39D229-146D-423E-9E50-91471851824E}
 		{7C6D6C96-0816-43F3-81C8-44CBC18434DE} = {5B39D229-146D-423E-9E50-91471851824E}
+		{E31DBDFE-1CC7-4E1B-B65C-C3810BF85981} = {FC718EF0-43EB-4767-9578-95FA0B3727A5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6AAFA1C6-603E-13FA-45E5-7910AA9F661D}
