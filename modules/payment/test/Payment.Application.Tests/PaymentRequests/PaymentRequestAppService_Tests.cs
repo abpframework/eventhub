@@ -15,12 +15,14 @@ namespace Payment.PaymentRequests
             _paymentRequestAppService = GetRequiredService<IPaymentRequestAppService>();
         }
 
-        //[Fact]
+        [Fact]
         public async Task Should_Create_Minimal_Payment_Request()
         {
             var result = await _paymentRequestAppService.CreateAsync(
                 new PaymentRequestCreationDto
                 {
+                    CustomerId = "customer_1",
+                    ProductId = "my_product_1",
                     ProductName = "My product 1",
                     Price = 99.99m
                 }
@@ -31,11 +33,13 @@ namespace Payment.PaymentRequests
             result.ProductName.ShouldBe("My product 1");
         }
 
-        //[Fact]
+        [Fact]
         public async Task Should_Create_Payment_Request_With_Default_Currency()
         {
             var result = await _paymentRequestAppService.CreateAsync(new PaymentRequestCreationDto
             {
+                CustomerId = "customer_1",
+                ProductId = "my_product_1",
                 Price = 4.95m,
                 ProductName = "Donation"
             });
