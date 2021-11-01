@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
+using Volo.Abp.ObjectExtending;
 
 namespace Payment.PaymentRequests
 {
@@ -152,7 +153,7 @@ namespace Payment.PaymentRequests
 
             var paymentRequest = await _paymentRequestRepository.GetAsync(paymentRequestId);
 
-            if (order.Status == PayPalConsts.OrderStatus.Completed || order.Status == PayPalConsts.OrderStatus.Approved)
+            if (order.Status is PayPalConsts.OrderStatus.Completed or PayPalConsts.OrderStatus.Approved)
             {
                 paymentRequest.SetAsCompleted();
             }

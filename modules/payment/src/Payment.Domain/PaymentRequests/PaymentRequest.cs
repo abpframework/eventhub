@@ -68,7 +68,7 @@ namespace Payment.PaymentRequests
 
         public virtual void SetAsFailed(string failReason)
         {
-            if (State != PaymentRequestState.Failed)
+            if (State == PaymentRequestState.Failed)
             {
                 return;
             }
