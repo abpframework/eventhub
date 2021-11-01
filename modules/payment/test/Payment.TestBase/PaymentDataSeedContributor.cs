@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Payment.PaymentRequests;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
@@ -8,26 +9,31 @@ namespace Payment
 {
     public class PaymentDataSeedContributor : IDataSeedContributor, ITransientDependency
     {
-        private readonly IGuidGenerator _guidGenerator;
-        private readonly ICurrentTenant _currentTenant;
+        private readonly IPaymentRequestRepository _paymentRequestRepository;
+        private readonly PaymentTestData _paymentTestData;
 
-        public PaymentDataSeedContributor(
-            IGuidGenerator guidGenerator, ICurrentTenant currentTenant)
+        public PaymentDataSeedContributor(IPaymentRequestRepository paymentRequestRepository, PaymentTestData paymentTestData)
         {
-            _guidGenerator = guidGenerator;
-            _currentTenant = currentTenant;
+            _paymentRequestRepository = paymentRequestRepository;
+            _paymentTestData = paymentTestData;
         }
 
-        public Task SeedAsync(DataSeedContext context)
+        public async Task SeedAsync(DataSeedContext context)
         {
-            /* Instead of returning the Task.CompletedTask, you can insert your test data
-             * at this point!
-             */
+            await BuildPaymentRequestAsync();
+        }
 
-            using (_currentTenant.Change(context?.TenantId))
-            {
-                return Task.CompletedTask;
-            }
+        private async Task BuildPaymentRequestAsync()
+        {
+            var paymentRequest = new PaymentRequest(
+                _paymentTestData.PaymentRequest1Id,
+                _paymentTestData.Customer1Id,
+                _paymentTestData.Product1Id,
+                "Product 1",
+                10,
+                "USD");
+
+            await _paymentRequestRepository.InsertAsync(paymentRequest, autoSave: true);
         }
     }
 }
