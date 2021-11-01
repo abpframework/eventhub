@@ -1,9 +1,9 @@
 ﻿@page "/Payment/Requests"
-@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(PaymentAdminPermissions.Request.Default)]
 @using global::Payment.Admin.Payments
 @using global::Payment.PaymentRequests
-@using Volo.Abp.Application.Dtos
-@using Blazorise
+@using global::Payment.Admin.Permissions
 @using Volo.Abp.BlazoriseUI.Components.ObjectExtending
 @inherits PaymentAdminComponentBase
 
@@ -62,10 +62,6 @@
                 <DataGridColumn TItem="PaymentRequestWithDetailsDto"
                                 Field="ProductName"
                                 Caption="@L["ProductName"]">
-                </DataGridColumn>
-                <DataGridColumn TItem="PaymentRequestWithDetailsDto"
-                                Field="CustomerId"
-                                Caption="@L["CustomerId"]">
                 </DataGridColumn>
                 <DataGridColumn TItem="PaymentRequestWithDetailsDto"
                                 Field="Currency"

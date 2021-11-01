@@ -5,12 +5,9 @@ using System.Threading.Tasks;
 using Blazorise;
 using Blazorise.DataGrid;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using Payment.Admin.Payments;
 using Volo.Abp.Application.Dtos;
 using Payment.PaymentRequests;
-using Volo.Abp.AspNetCore.Components.Web.Extensibility.TableColumns;
-using Volo.Abp.BlazoriseUI.Components;
 
 namespace Payment.Admin.Pages.Payment.Requests
 {
