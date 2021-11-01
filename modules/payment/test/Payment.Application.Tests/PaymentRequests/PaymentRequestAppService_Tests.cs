@@ -15,7 +15,7 @@ namespace Payment.PaymentRequests
             _paymentRequestAppService = GetRequiredService<IPaymentRequestAppService>();
         }
 
-        [Fact]
+        //[Fact]
         public async Task Should_Create_Minimal_Payment_Request()
         {
             var result = await _paymentRequestAppService.CreateAsync(
@@ -31,7 +31,7 @@ namespace Payment.PaymentRequests
             result.ProductName.ShouldBe("My product 1");
         }
 
-        [Fact]
+        //[Fact]
         public async Task Should_Create_Payment_Request_With_Default_Currency()
         {
             var result = await _paymentRequestAppService.CreateAsync(new PaymentRequestCreationDto
