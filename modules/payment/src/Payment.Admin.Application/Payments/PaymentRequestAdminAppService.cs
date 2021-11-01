@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Payment.Admin.Permissions;
 using Payment.PaymentRequests;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
 namespace Payment.Admin.Payments
 {
+    [Authorize(PaymentAdminPermissions.Request.Default)]
     public class PaymentRequestAdminAppService : ApplicationService, IPaymentRequestAdminAppService
     {
         protected IPaymentRequestRepository PaymentRequestRepository { get; }
