@@ -66,3 +66,32 @@ TODO
   - `FailReason`: Reason of failure from payment provider (PayPal)
   - `ExtraProperties`: Represents ExtraProperties of PaymentRequest entity.
 
+
+
+## Webhook Handling
+You have to make some configuration for webhooks on PayPal Dashboard.
+
+_If you test it locally, you can use [ngrok](https://ngrok.com/) to open your localhost to world_
+
+0. Deploy eventhub or open your ip:port to public. Your HttpApi.Host must be accessible from all over the world.
+
+1. Go to [Application List](https://developer.paypal.com/developer/applications). Find your app and go details. _(You can use my account below)_
+<details>
+  <summary>PayPal Account Credentials</summary>
+
+> `info@enisnecipoglu.com`
+> `1q2w3E**`
+
+> Use following temp number for two factor authentication verification:
+> https://receive-smss.com/sms/48722717428/
+
+> _(Yes the star (*) is doubled. min password length requirement was 8)_
+
+</details> 
+
+2. At the bottom of page you'll see the Webhooks section
+![image](https://user-images.githubusercontent.com/23705418/138262017-b2c3a689-f929-4dbb-8927-04ab9a2c5292.png)
+
+3. Click to **Add Webhook** button and use following values:
+    - **Webhook URL**: `https://yourhttpapihosturl.com/api/payment/requests/webhook` _(replace hostname with your API public url)_
+    - **Event types**: `Checkout order approved`, `Checkout order completed`
