@@ -2,20 +2,21 @@
 using Microsoft.Extensions.DependencyInjection;
 using Payment.Localization;
 using Payment.Web.Menus;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
-using Payment.Permissions;
 
 namespace Payment.Web
 {
     [DependsOn(
         typeof(PaymentApplicationContractsModule),
         typeof(AbpAspNetCoreMvcUiThemeSharedModule),
-        typeof(AbpAutoMapperModule)
+        typeof(AbpAutoMapperModule),
+        typeof(AbpAspNetCoreMvcModule)
         )]
     public class PaymentWebModule : AbpModule
     {

@@ -55,6 +55,33 @@ namespace EventHub.Emailing
                         isInlineLocalized: true
                     )
             );
+            
+            context.Add(
+                new TemplateDefinition(
+                        EmailTemplates.PaymentRequestCompleted)
+                    .WithVirtualFilePath(
+                        "/Emailing/Templates/PaymentRequestCompleted.tpl",
+                        isInlineLocalized: true
+                    )
+            );
+            
+            context.Add(
+                new TemplateDefinition(
+                        EmailTemplates.PaymentRequestFailed)
+                    .WithVirtualFilePath(
+                        "/Emailing/Templates/PaymentRequestFailed.tpl",
+                        isInlineLocalized: true
+                    )
+            );
+            
+            context.Add(
+                new TemplateDefinition(
+                        EmailTemplates.PremiumEndDateReminder)
+                    .WithVirtualFilePath(
+                        "/Emailing/Templates/PremiumEndDateReminder.tpl",
+                        isInlineLocalized: true
+                    )
+            );
         }
     }
 }

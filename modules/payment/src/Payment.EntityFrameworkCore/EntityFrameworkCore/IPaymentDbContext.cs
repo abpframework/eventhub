@@ -1,4 +1,6 @@
-﻿using Volo.Abp.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Payment.PaymentRequests;
+using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace Payment.EntityFrameworkCore
@@ -6,8 +8,6 @@ namespace Payment.EntityFrameworkCore
     [ConnectionStringName(PaymentDbProperties.ConnectionStringName)]
     public interface IPaymentDbContext : IEfCoreDbContext
     {
-        /* Add DbSet for each Aggregate Root here. Example:
-         * DbSet<Question> Questions { get; }
-         */
+        DbSet<PaymentRequest> PaymentRequests { get; }
     }
 }

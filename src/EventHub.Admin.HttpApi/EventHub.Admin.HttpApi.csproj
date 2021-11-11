@@ -9,6 +9,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\EventHub.Admin.Application.Contracts\EventHub.Admin.Application.Contracts.csproj" />
+        <ProjectReference Include="..\..\modules\payment\src\Payment.Admin.HttpApi\Payment.Admin.HttpApi.csproj" />
     </ItemGroup>
 
     <ItemGroup>

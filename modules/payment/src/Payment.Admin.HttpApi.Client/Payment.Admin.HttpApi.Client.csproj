@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\..\common.props" />
+    <Import Project="..\..\configureawait.props" />
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <RootNamespace>Payment.Admin</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Volo.Abp.Http.Client" Version="5.0.0-beta.1" />
+        <ProjectReference Include="..\Payment.Admin.Application.Contracts\Payment.Admin.Application.Contracts.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="**\*generate-proxy.json" />
+        <Content Remove="**\*generate-proxy.json" />
+    </ItemGroup>
+
+</Project>

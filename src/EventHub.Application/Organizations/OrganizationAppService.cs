@@ -119,7 +119,7 @@ namespace EventHub.Organizations
         public async Task<bool> IsOrganizationOwnerAsync(Guid organizationId)
         {
             return CurrentUser.Id.HasValue && await _organizationRepository
-                .AnyAsync(x => x.Id == organizationId && x.OwnerUserId == CurrentUser.Id.Value);
+                .AnyAsync(x => x.Id == organizationId && x.OwnerUserId == CurrentUser.GetId());
         }
 
         [Authorize]

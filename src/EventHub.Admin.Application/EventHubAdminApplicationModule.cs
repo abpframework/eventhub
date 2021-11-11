@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Account;
+﻿using Payment.Admin;
+using Volo.Abp.Account;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
@@ -12,7 +13,8 @@ namespace EventHub.Admin
         typeof(EventHubAdminApplicationContractsModule),
         typeof(AbpIdentityApplicationModule),
         typeof(AbpPermissionManagementApplicationModule),
-        typeof(AbpAutoMapperModule)
+        typeof(AbpAutoMapperModule),
+        typeof(PaymentAdminApplicationModule)
     )]
     public class EventHubAdminApplicationModule : AbpModule
     {

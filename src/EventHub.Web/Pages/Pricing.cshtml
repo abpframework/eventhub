@@ -1,0 +1,137 @@
+@page "/pricing/{organizationName}"
+@using EventHub.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@model EventHub.Web.Pages.Pricing
+@inject IHtmlLocalizer<EventHubResource> L
+
+@section styles {
+  <abp-style src="/Pages/Pricing.css" />
+}
+
+<div class="container-fluid flex-grow-1 container-p-y pricing-table">
+  <div class="container px-0">
+
+    <h1 class="text-center font-weight-bolder pt-5 mb-3">
+      Pricing plans
+    </h1>
+    <div class="text-center text-muted text-large font-weight-light">
+      Choose the best plan that fits your needs
+    </div>
+    
+    <div class="row no-gutters row-bordered ui-bordered text-center mt-3">
+
+      <div class="d-flex col-md flex-column py-4">
+        <div class="display-1 text-primary my-4"><i class="lnr lnr-briefcase text-big"></i></div>
+        <h5 class="m-0 ml-2">Normal</h5>
+        <div class="flex-grow-1">
+          <div class="py-4 my-2">
+            <span class="d-inline-block text-muted text-big align-middle mr-2">$</span>
+            <span class="display-3 d-inline-block font-weight-bold align-middle">0</span>
+          </div>
+          <div class="pb-5">
+            <p class="ui-company-text mb-2">1 Organization</p>
+            <p class="ui-company-text mb-2">2 Events</p>
+            <p class="ui-company-text mb-0">No ads</p>
+          </div>
+        </div>
+        <div class="px-md-3 px-lg-5">
+        </div>
+      </div>
+
+      @if(Model.PremiumPlanInfo is not null)
+      {
+        <div class="d-flex col-md flex-column py-4">
+          <div class="display-1 text-primary my-4"><i class="lnr lnr-store text-big"></i></div>
+          <h5 class="m-0">
+            @Model.PremiumPlanInfo.PlanType
+            @if (Model.Organization.IsPremium)
+            {
+              <span class="align-top text-dark font-weight-bold" style="font-size: x-small" abp-badge-pill="Info"> Current Plan </span>
+            }
+          </h5>
+          <div class="flex-grow-1">
+            <div class="py-4 my-2">
+              <span class="d-inline-block text-muted text-big align-middle mr-2">$</span>
+              <span class="display-3 d-inline-block font-weight-bold align-middle">@Model.PremiumPlanInfo.Price</span>
+            </div>
+            <div class="pb-5">
+              <p class="ui-company-text mb-2">1 Organization</p>
+              <p class="ui-company-text mb-2">2 Events</p>
+              <p class="ui-company-text mb-0">No ads</p>
+            </div>
+          </div>
+          <div class="px-md-3 px-lg-5">
+
+            @if (Model.Organization.IsPremium)
+            {
+              <form id="Extend" method="post" asp-page-handler="Extend">
+                <abp-input asp-for="TargetPlanToUpgrade" value="@Model.PremiumPlanInfo.PlanType"></abp-input>
+                <abp-input asp-for="OrganizationName"></abp-input>
+                <a onclick="document.getElementById('Extend').submit()" class="btn btn-primary btn-lg rounded-pill">Extend Now</a>
+              </form>
+            }
+            else
+            {
+              <form id="Upgrade" method="post" asp-page-handler="Upgrade">
+                <abp-input asp-for="TargetPlanToUpgrade" value="@Model.PremiumPlanInfo.PlanType"></abp-input>
+                <abp-input asp-for="OrganizationName"></abp-input>
+                <a onclick="document.getElementById('Upgrade').submit()" class="btn btn-primary btn-lg rounded-pill">Upgrade To @Model.PremiumPlanInfo.PlanType</a>
+              </form>
+            }
+          </div>
+        </div>
+      }
+    </div>
+    
+    <h3 class="text-center font-weight-light my-5">Frequently Asked Questions</h3>
+
+    <div class="row">
+      <div class="col-md-6">
+
+        <h5 class="mb-2">Dapibus ac facilisis in?</h5>
+        <p class="ui-company-text text-muted mb-4">
+          Lorem ipsum dolor sit amet, ius virtute suscipit te. Ius prima euismod consequat eu.
+        </p>
+
+        <h5 class="mb-2">Cras justo odio?</h5>
+        <p class="ui-company-text text-muted mb-4">
+          Etiam vivendo eu sea, purto ponderum mediocritatem at pro.
+        </p>
+
+        <h5 class="mb-2">Porta ac consectetur ac?</h5>
+        <p class="ui-company-text text-muted mb-4">
+          Iuvaret deleniti vulputate nec ne, id vix lucilius legendos deseruisse.
+        </p>
+
+        <h5 class="mb-2">Ne ornatus albucius ius?</h5>
+        <p class="ui-company-text text-muted mb-4">
+          Lorem ipsum dolor sit amet, mea in pertinax hendrerit gloriatur.
+        </p>
+
+      </div>
+      <div class="col-md-6">
+
+        <h5 class="mb-2">Ne ornatus albucius ius?</h5>
+        <p class="ui-company-text text-muted mb-4">
+          Lorem ipsum dolor sit amet, mea in pertinax hendrerit gloriatur.
+        </p>
+
+        <h5 class="mb-2">Quo insolens intellegam dissentiet at?</h5>
+        <p class="ui-company-text text-muted mb-4">
+          Ex fugit legimus fuisset per. Ex quidam option diceret ius.
+        </p>
+
+        <h5 class="mb-2">Ad his assum delenit blandit?</h5>
+        <p class="ui-company-text text-muted mb-4">
+          Ne ornatus albucius ius, nostrum dignissim repudiandae an usu.
+        </p>
+
+        <h5 class="mb-2">Dapibus ac facilisis in?</h5>
+        <p class="ui-company-text text-muted mb-4">
+          Lorem ipsum dolor sit amet, ius virtute suscipit te. Ius prima euismod consequat eu.
+        </p>
+
+      </div>
+    </div>
+  </div>
+</div>

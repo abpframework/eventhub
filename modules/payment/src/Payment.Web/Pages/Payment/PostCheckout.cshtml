@@ -1,0 +1,41 @@
+﻿@page
+@using Payment.Web.Pages.Payment
+@using Payment.PaymentRequests
+@inherits Payment.Web.Pages.PaymentPageBase
+@model Payment.Web.Pages.Payment.PostCheckoutPageModel
+@{
+	PageLayout.Content.Title = L["PaymentResult"] + L["Enum:PaymentRequestState:" + Model.PaymentRequest.State];
+}
+
+<main class="static-page container mt-5">
+	<abp-card class="m-5">
+		<abp-card-header>
+			<h2>@L["PaymentResult"]</h2>
+		</abp-card-header>
+
+		<abp-card-body>
+
+			@if (Model.PaymentRequest.State == PaymentRequestState.Completed)
+			{
+				<abp-alert alert-type="Success" dismissible="false">
+					<h3 class="d-inline">
+						<i class="fa fa-check-circle"></i>
+						@L["YourPaymentCompletedSuccessfully"]
+					</h3>>
+				</abp-alert>
+			}
+			else
+			{
+				<abp-alert alert-type="Danger" dismissible="false">
+					<h3 class="d-inline">
+						<i class="fa fa-times"></i>
+						@L["YourPaymentFailed"]
+					</h3>
+				</abp-alert>
+
+				<abp-button href="@Model.GoBackLink" text="@L["GoBack"]" />
+			}
+
+		</abp-card-body>
+	</abp-card>
+</main>

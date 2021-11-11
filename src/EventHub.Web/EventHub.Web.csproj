@@ -17,6 +17,7 @@
     <ProjectReference Include="..\EventHub.HttpApi\EventHub.HttpApi.csproj" />
     <ProjectReference Include="..\EventHub.HttpApi.Client\EventHub.HttpApi.Client.csproj" />
     <ProjectReference Include="..\EventHub.Web.Theme\EventHub.Web.Theme.csproj" />
+    <ProjectReference Include="..\..\modules\payment\src\Payment.Web\Payment.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Payment.PaymentRequests;
 
 namespace Payment
 {
@@ -6,9 +7,7 @@ namespace Payment
     {
         public PaymentApplicationAutoMapperProfile()
         {
-            /* You can configure your AutoMapper mapping configuration here.
-             * Alternatively, you can split your mapping configurations
-             * into multiple profile classes for a better organization. */
+            CreateMap<PaymentRequest, PaymentRequestDto>();
         }
     }
 }

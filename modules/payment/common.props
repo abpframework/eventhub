@@ -5,15 +5,6 @@
     <NoWarn>$(NoWarn);CS1591</NoWarn>
     <AbpProjectType>module</AbpProjectType>
   </PropertyGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="ConfigureAwait.Fody" Version="3.3.1" PrivateAssets="All" />
-    <PackageReference Include="Fody" Version="6.5.3">
-      <PrivateAssets>All</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
 
   <Target Name="NoWarnOnRazorViewImportedTypeConflicts" BeforeTargets="RazorCoreCompile">
     <PropertyGroup>

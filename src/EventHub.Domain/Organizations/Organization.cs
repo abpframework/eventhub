@@ -1,6 +1,7 @@
 ﻿using System;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.Timing;
 
 namespace EventHub.Organizations
 {
@@ -27,6 +28,12 @@ namespace EventHub.Organizations
         public string MediumUsername { get; set; }
 
         public int MemberCount { get; internal set; }
+
+        public bool IsPremium { get; private set; }
+
+        public DateTime? PremiumEndDate { get; private set; }
+
+        public bool IsSendPremiumReminderEmail { get; set; }
 
         private Organization()
         {
@@ -61,6 +68,41 @@ namespace EventHub.Organizations
         public Organization SetDescription(string description)
         {
             Description = Check.NotNullOrWhiteSpace(description, nameof(description), OrganizationConsts.MaxDescriptionNameLength, OrganizationConsts.MinDescriptionNameLength);
+            return this;
+        }
+
+        internal Organization UpgradeToPremium(DateTime endDate)
+        {
+            SetPremiumStatus(true, endDate);
+
+            return this;
+        }
+        
+        public Organization DowngradeToPremium()
+        {
+            if (!IsPremium)
+            {
+                return this;
+            }
+            
+            SetPremiumStatus(false);
+
+            return this;
+        }
+
+        private Organization SetPremiumStatus(bool isPremium, DateTime? endDate = null)
+        {
+            if (isPremium)
+            {
+                Check.NotNull(endDate, nameof(endDate));
+                IsPremium = true;
+                PremiumEndDate = endDate;
+
+                return this;
+            }
+
+            IsPremium = false;
+            
             return this;
         }
     }

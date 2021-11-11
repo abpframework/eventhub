@@ -1,0 +1,89 @@
+﻿@page "/Payment/Requests"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(PaymentAdminPermissions.Request.Default)]
+@using global::Payment.Admin.Payments
+@using global::Payment.PaymentRequests
+@using global::Payment.Admin.Permissions
+@using Volo.Abp.BlazoriseUI.Components.ObjectExtending
+@inherits PaymentAdminComponentBase
+
+<Card>
+    <CardHeader>
+        <h2>@L["PaymentRequests"]</h2>
+    </CardHeader>
+    
+    <CardBody>
+        <Form>
+            <div id="FilterSection" class="row mt-3">
+                <Field ColumnSize="ColumnSize.Is3">
+                    <FieldLabel>@L["ProductName"]</FieldLabel>
+                    <TextEdit Placeholder="@L["ProductName"]" @bind-Text="@GetListInput.ProductName"/>
+                </Field>
+                <Field ColumnSize="ColumnSize.Is3">
+                    <FieldLabel>@L["Status"]</FieldLabel>
+                    <Select Placeholder="@L["Status"]" TValue="PaymentRequestState?" SelectedValue="@GetListInput.Status" SelectedValueChanged="OnPaymentRequestStateChanged">
+                        <option value="@((PaymentRequestState?) null)">-</option>
+                        @foreach (var item in PaymentRequestStates)
+                        {
+                            <SelectItem Value="@item">@L["Enum:PaymentRequestState:" + item]</SelectItem>
+                        }
+                    </Select>
+                </Field>
+                <Field ColumnSize="ColumnSize.Is3">
+                    <FieldLabel>@L["MinCreationTime"]</FieldLabel>
+                    <DateEdit Placeholder="@L["MinCreationTime"]" @bind-Date="@GetListInput.MinCreationTime"/>
+                </Field>
+                <Field ColumnSize="ColumnSize.Is3">
+                    <FieldLabel>@L["MaxCreationTime"]</FieldLabel>
+                    <DateEdit Placeholder="@L["MaxCreationTime"]" @bind-Date="@GetListInput.MaxCreationTime"/>
+                </Field>
+                <Field ColumnSize="ColumnSize.Is12">
+                    <Row>
+                        <Column ColumnSize="ColumnSize.Is9"></Column>
+                        <Column ColumnSize="ColumnSize.Is3">
+                            <SubmitButton Block="true"
+                                          Clicked="@GetPaymentRequestsAsync">
+                                <Icon Name="IconName.Search" />
+                            </SubmitButton>
+                        </Column>
+                    </Row>
+                </Field>
+            </div>
+        </Form>
+        
+        <DataGrid TItem="PaymentRequestWithDetailsDto"
+                  Data="PaymentRequests"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  PageSize="PageSize"
+                  Responsive="true">
+            <DataGridColumns>
+                <DataGridColumn TItem="PaymentRequestWithDetailsDto"
+                                Field="ProductName"
+                                Caption="@L["ProductName"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="PaymentRequestWithDetailsDto"
+                                Field="Currency"
+                                Caption="@L["Currency"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="PaymentRequestWithDetailsDto"
+                                Field="Price"
+                                Caption="@L["Price"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="PaymentRequestWithDetailsDto"
+                                Field="State"
+                                Caption="@L["State"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="PaymentRequestWithDetailsDto"
+                                Field="FailReason"
+                                Caption="@L["FailReason"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="PaymentRequestWithDetailsDto"
+                                Field="CreationTime"
+                                Caption="@L["CreationTime"]">
+                </DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>

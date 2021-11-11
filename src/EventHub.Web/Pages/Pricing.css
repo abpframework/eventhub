@@ -1,0 +1,41 @@
+.pricing-table{
+    margin: 0;
+    font-size: .894rem;
+    font-weight: 400;
+    line-height: 1.47;
+    color: #4E5155;
+    text-align: left;
+}
+
+.display-3 {
+    font-size: 3rem;
+    font-weight: 300;
+    line-height: 1.1;
+}
+
+.font-weight-bold {
+    font-weight: 700 !important;
+}
+
+.row-bordered>.col::after, .row-bordered>[class^="col-"]::after, .row-bordered>[class*=" col-"]::after, .row-bordered>[class^="col "]::after, .row-bordered>[class*=" col "]::after, .row-bordered>[class$=" col"]::after, .row-bordered>[class="col"]::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -1px;
+    display: block;
+    width: 0;
+    border-left: 1px solid rgba(24,28,33,0.06);
+}
+
+ .ui-bordered {
+    border: 1px solid rgba(24,28,33,0.06);
+}
+
+.row-bordered {
+    overflow: hidden;
+}
+
+html:not([dir=rtl]) .mb-4, html:not([dir=rtl]) .my-4 {
+    margin-bottom: 1.5rem !important;
+}

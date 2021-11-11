@@ -10,6 +10,7 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.PostgreSql;
 using System;
+using Payment.EntityFrameworkCore;
 
 namespace EventHub.EntityFrameworkCore
 {
@@ -22,7 +23,8 @@ namespace EventHub.EntityFrameworkCore
         typeof(AbpEntityFrameworkCorePostgreSqlModule),
         typeof(AbpBackgroundJobsEntityFrameworkCoreModule),
         typeof(AbpAuditLoggingEntityFrameworkCoreModule),
-        typeof(BlobStoringDatabaseEntityFrameworkCoreModule)
+        typeof(BlobStoringDatabaseEntityFrameworkCoreModule),
+        typeof(PaymentEntityFrameworkCoreModule)
         )]
     public class EventHubEntityFrameworkCoreModule : AbpModule
     {

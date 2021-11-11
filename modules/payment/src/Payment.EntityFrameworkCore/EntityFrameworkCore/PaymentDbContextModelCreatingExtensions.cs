@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Payment.PaymentRequests;
 using Volo.Abp;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Payment.EntityFrameworkCore
 {
@@ -10,25 +12,17 @@ namespace Payment.EntityFrameworkCore
         {
             Check.NotNull(builder, nameof(builder));
 
-            /* Configure all entities here. Example:
-
-            builder.Entity<Question>(b =>
+            builder.Entity<PaymentRequest>(b =>
             {
-                //Configure table & schema name
-                b.ToTable(PaymentDbProperties.DbTablePrefix + "Questions", PaymentDbProperties.DbSchema);
-
+                b.ToTable(PaymentDbProperties.DbTablePrefix + "PaymentRequests", PaymentDbProperties.DbSchema);
                 b.ConfigureByConvention();
+                b.Property(x => x.CustomerId).HasMaxLength(PaymentRequestConsts.MaxCustomerIdLength);
+                b.Property(x => x.ProductId).HasMaxLength(PaymentRequestConsts.MaxProductIdLength);
+                b.Property(x => x.ProductName).IsRequired().HasMaxLength(PaymentRequestConsts.MaxProductNameLength);
 
-                //Properties
-                b.Property(q => q.Title).IsRequired().HasMaxLength(QuestionConsts.MaxTitleLength);
-
-                //Relations
-                b.HasMany(question => question.Tags).WithOne().HasForeignKey(qt => qt.QuestionId);
-
-                //Indexes
-                b.HasIndex(q => q.CreationTime);
+                b.HasIndex(x => x.CustomerId);
+                b.HasIndex(x => x.State);
             });
-            */
         }
     }
 }
