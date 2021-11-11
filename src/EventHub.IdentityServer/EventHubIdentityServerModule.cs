@@ -111,6 +111,8 @@ namespace EventHub
                         bundle.AddFiles("/global-styles.css");
                     }
                 );
+
+                options.Mode = BundlingMode.None;
             });
 
             Configure<AbpAuditingOptions>(options =>
