@@ -49,6 +49,8 @@ steps:
 
 - task: HelmDeploy@0
   displayName: Helm deploy
+  condition: 
+  timeoutInMinutes: 20
   inputs:
     connectionType: 'Azure Resource Manager'
     azureSubscription: 'volosoft(fe02ef9f-9e1c-4e40-b924-505981688dd8)'
