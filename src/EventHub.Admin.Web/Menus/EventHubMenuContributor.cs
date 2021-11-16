@@ -4,7 +4,6 @@ using EventHub.Admin.Permissions;
 using EventHub.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Localization;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.UI.Navigation;
@@ -33,7 +32,7 @@ namespace EventHub.Admin.Web.Menus
             }
         }
 
-        private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
+        private Task ConfigureMainMenuAsync(MenuConfigurationContext context)
         {
             var l = context.GetLocalizer<EventHubResource>();
 
@@ -68,6 +67,8 @@ namespace EventHub.Admin.Web.Menus
                         url: "/events"
                     ).RequirePermissions(EventHubPermissions.Events.Default)
                 );
+            
+            return Task.CompletedTask;
         }
 
         private Task ConfigureUserMenuAsync(MenuConfigurationContext context)
@@ -81,7 +82,7 @@ namespace EventHub.Admin.Web.Menus
             {
                 context.Menu.AddItem(new ApplicationMenuItem(
                     "Account.Manage",
-                    accountStringLocalizer["ManageYourProfile"],
+                    accountStringLocalizer["Manage"],
                     $"{identityServerUrl.EnsureEndsWith('/')}Account/Manage?returnUrl={_configuration["App:SelfUrl"]}",
                     icon: "fa fa-cog",
                     order: 1000,

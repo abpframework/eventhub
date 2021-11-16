@@ -71,7 +71,7 @@
                         <EntityActions TItem="EventInListDto">
                             <EntityAction TItem="EventInListDto"
                                           RequiredPolicy="@EventHubPermissions.Events.Update"
-                                          Clicked="() => OpenEditEventModal(context)"
+                                          Clicked="() => OpenEditEventModalAsync(context)"
                                           Text="@L["Edit"]">
                             </EntityAction>
                             <EntityAction TItem="EventInListDto"
