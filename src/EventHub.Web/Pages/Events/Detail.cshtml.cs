@@ -8,7 +8,7 @@ namespace EventHub.Web.Pages.Events
     public class DetailPageModel : EventHubPageModel
     {
         [BindProperty(SupportsGet = true)]
-        public string Url { get; set; }
+        public new string Url { get; set; }
 
         public bool IsEventOwner { get; set; }
 
@@ -40,7 +40,7 @@ namespace EventHub.Web.Pages.Events
                         {
                             url = Event.Url
                         }
-                    )
+                    )!
                 );
             }
 

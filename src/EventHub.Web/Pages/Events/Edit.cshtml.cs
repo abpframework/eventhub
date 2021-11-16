@@ -22,7 +22,7 @@ namespace EventHub.Web.Pages.Events
     public class EditPageModel : EventHubPageModel
     {
         [BindProperty(SupportsGet = true)]
-        public string Url { get; set; }
+        public new string Url { get; set; }
         
         [BindProperty] 
         public EditEventViewModel Event { get; set; }

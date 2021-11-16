@@ -33,9 +33,9 @@ namespace EventHub.Data
         {
             try
             {
-                if (!await MigrationsFolderExists())
+                if (!MigrationsFolderExists())
                 {
-                    await AddInitialMigration();
+                    AddInitialMigration();
                     return;
                 }
             }
@@ -70,14 +70,14 @@ namespace EventHub.Data
             await _dataSeeder.SeedAsync();
         }
 
-        private async Task<bool> MigrationsFolderExists()
+        private bool MigrationsFolderExists()
         {
             var dbMigrationsProjectFolder = GetDbMigrationsProjectFolderPath();
 
             return Directory.Exists(Path.Combine(dbMigrationsProjectFolder, "migrations"));
         }
 
-        private async Task AddInitialMigration()
+        private void AddInitialMigration()
         {
             Logger.LogInformation("Creating initial migration...");
 
