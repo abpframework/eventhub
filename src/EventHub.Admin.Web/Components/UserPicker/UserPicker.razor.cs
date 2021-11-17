@@ -120,10 +120,9 @@ namespace EventHub.Admin.Web.Components.UserPicker
             await SaveFormAsync.InvokeAsync();
         }
 
-        private Task ClosingUserPickerModal(ModalClosingEventArgs eventArgs)
+        private void ClosingUserPickerModal(ModalClosingEventArgs eventArgs)
         {
             eventArgs.Cancel = eventArgs.CloseReason == CloseReason.FocusLostClosing;
-            return Task.CompletedTask;
         }
     }
 }

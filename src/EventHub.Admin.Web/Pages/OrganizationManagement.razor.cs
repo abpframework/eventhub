@@ -153,11 +153,10 @@ namespace EventHub.Admin.Web.Pages
             SelectedTabInEditModal = name;
         }
 
-        private Task OnEditModalClosing(CancelEventArgs e)
+        private void OnEditModalClosing(CancelEventArgs e)
         {
             IsLoadingProfileImage = false;
             SelectedTabInEditModal = TabContentInEditModal.OrganizationProfile.ToString();
-            return Task.CompletedTask;
         }
 
         private async Task OnKeyPress(KeyboardEventArgs e)

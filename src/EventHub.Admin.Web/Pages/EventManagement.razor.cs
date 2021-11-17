@@ -102,10 +102,9 @@ namespace EventHub.Admin.Web.Pages
             await EditEventModal.Show();
         }
 
-        private Task OnEditModalClosing(CancelEventArgs e)
+        private void OnEditModalClosing(CancelEventArgs e)
         {
             SelectedTabInEditModal = EventEditTabs.EventInfo.ToString();
-            return Task.CompletedTask;
         }
 
         private void OnSelectedTabChangedInEditModal(string name)
