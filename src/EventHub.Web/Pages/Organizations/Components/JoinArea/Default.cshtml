@@ -6,24 +6,24 @@
     <abp-card-body>
         @if (Model.IsLoggedIn)
         {
-            if (Model.IsJoined)
-            {
-                <abp-button id="OrganizationLeaveButton"
-                            button-type="Secondary"
-                            size="Block"
-                            icon="fas fa-times"
-                            text="@L["LeaveOrganization"].Value"
-                            data-url="@Url.Action("Leave","OrganizationMembership", new { organizationId = Model.OrganizationId })" />
-            }
-            else
-            {
-                <abp-button id="OrganizationJoinButton"
-                            button-type="Primary"
-                            size="Block"
-                            icon="fas fa-plus"
-                            text="@L["JoinOrganization"].Value"
-                            data-url="@Url.Action("Join","OrganizationMembership", new { organizationId = Model.OrganizationId })"/>
-            }
+            <div class="d-grid gap-2">
+                @if (Model.IsJoined)
+                {
+                    <abp-button id="OrganizationLeaveButton"
+                                button-type="Secondary"
+                                icon="fas fa-times"
+                                text="@L["LeaveOrganization"].Value"
+                                data-url="@Url.Action("Leave","OrganizationMembership", new { organizationId = Model.OrganizationId })" />
+                }
+                else
+                {
+                    <abp-button id="OrganizationJoinButton"
+                                button-type="Primary"
+                                icon="fas fa-plus"
+                                text="@L["JoinOrganization"].Value"
+                                data-url="@Url.Action("Join","OrganizationMembership", new { organizationId = Model.OrganizationId })"/>
+                }
+            </div>
         }
         else
         {

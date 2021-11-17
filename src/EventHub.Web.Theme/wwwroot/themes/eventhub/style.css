@@ -40,6 +40,10 @@ body {
     font-weight: 600;
 }
 
+a:link, a:visited, a:hover, a:focus, a:active {
+    text-decoration: none;
+}
+
 p.lead {
     font-size: 14px;
     font-weight: 500;

@@ -2,8 +2,7 @@
 {
     public class EventHubMenus
     {
-        private const string Prefix = "EventHub";
-        public const string Home = Prefix + ".Home";
+        public const string Prefix = "EventHub";
 
         public static class OrganizationManagement
         {

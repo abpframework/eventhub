@@ -1,4 +1,32 @@
 ﻿$(function () {
+    $('.main-slider .owl-carousel').owlCarousel({
+        loop: true,
+        center: true,
+        margin: 0,
+        padding: 0,
+        nav: true,
+        items: 1,
+        dots: false,
+    });
+
+    $('.card-slider .owl-carousel').owlCarousel({
+        loop: false,
+        center: false,
+        margin: 30,
+        padding: 0,
+        nav: true,
+        slideBy: 2,
+        responsive: {
+            0: {
+                items: 1,
+            },
+            991: {
+                items: 2,
+            },
+        },
+        dots: true,
+    });
+    
     function cb(start, end) {
         $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
     }

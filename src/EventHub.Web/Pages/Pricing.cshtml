@@ -15,23 +15,22 @@
       Pricing plans
     </h1>
     <div class="text-center text-muted text-large font-weight-light">
-      Choose the best plan that fits your needs
+      Choose the plan best for your organization.
     </div>
     
     <div class="row no-gutters row-bordered ui-bordered text-center mt-3">
 
       <div class="d-flex col-md flex-column py-4">
         <div class="display-1 text-primary my-4"><i class="lnr lnr-briefcase text-big"></i></div>
-        <h5 class="m-0 ml-2">Normal</h5>
+        <h5 class="m-0 ms-2">Free account</h5>
         <div class="flex-grow-1">
           <div class="py-4 my-2">
-            <span class="d-inline-block text-muted text-big align-middle mr-2">$</span>
+            <span class="d-inline-block text-muted text-big align-middle me-2">$</span>
             <span class="display-3 d-inline-block font-weight-bold align-middle">0</span>
           </div>
           <div class="pb-5">
-            <p class="ui-company-text mb-2">1 Organization</p>
-            <p class="ui-company-text mb-2">2 Events</p>
-            <p class="ui-company-text mb-0">No ads</p>
+            <p class="ui-company-text mb-2">1 event per month</p>
+            <p class="ui-company-text mb-2">300 attendees per event</p>
           </div>
         </div>
         <div class="px-md-3 px-lg-5">
@@ -43,7 +42,7 @@
         <div class="d-flex col-md flex-column py-4">
           <div class="display-1 text-primary my-4"><i class="lnr lnr-store text-big"></i></div>
           <h5 class="m-0">
-            @Model.PremiumPlanInfo.PlanType
+            @Model.PremiumPlanInfo.PlanType account
             @if (Model.Organization.IsPremium)
             {
               <span class="align-top text-dark font-weight-bold" style="font-size: x-small" abp-badge-pill="Info"> Current Plan </span>
@@ -51,13 +50,12 @@
           </h5>
           <div class="flex-grow-1">
             <div class="py-4 my-2">
-              <span class="d-inline-block text-muted text-big align-middle mr-2">$</span>
+              <span class="d-inline-block text-muted text-big align-middle me-2">$</span>
               <span class="display-3 d-inline-block font-weight-bold align-middle">@Model.PremiumPlanInfo.Price</span>
             </div>
             <div class="pb-5">
-              <p class="ui-company-text mb-2">1 Organization</p>
-              <p class="ui-company-text mb-2">2 Events</p>
-              <p class="ui-company-text mb-0">No ads</p>
+            <p class="ui-company-text mb-2">unlimited events</p>
+            <p class="ui-company-text mb-2">unlimited attendees</p>
             </div>
           </div>
           <div class="px-md-3 px-lg-5">
@@ -82,7 +80,7 @@
         </div>
       }
     </div>
-    
+  @*
     <h3 class="text-center font-weight-light my-5">Frequently Asked Questions</h3>
 
     <div class="row">
@@ -133,5 +131,6 @@
 
       </div>
     </div>
+    *@
   </div>
 </div>

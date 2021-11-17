@@ -56,7 +56,7 @@
                                         @if (!organizationPaymentRequestExtraParameterConfiguration.IsExtend)
                                         {
                                             <span class="text-muted">Target Plan: @OrganizationPlanType.Premium</span>
-                                            <span class="text-muted ml-1">End date: @DateTime.Now.AddMonths(planInfo.OnePremiumPeriodAsMonth).ToShortDateString()</span>
+                                            <span class="text-muted ms-1">End date: @DateTime.Now.AddMonths(planInfo.OnePremiumPeriodAsMonth).ToShortDateString()</span>
                                         }
                                         else
                                         {
@@ -75,9 +75,9 @@
 
             <div class="d-flex flex-wrap justify-content-between align-items-center pb-4">
                 <abp-container>
-                    <abp-row class="float-right">
+                    <abp-row class="float-end">
                         <abp-column>
-                            <div class="text-right mt-4">
+                            <div class="text-end mt-4">
                                 <label class="text-muted font-weight-normal m-0">Total price</label>
                                 <div class="text-large"><strong>@Model.PaymentRequest.Price @Model.PaymentRequest.Currency</strong></div>
                             </div>
@@ -86,9 +86,9 @@
                 </abp-container>
             </div>
 
-            <abp-container class="float-right">
+            <abp-container class="float-end">
                 <abp-row>
-                    <abp-column class="float-right">
+                    <abp-column class="float-end">
                         <form method="post">
                             @if (Model.PaymentRequest.State != PaymentRequestState.Waiting)
                             {
@@ -97,8 +97,8 @@
                             }
                             else
                             {
-                                <abp-button class="mt-2 float-right" offset="_10" size="Large" type="submit" button-type="Primary">@L["Checkout"]</abp-button>
-                                <a href="@Url.Page("/Pricing", new { organizationName = organizationName })" class="btn btn-lg btn-default md-btn-flat mt-2 mr-3 float-right">Back to pricing</a>
+                                <abp-button class="mt-2 float-end" offset="_10" size="Large" type="submit" button-type="Primary">@L["Checkout"]</abp-button>
+                                <a href="@Url.Page("/Pricing", new { organizationName = organizationName })" class="btn btn-lg btn-default md-btn-flat mt-2 me-3 float-end">Back to pricing</a>
                             }
                         </form>
                     </abp-column>

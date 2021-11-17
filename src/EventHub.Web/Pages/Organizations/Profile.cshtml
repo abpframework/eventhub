@@ -31,13 +31,13 @@
             <div class="col-12 mt-4">
                 <ul class="nav nav-tabs profile-nav" id="myTab">
                     <li class="nav-item">
-                        <a href="#about-organization-section" class="nav-link active" data-toggle="tab">About the Organization</a>
+                        <a href="#about-organization-section" class="nav-link active" data-bs-toggle="tab">About the Organization</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#events-section" class="nav-link" data-toggle="tab">Events</a>
+                        <a href="#events-section" class="nav-link" data-bs-toggle="tab">Events</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#members-section" class="nav-link" data-toggle="tab">Members</a>
+                        <a href="#members-section" class="nav-link" data-bs-toggle="tab">Members</a>
                     </li>
                 </ul>
 
@@ -60,7 +60,7 @@
                                 <h5 class="detail-head mt-3 font-weight-bold">Owners</h5>
                                 <div>
                                     <a href="/users/@Model.Organization.OwnerUserName">
-                                        <img gravatar-email="@Model.Organization.OwnerEmail" default-image="Wavatar" gravatar-size="40" class="org-avatar avatar rounded-circle" data-toggle="tooltip" title="@Model.Organization.OwnerUserName"/>
+                                        <img gravatar-email="@Model.Organization.OwnerEmail" default-image="Wavatar" gravatar-size="40" class="org-avatar avatar rounded-circle" data-bs-toggle="tooltip" title="@Model.Organization.OwnerUserName"/>
                                     </a>
                                 </div>
 
@@ -79,16 +79,20 @@
                                                     <span>Premium end date: @Model.Organization.PremiumEndDate!.Value.ToShortDateString()</span>
                                                     @if (PremiumPlanInfoOptionsSnapshot.Value.IsExtendable && Model.Organization.PremiumEndDate!.Value.IsBetween(DateTime.Now, DateTime.Now.AddMonths(PremiumPlanInfoOptionsSnapshot.Value.OnePremiumPeriodAsMonth - PremiumPlanInfoOptionsSnapshot.Value.CanBeExtendedAfterHowManyMonths)))
                                                     {
-                                                        <a href="@Url.Page("/Pricing", new { organizationName = Model.Organization.Name })" class="btn btn-primary btn-block mt-3">
-                                                            <i class="fas fa-handshake"></i> @L["ExtendNow"].Value
-                                                        </a>
+                                                        <div class="d-grid gap-2">
+                                                            <a href="@Url.Page("/Pricing", new { organizationName = Model.Organization.Name })" class="btn btn-primary mt-3">
+                                                                <i class="fas fa-handshake"></i> @L["ExtendNow"].Value
+                                                            </a>
+                                                        </div>
                                                     }
                                                 }
                                                 else
                                                 {
-                                                    <a href="@Url.Page("/Pricing", new { organizationName = Model.Organization.Name })" class="btn btn-primary btn-block">
-                                                        <i class="fas fa-handshake"></i> @L["UpgradeToPremium"]
-                                                    </a>
+                                                    <div class="d-grid gap-2">
+                                                        <a href="@Url.Page("/Pricing", new { organizationName = Model.Organization.Name })" class="btn btn-primary">
+                                                            <i class="fas fa-handshake"></i> @L["UpgradeToPremium"]
+                                                        </a>
+                                                    </div>
                                                 }
                                             </abp-card-body>
                                         </abp-card>   
@@ -167,10 +171,10 @@
                                 <div class="list-style">
                                     <ul class="nav nav-pills events" role="tablist">
                                         <li class="nav-item">
-                                            <a href="#PastEvent" class="selected" data-toggle="tab"><img src="/assets/past.svg"> Past</a>
+                                            <a href="#PastEvent" class="selected" data-bs-toggle="tab"><img src="/assets/past.svg"> Past</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="#UpcomingEvent" data-toggle="tab"><img src="/assets/now.svg"> Upcoming</a>
+                                            <a href="#UpcomingEvent" data-bs-toggle="tab"><img src="/assets/now.svg"> Upcoming</a>
                                         </li>
                                     </ul>
                                 </div>

@@ -51,7 +51,7 @@
 <div class="search-event container">
     <div class="card bg-primary mb-0">
         <div class="card-body">
-            <div class="form-row search-form">
+            <div class="row search-form">
                 <div class="col-md mb-3 mb-md-0">
                     <select id="LanguageSelect" class="form-select" aria-label="en">
                         <option value="" selected>Language</option>
@@ -78,8 +78,8 @@
                         <label for="inputWhen">When</label>
                     </div>
                 </div>
-                <div class="col-md-2">
-                    <button id="SearchButton" class="btn btn-primary btn-lg btn-block ">
+                <div class="col-md-2 d-grid gap-2">
+                    <button id="SearchButton" class="btn btn-primary btn-lg">
                         <img src="/assets/search.svg">
                         Search
                     </button>
@@ -162,28 +162,27 @@
         </div>
     </div>
 
-    <div class="container text-center py-5">
-        <h1 class="my-5 pb-5">How EventHub Works?</h1>
-        <div class="row my-4">
-            <div class="col-md-5 ml-auto">
-                <div class="px-5">
-                    <h3>Explore groups</h3>
-                    <p class="lead">
-                        List who is organizing local events
-                        with one click.
-                    </p>
-                    @if (!CurrentUser.IsAuthenticated)
-                    {
-                        <a href="@UrlOptions.Value.Account/Account/Register?returnUrl=@UrlOptions.Value.Www" class="btn btn-link btn-lg">Join EventHub</a>
-                    }
-                </div>
+<div class="container text-center py-5">
+    <h1 class="my-5 pb-5">How EventHub Works?</h1>
+    <div class="row my-4">
+        <div class="col-md-5 ms-auto">
+            <div class="px-5">
+                <h3>Explore groups</h3>
+                <p class="lead">
+                    List who is organizing local events
+                    with one click.
+                </p>
+                @if (!CurrentUser.IsAuthenticated)
+                {
+                    <a href="@UrlOptions.Value.Account/Account/Register?returnUrl=@UrlOptions.Value.Www" class="btn btn-link btn-lg">Join EventHub</a>
+                }
             </div>
-            <div class="col-md-5 mr-auto border-left">
-                <div class="px-5">
-                    <h3>Start an Event</h3>
-                    <p class="lead">Create your own Eventhub group and benefit from a community of millions.</p>
-                    <a href="@Url.Page("/Events/New")" class="btn btn-link btn-lg">Start</a>
-                </div>
+        </div>
+        <div class="col-md-5 me-auto border-left">
+            <div class="px-5">
+                <h3>Start an Event</h3>
+                <p class="lead">Create your own Eventhub group and benefit from a community of millions.</p>
+                <a href="@Url.Page("/Events/New")" class="btn btn-link btn-lg">Start</a>
             </div>
         </div>
     </div>

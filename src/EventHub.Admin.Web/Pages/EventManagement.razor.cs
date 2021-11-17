@@ -81,8 +81,8 @@ namespace EventHub.Admin.Web.Pages
         private async Task OnDataGridReadAsync(DataGridReadDataEventArgs<EventInListDto> e)
         {
             CurrentSorting = e.Columns
-                .Where(c => c.Direction != SortDirection.None)
-                .Select(c => c.Field + (c.Direction == SortDirection.Descending ? " DESC" : ""))
+                .Where(c => c.SortDirection != SortDirection.None)
+                .Select(c => c.Field + (c.SortDirection == SortDirection.Descending ? " DESC" : ""))
                 .JoinAsString(",");
             CurrentPage = e.Page - 1;
 
@@ -90,7 +90,7 @@ namespace EventHub.Admin.Web.Pages
             await InvokeAsync(StateHasChanged);
         }
 
-        private async Task OpenEditEventModal(EventInListDto input)
+        private async Task OpenEditEventModalAsync(EventInListDto input)
         {
             EditingEventId = input.Id;
             Event = await EventAppService.GetAsync(EditingEventId);
@@ -99,7 +99,7 @@ namespace EventHub.Admin.Web.Pages
             FileEntry = new FileEntry();
             await SetCoverImageUrlAsync();
 
-            EditEventModal.Show();
+            await EditEventModal.Show();
         }
 
         private void OnEditModalClosing(CancelEventArgs e)
@@ -124,7 +124,7 @@ namespace EventHub.Admin.Web.Pages
 
             CoverImageUrl = string.Empty;
             DisabledCoverImageButton = false;
-            EditEventModal.Hide();
+            await EditEventModal.Hide();
         }
 
         private async Task OnKeyPress(KeyboardEventArgs e)

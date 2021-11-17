@@ -52,8 +52,8 @@ namespace EventHub.Admin.Web.Pages
         private async Task OnDataGridReadAsync(DataGridReadDataEventArgs<OrganizationInListDto> e)
         {
             CurrentSorting = e.Columns
-                .Where(c => c.Direction != SortDirection.None)
-                .Select(c => c.Field + (c.Direction == SortDirection.Descending ? " DESC" : ""))
+                .Where(c => c.SortDirection != SortDirection.None)
+                .Select(c => c.Field + (c.SortDirection == SortDirection.Descending ? " DESC" : ""))
                 .JoinAsString(",");
             CurrentPage = e.Page - 1;
             await GetOrganizationsAsync();
@@ -71,7 +71,7 @@ namespace EventHub.Admin.Web.Pages
             TotalCount = (int) result.TotalCount;
         }
 
-        private async Task OpenEditOrganizationModal(OrganizationInListDto input)
+        private async Task OpenEditOrganizationModalAsync(OrganizationInListDto input)
         {
             EditingOrganizationId = input.Id;
             Organization = await OrganizationAppService.GetAsync(EditingOrganizationId);
@@ -80,14 +80,14 @@ namespace EventHub.Admin.Web.Pages
             await SetProfileImageUrlAsync();
 
             EditingOrganization = ObjectMapper.Map<OrganizationProfileDto, UpdateOrganizationDto>(Organization);
-            EditOrganizationModal.Show();
+            await EditOrganizationModal.Show();
         }
 
         private async Task UpdateOrganizationAsync()
         {
             await OrganizationAppService.UpdateAsync(EditingOrganizationId, EditingOrganization);
             await GetOrganizationsAsync();
-            EditOrganizationModal.Hide();
+            await EditOrganizationModal.Hide();
 
             ProfileImageUrl = null;
             DisabledProfileImageButton = false;

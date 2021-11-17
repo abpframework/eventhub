@@ -61,4 +61,4 @@ steps:
     chartName: 'etc/k8s/helm-chart/eventhub'
     releaseName: 'eh-az'
     valueFile: 'etc/k8s/helm-chart/eventhub/values.azure.yaml'
-    arguments: '--namespace eventhub --create-namespace --set global.eventHubImageVersion=$(version)'
+    arguments: '--timeout 20m --namespace eventhub --create-namespace --set global.eventHubImageVersion=$(version)'

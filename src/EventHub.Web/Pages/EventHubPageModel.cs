@@ -17,7 +17,11 @@ namespace EventHub.Web.Pages
         {
             Logger.LogException(exception);
             var errorInfoConverter = LazyServiceProvider.LazyGetRequiredService<IExceptionToErrorInfoConverter>();
-            var errorInfo = errorInfoConverter.Convert(exception, false);
+            var errorInfo = errorInfoConverter.Convert(exception, options =>
+            {
+                options.SendExceptionsDetailsToClients = false;
+                options.SendStackTraceToClients = false;
+            });
             Alerts.Danger(errorInfo.Message);
         }
     }

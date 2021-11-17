@@ -63,8 +63,8 @@ namespace EventHub.Admin.Web.Pages
         private async Task OnDataGridReadAsync(DataGridReadDataEventArgs<EventAttendeeDto> e)
         {
             CurrentSorting = e.Columns
-                .Where(c => c.Direction != SortDirection.None)
-                .Select(c => c.Field + (c.Direction == SortDirection.Descending ? " DESC" : ""))
+                .Where(c => c.SortDirection != SortDirection.None)
+                .Select(c => c.Field + (c.SortDirection == SortDirection.Descending ? " DESC" : ""))
                 .JoinAsString(",");
             CurrentPage = e.Page - 1;
 
