@@ -1,1 +1,68 @@
 ﻿/* Your Global Styles */
+
+.border-light {
+    border-color: #E1E5E9 !important;
+}
+.text-info { 
+    color: #6F32E2!important;
+}
+
+
+.progresses {
+    position: relative;
+    max-width: 440px;
+    margin: 30px auto;
+}
+
+.progresses ul {
+    list-style: none;
+    padding: 0
+}
+
+.progresses ul li.create-steps {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #f8f9fa;
+    z-index: 200;
+    position: relative;
+    text-align: center;
+    line-height: 30px;
+    border: 2px solid #dce0e4;
+    color: #bfc6cd;
+}
+
+.progresses ul li.create-steps.blue {
+    color: #fff;
+    background-color: #00044A;  
+    border-color: #00044A;  
+}
+
+.progresses ul li.create-steps span {
+    position: absolute;
+    top: 35px;
+    left: -30px;
+    font-size: 0.8rem;
+    width: 90px;
+    color:#bfc6cd;
+} 
+
+.progresses ul li.create-steps.blue  span { 
+    color:#00044A;
+} 
+
+.progresses .progress {
+    height: 2px;
+    width: 100%;
+    top: 38px;
+    position: absolute;
+    background-color: #DCE0E5;
+    border-radius: 10px
+}
+.progress-bar { 
+    background-color: #00044A; 
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link { 
+    background-color: #00044A !important;
+}
