@@ -48,11 +48,7 @@ namespace EventHub.EntityFrameworkCore
             });
             
             /* Registering the payment dbcontext and replacing the module's dbcontext */
-            context.Services.AddAbpDbContext<EventHubPaymentDbContext>(options =>
-            {
-                options.ReplaceDbContext<IPaymentDbContext>();
-                options.AddDefaultRepositories();
-            });
+            context.Services.AddAbpDbContext<EventHubPaymentDbContext>();
 
             Configure<AbpDbContextOptions>(options =>
             {
