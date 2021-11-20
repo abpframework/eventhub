@@ -10,7 +10,9 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.PostgreSql;
 using System;
+using EventHub.EntityFrameworkCore.Payment;
 using Payment.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.SqlServer;
 
 namespace EventHub.EntityFrameworkCore
 {
@@ -24,7 +26,8 @@ namespace EventHub.EntityFrameworkCore
         typeof(AbpBackgroundJobsEntityFrameworkCoreModule),
         typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(BlobStoringDatabaseEntityFrameworkCoreModule),
-        typeof(PaymentEntityFrameworkCoreModule)
+        typeof(PaymentEntityFrameworkCoreModule),
+        typeof(AbpEntityFrameworkCoreSqlServerModule)
         )]
     public class EventHubEntityFrameworkCoreModule : AbpModule
     {
@@ -43,10 +46,25 @@ namespace EventHub.EntityFrameworkCore
             {
                 options.AddDefaultRepositories();
             });
+            
+            /* Registering the payment dbcontext and replacing the module's dbcontext */
+            context.Services.AddAbpDbContext<EventHubPaymentDbContext>(options =>
+            {
+                options.ReplaceDbContext<IPaymentDbContext>();
+                options.AddDefaultRepositories();
+            });
 
             Configure<AbpDbContextOptions>(options =>
             {
                 options.UseNpgsql();
+                
+                /* While the default db provider is PostgreSQl (because of `options.UseNpgsql()` above),
+                 * We are configuring to use SQL Server for the payment database
+                 */
+                options.Configure<EventHubPaymentDbContext>(opts =>
+                {
+                    opts.UseSqlServer();
+                });
             });
         }
     }
