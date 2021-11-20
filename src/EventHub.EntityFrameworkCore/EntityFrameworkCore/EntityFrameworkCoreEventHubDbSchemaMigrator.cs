@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using EventHub.Data;
+using EventHub.EntityFrameworkCore.Payment;
 using Volo.Abp.DependencyInjection;
 
 namespace EventHub.EntityFrameworkCore
@@ -28,6 +29,11 @@ namespace EventHub.EntityFrameworkCore
 
             await _serviceProvider
                 .GetRequiredService<EventHubDbContext>()
+                .Database
+                .MigrateAsync();
+            
+            await _serviceProvider
+                .GetRequiredService<EventHubPaymentDbContext>()
                 .Database
                 .MigrateAsync();
         }
