@@ -2,143 +2,852 @@
 @using EventHub.Web.Pages
 @model EventHub.Web.Pages.Empty
 
-    <main class="static-page container mt-5"> 
-        <h1 class="text-center mb-3">Create an Event</h1>
-        <p class="text-center mb-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ut nulla consequat, tempus sapien in,
-pellentesque nunc. Sed at nunc pellentesque, fermentum mi et, fermentum massa. </p>
-        <div class="row"> 
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body px-4 py-5 text-center">
-                        <svg width="50" height="58" viewBox="0 0 50 58" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M33.0445 28.1094H9.31281C8.68249 28.1094 8.17188 28.6205 8.17188 29.2515C8.17188 29.8825 8.68249 30.394 9.31281 30.394H33.0445C33.6748 30.394 34.1854 29.8825 34.1854 29.2515C34.1854 28.6209 33.6748 28.1094 33.0445 28.1094Z" fill="#E8345D"/>
-                            <path d="M33.0445 34.8032H9.31281C8.68249 34.8032 8.17188 35.3143 8.17188 35.9453C8.17188 36.5763 8.68249 37.0879 9.31281 37.0879H33.0445C33.6748 37.0879 34.1854 36.5763 34.1854 35.9453C34.1854 35.3143 33.6748 34.8032 33.0445 34.8032Z" fill="#E8345D"/>
-                            <path d="M33.0445 41.4976H9.31281C8.68249 41.4976 8.17188 42.0087 8.17188 42.6397C8.17188 43.2707 8.68249 43.7822 9.31281 43.7822H33.0445C33.6748 43.7822 34.1854 43.2707 34.1854 42.6397C34.1854 42.0087 33.6748 41.4976 33.0445 41.4976Z" fill="#E8345D"/>
-                            <path d="M48.0044 5.61362H44.3885V1.99791C44.3885 0.896072 43.4919 0 42.3894 0H37.5942C36.4935 0 35.5981 0.896072 35.5981 1.99791V5.61317H31.9827C31.1161 5.61317 30.3785 6.16896 30.1019 6.94246H12.6346C12.332 6.94246 12.0418 7.06282 11.8281 7.27699L0.333931 18.791C0.120145 19.0051 0 19.2959 0 19.599V54.9016C0 56.6101 1.38917 58 3.09637 58H39.7387C41.4459 58 42.8351 56.6101 42.8351 54.9016V39.4692C42.8351 38.8382 42.324 38.3267 41.6941 38.3267C41.0643 38.3267 40.5536 38.8382 40.5536 39.4692V54.9016C40.5536 55.3428 40.1804 55.7153 39.7387 55.7153H3.09637C2.65466 55.7153 2.28142 55.3428 2.28142 54.9016V20.7411H10.3103C12.2212 20.7411 13.7755 19.1857 13.7755 17.2736V9.22711H29.9831V12.4114C29.9831 13.5132 30.8802 14.4093 31.9827 14.4093H35.5981V18.0246C35.5981 19.1282 36.4935 20.026 37.5942 20.026H40.5532V29.1438C40.5532 29.7744 41.0643 30.2859 41.6941 30.2859C42.324 30.2859 42.8346 29.7744 42.8346 29.1438V19.9742C43.7233 19.7707 44.3885 18.9751 44.3885 18.025V14.4093H48.0039C49.1047 14.4093 50 13.5132 50 12.4114V7.61462C50 6.51102 49.1047 5.61362 48.0044 5.61362ZM10.3103 18.4564H3.8941L11.4937 10.8431V17.2736C11.4937 17.9259 10.9632 18.4564 10.3103 18.4564ZM47.7186 12.1246H43.2481C42.6177 12.1246 42.1071 12.6362 42.1071 13.2672V17.7413H37.8795V13.2672C37.8795 12.6362 37.3689 12.1246 36.739 12.1246H32.265V7.89827H36.739C37.3689 7.89827 37.8795 7.38673 37.8795 6.75572V2.28465H42.1071V6.75572C42.1071 7.38673 42.6177 7.89827 43.2481 7.89827H47.7186V12.1246Z" fill="#E8345D"/>
-                            <path d="M41.6937 33.1411C41.0633 33.1411 40.5527 33.6526 40.5527 34.2837V34.3067C40.5527 34.9372 41.0638 35.4488 41.6937 35.4488C42.3235 35.4488 42.8342 34.9372 42.8342 34.3067V34.2837C42.8346 33.6526 42.3235 33.1411 41.6937 33.1411Z" fill="#E8345D"/>
-                        </svg> 
-                        <h2 class="mt-4">Create a New Event</h2>
-                        <p class="my-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam utnulla consequat, tempus sapien in.</p>
-                        <a href="#" class="btn btn-primary">Create</a>
-                    </div> 
-                </div> 
-            </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body px-4 py-5 text-center">
-                        <svg width="42" height="56" viewBox="0 0 42 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M40.9071 0H12.456C12.4436 0 12.4313 0.00128174 12.4193 0.00170898C12.4069 0.00213622 12.3946 0.00299073 12.3822 0.00384521C12.3361 0.00683594 12.29 0.0119629 12.2452 0.020935C12.2439 0.020935 12.2431 0.020935 12.2422 0.0213622C12.1965 0.0303345 12.1517 0.0435792 12.1074 0.0585327C12.0958 0.0623779 12.0839 0.0666504 12.0724 0.0709229C12.0314 0.0863037 11.9913 0.103821 11.952 0.123901C11.949 0.12561 11.9456 0.126892 11.9422 0.128601C11.9008 0.150818 11.8616 0.176453 11.8231 0.203369C11.8133 0.210632 11.8031 0.218323 11.7933 0.226013C11.7549 0.255066 11.7182 0.285828 11.6836 0.320435L0.320063 11.6971C0.285497 11.7318 0.254344 11.7693 0.225325 11.8074C0.217643 11.8172 0.210388 11.827 0.20356 11.8369C0.176248 11.8757 0.150216 11.9155 0.128025 11.9569C0.126745 11.9595 0.125892 11.9616 0.125038 11.9642C0.104127 12.0039 0.0862037 12.0453 0.0708408 12.0876C0.0665732 12.0988 0.0623056 12.1099 0.0584649 12.121C0.0435287 12.1658 0.0302994 12.2111 0.0209108 12.2573V12.2581C0.011949 12.3038 0.00682802 12.3508 0.00384076 12.3978C0.00298726 12.4098 0.00213375 12.4218 0.001707 12.4337C0.00128026 12.4461 0 12.4585 0 12.4709V54.9062C0 55.5104 0.489057 56 1.09248 56H40.9075C41.5105 56 42 55.5104 42 54.9062V1.09375C41.9996 0.489624 41.5105 0 40.9071 0ZM11.3635 3.73456V11.3771H3.72981L11.3635 3.73456ZM39.8146 53.8125H2.18497V13.5646H12.456C13.0594 13.5646 13.5485 13.0746 13.5485 12.4709V2.1875H39.815V53.8125H39.8146Z" fill="#E8345D"/>
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.3835 20.3442C6.78007 20.3442 6.29102 20.8339 6.29102 21.438V37.2427C6.29102 37.8468 6.78007 38.3364 7.3835 38.3364C7.98693 38.3364 8.47598 37.8468 8.47598 37.2427V22.5317H26.4473V28.1146C26.1631 28.0936 25.8759 28.0825 25.5866 28.0825C19.2088 28.0825 14.0199 33.277 14.0199 39.6626C14.0199 39.9514 14.031 40.239 14.0523 40.5239H11.7534C11.15 40.5239 10.6609 41.0135 10.6609 41.6177C10.6609 42.2218 11.15 42.7114 11.7534 42.7114H14.4309C15.3313 46.0046 17.6605 48.8001 20.8654 50.2365C21.4164 50.4835 22.0625 50.2365 22.3091 49.6849C22.5558 49.1338 22.3091 48.4865 21.7582 48.24C18.3847 46.728 16.2049 43.3613 16.2049 39.6626C16.2049 34.4835 20.4135 30.27 25.5866 30.27C30.7596 30.27 34.9683 34.4835 34.9683 39.6626C34.9683 43.3613 32.7889 46.728 29.4154 48.24C28.8644 48.4865 28.6178 49.1338 28.8644 49.6849C29.0462 50.0912 29.4448 50.3322 29.8622 50.3322C30.0116 50.3322 30.1631 50.3015 30.3081 50.2365C34.4664 48.3729 37.1532 44.2222 37.1532 39.6626C37.1532 34.3323 33.5374 29.8325 28.6323 28.4905V21.438C28.6323 20.8339 28.1428 20.3442 27.5398 20.3442H7.3835Z" fill="#E8345D"/>
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M25.5886 49.0552C24.9869 49.0552 24.4961 49.5461 24.4961 50.1489C24.4961 50.7513 24.9869 51.2427 25.5886 51.2427C26.1903 51.2427 26.6811 50.7513 26.6811 50.1489C26.6811 49.5461 26.1903 49.0552 25.5886 49.0552Z" fill="#E8345D"/>
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.3835 40.5239C6.78178 40.5239 6.29102 41.0153 6.29102 41.6177C6.29102 42.2201 6.78178 42.7114 7.3835 42.7114C7.98522 42.7114 8.47598 42.2201 8.47598 41.6177C8.47598 41.0153 7.98522 40.5239 7.3835 40.5239Z" fill="#E8345D"/>
-                        </svg> 
-                        <h2 class="my-4">Drafts</h2>
-                        <div class="card card-body border-light mb-0 mt-3">
-                            <div class="row">
-                                <div class="col-7 text-start">
-                                    <a href="#" class="text-info stretched-link text-decoration-none">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</a>
-                                </div>
-                                <div class="col-5 text-end">
-                                    <span>Last edit: 01/01/2020</span>
-                                </div>
-                            </div>
-                        </div>  
-                        <div class="card card-body border-light mb-0 mt-3">
-                            <div class="row">
-                                <div class="col-7 text-start">
-                                    <a href="#" class="text-info stretched-link text-decoration-none">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</a>
-                                </div>
-                                <div class="col-5 text-end">
-                                    <span>Last edit: 01/01/2020</span>
-                                </div>
-                            </div>
-                        </div>  
-                        <div class="card card-body border-light mb-0 mt-3">
-                            <div class="row">
-                                <div class="col-7 text-start">
-                                    <a href="#" class="text-info stretched-link text-decoration-none">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</a>
-                                </div>
-                                <div class="col-5 text-end">
-                                    <span>Last edit: 01/01/2020</span>
-                                </div>
-                            </div>
-                        </div>  
-                        <div class="card card-body border-light mb-0 mt-3">
-                            <div class="row">
-                                <div class="col-7 text-start">
-                                    <a href="#" class="text-info stretched-link text-decoration-none">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</a>
-                                </div>
-                                <div class="col-5 text-end">
-                                    <span>Last edit: 01/01/2020</span>
-                                </div>
-                            </div>
-                        </div>  
-                    </div>
-                </div>  
-            </div>
-        </div>
-    </main>
-
-    <main class="static-page container mt-5">  
-        <div class="px-4 py-1">
-            <div class="progresses py-4">
-                <ul class="d-flex align-items-center justify-content-between">
-                    <li id="step-1" class="create-steps blue">1<span>New Event</span></li>
-                    <li id="step-2" class="create-steps">2<span>Add Track</span></li>
-                    <li id="step-3" class="create-steps">3<span>Add Session</span></li>
-                </ul>
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-            </div>
-        </div>
-        <div class="px-4 py-1">
-            <div class="progresses py-4">
-                <ul class="d-flex align-items-center justify-content-between">
-                    <li id="step-1" class="create-steps blue">1<span>New Event</span></li>
-                    <li id="step-2" class="create-steps blue">2<span>Add Track</span></li>
-                    <li id="step-3" class="create-steps">3<span>Add Session</span></li>
-                </ul>
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-            </div>
-        </div>
-        <div class="px-4 py-1">
-            <div class="progresses py-4">
-                <ul class="d-flex align-items-center justify-content-between">
-                    <li id="step-1" class="create-steps blue">1<span>New Event</span></li>
-                    <li id="step-2" class="create-steps blue">2<span>Add Track</span></li>
-                    <li id="step-3" class="create-steps blue">3<span>Add Session</span></li>
-                </ul>
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-            </div>
-        </div>
-        <div class="row"> 
-            <div class="col">
-                <div class="card">
-                    <div class="card-body profile-content p-4"> 
-                        <h2>Create a New Event</h2> 
-                        <div class="row"> 
-                            <div class="col-md-6"> 
-                                <div class="form-label-group">
-                                    <input type="text" id="inputName" class="form-control" placeholder="Name *" required="" data-val="true" data-val-length="..." data-val-length-max="32" data-val-length-min="2" data-val-required="..." maxlength="32" name="Organization.Name" value="">
-                                    <label for="inputName">Name*</label>
-                                    <span class="Microsoft.AspNetCore.Mvc.TagHelpers.TagHelperOutputExtensions+ClassAttributeHtmlContent text-danger" data-valmsg-for="Organization.Name" data-valmsg-replace="true"></span>
-                                </div>
-                            </div> 
-                            <div class="col-md-6"> 
-                                <div class="form-label-group">
-                                    <input type="text" id="inputName" class="form-control" placeholder="Name *" required="" data-val="true" data-val-length="..." data-val-length-max="32" data-val-length-min="2" data-val-required="..." maxlength="32" name="Organization.Name" value="">
-                                    <label for="inputName">Name*</label>
-                                    <span class="Microsoft.AspNetCore.Mvc.TagHelpers.TagHelperOutputExtensions+ClassAttributeHtmlContent text-danger" data-valmsg-for="Organization.Name" data-valmsg-replace="true"></span>
-                                </div>
-                            </div> 
-                        </div>
-                    </div> 
+<main class="static-page container mt-5"> 
+    <h1 class="text-center mb-3">Create an Event</h1>
+    <p class="text-center mb-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ut nulla consequat, tempus sapien in,
+        pellentesque nunc. Sed at nunc pellentesque, fermentum mi et, fermentum massa. </p>
+    <div class="row"> 
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body px-4 py-5 text-center">
+                    <svg width="50" height="58" viewBox="0 0 50 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M33.0445 28.1094H9.31281C8.68249 28.1094 8.17188 28.6205 8.17188 29.2515C8.17188 29.8825 8.68249 30.394 9.31281 30.394H33.0445C33.6748 30.394 34.1854 29.8825 34.1854 29.2515C34.1854 28.6209 33.6748 28.1094 33.0445 28.1094Z" fill="#E8345D"/>
+                        <path d="M33.0445 34.8032H9.31281C8.68249 34.8032 8.17188 35.3143 8.17188 35.9453C8.17188 36.5763 8.68249 37.0879 9.31281 37.0879H33.0445C33.6748 37.0879 34.1854 36.5763 34.1854 35.9453C34.1854 35.3143 33.6748 34.8032 33.0445 34.8032Z" fill="#E8345D"/>
+                        <path d="M33.0445 41.4976H9.31281C8.68249 41.4976 8.17188 42.0087 8.17188 42.6397C8.17188 43.2707 8.68249 43.7822 9.31281 43.7822H33.0445C33.6748 43.7822 34.1854 43.2707 34.1854 42.6397C34.1854 42.0087 33.6748 41.4976 33.0445 41.4976Z" fill="#E8345D"/>
+                        <path d="M48.0044 5.61362H44.3885V1.99791C44.3885 0.896072 43.4919 0 42.3894 0H37.5942C36.4935 0 35.5981 0.896072 35.5981 1.99791V5.61317H31.9827C31.1161 5.61317 30.3785 6.16896 30.1019 6.94246H12.6346C12.332 6.94246 12.0418 7.06282 11.8281 7.27699L0.333931 18.791C0.120145 19.0051 0 19.2959 0 19.599V54.9016C0 56.6101 1.38917 58 3.09637 58H39.7387C41.4459 58 42.8351 56.6101 42.8351 54.9016V39.4692C42.8351 38.8382 42.324 38.3267 41.6941 38.3267C41.0643 38.3267 40.5536 38.8382 40.5536 39.4692V54.9016C40.5536 55.3428 40.1804 55.7153 39.7387 55.7153H3.09637C2.65466 55.7153 2.28142 55.3428 2.28142 54.9016V20.7411H10.3103C12.2212 20.7411 13.7755 19.1857 13.7755 17.2736V9.22711H29.9831V12.4114C29.9831 13.5132 30.8802 14.4093 31.9827 14.4093H35.5981V18.0246C35.5981 19.1282 36.4935 20.026 37.5942 20.026H40.5532V29.1438C40.5532 29.7744 41.0643 30.2859 41.6941 30.2859C42.324 30.2859 42.8346 29.7744 42.8346 29.1438V19.9742C43.7233 19.7707 44.3885 18.9751 44.3885 18.025V14.4093H48.0039C49.1047 14.4093 50 13.5132 50 12.4114V7.61462C50 6.51102 49.1047 5.61362 48.0044 5.61362ZM10.3103 18.4564H3.8941L11.4937 10.8431V17.2736C11.4937 17.9259 10.9632 18.4564 10.3103 18.4564ZM47.7186 12.1246H43.2481C42.6177 12.1246 42.1071 12.6362 42.1071 13.2672V17.7413H37.8795V13.2672C37.8795 12.6362 37.3689 12.1246 36.739 12.1246H32.265V7.89827H36.739C37.3689 7.89827 37.8795 7.38673 37.8795 6.75572V2.28465H42.1071V6.75572C42.1071 7.38673 42.6177 7.89827 43.2481 7.89827H47.7186V12.1246Z" fill="#E8345D"/>
+                        <path d="M41.6937 33.1411C41.0633 33.1411 40.5527 33.6526 40.5527 34.2837V34.3067C40.5527 34.9372 41.0638 35.4488 41.6937 35.4488C42.3235 35.4488 42.8342 34.9372 42.8342 34.3067V34.2837C42.8346 33.6526 42.3235 33.1411 41.6937 33.1411Z" fill="#E8345D"/>
+                    </svg> 
+                    <h2 class="mt-4">Create a New Event</h2>
+                    <p class="my-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam utnulla consequat, tempus sapien in.</p>
+                    <a href="#" class="btn btn-primary">Create</a>
                 </div> 
             </div> 
         </div>
-    </main>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body px-4 py-5 text-center">
+                    <svg width="42" height="56" viewBox="0 0 42 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M40.9071 0H12.456C12.4436 0 12.4313 0.00128174 12.4193 0.00170898C12.4069 0.00213622 12.3946 0.00299073 12.3822 0.00384521C12.3361 0.00683594 12.29 0.0119629 12.2452 0.020935C12.2439 0.020935 12.2431 0.020935 12.2422 0.0213622C12.1965 0.0303345 12.1517 0.0435792 12.1074 0.0585327C12.0958 0.0623779 12.0839 0.0666504 12.0724 0.0709229C12.0314 0.0863037 11.9913 0.103821 11.952 0.123901C11.949 0.12561 11.9456 0.126892 11.9422 0.128601C11.9008 0.150818 11.8616 0.176453 11.8231 0.203369C11.8133 0.210632 11.8031 0.218323 11.7933 0.226013C11.7549 0.255066 11.7182 0.285828 11.6836 0.320435L0.320063 11.6971C0.285497 11.7318 0.254344 11.7693 0.225325 11.8074C0.217643 11.8172 0.210388 11.827 0.20356 11.8369C0.176248 11.8757 0.150216 11.9155 0.128025 11.9569C0.126745 11.9595 0.125892 11.9616 0.125038 11.9642C0.104127 12.0039 0.0862037 12.0453 0.0708408 12.0876C0.0665732 12.0988 0.0623056 12.1099 0.0584649 12.121C0.0435287 12.1658 0.0302994 12.2111 0.0209108 12.2573V12.2581C0.011949 12.3038 0.00682802 12.3508 0.00384076 12.3978C0.00298726 12.4098 0.00213375 12.4218 0.001707 12.4337C0.00128026 12.4461 0 12.4585 0 12.4709V54.9062C0 55.5104 0.489057 56 1.09248 56H40.9075C41.5105 56 42 55.5104 42 54.9062V1.09375C41.9996 0.489624 41.5105 0 40.9071 0ZM11.3635 3.73456V11.3771H3.72981L11.3635 3.73456ZM39.8146 53.8125H2.18497V13.5646H12.456C13.0594 13.5646 13.5485 13.0746 13.5485 12.4709V2.1875H39.815V53.8125H39.8146Z" fill="#E8345D"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M7.3835 20.3442C6.78007 20.3442 6.29102 20.8339 6.29102 21.438V37.2427C6.29102 37.8468 6.78007 38.3364 7.3835 38.3364C7.98693 38.3364 8.47598 37.8468 8.47598 37.2427V22.5317H26.4473V28.1146C26.1631 28.0936 25.8759 28.0825 25.5866 28.0825C19.2088 28.0825 14.0199 33.277 14.0199 39.6626C14.0199 39.9514 14.031 40.239 14.0523 40.5239H11.7534C11.15 40.5239 10.6609 41.0135 10.6609 41.6177C10.6609 42.2218 11.15 42.7114 11.7534 42.7114H14.4309C15.3313 46.0046 17.6605 48.8001 20.8654 50.2365C21.4164 50.4835 22.0625 50.2365 22.3091 49.6849C22.5558 49.1338 22.3091 48.4865 21.7582 48.24C18.3847 46.728 16.2049 43.3613 16.2049 39.6626C16.2049 34.4835 20.4135 30.27 25.5866 30.27C30.7596 30.27 34.9683 34.4835 34.9683 39.6626C34.9683 43.3613 32.7889 46.728 29.4154 48.24C28.8644 48.4865 28.6178 49.1338 28.8644 49.6849C29.0462 50.0912 29.4448 50.3322 29.8622 50.3322C30.0116 50.3322 30.1631 50.3015 30.3081 50.2365C34.4664 48.3729 37.1532 44.2222 37.1532 39.6626C37.1532 34.3323 33.5374 29.8325 28.6323 28.4905V21.438C28.6323 20.8339 28.1428 20.3442 27.5398 20.3442H7.3835Z" fill="#E8345D"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M25.5886 49.0552C24.9869 49.0552 24.4961 49.5461 24.4961 50.1489C24.4961 50.7513 24.9869 51.2427 25.5886 51.2427C26.1903 51.2427 26.6811 50.7513 26.6811 50.1489C26.6811 49.5461 26.1903 49.0552 25.5886 49.0552Z" fill="#E8345D"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M7.3835 40.5239C6.78178 40.5239 6.29102 41.0153 6.29102 41.6177C6.29102 42.2201 6.78178 42.7114 7.3835 42.7114C7.98522 42.7114 8.47598 42.2201 8.47598 41.6177C8.47598 41.0153 7.98522 40.5239 7.3835 40.5239Z" fill="#E8345D"/>
+                    </svg> 
+                    <h2 class="my-4">Drafts</h2>
+                    <div class="card card-body border-light mb-0 mt-3">
+                        <div class="row">
+                            <div class="col-7 text-start">
+                                <a href="#" class="text-info stretched-link text-decoration-none">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</a>
+                            </div>
+                            <div class="col-5 text-end">
+                                <span>Last edit: 01/01/2020</span>
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="card card-body border-light mb-0 mt-3">
+                        <div class="row">
+                            <div class="col-7 text-start">
+                                <a href="#" class="text-info stretched-link text-decoration-none">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</a>
+                            </div>
+                            <div class="col-5 text-end">
+                                <span>Last edit: 01/01/2020</span>
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="card card-body border-light mb-0 mt-3">
+                        <div class="row">
+                            <div class="col-7 text-start">
+                                <a href="#" class="text-info stretched-link text-decoration-none">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</a>
+                            </div>
+                            <div class="col-5 text-end">
+                                <span>Last edit: 01/01/2020</span>
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="card card-body border-light mb-0 mt-3">
+                        <div class="row">
+                            <div class="col-7 text-start">
+                                <a href="#" class="text-info stretched-link text-decoration-none">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</a>
+                            </div>
+                            <div class="col-5 text-end">
+                                <span>Last edit: 01/01/2020</span>
+                            </div>
+                        </div>
+                    </div>  
+                </div>
+            </div>  
+        </div>
+    </div> 
+    
+    <!-- Progress Steps -->
+    <div class="px-4 py-1">
+        <div class="progresses py-4">
+            <ul class="d-flex align-items-center justify-content-between">
+                <li id="step-1" class="create-steps blue">1<span>New Event</span></li>
+                <li id="step-2" class="create-steps">2<span>Add Track</span></li>
+                <li id="step-3" class="create-steps">3<span>Add Session</span></li>
+            </ul>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create a New Event -->
+    <div class="row"> 
+        <div class="col-md-10 mx-auto">
+            <div class="card">
+                <div class="card-body profile-content p-5"> 
+                    <h2 class="mb-4">Create a New Event</h2> 
+                    <div class="row"> 
+                        <div class="col-md-6">  
+                            <div class="form-floating mb-4">
+                                <input type="text" class="form-control" id="OrganizationName" placeholder=" ">
+                                <label for="OrganizationName">Email address</label>
+                            </div> 
+                        </div>  
+                        <div class="col-md-6"> 
+                            <div class="form-floating mb-4">
+                                <input type="text" id="Title" placeholder=" " class="form-control">
+                                <label for="Title">Title</label> 
+                            </div>
+                        </div>   
+                        <div class="col-md-6"> 
+                            <div class="form-floating mb-4">
+                                <input type="text" id="StartDate" placeholder=" " class="form-control">
+                                <label for="StartDate">Start Date</label> 
+                            </div>
+                        </div>   
+                        <div class="col-md-6"> 
+                            <div class="form-floating mb-4">
+                                <input type="text" id="EndDate" placeholder=" " class="form-control">
+                                <label for="EndDate">End Date</label> 
+                            </div>
+                        </div>    
+                        <div class="col-md-12">  
+                            <div class="form-floating mb-4">
+                                <textarea class="form-control" placeholder="Leave a comment here" id="EventsExplanation" style="height: 150px"></textarea>
+                                <label for="EventsExplanation">Event’s Explanation</label>
+                            </div> 
+                        </div>      
+                    </div>
+
+                    <div class="row"> 
+                        <div class="col-md-12">
+                            <h3 class="mb-3">Cover Image</h3>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="image-area">
+                                        <img id="imageResult" src="#" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
+                                    </div>
+                                </div> 
+                                <div class="col-6">
+                                    <div>
+                                        <p class="mb-3">Photo size should be <span class="text-primary">1050x596</span> and <span class="text-primary">max 5 MB.</span></p>
+                                        <input type="file" id="Organization_ProfilePictureFile" class="form-control border-0" hidden="" name="Organization.ProfilePictureFile">
+                                        <label id="upload-label" for="Organization_ProfilePictureFile" class="btn btn-primary btn-lg text-white">Upload</label>
+                                        <span class="Microsoft.AspNetCore.Mvc.TagHelpers.TagHelperOutputExtensions+ClassAttributeHtmlContent text-danger" data-valmsg-for="Organization.ProfilePictureFile" data-valmsg-replace="true"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row"> 
+                        <div class="col-md-6"> 
+                            <div class="form-floating mb-4">
+                                <select class="form-select" id="Country">
+                                    <option selected>Select Country</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                                <label for="Country">Country</label>
+                            </div>
+                        </div>   
+                        <div class="col-md-6">  
+                            <div class="form-floating mb-4">
+                                <select class="form-select" id="City">
+                                    <option selected>Select City</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                                <label for="City">City</label>
+                            </div>
+                        </div> 
+                        <div class="col-md-6"> 
+                            <div class="form-floating mb-4">
+                                <select class="form-select" id="Language">
+                                    <option selected>Select Language</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                                <label for="Language">Country</label>
+                            </div>
+                        </div>   
+                        <div class="col-md-6">  
+                            <div class="form-floating mb-4"> 
+                                <input type="text" id="Capacity" placeholder=" " class="form-control">
+                                <label for="Capacity">Capacity</label>  
+                            </div>
+                        </div>  
+                        <div class="col-md-6"> 
+                            <div class="form-floating mb-4">
+                                <select class="form-select" id="TypeOfEvent">
+                                    <option selected>Select Type of Event</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                                <label for="TypeOfEvent">Type of Event</label>
+                            </div>
+                        </div>   
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6"></div>
+                        <div class="col-6 text-end">
+                            <a href="#" class="btn btn-primary btn-lg">Next Step <i class="fa fa-arrow-right ms-2"></i></a>
+                        </div>
+                    </div>
+                </div> 
+            </div> 
+        </div> 
+    </div>
+
+    <!-- Progress Steps -->
+    <div class="px-4 py-1">
+        <div class="progresses py-4">
+            <ul class="d-flex align-items-center justify-content-between">
+                <li id="step-1" class="create-steps blue">1<span>New Event</span></li>
+                <li id="step-2" class="create-steps blue">2<span>Add Track</span></li>
+                <li id="step-3" class="create-steps">3<span>Add Session</span></li>
+            </ul>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Track -->
+    <div class="row"> 
+        <div class="col-md-10 mx-auto">
+            <div class="card">
+                <div class="card-body profile-content p-5" style="min-height: 480px;"> 
+                    <h2 class="mb-4">Add Track</h2> 
+                    <div class="row"> 
+                        <div class="col-md-3">  
+                            <div class="track-item mb-4"> 
+                                <span class="track-name">There is a track name here</span>
+                                <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#editTrackModal" class="mt-3 d-block text-info"><small><i class="fa fa-edit me-1"></i>Edit</small></a>
+                            </div> 
+                        </div>   
+                        <div class="col-md-3">  
+                            <div class="track-item mb-4"> 
+                                <span class="track-name">There is a track name here</span>
+                                <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#editTrackModal" class="mt-3 d-block text-info"><small><i class="fa fa-edit me-1"></i>Edit</small></a>
+                            </div> 
+                        </div>   
+                        <div class="col-md-3">  
+                            <div class="track-item mb-4"> 
+                                <span class="track-name">There is a track name here</span>
+                                <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#editTrackModal" class="mt-3 d-block text-info"><small><i class="fa fa-edit me-1"></i>Edit</small></a>
+                            </div> 
+                        </div>     
+                        <div class="col-md-3">  
+                            <div class="big-square-btn mb-4 text-center"> 
+                                <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#addTrackModal" class="btn btn-outline-secondary d-block px-2 py-5"><i class="fa fa-plus mb-3"></i><br>Add New Track</a>
+                            </div> 
+                        </div>        
+                    </div>
+                </div> 
+
+                <div class="card-footer bg-white border-0 p-5 pt-1"> 
+                    <div class="row">
+                        <div class="col-6">
+                            <a href="#" class="btn btn-secondary"><i class="fa fa-arrow-left me-2"></i> Previous Step </a>
+                        </div>
+                        <div class="col-6 text-end">
+                            <a href="#" class="btn btn-link">Skip This Step</a>
+                            <a href="#" class="btn btn-primary">Next Step <i class="fa fa-arrow-right ms-2"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </div> 
+    </div>
+
+    <!-- Progress Steps -->
+    <div class="px-4 py-1">
+        <div class="progresses py-4">
+            <ul class="d-flex align-items-center justify-content-between">
+                <li id="step-1" class="create-steps blue">1<span>New Event</span></li>
+                <li id="step-2" class="create-steps blue">2<span>Add Track</span></li>
+                <li id="step-3" class="create-steps blue">3<span>Add Session</span></li>
+            </ul>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Session -->
+    <div class="row"> 
+        <div class="col-md-10 mx-auto">
+            <div class="card">
+                <div class="card-body profile-content p-5" style="min-height: 480px;"> 
+                    <h2 class="mb-4">Add Session</h2> 
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="text-center" width="25%">Track 1</th>
+                                <th class="text-center" width="25%">Track 1</th>
+                                <th class="text-center" width="25%">Track 1</th>
+                                <th class="text-center" width="25%">Track 1</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="track-item"> 
+                                        <span class="track-name">Session Title</span>
+                                        <small class="text-primary d-block my-2">09:00 - 10:00 | English</small>
+                                        <span class="d-block mb-2">Halil İbrahim Kalkan</span> 
+                                        <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#editSessionModal" class="mt-3 d-block text-info"><small><i class="fa fa-edit me-1"></i>Edit</small></a>
+                                    </div> 
+                                    <div class="track-item"> 
+                                        <span class="track-name">Session Title</span>
+                                        <small class="text-primary d-block my-2">09:00 - 10:00 | English</small>
+                                        <span class="d-block mb-2">Halil İbrahim Kalkan</span> 
+                                        <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#editSessionModal" class="mt-3 d-block text-info"><small><i class="fa fa-edit me-1"></i>Edit</small></a>
+                                    </div> 
+                                    <div class="big-square-btn text-center"> 
+                                        <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#addSessionModal" class="btn btn-outline-secondary d-block px-2 py-5"><i class="fa fa-plus mb-3"></i><br>Add New Session</a>
+                                    </div> 
+                                </td>
+                                <td> 
+                                    <div class="big-square-btn text-center"> 
+                                        <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#addSessionModal" class="btn btn-outline-secondary d-block px-2 py-5"><i class="fa fa-plus mb-3"></i><br>Add New Session</a>
+                                    </div> 
+                                </td>
+                                <td>
+                                    <div class="track-item"> 
+                                        <span class="track-name">Session Title</span>
+                                        <small class="text-primary d-block my-2">09:00 - 10:00 | English</small>
+                                        <span class="d-block mb-2">Berkan Şaşmaz</span> 
+                                        <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#editSessionModal" class="mt-3 d-block text-info"><small><i class="fa fa-edit me-1"></i>Edit</small></a>
+                                    </div> 
+                                    <div class="big-square-btn text-center"> 
+                                        <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#addSessionModal" class="btn btn-outline-secondary d-block px-2 py-5"><i class="fa fa-plus mb-3"></i><br>Add New Session</a>
+                                    </div> 
+                                </td>
+                                <td> 
+                                    <div class="big-square-btn text-center"> 
+                                        <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#addSessionModal" class="btn btn-outline-secondary d-block px-2 py-5"><i class="fa fa-plus mb-3"></i><br>Add New Session</a>
+                                    </div> 
+                                </td>
+                            </tr> 
+
+                        </tbody>
+                    </table> 
+                </div> 
+                <div class="card-footer bg-white border-0 p-5 pt-1"> 
+                    <div class="row">
+                        <div class="col-6">
+                            <a href="#" class="btn btn-secondary"><i class="fa fa-arrow-left me-2"></i> Previous Step </a>
+                        </div>
+                        <div class="col-6 text-end">
+                            <a href="#" class="btn btn-outline-secondary me-2">Save as Draft</a>
+                            <a href="#" class="btn btn-success">Publish <i class="fa fa-arrow-right ms-2"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </div> 
+    </div>
+
+    <!-- Event Preview -->
+    <div class="row"> 
+        <div class="col-md-10 mx-auto">
+            <div class="card">
+                <div class="card-body profile-content p-5" style="min-height: 480px;"> 
+                    <h2 class="mb-5">Event Preview</h2>  
+                    <div class="row mb-4">
+                        <div class="col-md-4"> 
+                            <span>Organization Name:</span>
+                        </div>
+                        <div class="col-md-8"> 
+                            <span class="preview-item">Volosoft</span>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4"> 
+                            <span>Title:</span>
+                        </div>
+                        <div class="col-md-8"> 
+                            <span class="preview-item">My pretty cool event</span>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4"> 
+                            <span>Start Date:</span>
+                        </div>
+                        <div class="col-md-8"> 
+                            <span class="preview-item">10/08/2025 - 09:00</span>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4"> 
+                            <span>End Date:</span>
+                        </div>
+                        <div class="col-md-8"> 
+                            <span class="preview-item">10/08/2025 - 10:00</span>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4"> 
+                            <span>Event’s Explanation:</span>
+                        </div>
+                        <div class="col-md-8"> 
+                            <p class="preview-item">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                            veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                            commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+                            velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                            cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
+                            est laborum.</p>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4"> 
+                            <span>Cover Image:</span>
+                        </div>
+                        <div class="col-md-8"> 
+                            <img src="https://api.openeventhub.com/api/eventhub/event/cover-image/3a003fb9-611a-db0c-82b2-7299ff8e8ce7" class="w-100 rounded-3">
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4"> 
+                            <span>Country:</span>
+                        </div>
+                        <div class="col-md-8"> 
+                            <span class="preview-item">Turkey</span>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4"> 
+                            <span>City:</span>
+                        </div>
+                        <div class="col-md-8"> 
+                            <span class="preview-item">Istanbul</span>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4"> 
+                            <span>Language:</span>
+                        </div>
+                        <div class="col-md-8"> 
+                            <span class="preview-item">English</span>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4"> 
+                            <span>Capacity:</span>
+                        </div>
+                        <div class="col-md-8"> 
+                            <span class="preview-item">100+</span>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4"> 
+                            <span>Event Type:</span>
+                        </div>
+                        <div class="col-md-8"> 
+                            <span class="preview-item">Online</span>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4"> 
+                            <span>Tracks:</span>
+                        </div>
+                        <div class="col-md-8"> 
+                            <span class="preview-item">4</span>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4"> 
+                            <span>Sessions:</span>
+                        </div> 
+                    </div>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="text-center" width="25%">Track 1</th>
+                                <th class="text-center" width="25%">Track 1</th>
+                                <th class="text-center" width="25%">Track 1</th>
+                                <th class="text-center" width="25%">Track 1</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="track-item"> 
+                                        <span class="track-name">Session Title</span>
+                                        <small class="text-primary d-block my-2">09:00 - 10:00 | English</small>
+                                        <span class="d-block mb-2">Halil İbrahim Kalkan</span>  
+                                    </div> 
+                                    <div class="track-item"> 
+                                        <span class="track-name">Session Title</span>
+                                        <small class="text-primary d-block my-2">09:00 - 10:00 | English</small>
+                                        <span class="d-block mb-2">Halil İbrahim Kalkan</span>  
+                                    </div>  
+                                    <div class="track-item"> 
+                                        <span class="track-name">Session Title</span>
+                                        <small class="text-primary d-block my-2">09:00 - 10:00 | English</small>
+                                        <span class="d-block mb-2">Halil İbrahim Kalkan</span>  
+                                    </div>  
+                                </td>
+                                <td>  
+                                    <div class="track-item"> 
+                                        <span class="track-name">Session Title</span>
+                                        <small class="text-primary d-block my-2">09:00 - 10:00 | English</small>
+                                        <span class="d-block mb-2">Halil İbrahim Kalkan</span>  
+                                    </div>  
+                                </td>
+                                <td>
+                                    <div class="track-item"> 
+                                        <span class="track-name">Session Title</span>
+                                        <small class="text-primary d-block my-2">09:00 - 10:00 | English</small>
+                                        <span class="d-block mb-2">Halil İbrahim Kalkan</span>  
+                                    </div> 
+                                    <div class="track-item"> 
+                                        <span class="track-name">Session Title</span>
+                                        <small class="text-primary d-block my-2">09:00 - 10:00 | English</small>
+                                        <span class="d-block mb-2">Halil İbrahim Kalkan</span>  
+                                    </div> 
+                                    <div class="track-item"> 
+                                        <span class="track-name">Session Title</span>
+                                        <small class="text-primary d-block my-2">09:00 - 10:00 | English</small>
+                                        <span class="d-block mb-2">Halil İbrahim Kalkan</span>  
+                                    </div>   
+                                    <div class="track-item"> 
+                                        <span class="track-name">Session Title</span>
+                                        <small class="text-primary d-block my-2">09:00 - 10:00 | English</small>
+                                        <span class="d-block mb-2">Halil İbrahim Kalkan</span>  
+                                    </div>  
+                                </td>
+                                <td>  
+                                    <div class="track-item"> 
+                                        <span class="track-name">Session Title</span>
+                                        <small class="text-primary d-block my-2">09:00 - 10:00 | English</small>
+                                        <span class="d-block mb-2">Halil İbrahim Kalkan</span>  
+                                    </div> 
+                                    <div class="track-item"> 
+                                        <span class="track-name">Session Title</span>
+                                        <small class="text-primary d-block my-2">09:00 - 10:00 | English</small>
+                                        <span class="d-block mb-2">Halil İbrahim Kalkan</span>  
+                                    </div> 
+                                    <div class="track-item"> 
+                                        <span class="track-name">Session Title</span>
+                                        <small class="text-primary d-block my-2">09:00 - 10:00 | English</small>
+                                        <span class="d-block mb-2">Halil İbrahim Kalkan</span>  
+                                    </div>  
+                                    <div class="track-item"> 
+                                        <span class="track-name">Session Title</span>
+                                        <small class="text-primary d-block my-2">09:00 - 10:00 | English</small>
+                                        <span class="d-block mb-2">Halil İbrahim Kalkan</span>  
+                                    </div>  
+                                    <div class="track-item"> 
+                                        <span class="track-name">Session Title</span>
+                                        <small class="text-primary d-block my-2">09:00 - 10:00 | English</small>
+                                        <span class="d-block mb-2">Halil İbrahim Kalkan</span>  
+                                    </div>  
+                                </td>
+                            </tr> 
+
+                        </tbody>
+                    </table> 
+                </div> 
+                <div class="card-footer bg-white border-0 p-5 pt-1"> 
+                    <div class="row">
+                        <div class="col-6">
+                            <a href="#" class="btn btn-secondary"><i class="fa fa-arrow-left me-2"></i> Previous Step </a>
+                        </div>
+                        <div class="col-6 text-end">
+                            <a href="#" class="btn btn-outline-secondary me-2">Save as Draft</a>
+                            <a href="#" class="btn btn-success">Publish <i class="fa fa-arrow-right ms-2"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </div> 
+    </div>
+</main>  
+ 
+<!-- Add Track Modal -->
+<div class="modal fade" id="addTrackModal" tabindex="-1" aria-labelledby="addTrackModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+        <div class="modal-header border-0 p-5 pb-2">
+            <h5 class="modal-title">Add New Track</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body profile-content px-5">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="TrackName" placeholder=" ">
+                <label for="TrackName">Track Name</label>
+            </div>
+        </div>
+        <div class="modal-footer border-0 p-5 pt-2">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary"><i class="fa fa-plus me-2"></i>Add</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Track Modal -->
+<div class="modal fade" id="editTrackModal" tabindex="-1" aria-labelledby="editTrackModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+        <div class="modal-header border-0 p-5 pb-2">
+            <h5 class="modal-title">Edit This Track</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body profile-content px-5">
+            <div class="form">
+                <label for="TrackName" class="mb-2">Edit Track Name</label>
+                <input type="text" class="form-control" id="TrackName" placeholder="There is a track name here">
+            </div>
+        </div>
+        <div class="modal-footer border-0 p-5 pt-2">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary"><i class="fa fa-check-circle me-2"></i>Save</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Session Modal -->
+<div class="modal fade" id="addSessionModal" tabindex="-1" aria-labelledby="addSessionModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+        <div class="modal-header border-0 p-5 pb-2">
+            <h5 class="modal-title">Add New Session</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body profile-content px-5">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="Title2" placeholder=" ">
+                <label for="Title2">Title</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="StartTime2" placeholder=" ">
+                <label for="StartTime2">Start Time</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="EndTime2" placeholder=" ">
+                <label for="EndTime2">End Time</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="Language2" placeholder=" ">
+                <label for="Language2">Language</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="Speakers" placeholder=" ">
+                <label for="Speakers">Speakers</label>
+            </div>
+        </div>
+        <div class="modal-footer border-0 p-5 pt-2">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary"><i class="fa fa-plus me-2"></i>Add</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Session Modal -->
+<div class="modal fade" id="editSessionModal" tabindex="-1" aria-labelledby="editSessionModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+        <div class="modal-header border-0 p-5 pb-2">
+            <h5 class="modal-title">Edit This Session</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body profile-content px-5">
+            <div class="form mb-3">
+                <label for="Title2">Title</label>
+                <input type="text" class="form-control" id="Title2" placeholder="Lorem Upsym Title">
+            </div>
+            <div class="form mb-3">
+                <label for="StartTime2">Start Time</label>
+                <input type="text" class="form-control" id="StartTime2" placeholder="09:00">
+            </div>
+            <div class="form mb-3">
+                <label for="EndTime2">End Time</label>
+                <input type="text" class="form-control" id="EndTime2" placeholder="10:00">
+            </div>
+            <div class="form mb-3">
+                <label for="Language2">Language</label>
+                <input type="text" class="form-control" id="Language2" placeholder="English">
+            </div>
+            <div class="form mb-3">
+                <label for="Speakers">Speakers</label>
+                <input type="text" class="form-control" id="Speakers" placeholder="@@hikalkan">
+            </div>
+        </div>
+        <div class="modal-footer border-0 p-5 pt-2">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary"><i class="fa fa-check-circle me-2"></i>Save</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Pricing -->
+<main class="static-page container mt-5"> 
+    <h1 class="text-center mb-3">Eventhub Pricing List</h1>
+    <p class="text-center mb-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ut nulla consequat, tempus sapien in,
+        pellentesque nunc. Sed at nunc pellentesque, fermentum mi et, fermentum massa. </p>
+    <div class="row"> 
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body px-4 py-4 text-center"> 
+                    <h2 class="mt-4">Normal Account</h2>
+                    <p class="my-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam utnulla consequat, tempus sapien in.</p>
+                    <div class="price mb-4">
+                        <small>$</small>
+                        <span>0</span>
+                    </div>
+                    <ul class="list-check-icon mb-4 text-start">
+                        <li><i class="fa fa-check-circle"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit. </li>
+                        <li><i class="fa fa-check-circle"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit. </li>
+                        <li><i class="fa fa-check-circle"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit. </li> 
+                    </ul> 
+                </div> 
+            </div> 
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body px-4 py-4 text-center"> 
+                    <h2 class="mt-4">Premium Account</h2>
+                    <p class="my-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam utnulla consequat, tempus sapien in.</p>
+                    <div class="price mb-4">
+                        <small>$</small>
+                        <span>60</span>
+                    </div>
+                    <ul class="list-check-icon mb-4 text-start">
+                        <li><i class="fa fa-check-circle"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit. </li> 
+                        <li><i class="fa fa-check-circle"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit. </li> 
+                        <li><i class="fa fa-check-circle"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit adipiscing elit. </li> 
+                        <li><i class="fa fa-check-circle"></i> Lorem ipsum adipiscing elit dolor sit amet, consectetur adipiscing elit. </li> 
+                        <li><i class="fa fa-check-circle"></i> Lorem  adipiscing elit adipiscing elitipsum dolor sit amet, consectetur adipiscing elit. </li> 
+                        <li><i class="fa fa-check-circle"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit. </li> 
+                    </ul>
+                    <a href="#" class="btn btn-info my-4"><i class="fas fa-crown me-2"></i> Upgrade to Premium</a>
+                </div> 
+            </div> 
+        </div>
+
+        <h2 class="text-center mb-3">Frequently Asked Questions</h2>
+ 
+        <div id="accordion" class="mb-5 pb-5 faq-container"> 
+            <div class="faq shown" data-anchor-id="accordion1">
+                <div class="faq-header">
+                    <h5><button class="btn btn-faq" data-bs-toggle="collapse" data-bs-target="#accordion1" aria-expanded="false" aria-controls="accordion1">Lorem ipsum dolor sit amet, consectetur adipiscing elit?<i class="fas fa-chevron-up"></i> </button></h5>
+                </div>
+                <div id="accordion1" class="collapse show" data-bs-parent="#accordion" style="">
+                    <div class="faq-body">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        </p>
+                    </div>
+                </div>
+            </div>  
+            <div class="faq" data-anchor-id="accordion12">
+                <div class="faq-header">
+                    <h5><button class="btn btn-faq collapsed" data-bs-toggle="collapse" data-bs-target="#accordion12" aria-expanded="false" aria-controls="accordion12">What onsectetur adipiscinglor sit amet?<i class="fas fa-chevron-up"></i> </button></h5>
+                </div>
+                <div id="accordion12" class="collapse" data-bs-parent="#accordion" style="">
+                    <div class="faq-body">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        </p>
+                    </div>
+                </div>
+            </div>  
+            <div class="faq" data-anchor-id="accordion123">
+                <div class="faq-header">
+                    <h5><button class="btn btn-faq collapsed" data-bs-toggle="collapse" data-bs-target="#accordion123" aria-expanded="false" aria-controls="accordion123">What onsectetur adipiscing elit. Lorem ipsum dolor sit amet?<i class="fas fa-chevron-up"></i> </button></h5>
+                </div>
+                <div id="accordion123" class="collapse" data-bs-parent="#accordion" style="">
+                    <div class="faq-body">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        </p>
+                    </div>
+                </div>
+            </div>  
+            <div class="faq" data-anchor-id="accordion124">
+                <div class="faq-header">
+                    <h5><button class="btn btn-faq collapsed" data-bs-toggle="collapse" data-bs-target="#accordion124" aria-expanded="false" aria-controls="accordion124">Asectetur adipiscing elorem ipsum dolor sit amet?<i class="fas fa-chevron-up"></i> </button></h5>
+                </div>
+                <div id="accordion124" class="collapse" data-bs-parent="#accordion" style="">
+                    <div class="faq-body">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        </p>
+                    </div>
+                </div>
+            </div>  
+        </div>
+    </div>
+</main>
+
+<!-- Cart -->
+<main class="static-page container mt-5"> 
+    <h1 class="text-center mb-3">Title Cart</h1> 
+    <div class="row"> 
+        <div class="col-md-7">
+            <div class="card">
+                <div class="card-body px-5 py-4"> 
+                    <h2 class="my-4">Product Detail</h2>
+                    <h3 class="my-4">Premium Account: <span class="text-primary">Volosoft Company</span></h2>
+                    <p>Start Date: <span class="text-dark">02/11/2020</span></p>
+                    <p>End Date: <span class="text-dark">02/11/2020</span></p> 
+                </div> 
+            </div> 
+        </div>
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-body px-5 py-4"> 
+                    <h2 class="mt-4">Summary</h2> 
+                    <div class="cart-summary pt-3 pb-2">
+                        <p class="my-4">Premium Licence <span class="text-dark float-end">02/11/2020</span></p>
+                        <hr>
+                        <p class="my-4">TOTAL <span class="text-dark float-end">02/11/2020</span></p> 
+                    </div>
+                    <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#cardModal" class="btn btn-info d-block my-4">Checkout</a>
+                </div> 
+            </div> 
+        </div>  
+    </div>
+</main>
+
+<!-- Cart Modal --> 
+<div class="modal fade" id="cardModal" tabindex="-1" aria-labelledby="cardModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+        <div class="modal-header border-0 p-5 pb-2">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body px-5">  
+            <i class="fa fa-check-circle modal-icon"></i>
+            <h5 class="modal-title text-center">Thank you for your perchase!</h5>
+            <p class="text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam utnulla consequat.</p>
+        </div>
+        <div class="modal-footer border-0 p-5 pt-2">
+            <button type="button" class="btn btn-info w-100" data-bs-dismiss="modal">Close</button> 
+        </div>
+        </div>
+    </div>
+</div>

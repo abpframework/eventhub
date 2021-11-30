@@ -66,3 +66,151 @@
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link { 
     background-color: #00044A !important;
 }
+
+.big-square-btn .btn {    
+    border: 1px solid rgba(107, 126, 146, 0.20);
+    min-height: 177px;
+    background: rgba(107, 126, 146, 0.05);
+}
+.big-square-btn .btn:hover {    
+    color: #E8345D;
+    background: #fff;
+}
+.big-square-btn .fa-plus {    
+    border: 2px dashed; 
+    width: 34px;
+    height: 34px;
+    border-radius: 34px;
+    line-height: 30px;
+}
+
+.track-item {    
+    border: 1px solid rgba(107, 126, 146, 0.20);
+    padding: 1.5em;
+    border-radius: 10px;
+    min-height: 177px;
+    margin-bottom: 1em;
+}
+.track-item .track-name{    
+    font-weight: 500;
+    font-size: 1.125em;
+    color: #03044a;
+}
+.table > :not(:first-child) {
+    border-top: 1px solid currentColor;
+} 
+.table td, .table th { 
+    font-weight: normal;
+    padding: 16px 8px;
+    color: #6B7E92;
+}
+.text-primary {
+    color: #E8345D !important;
+} 
+.preview-item {
+    color: #00044A;
+}
+
+.price small{
+    font-size: 20px;
+    color: #00044A;
+    font-weight: 800;
+}
+.price span{
+    font-size: 60px;
+    color: #00044A;
+    font-weight: 800;
+}
+
+.list-check-icon {
+    list-style: none;
+    padding: 0;
+    margin: 0 30px 0 40px;
+}
+.list-check-icon li{
+    margin: 1em 2em;
+}
+.list-check-icon .fa {
+    color:#E8345D; 
+    margin: 0 10px 0 -28px;
+}
+
+.btn-info {
+    background: #6F32E2;
+    border-color: #6F32E2;
+    color: white;
+}
+.btn-info:hover {
+    background: #662ad6;
+    border-color: #662ad6;
+    color: white;
+}
+.btn-check:focus + .btn-info, .btn-info:focus {
+    background: #662ad6;
+    border-color: #662ad6;
+    color: white;
+}
+.faq.shown {
+    background-color: #fff9f7;
+}
+
+.faq-container .faq {
+    padding: 20px 40px;
+    background: #fff;
+    border: 1px solid #f2f3f5;
+    margin: 15px 0;
+    border-radius: 6px;
+}
+
+.faq-container .faq h5 {
+    margin: 0;
+}
+
+.faq-container .faq button.btn.btn-faq.collapsed {
+    
+}
+
+.faq-container .faq button.btn.btn-faq .fas{    
+    position: absolute;
+    top: 15px;
+    left: 0px;
+}
+
+.faq-container .faq button.btn.btn-faq.collapsed .fas{
+    color:#E8345D;   
+    transform: rotate(180deg);
+}
+
+.faq-container .faq button.btn.btn-faq {
+    padding: 10px 40px;
+    font-size: .9em;
+    text-align: left;
+    display: block;
+    width: 100%;
+    position: relative;
+    font-weight: normal;
+    color: #6B7E92;
+}
+
+.faq-container .faq .faq-body {
+    padding: 15px 0 10px 0;
+}
+
+.btn-check:focus + .btn, .btn:focus { 
+    box-shadow: none;
+}
+
+.text-dark {
+    font-weight: 700;
+    color: #03044a !important;
+} 
+.modal-icon {
+    display: block;
+    font-size: 64px;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #6F32E2;
+}
+.rounded-3 {
+    border-radius: 1rem !important;
+}
