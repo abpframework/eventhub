@@ -1,25 +1,19 @@
 @using System.Globalization
-@using EventHub.Web.Helpers
+@using EventHub.Web
 @using EventHub.Web.Pages.Events
+@using Microsoft.Extensions.Options
 @model List<EventHub.Events.EventInListDto>
+@inject IOptions<EventHubUrlOptions> UrlOptions
 
 @foreach (var eventDto in Model)
 {
     <div class="col-lg-4 col-md-6 event">
         <div class="card">
-            @if (eventDto.CoverImageContent is null)
-            {
-                <div class="event-thumbnail" style="background-image: url(/assets/eh-event.png);" alt="@eventDto.Title">
-                </div>
-            }
-            else
-            {
-                <div class="event-thumbnail" style="background-image: url( @($"data:image/png;base64,{Convert.ToBase64String(eventDto.CoverImageContent)}")"  alt="@eventDto.Title">
-                </div> 
-            }
+            <div class="event-thumbnail" style="background-image: url(@(UrlOptions.Value.Api.EnsureEndsWith('/') + $"api/eventhub/event/cover-image/{eventDto.Id}")" alt="@eventDto.Title">
+            </div>
             <div class="card-body">
                 <div class="event-container">
-                    <div class="form-row">
+                    <div class="row">
                         <div class="col-3">
                             <div class="event-date text-center">
                                 <small>@eventDto.StartTime.ToString("MMM")</small>
@@ -32,7 +26,7 @@
                                 <small>@eventDto.StartTime.ToString("hh tt", CultureInfo.InvariantCulture) - @eventDto.EndTime.ToString("hh tt", CultureInfo.InvariantCulture) | @EventDateHelper.GetLocationInfo(eventDto)</small>
                                 <p>@eventDto.Description</p>
                             </div>
-                            <a href="@Url.Page("/Events/Detail", new {url = eventDto.Url})" class="btn btn-link p-0">Learn More <img src="/assets/more-btn.svg"></a>
+                            <a href="@Url.Page("/Events/Detail", new { url = eventDto.Url })" class="btn btn-link p-0">Learn More <img src="/assets/more-btn.svg"></a>
                         </div>
                     </div>
                 </div>

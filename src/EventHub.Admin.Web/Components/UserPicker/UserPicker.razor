@@ -1,0 +1,71 @@
+﻿@using EventHub.Admin.Users
+@inherits EventHubComponentBase
+@inject IUserAppService UserAppService
+
+<Modal @ref="@UserPickerModal" Closing="@ClosingUserPickerModal">
+    <ModalContent Centered="true" size="@ModalSize.Large">
+        <ModalHeader>
+            <ModalTitle>@L["AddUser"]</ModalTitle>
+            <CloseButton Clicked="CloseUserPickerModalAsync" />
+        </ModalHeader>
+        <ModalBody>
+            <div id="UserFilterSection" class="row mt-3">
+                <Column ColumnSize="ColumnSize.Is12">
+                    <Field>
+                        <FieldLabel>@L["UserName"]</FieldLabel>
+                        <TextEdit TValue="string" KeyPress="OnKeyPressed" @bind-Text="@Filter.Username" />
+                    </Field>
+                </Column>
+            </div>
+
+            <DataGrid TItem="UserDto"
+                      Data="UserList"
+                      ReadData="OnDataGridReadAsync"
+                      TotalItems="TotalCount"
+                      ShowPager="true"
+                      PageSize="PageSize">
+                <DataGridColumns>
+                    <DataGridColumn Sortable="false" TItem="UserDto" Field="@nameof(UserDto.Id)">
+                        <CaptionTemplate>
+                            <Check TValue="bool" @bind-Checked="@AllUserSelected"></Check>
+                        </CaptionTemplate>
+                        <DisplayTemplate>
+                            @if (SelectAllUsers.ContainsKey(context.Id))
+                            {
+                                <Check TValue="bool" @bind-Checked="@SelectAllUsers[context.Id]"></Check>
+                            }
+                        </DisplayTemplate>
+                    </DataGridColumn>
+
+                    <DataGridColumn TItem="UserDto" Field="@nameof(UserDto.Username)" Caption="@L["UserName"].Value">
+                        <DisplayTemplate>
+                            @(context.Username)
+                        </DisplayTemplate>
+                    </DataGridColumn>
+
+                    <DataGridColumn TItem="UserDto" Field="@nameof(UserDto.Name)" Caption="@L["Name"].Value">
+                        <DisplayTemplate>
+                            @(context.Name)
+                        </DisplayTemplate>
+                    </DataGridColumn>
+
+                    <DataGridColumn TItem="UserDto" Field="@nameof(UserDto.Surname)" Caption="@L["Surname"].Value">
+                        <DisplayTemplate>
+                            @(context.Surname)
+                        </DisplayTemplate>
+                    </DataGridColumn>
+
+                    <DataGridColumn TItem="UserDto" Field="@nameof(UserDto.Email)" Caption="@L["Email"].Value">
+                        <DisplayTemplate>
+                            @(context.Email)
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                </DataGridColumns>
+            </DataGrid>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="CloseUserPickerModalAsync">@L["Cancel"]</Button>
+            <Button Color="Color.Primary" Clicked="SaveUserPickerFormAsync">@L["Save"]</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>

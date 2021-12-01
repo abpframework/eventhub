@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
 using Volo.Abp.BlobStoring;
+using Volo.Abp.Content;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 using Volo.Abp.Users;
@@ -17,17 +18,17 @@ namespace EventHub.Organizations
     public class OrganizationAppService : EventHubAppService, IOrganizationAppService
     {
         private readonly IRepository<Organization, Guid> _organizationRepository;
-        private readonly IRepository<OrganizationMembership, Guid>  _organizationMembershipsRepository;
+        private readonly IOrganizationMembershipRepository  _organizationMembershipsRepository;
         private readonly OrganizationManager _organizationManager;
         private readonly IBlobContainer<OrganizationProfilePictureContainer> _organizationBlobContainer;
-        private readonly IRepository<IdentityUser, Guid> _userRepository;
+        private readonly IUserRepository _userRepository;
 
         public OrganizationAppService(
             IRepository<Organization, Guid> organizationRepository,
-            IRepository<OrganizationMembership, Guid> organizationMembershipsRepository,
+            IOrganizationMembershipRepository organizationMembershipsRepository,
             OrganizationManager organizationManager,
-            IBlobContainer<OrganizationProfilePictureContainer> organizationBlobContainer, 
-            IRepository<IdentityUser, Guid> userRepository)
+            IBlobContainer<OrganizationProfilePictureContainer> organizationBlobContainer,
+            IUserRepository userRepository)
         {
             _organizationRepository = organizationRepository;
             _organizationMembershipsRepository = organizationMembershipsRepository;
@@ -37,7 +38,7 @@ namespace EventHub.Organizations
         }
 
         [Authorize]
-        public async Task CreateAsync(CreateOrganizationDto input)
+        public async Task<OrganizationDto> CreateAsync(CreateOrganizationDto input)
         {
             var organization = await _organizationManager.CreateAsync(
                 CurrentUser.GetId(),
@@ -52,13 +53,15 @@ namespace EventHub.Organizations
             organization.FacebookUsername = input.FacebookUsername;
             organization.InstagramUsername = input.InstagramUsername;
             organization.MediumUsername = input.MediumUsername;
-            
+
             await _organizationRepository.InsertAsync(organization, true);
-            
-            if (input.ProfilePictureContent != null && input.ProfilePictureContent.Length > 0)
+
+            if (input.ProfilePictureStreamContent != null && input.ProfilePictureStreamContent.ContentLength > 0)
             {
-                await SaveProfilePictureAsync(organization.Id, input.ProfilePictureContent);
+                await SaveProfilePictureAsync(organization.Id, input.ProfilePictureStreamContent);
             }
+            
+            return ObjectMapper.Map<Organization, OrganizationDto>(organization);
         }
 
         public async Task<PagedResultDto<OrganizationInListDto>> GetListAsync(OrganizationListFilterDto input)
@@ -67,13 +70,13 @@ namespace EventHub.Organizations
             var organizationMemberQueryable = await _organizationMembershipsRepository.GetQueryableAsync();
 
             var query = organizationQueryable;
-            
+
             if (input.RegisteredUserId.HasValue)
             {
                 var registeredOrganization = organizationMemberQueryable
                     .Where(x => x.UserId == input.RegisteredUserId)
                     .Select(x => x.OrganizationId);
-                
+
                 var organizationIds = await AsyncExecuter.ToListAsync(registeredOrganization);
                 query = query.Where(x => organizationIds.Contains(x.Id));
             }
@@ -84,11 +87,6 @@ namespace EventHub.Organizations
 
             var organizationDto = ObjectMapper
                 .Map<List<Organization>, List<OrganizationInListDto>>(await AsyncExecuter.ToListAsync(query));
-            
-            foreach (var organization in organizationDto)
-            {
-                organization.ProfilePictureContent = await GetProfilePictureAsync(organization.Id);
-            }
 
             return new PagedResultDto<OrganizationInListDto>(
                 totalCount,
@@ -104,7 +102,6 @@ namespace EventHub.Organizations
             var owner = await _userRepository.GetAsync(u => u.Id == organization.OwnerUserId);
             organizationProfileDto.OwnerUserName = owner.UserName;
             organizationProfileDto.OwnerEmail = owner.Email;
-            organizationProfileDto.ProfilePictureContent = await GetProfilePictureAsync(organizationProfileDto.Id);
 
             return organizationProfileDto;
         }
@@ -116,17 +113,13 @@ namespace EventHub.Organizations
 
             var organizationDto = ObjectMapper.Map<List<Organization>, List<OrganizationInListDto>>(organizations);
 
-            foreach (var organization in organizationDto)
-            {
-                organization.ProfilePictureContent = await GetProfilePictureAsync(organization.Id);
-            }
-            
             return new ListResultDto<OrganizationInListDto>(organizationDto);
         }
 
         public async Task<bool> IsOrganizationOwnerAsync(Guid organizationId)
         {
-            return CurrentUser.Id.HasValue && await _organizationRepository.AnyAsync(x => x.Id == organizationId && x.OwnerUserId == CurrentUser.Id.Value);
+            return CurrentUser.Id.HasValue && await _organizationRepository
+                .AnyAsync(x => x.Id == organizationId && x.OwnerUserId == CurrentUser.GetId());
         }
 
         [Authorize]
@@ -148,35 +141,34 @@ namespace EventHub.Organizations
             organization.InstagramUsername = input.InstagramUsername;
             organization.FacebookUsername = input.FacebookUsername;
             organization.MediumUsername = input.MediumUsername;
-            
-            if (input.ProfilePictureContent != null && input.ProfilePictureContent.Length > 0)
+
+            if (input.ProfilePictureStreamContent != null && input.ProfilePictureStreamContent.ContentLength > 0)
             {
-                await SaveProfilePictureAsync(organization.Id, input.ProfilePictureContent);
+                await SaveProfilePictureAsync(organization.Id, input.ProfilePictureStreamContent);
             }
-            
+
             await _organizationRepository.UpdateAsync(organization);
         }
-
-        private async Task SaveProfilePictureAsync(Guid id, byte[] bytes)
+        
+        public async Task<IRemoteStreamContent> GetProfilePictureAsync(Guid id)
         {
-            var organization = await _organizationRepository.GetAsync(x => x.Id == id);
-            
-            if (organization.OwnerUserId != CurrentUser.GetId())
-            {
-                throw new AbpAuthorizationException(EventHubErrorCodes.NotAuthorizedToUpdateOrganizationProfile)
-                    .WithData("Name", organization.DisplayName);
-            }
-            
             var blobName = id.ToString();
+
+            var pictureContent = await _organizationBlobContainer.GetOrNullAsync(blobName);
             
-            await _organizationBlobContainer.SaveAsync(blobName, bytes, overrideExisting: true);
+            if (pictureContent is null)
+            {
+                return null;
+            }
+
+            return new RemoteStreamContent(pictureContent, blobName);
         }
 
-        private async Task<byte[]> GetProfilePictureAsync(Guid id)
+        private async Task SaveProfilePictureAsync(Guid id, IRemoteStreamContent streamContent)
         {
             var blobName = id.ToString();
 
-            return await _organizationBlobContainer.GetAllBytesOrNullAsync(blobName);
+            await _organizationBlobContainer.SaveAsync(blobName, streamContent.GetStream(), overrideExisting: true);
         }
     }
 }

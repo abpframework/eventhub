@@ -1,19 +1,26 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Volo.Abp;
-using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
+using Volo.Abp.Guids;
 using Volo.Abp.Identity;
+using Volo.Abp.Timing;
 
 namespace EventHub.Events.Registrations
 {
-    public class EventRegistrationManager : DomainService
+    public class EventRegistrationManager : IDomainService
     {
-        private readonly IRepository<EventRegistration, Guid> _eventRegistrationRepository;
+        private readonly IEventRegistrationRepository _eventRegistrationRepository;
+        private readonly IGuidGenerator _guidGenerator;
+        private readonly IClock _clock;
 
-        public EventRegistrationManager(IRepository<EventRegistration, Guid> eventRegistrationRepository)
+        public EventRegistrationManager(
+            IEventRegistrationRepository eventRegistrationRepository,
+            IGuidGenerator guidGenerator,
+            IClock clock)
         {
             _eventRegistrationRepository = eventRegistrationRepository;
+            _guidGenerator = guidGenerator;
+            _clock = clock;
         }
 
         public async Task RegisterAsync(
@@ -42,7 +49,7 @@ namespace EventHub.Events.Registrations
                 
             await _eventRegistrationRepository.InsertAsync(
                 new EventRegistration(
-                    GuidGenerator.Create(),
+                    _guidGenerator.Create(),
                     @event.Id,
                     user.Id
                 )
@@ -68,17 +75,12 @@ namespace EventHub.Events.Registrations
             IdentityUser user)
         {
             return await _eventRegistrationRepository
-                .AnyAsync(x => x.EventId == @event.Id && x.UserId == user.Id);
+                .ExistsAsync(@event.Id, user.Id);
         }
 
         public bool IsPastEvent(Event @event)
         {
-            if (Clock.Now > @event.EndTime)
-            {
-                return true;
-            }
-
-            return false;
+            return _clock.Now > @event.EndTime;
         }
     }
 }

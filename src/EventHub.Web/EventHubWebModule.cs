@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using EventHub.Localization;
 using EventHub.Web.Menus;
+using EventHub.Web.PaymentRequests;
 using EventHub.Web.Theme;
 using EventHub.Web.Theme.Bundling;
 using EventHub.Web.Utils;
@@ -36,6 +37,7 @@ using Volo.Abp.Swashbuckle;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
+using Payment.Web;
 
 namespace EventHub.Web
 {
@@ -51,7 +53,8 @@ namespace EventHub.Web
         typeof(AbpHttpClientIdentityModelWebModule),
         typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpSwashbuckleModule),
-        typeof(AbpAccountApplicationContractsModule)
+        typeof(AbpAccountApplicationContractsModule),
+        typeof(PaymentWebModule)
         )]
     public class EventHubWebModule : AbpModule
     {
@@ -84,6 +87,23 @@ namespace EventHub.Web
             ConfigureCookies(context);
             ConfigureSwaggerServices(context.Services);
             ConfigureRazorPageOptions();
+            ConfigurePremiumPlanInfo(context, configuration);
+        }
+
+        private void ConfigurePremiumPlanInfo(ServiceConfigurationContext context, IConfiguration configuration)
+        {
+            context.Services.AddOptions<PremiumPlanInfoOptions>()
+                .Bind(configuration.GetSection(PremiumPlanInfoOptions.OrganizationPlanInfo))
+                .ValidateDataAnnotations()
+                .Validate(config =>
+                {
+                    if (config.IsActive)
+                    {
+                        return config.OnePremiumPeriodAsMonth > config.CanBeExtendedAfterHowManyMonths;
+                    }
+
+                    return true;
+                }, "OnePremiumPeriodAsMonth must be greater than CanBeExtendedAfterHowManyMonths.");
         }
 
         private void ConfigureBundles()
@@ -128,10 +148,13 @@ namespace EventHub.Web
         {
             Configure<RazorPagesOptions>(options =>
             {
+                options.Conventions.AuthorizeFolder("/Payment");
+
                 options.Conventions.AuthorizePage("/Events/New");
                 options.Conventions.AuthorizePage("/Events/Edit");
                 options.Conventions.AuthorizePage("/Organizations/New");
                 options.Conventions.AuthorizePage("/Organizations/Edit");
+                options.Conventions.AuthorizePage("/Pricing");
             });
         }
 

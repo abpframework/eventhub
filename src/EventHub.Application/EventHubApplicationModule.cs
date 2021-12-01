@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Application;
+﻿using Payment;
+using Volo.Abp.Application;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 
@@ -7,7 +8,8 @@ namespace EventHub
     [DependsOn(
         typeof(EventHubDomainModule),
         typeof(EventHubApplicationContractsModule),
-        typeof(AbpDddApplicationModule)
+        typeof(AbpDddApplicationModule),
+        typeof(PaymentApplicationModule)
     )]
     public class EventHubApplicationModule : AbpModule
     {

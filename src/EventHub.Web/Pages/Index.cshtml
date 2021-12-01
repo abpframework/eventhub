@@ -31,53 +31,16 @@
 
 
 <div class="container-fluid p-0">
-    <div class="main-slider">
-        <div class="owl-carousel owl-theme">
-            <div class="item">
-                <div class="slider-container d-flex align-items-center text-center text-dark" style="background-image: url('/assets/eh-banner-4.png')">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-9 col-md-11 mx-auto">
-                                <h1>.Net Foundation Week</h1>
-                                <p class="lead">
-                                    Lorem ipsum is placeholder text commonly used in the graphic!!
-                                </p>
-                                <div>
-                                    <a href="#" class="btn btn-primary">Join Now</a>
-                                    <a href="#" class="btn btn-link">More Details</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <div class="slider-container d-flex align-items-center text-center text-dark" style="background-image: url('/assets/eh-banner-5.png')">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-9 col-md-11 mx-auto">
-                                <h1>.Net Foundation Week</h1>
-                                <p class="lead">
-                                    Lorem ipsum is placeholder text commonly used in the graphic!
-                                </p>
-                                <div>
-                                    <a href="#" class="btn btn-primary">Join Now</a>
-                                    <a href="#" class="btn btn-link">More Details</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <div class="slider-container d-flex align-items-center text-center text-light" style="background-image: url('/assets/slide.jpg')">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-9 col-md-11 mx-auto">
-                                <h1>Let's Share Together!</h1>
-                                <p class="lead">Try something new, or do more of what you love :)</p>
-                            </div>
-                        </div>
+    <div class="slider-container d-flex align-items-center text-center text-dark" style="background-image: url('/assets/eh-banner-4.png')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-9 col-md-11 mx-auto">
+                    <img src="/assets/eventhub-logo.svg" >
+                    <p class="lead mt-2">
+                       Benefit from a community of millions.
+                    </p>
+                    <div>
+                        <a href="@Url.Page("/Events/New")" class="btn btn-primary">Join Now</a>
                     </div>
                 </div>
             </div>
@@ -88,7 +51,7 @@
 <div class="search-event container">
     <div class="card bg-primary mb-0">
         <div class="card-body">
-            <div class="form-row search-form">
+            <div class="row search-form">
                 <div class="col-md mb-3 mb-md-0">
                     <select id="LanguageSelect" class="form-select" aria-label="en">
                         <option value="" selected>Language</option>
@@ -115,8 +78,8 @@
                         <label for="inputWhen">When</label>
                     </div>
                 </div>
-                <div class="col-md-auto">
-                    <button id="SearchButton" class="btn btn-primary btn-lg btn-block ">
+                <div class="col-md-2 d-grid gap-2">
+                    <button id="SearchButton" class="btn btn-primary btn-lg">
                         <img src="/assets/search.svg">
                         Search
                     </button>
@@ -126,99 +89,83 @@
     </div>
 </div>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md">
-            <h2 class=" mb-4">Upcoming Events</h2>
+    <div class="container">
+        <div class="row">
+            <div class="col-md">
+                <h2 class=" mb-4">Upcoming Events</h2>
+            </div>
         </div>
+
+        @await Component.InvokeAsync(typeof(EventsAreaViewComponent), new
+        {
+            minDate = Clock.Now,
+            maxResultCount = 15
+        })
     </div>
 
-    @await Component.InvokeAsync(typeof(EventsAreaViewComponent), new
-    {
-        minDate = Clock.Now,
-        maxResultCount = 15
-    })
-</div>
+    <div class="container-fluid bg-white mt-5 py-5">
+        <div class="container py-3">
+            <div class="card-slider">
 
-<div class="container-fluid bg-white mt-5 py-5">
-    <div class="container py-3">
-        <div class="card-slider">
-
-            <h2 class="mb-4">Online Events</h2>
-            <div class="owl-carousel owl-theme">
-                @for (var i = 0; i < Model.OnlineEvents.Count; i += 2)
-                {
-                    <div class="item">
-                        <div class="card mb-3">
-                            <div class="row no-glutters">
-                                <div class="col-5 pr-0">
-                                    @if (Model.OnlineEvents[i].CoverImageContent is null)
-                                    {
-                                        <div class="event-thumbnail-left" style="background-image: url(/assets/eh-event.png);">
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="event-thumbnail-left" style="background-image: url( @($"data:image/png;base64,{Convert.ToBase64String(Model.OnlineEvents[i].CoverImageContent)}") );" alt="@Model.OnlineEvents[i].Title">
-                                        </div>
-                                    }
-                                </div>
-                                <div class="col-7">
-                                    <div class="card-body">
-                                        <div class="event-container online-event">
-                                            <div class="event-info">
-                                                <h5>@Model.OnlineEvents[i].Title</h5>
-                                                <small>@Model.OnlineEvents[i].StartTime.ToString("MMMM dd, yyyy dddd") <br /> @Model.OnlineEvents[i].StartTime.ToString("hh tt", CultureInfo.InvariantCulture) - @Model.OnlineEvents[i].EndTime.ToString("hh tt", CultureInfo.InvariantCulture) | Online</small>
-                                                <p>@Model.OnlineEvents[i].Description</p>
-                                            </div>
-                                            <a href="@Url.Page("/Events/Detail", new {url = @Model.OnlineEvents[i].Url})" class="btn btn-link p-0">Learn More <img src="/assets/more-btn.svg"></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        @if (i + 1 <= Model.OnlineEvents.Count - 1)
-                        {
+                <h2 class="mb-4">Online Events</h2>
+                <div class="owl-carousel owl-theme">
+                    @for (var i = 0; i < Model.OnlineEvents.Count; i += 2)
+                    {
+                        <div class="item">
                             <div class="card mb-3">
                                 <div class="row no-glutters">
                                     <div class="col-5 pr-0">
-                                        @if (Model.OnlineEvents[i + 1].CoverImageContent is null)
-                                        {
-                                            <div class="event-thumbnail-left" style="background-image: url(/assets/eh-event.png);">
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <div class="event-thumbnail-left" style="background-image: url( @($"data:image/png;base64,{Convert.ToBase64String(Model.OnlineEvents[i + 1].CoverImageContent)}") );" alt="@Model.OnlineEvents[i + 1].Title">
-                                            </div>
-                                        }
+                                        <div class="event-thumbnail-left" style="background-image: url( @(UrlOptions.Value.Api.EnsureEndsWith('/') + $"api/eventhub/event/cover-image/{Model.OnlineEvents[i].Id}") );" alt="@Model.OnlineEvents[i].Title">
+                                        </div>
                                     </div>
                                     <div class="col-7">
                                         <div class="card-body">
                                             <div class="event-container online-event">
                                                 <div class="event-info">
-                                                    <h5>@Model.OnlineEvents[i + 1].Title</h5>
-                                                    <small>@Model.OnlineEvents[i + 1].StartTime.ToString("MMMM dd, yyyy dddd") <br /> @Model.OnlineEvents[i + 1].StartTime.ToString("hh tt", CultureInfo.InvariantCulture) - @Model.OnlineEvents[i + 1].EndTime.ToString("hh tt", CultureInfo.InvariantCulture) | Online</small>
-                                                    <p>@Model.OnlineEvents[i + 1].Description</p>
+                                                    <h5>@Model.OnlineEvents[i].Title</h5>
+                                                    <small>@Model.OnlineEvents[i].StartTime.ToString("MMMM dd, yyyy dddd") <br /> @Model.OnlineEvents[i].StartTime.ToString("hh tt", CultureInfo.InvariantCulture) - @Model.OnlineEvents[i].EndTime.ToString("hh tt", CultureInfo.InvariantCulture) | Online</small>
+                                                    <p>@Model.OnlineEvents[i].Description</p>
                                                 </div>
-                                                <a href="@Url.Page("/Events/Detail", new {url = @Model.OnlineEvents[i + 1].Url})" class="btn btn-link p-0">Learn More <img src="/assets/more-btn.svg"></a>
+                                                <a href="@Url.Page("/Events/Detail", new {url = Model.OnlineEvents[i].Url})" class="btn btn-link p-0">Learn More <img src="/assets/more-btn.svg"></a>
                                             </div>
                                         </div>
-                                    </div> 
+                                    </div>
                                 </div>
                             </div>
-                        }
-                    </div>
-                }
+                            @if (i + 1 <= Model.OnlineEvents.Count - 1)
+                            {
+                                <div class="card mb-3">
+                                    <div class="row no-glutters">
+                                        <div class="col-5 pr-0">
+                                            <div class="event-thumbnail-left" style="background-image: url( @(UrlOptions.Value.Api.EnsureEndsWith('/') + $"api/eventhub/event/cover-image/{Model.OnlineEvents[i + 1].Id}") );" alt="@Model.OnlineEvents[i + 1].Title">
+                                            </div>
+                                        </div>
+                                        <div class="col-7">
+                                            <div class="card-body">
+                                                <div class="event-container online-event">
+                                                    <div class="event-info">
+                                                        <h5>@Model.OnlineEvents[i + 1].Title</h5>
+                                                        <small>@Model.OnlineEvents[i + 1].StartTime.ToString("MMMM dd, yyyy dddd") <br /> @Model.OnlineEvents[i + 1].StartTime.ToString("hh tt", CultureInfo.InvariantCulture) - @Model.OnlineEvents[i + 1].EndTime.ToString("hh tt", CultureInfo.InvariantCulture) | Online</small>
+                                                        <p>@Model.OnlineEvents[i + 1].Description</p>
+                                                    </div>
+                                                    <a href="@Url.Page("/Events/Detail", new {url = @Model.OnlineEvents[i + 1].Url})" class="btn btn-link p-0">Learn More <img src="/assets/more-btn.svg"></a>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 <div class="container text-center py-5">
     <h1 class="my-5 pb-5">How EventHub Works?</h1>
     <div class="row my-4">
-        <div class="col-md-5 ml-auto">
+        <div class="col-md-5 ms-auto">
             <div class="px-5">
                 <h3>Explore groups</h3>
                 <p class="lead">
@@ -231,7 +178,7 @@
                 }
             </div>
         </div>
-        <div class="col-md-5 mr-auto border-left">
+        <div class="col-md-5 me-auto border-left">
             <div class="px-5">
                 <h3>Start an Event</h3>
                 <p class="lead">Create your own Eventhub group and benefit from a community of millions.</p>

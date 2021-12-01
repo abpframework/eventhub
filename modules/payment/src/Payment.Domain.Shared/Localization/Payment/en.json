@@ -1,0 +1,36 @@
+
+{
+  "culture": "en",
+  "texts": {
+    "CompletePayment": "Complete the Payment",
+    "Enum:PaymentRequestState:Completed": "Completed",
+    "Enum:PaymentRequestState:Failed": "Failed",
+    "Enum:PaymentRequestState:Waiting": "Waiting",
+    "GoBack": "Go Back",
+    "MyAccount": "My account",
+    "PaymentRequestIsNotWaiting": "The state isn't 'Waiting', so you can't pay this Payment Request at this time.",
+    "PaymentResult": "Payment Result",
+    "Price": "Price",
+    "ProductInformation": "Product Information",
+    "ProductName": "Product Name",
+    "SamplePageMessage": "A sample page for the Payment module",
+    "Status": "State",
+    "YourPaymentCompletedSuccessfully": "Your payment has been completed successfully!",
+    "YourPaymentFailed": "Your payment has been failed unfortunetely!",
+    "Permission:Payment": "Payment",
+    "Menu:PaymentManagement": "Payment",
+    "PaymentRequests": "Payment Requests",
+    "PaymentRequestState:0": "Waiting",
+    "PaymentRequestState:1": "Completed",
+    "PaymentRequestState:2": "Failed",
+    "MinCreationTime": "Min Creation Time",
+    "MaxCreationTime": "Max Creation Time",
+    "CustomerId": "Customer Id",
+    "Currency": "Currency",
+    "State": "State",
+    "FailReason": "Fail Reason",
+    "CreationTime": "Creation Time",
+    "Permission:PaymentManagement": "Payment Management",
+    "Permission:PaymentRequest": "Payment Requests"
+  }
+}

@@ -1,0 +1,208 @@
+{
+  "modules": {
+    "payment": {
+      "rootPath": "payment",
+      "remoteServiceName": "Payment",
+      "controllers": {
+        "Payment.PaymentRequests.PaymentRequestController": {
+          "controllerName": "PaymentRequest",
+          "controllerGroupName": "PaymentRequest",
+          "type": "Payment.PaymentRequests.PaymentRequestController",
+          "interfaces": [
+            {
+              "type": "Payment.PaymentRequests.IPaymentRequestAppService"
+            }
+          ],
+          "actions": {
+            "CompleteAsyncByToken": {
+              "uniqueName": "CompleteAsyncByToken",
+              "name": "CompleteAsync",
+              "httpMethod": "POST",
+              "url": "api/payment/requests/complete/{token}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "token",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "token",
+                  "name": "token",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Payment.PaymentRequests.PaymentRequestDto",
+                "typeSimple": "Payment.PaymentRequests.PaymentRequestDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Payment.PaymentRequests.IPaymentRequestAppService"
+            },
+            "CreateAsyncByInput": {
+              "uniqueName": "CreateAsyncByInput",
+              "name": "CreateAsync",
+              "httpMethod": "POST",
+              "url": "api/payment/requests",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Payment.PaymentRequests.PaymentRequestCreationDto, Payment.Application.Contracts",
+                  "type": "Payment.PaymentRequests.PaymentRequestCreationDto",
+                  "typeSimple": "Payment.PaymentRequests.PaymentRequestCreationDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Payment.PaymentRequests.PaymentRequestCreationDto",
+                  "typeSimple": "Payment.PaymentRequests.PaymentRequestCreationDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Payment.PaymentRequests.PaymentRequestDto",
+                "typeSimple": "Payment.PaymentRequests.PaymentRequestDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Payment.PaymentRequests.IPaymentRequestAppService"
+            },
+            "GetAsyncById": {
+              "uniqueName": "GetAsyncById",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/payment/requests/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Payment.PaymentRequests.PaymentRequestDto",
+                "typeSimple": "Payment.PaymentRequests.PaymentRequestDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Payment.PaymentRequests.IPaymentRequestAppService"
+            },
+            "StartPaymentAsyncByInput": {
+              "uniqueName": "StartPaymentAsyncByInput",
+              "name": "StartPaymentAsync",
+              "httpMethod": "POST",
+              "url": "api/payment/requests/start",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Payment.PaymentRequests.StartPaymentDto, Payment.Application.Contracts",
+                  "type": "Payment.PaymentRequests.StartPaymentDto",
+                  "typeSimple": "Payment.PaymentRequests.StartPaymentDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Payment.PaymentRequests.StartPaymentDto",
+                  "typeSimple": "Payment.PaymentRequests.StartPaymentDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Payment.PaymentRequests.StartPaymentResultDto",
+                "typeSimple": "Payment.PaymentRequests.StartPaymentResultDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Payment.PaymentRequests.IPaymentRequestAppService"
+            },
+            "HandleWebhookAsyncByPayload": {
+              "uniqueName": "HandleWebhookAsyncByPayload",
+              "name": "HandleWebhookAsync",
+              "httpMethod": "POST",
+              "url": "api/payment/requests/webhook",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "payload",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "payload",
+                  "name": "payload",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Boolean",
+                "typeSimple": "boolean"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Payment.PaymentRequests.IPaymentRequestAppService"
+            }
+          }
+        }
+      }
+    }
+  },
+  "types": {}
+}

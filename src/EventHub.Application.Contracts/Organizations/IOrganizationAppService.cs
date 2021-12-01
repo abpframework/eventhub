@@ -2,12 +2,13 @@
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Content;
 
 namespace EventHub.Organizations
 {
     public interface IOrganizationAppService : IApplicationService
     {
-        Task CreateAsync(CreateOrganizationDto input);
+        Task<OrganizationDto> CreateAsync(CreateOrganizationDto input);
 
         Task<PagedResultDto<OrganizationInListDto>> GetListAsync(OrganizationListFilterDto input);
 
@@ -18,5 +19,7 @@ namespace EventHub.Organizations
         Task<bool> IsOrganizationOwnerAsync(Guid organizationId);
 
         Task UpdateAsync(Guid id, UpdateOrganizationDto input);
+
+        Task<IRemoteStreamContent> GetProfilePictureAsync(Guid id);
     }
 }

@@ -21,6 +21,8 @@ namespace EventHub.Organizations
             string displayName,
             string description)
         {
+            name = name.Trim().Replace(' ', '-').ToKebabCase().ToLowerInvariant();;
+
             if (await _organizationRepository.AnyAsync(o => o.Name == name))
             {
                 throw new BusinessException(EventHubErrorCodes.OrganizationNameAlreadyExists)

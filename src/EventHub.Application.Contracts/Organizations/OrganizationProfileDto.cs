@@ -26,7 +26,9 @@ namespace EventHub.Organizations
         public string InstagramUsername { get; set; }
 
         public string MediumUsername { get; set; }
+
+        public bool IsPremium { get; set; }
         
-        public byte[] ProfilePictureContent { get; set; }
+        public DateTime? PremiumEndDate { get; set; }
     }
 }

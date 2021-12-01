@@ -9,10 +9,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EventHub.Application.Contracts\EventHub.Application.Contracts.csproj" />
+    <ProjectReference Include="..\..\modules\payment\src\Payment.HttpApi.Client\Payment.HttpApi.Client.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Http.Client" Version="4.4.0-rc.1" />
+    <PackageReference Include="Volo.Abp.Http.Client" Version="5.0.0-rc.1" />
   </ItemGroup>
 
 </Project>

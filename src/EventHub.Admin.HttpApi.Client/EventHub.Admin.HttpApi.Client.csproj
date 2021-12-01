@@ -9,12 +9,13 @@
 
     <ItemGroup>
         <ProjectReference Include="..\EventHub.Admin.Application.Contracts\EventHub.Admin.Application.Contracts.csproj" />
+        <ProjectReference Include="..\..\modules\payment\src\Payment.Admin.HttpApi.Client\Payment.Admin.HttpApi.Client.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Volo.Abp.Account.HttpApi.Client" Version="4.4.0-rc.1" />
-        <PackageReference Include="Volo.Abp.Identity.HttpApi.Client" Version="4.4.0-rc.1" />
-        <PackageReference Include="Volo.Abp.PermissionManagement.HttpApi.Client" Version="4.4.0-rc.1" />
+        <PackageReference Include="Volo.Abp.Account.HttpApi.Client" Version="5.0.0-rc.1" />
+        <PackageReference Include="Volo.Abp.Identity.HttpApi.Client" Version="5.0.0-rc.1" />
+        <PackageReference Include="Volo.Abp.PermissionManagement.HttpApi.Client" Version="5.0.0-rc.1" />
     </ItemGroup>
 
 </Project>

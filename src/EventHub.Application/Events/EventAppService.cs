@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
 using Volo.Abp.BlobStoring;
+using Volo.Abp.Content;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 using Volo.Abp.Users;
@@ -20,20 +21,20 @@ namespace EventHub.Events
     {
         private readonly EventManager _eventManager;
         private readonly EventRegistrationManager _eventRegistrationManager;
-        private readonly IRepository<EventRegistration, Guid> _eventRegistrationRepository;
-        private readonly IRepository<Event, Guid> _eventRepository;
+        private readonly IEventRegistrationRepository _eventRegistrationRepository;
+        private readonly IEventRepository _eventRepository;
         private readonly IRepository<Organization, Guid> _organizationRepository;
-        private readonly IRepository<IdentityUser, Guid> _userRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IRepository<Country, Guid> _countriesRepository;
         private readonly IBlobContainer<EventCoverImageContainer> _eventBlobContainer;
 
         public EventAppService(
             EventManager eventManager,
             EventRegistrationManager eventRegistrationManager,
-            IRepository<EventRegistration, Guid> eventRegistrationRepository,
-            IRepository<Event, Guid> eventRepository,
+            IEventRegistrationRepository eventRegistrationRepository,
+            IEventRepository eventRepository,
             IRepository<Organization, Guid> organizationRepository,
-            IRepository<IdentityUser, Guid> userRepository,
+            IUserRepository userRepository,
             IRepository<Country, Guid> countriesRepository,
             IBlobContainer<EventCoverImageContainer> eventBlobContainer)
         {
@@ -73,9 +74,9 @@ namespace EventHub.Events
 
             await _eventManager.SetCapacityAsync(@event, input.Capacity);
 
-            if (input.CoverImageContent != null && input.CoverImageContent.Length > 0)
+            if (input.CoverImageStreamContent != null && input.CoverImageStreamContent.ContentLength > 0)
             {
-                await SaveCoverImageAsync(@event.Id, input.CoverImageContent);
+                await SaveCoverImageAsync(@event.Id, input.CoverImageStreamContent);
             }
 
             await _eventRepository.InsertAsync(@event);
@@ -161,11 +162,6 @@ namespace EventHub.Events
                 }
             ).ToList();
 
-            foreach (var @event in events)
-            {
-                @event.CoverImageContent = await GetCoverImageAsync(@event.Id);
-            }
-
             return new PagedResultDto<EventInListDto>(totalCount, events);
         }
 
@@ -179,8 +175,7 @@ namespace EventHub.Events
             dto.OrganizationId = organization.Id;
             dto.OrganizationName = organization.Name;
             dto.OrganizationDisplayName = organization.DisplayName;
-            dto.CoverImageContent = await GetCoverImageAsync(dto.Id);
-
+            
             var user = await _userRepository.GetAsync(organization.OwnerUserId);
             dto.OwnerUserName = user.UserName;
             dto.OwnerEmail = user.Email;
@@ -254,9 +249,9 @@ namespace EventHub.Events
             @event.SetTime(input.StartTime, input.EndTime);
             await _eventManager.SetCapacityAsync(@event, input.Capacity);
             
-            if (input.CoverImageContent != null && input.CoverImageContent.Length > 0)
+            if (input.CoverImageStreamContent != null && input.CoverImageStreamContent.ContentLength > 0)
             {
-                await SaveCoverImageAsync(@event.Id, input.CoverImageContent);
+                await SaveCoverImageAsync(@event.Id, input.CoverImageStreamContent);
             }
             
             await _eventRepository.UpdateAsync(@event);
@@ -281,14 +276,21 @@ namespace EventHub.Events
         {
             var blobName = id.ToString();
 
-            return await _eventBlobContainer.GetAllBytesOrNullAsync(blobName);
+            var coverImageStream = await _eventBlobContainer.GetOrNullAsync(blobName);
+            
+            if (coverImageStream is null)
+            {
+                return null;
+            }
+
+            return new RemoteStreamContent(coverImageStream, blobName);
         }
 
-        private async Task SaveCoverImageAsync(Guid id, byte[] coverImageContent)
+        private async Task SaveCoverImageAsync(Guid id, IRemoteStreamContent streamContent)
         {
             var blobName = id.ToString();
 
-            await _eventBlobContainer.SaveAsync(blobName, coverImageContent, overrideExisting: true);
+            await _eventBlobContainer.SaveAsync(blobName, streamContent.GetStream(), overrideExisting: true);
         }
     }
 }

@@ -37,7 +37,10 @@ else
                   <div class="col-md-6"> 
                     <div class="form-label-group">
                       <select asp-for="Event.OrganizationId" asp-items="Model.Organizations" class="form-select">
-                        <option selected value="">Organization</option>
+                        @if (Model.Organizations.Count > 1)
+                        {
+                          <option selected value="">Pick an organization</option>
+                        }
                       </select>
                       <span asp-validation-for="Event.OrganizationId" class="text-danger"></span>
                     </div>
@@ -65,7 +68,7 @@ else
                   </div>
                   <div class="col-md-12">
                     <div class="form-label-group">
-                      <textarea rows="3" type="text" id="inputDescription" asp-for="Event.Description" class="form-control" placeholder="Description"></textarea> 
+                      <textarea rows="5" type="text" id="inputDescription" asp-for="Event.Description" class="form-control" placeholder="Description"></textarea> 
                       <span asp-validation-for="Event.Description" class="text-danger"></span>
                     </div>
                   </div>  
@@ -126,7 +129,7 @@ else
                     </select>
                     <span asp-validation-for="Event.Language" class="text-danger"></span>
                   </div> 
-                  <div class="col-md-12 text-right">
+                  <div class="col-md-12 text-end">
                     <button type="submit" class="btn btn-primary btn-lg"> 
                       Publish New Event
                     </button>

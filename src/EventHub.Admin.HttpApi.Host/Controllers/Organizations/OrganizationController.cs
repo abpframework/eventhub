@@ -1,10 +1,12 @@
 using System;
 using System.Threading.Tasks;
 using EventHub.Admin.Organizations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.Content;
 
 namespace EventHub.Admin.Controllers.Organizations
 {
@@ -16,7 +18,7 @@ namespace EventHub.Admin.Controllers.Organizations
     public class OrganizationController : AbpController, IOrganizationAppService
     {
         private readonly IOrganizationAppService _organizationAppService;
-
+        
         public OrganizationController(IOrganizationAppService organizationAppService)
         {
             _organizationAppService = organizationAppService;
@@ -43,7 +45,7 @@ namespace EventHub.Admin.Controllers.Organizations
         }
 
         [HttpPut]
-        public Task<OrganizationProfileDto> UpdateAsync(Guid id, UpdateOrganizationDto input)
+        public Task<OrganizationProfileDto> UpdateAsync(Guid id, [FromForm] UpdateOrganizationDto input)
         {
             return _organizationAppService.UpdateAsync(id, input);
         }
@@ -53,6 +55,23 @@ namespace EventHub.Admin.Controllers.Organizations
         public Task DeleteAsync(Guid id)
         {
             return _organizationAppService.DeleteAsync(id);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("cover-image/{id}")]
+        public async Task<IRemoteStreamContent> GetCoverImageAsync(Guid id)
+        {
+            var remoteStreamContent = await _organizationAppService.GetCoverImageAsync(id);
+            if (remoteStreamContent is null)
+            {
+                return null;
+            }
+            
+            Response.Headers.Add("Accept-Ranges", "bytes");
+            Response.ContentType = remoteStreamContent.ContentType;
+
+            return remoteStreamContent;
         }
     }
 }

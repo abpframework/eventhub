@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\..\common.props" />
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <RootNamespace />
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Payment.Admin.Application\Payment.Admin.Application.csproj" />
+        <ProjectReference Include="..\Payment.Domain.Tests\Payment.Domain.Tests.csproj" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+    </ItemGroup>
+</Project>

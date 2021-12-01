@@ -4,12 +4,15 @@
 @using Microsoft.AspNetCore.Authorization
 @using EventHub.Admin.Organizations
 @using EventHub.Organizations
+@using EventHub.Web
+@using Microsoft.Extensions.Options
 @using Volo.Abp.AspNetCore.Components.Notifications
 @inherits EventHubComponentBase
 @inject NavigationManager NavigationManager
 @attribute [Authorize(EventHubPermissions.Organizations.Default)]
 @inject IOrganizationAppService OrganizationAppService
 @inject IUiNotificationService UiNotificationService
+@inject IOptions<EventHubUrlOptions> UrlOptions
 
 <Card>
     <CardHeader>
@@ -58,8 +61,7 @@
                   ReadData="OnDataGridReadAsync"
                   TotalItems="TotalCount"
                   ShowPager="true"
-                  PageSize="PageSize"
-                  Responsive="true">
+                  PageSize="PageSize">
             <DataGridColumns>
                 <DataGridEntityActionsColumn TItem="OrganizationInListDto">
                     <DisplayTemplate>
@@ -71,7 +73,7 @@
                             </EntityAction>
                             <EntityAction TItem="OrganizationInListDto"
                                           RequiredPolicy="@EventHubPermissions.Organizations.Update"
-                                          Clicked="() => OpenEditOrganizationModal(context)"
+                                          Clicked="() => OpenEditOrganizationModalAsync(context)"
                                           Text="@L["Edit"]">
                             </EntityAction>
                             <EntityAction TItem="OrganizationInListDto"
@@ -235,16 +237,16 @@
                                 <Field Horizontal="true">
                                     <FieldLabel ColumnSize="ColumnSize.Is3">@L["ChooseProfileImage"]</FieldLabel>
                                     <FieldBody ColumnSize="ColumnSize.Is6">
-                                        <FileEdit MaxMessageSize="@OrganizationConsts.MaxProfilePictureFileSize" Filter=".jpg, .png" Changed="@OnProfileImageFileChanged" Progressed="@OnProgressedForProfileImage" AutoReset="true"/>
+                                        <FileEdit MaxMessageSize="@OrganizationConsts.MaxProfilePictureFileSize" Filter="@string.Join(", ", OrganizationConsts.AllowedProfilePictureExtensions)" Changed="@OnProfileImageFileChanged" Progressed="@OnProgressedForProfileImage" AutoReset="true"/>
                                     </FieldBody>
                                     <Column ColumnSize="ColumnSize.Is3">
-                                        @if (!ProfileImageUrl.IsNullOrWhiteSpace())
+                                        @if (DisabledProfileImageButton)
                                         {
-                                            <Button Color="Color.Warning" Clicked="@OnDeleteCoverImageButtonClicked">@L["DeleteCoverImage"]</Button>
+                                            <Button disabled Color="Color.Secondary" Clicked="@OnDeleteCoverImageButtonClicked">@L["DeleteCoverImage"]</Button>
                                         }
                                         else
                                         {
-                                            <Button disabled Color="Color.Secondary" Clicked="@OnDeleteCoverImageButtonClicked">@L["DeleteCoverImage"]</Button>
+                                            <Button Color="Color.Warning" Clicked="@OnDeleteCoverImageButtonClicked">@L["DeleteCoverImage"]</Button>
                                         }
                                     </Column>
                                 </Field>

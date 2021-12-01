@@ -26,5 +26,7 @@
         public const int MaxInstagramUsernameLength = 24;
 
         public const int MaxMediumUsernameLength = 24;
+        
+        public static string[] AllowedProfilePictureExtensions = { ".jpg", ".png" };
     }
 }

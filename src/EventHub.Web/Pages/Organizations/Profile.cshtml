@@ -1,13 +1,18 @@
 ﻿@page "/organizations/{name}"
 @inject IHtmlLocalizer<EventHubResource> L
 @using EventHub.Localization
+@using EventHub.Web
 @using EventHub.Web.Pages.Events.Components.EventsArea
 @using EventHub.Web.Pages.Organizations.Components.JoinArea
 @using EventHub.Web.Pages.Organizations.Components.MembersArea
+@using EventHub.Web.PaymentRequests
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Options
 @using Volo.Abp.Timing
 @model EventHub.Web.Pages.Organizations.ProfilePageModel
 @inject IClock Clock
+@inject IOptions<EventHubUrlOptions> UrlOptions
+@inject IOptionsSnapshot<PremiumPlanInfoOptions> PremiumPlanInfoOptionsSnapshot
 
 @section scripts {
     <abp-script src="/Pages/Organizations/Profile.js"/>
@@ -18,14 +23,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="detail-image">
-                    @if (Model.Organization.ProfilePictureContent == null)
-                    {
-                        <img class="detail-img" src="/assets/eh-organization-big.png" alt="@Model.Organization.Name">
-                    }
-                    else
-                    {
-                        <img class="detail-img" src="@($"data:image/png;base64,{Convert.ToBase64String(Model.Organization.ProfilePictureContent)}")" alt="@Model.Organization.Name">
-                    }
+                    <img class="detail-img" src="@(UrlOptions.Value.Api.EnsureEndsWith('/') + $"api/eventhub/organization/profile-picture/{Model.Organization.Id}")" alt="@Model.Organization.Name">
                 </div>
             </div>
 
@@ -33,13 +31,13 @@
             <div class="col-12 mt-4">
                 <ul class="nav nav-tabs profile-nav" id="myTab">
                     <li class="nav-item">
-                        <a href="#about-organization-section" class="nav-link active" data-toggle="tab">About the Organization</a>
+                        <a href="#about-organization-section" class="nav-link active" data-bs-toggle="tab">About the Organization</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#events-section" class="nav-link" data-toggle="tab">Events</a>
+                        <a href="#events-section" class="nav-link" data-bs-toggle="tab">Events</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#members-section" class="nav-link" data-toggle="tab">Members</a>
+                        <a href="#members-section" class="nav-link" data-bs-toggle="tab">Members</a>
                     </li>
                 </ul>
 
@@ -47,7 +45,13 @@
                     <div id="about-organization-section" class="tab-pane fade show active">
                         <div class="row">
                             <div class="col-md-7">
-                                <h5 class="detail-head mt-3 font-weight-bold">@Model.Organization.DisplayName</h5>
+                                <h5 class="detail-head mt-3 font-weight-bold">
+                                    @Model.Organization.DisplayName
+                                    @if (Model.Organization.IsPremium)
+                                    {
+                                        <span class="align-top text-dark font-weight-bold" style="font-size: x-small" abp-badge-pill="Warning"> Premium </span>
+                                    }
+                                </h5>
                                 <p>
                                     @Model.Organization.Description
                                 </p>
@@ -56,15 +60,50 @@
                                 <h5 class="detail-head mt-3 font-weight-bold">Owners</h5>
                                 <div>
                                     <a href="/users/@Model.Organization.OwnerUserName">
-                                        <img gravatar-email="@Model.Organization.OwnerEmail" default-image="Wavatar" gravatar-size="40" class="org-avatar avatar rounded-circle" data-toggle="tooltip" title="@Model.Organization.OwnerUserName"/>
+                                        <img gravatar-email="@Model.Organization.OwnerEmail" default-image="Wavatar" gravatar-size="40" class="org-avatar avatar rounded-circle" data-bs-toggle="tooltip" title="@Model.Organization.OwnerUserName"/>
                                     </a>
                                 </div>
 
                                 @if (Model.IsOrganizationOwner)
                                 {
                                     <a href="/organization/edit/@Model.Organization.Name" class="btn btn-primary mt-4 text-white">
-                                        <i class="far fa-edit"></i> edit
+                                        <i class="far fa-edit"></i> Edit
                                     </a>
+
+                                    @if (PremiumPlanInfoOptionsSnapshot.Value.IsActive)
+                                    {
+                                        <abp-card class="detail-head mt-4 font-weight-bold text-center">
+                                            <abp-card-body>
+                                                @if (Model.Organization.IsPremium)
+                                                {
+                                                    <span>Premium end date: @Model.Organization.PremiumEndDate!.Value.ToShortDateString()</span>
+                                                    @if (PremiumPlanInfoOptionsSnapshot.Value.IsExtendable && Model.Organization.PremiumEndDate!.Value.IsBetween(DateTime.Now, DateTime.Now.AddMonths(PremiumPlanInfoOptionsSnapshot.Value.OnePremiumPeriodAsMonth - PremiumPlanInfoOptionsSnapshot.Value.CanBeExtendedAfterHowManyMonths)))
+                                                    {
+                                                        <div class="d-grid gap-2">
+                                                            <a href="@Url.Page("/Pricing", new { organizationName = Model.Organization.Name })" class="btn btn-primary mt-3">
+                                                                <i class="fas fa-handshake"></i> @L["ExtendNow"].Value
+                                                            </a>
+                                                        </div>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <div class="d-grid gap-2">
+                                                        <a href="@Url.Page("/Pricing", new { organizationName = Model.Organization.Name })" class="btn btn-primary">
+                                                            <i class="fas fa-handshake"></i> @L["UpgradeToPremium"]
+                                                        </a>
+                                                    </div>
+                                                }
+                                            </abp-card-body>
+                                        </abp-card>   
+                                    }else if (Model.Organization.IsPremium)
+                                    {
+                                        <abp-card class="detail-head mt-4 font-weight-bold text-center">
+                                            <abp-card-body>
+                                                <span>Premium end date: @Model.Organization.PremiumEndDate!.Value.ToShortDateString()</span>
+                                            </abp-card-body>
+                                        </abp-card>
+                                    }
                                 }
                                 @await Component.InvokeAsync(typeof(JoinAreaViewComponent), new {organizationId = Model.Organization.Id})
                                 @await Component.InvokeAsync(typeof(MembersAreaViewComponent),
@@ -132,10 +171,10 @@
                                 <div class="list-style">
                                     <ul class="nav nav-pills events" role="tablist">
                                         <li class="nav-item">
-                                            <a href="#PastEvent" class="selected" data-toggle="tab"><img src="/assets/past.svg"> Past</a>
+                                            <a href="#PastEvent" class="selected" data-bs-toggle="tab"><img src="/assets/past.svg"> Past</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="#UpcomingEvent" data-toggle="tab"><img src="/assets/now.svg"> Upcoming</a>
+                                            <a href="#UpcomingEvent" data-bs-toggle="tab"><img src="/assets/now.svg"> Upcoming</a>
                                         </li>
                                     </ul>
                                 </div>

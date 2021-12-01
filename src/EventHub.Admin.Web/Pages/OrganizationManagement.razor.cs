@@ -9,6 +9,7 @@ using Blazorise.DataGrid;
 using EventHub.Admin.Organizations;
 using Microsoft.AspNetCore.Components.Web;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Content;
 
 namespace EventHub.Admin.Web.Pages
 {
@@ -30,6 +31,7 @@ namespace EventHub.Admin.Web.Pages
         private IFileEntry FileEntry { get; set; }
         private bool IsLoadingProfileImage { get; set; }
         private string SelectedTabInEditModal { get; set; }
+        private bool DisabledProfileImageButton { get; set; }
 
         public OrganizationManagement()
         {
@@ -50,8 +52,8 @@ namespace EventHub.Admin.Web.Pages
         private async Task OnDataGridReadAsync(DataGridReadDataEventArgs<OrganizationInListDto> e)
         {
             CurrentSorting = e.Columns
-                .Where(c => c.Direction != SortDirection.None)
-                .Select(c => c.Field + (c.Direction == SortDirection.Descending ? " DESC" : ""))
+                .Where(c => c.SortDirection != SortDirection.None)
+                .Select(c => c.Field + (c.SortDirection == SortDirection.Descending ? " DESC" : ""))
                 .JoinAsString(",");
             CurrentPage = e.Page - 1;
             await GetOrganizationsAsync();
@@ -69,28 +71,34 @@ namespace EventHub.Admin.Web.Pages
             TotalCount = (int) result.TotalCount;
         }
 
-        private async Task OpenEditOrganizationModal(OrganizationInListDto input)
+        private async Task OpenEditOrganizationModalAsync(OrganizationInListDto input)
         {
             EditingOrganizationId = input.Id;
             Organization = await OrganizationAppService.GetAsync(EditingOrganizationId);
-            FillProfileImageUrl(Organization.ProfilePictureContent);
+
+            FileEntry = new FileEntry();
+            await SetProfileImageUrlAsync();
 
             EditingOrganization = ObjectMapper.Map<OrganizationProfileDto, UpdateOrganizationDto>(Organization);
-            EditOrganizationModal.Show();
+            await EditOrganizationModal.Show();
         }
 
         private async Task UpdateOrganizationAsync()
         {
             await OrganizationAppService.UpdateAsync(EditingOrganizationId, EditingOrganization);
             await GetOrganizationsAsync();
-            EditOrganizationModal.Hide();
+            await EditOrganizationModal.Hide();
+
+            ProfileImageUrl = null;
+            DisabledProfileImageButton = false;
         }
 
         private void OnDeleteCoverImageButtonClicked()
         {
-            EditingOrganization.ProfilePictureContent = null;
+            EditingOrganization.ProfilePictureStreamContent = null;
             FileEntry = new FileEntry();
             ProfileImageUrl = null;
+            DisabledProfileImageButton = true;
             IsLoadingProfileImage = false;
         }
 
@@ -110,25 +118,26 @@ namespace EventHub.Admin.Web.Pages
 
             IsLoadingProfileImage = true;
 
-            using (var stream = new MemoryStream())
-            {
-                await FileEntry.WriteToStreamAsync(stream);
+            var stream = new MemoryStream();
+            await FileEntry.WriteToStreamAsync(stream);
+            stream.Seek(0, SeekOrigin.Begin);
+            EditingOrganization.ProfilePictureStreamContent = new RemoteStreamContent(stream);
 
-                stream.Seek(0, SeekOrigin.Begin);
-                EditingOrganization.ProfilePictureContent = stream.ToArray();
-                FillProfileImageUrl(EditingOrganization.ProfilePictureContent);
-                await InvokeAsync(StateHasChanged);
-            }
-        }
-
-        private void FillProfileImageUrl(byte[] content)
-        {
-            if (content != null)
+            void SetProfileImageUrl(string contentType, byte[] content)
             {
-                var imageBase64Data = Convert.ToBase64String(content);
-                var imageDataUrl = $"data:image/png;base64,{imageBase64Data}";
-                ProfileImageUrl = imageDataUrl;
+                if (content != null)
+                {
+                    contentType = string.IsNullOrWhiteSpace(contentType) ? "image/png" : contentType;
+                    var imageDataUrl = $"data:{contentType};base64,{Convert.ToBase64String(content)}";
+                    ProfileImageUrl = imageDataUrl;
+                    DisabledProfileImageButton = false;
+                }
             }
+            
+            SetProfileImageUrl(EditingOrganization.ProfilePictureStreamContent.ContentType, stream.ToArray());
+
+            await stream.FlushAsync();
+            await InvokeAsync(StateHasChanged);
         }
 
         private void OnProgressedForProfileImage(FileProgressedEventArgs e)
@@ -156,6 +165,18 @@ namespace EventHub.Admin.Web.Pages
             {
                 await GetOrganizationsAsync();
             }
+        }
+        
+        private async Task SetProfileImageUrlAsync()
+        {
+            var imageRemoteStreamContent = await OrganizationAppService.GetCoverImageAsync(id: EditingOrganizationId);
+            if (imageRemoteStreamContent.ContentLength <= 0)
+            {
+                ProfileImageUrl = "assets/eh-organization.png";
+                DisabledProfileImageButton = true;
+                return;
+            }
+            ProfileImageUrl = UrlOptions.Value.AdminApi.EnsureEndsWith('/') + "api/eventhub/admin/organization/cover-image/" + EditingOrganizationId;
         }
     }
 

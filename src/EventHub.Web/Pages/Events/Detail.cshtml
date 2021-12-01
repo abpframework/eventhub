@@ -24,17 +24,7 @@
 @{
     string description = Model.Event.Description.Length >= 160 ? Model.Event.Description.TruncateWithPostfix(155) : Model.Event.Description;
     string title = Model.Event.Title;
-    string coverImageUrl;
-
-    if (Model.Event.CoverImageContent is null)
-    {
-        // TODO(berkansasmaz): Get a default image from the design team to be used in social media posts
-        coverImageUrl = UrlOptions.Value.Www + "/assets/slide.jpg";
-    }
-    else
-    {
-        coverImageUrl = $"{UrlOptions.Value.Www}/api/event/cover-picture-source/{Model.Event.Id}";
-    }
+    string coverImageUrl = UrlOptions.Value.Api.EnsureEndsWith('/') + $"api/eventhub/event/cover-image/{Model.Event.Id}";
 
     ViewBag.Title = title;
     ViewBag.Description = description;
@@ -52,14 +42,7 @@
         <div class="row">
             <div class="col-md-7">
                 <div class="detail-image">
-                    @if (Model.Event.CoverImageContent == null)
-                    {
-                        <img src="/assets/eh-event.png" class="detail-img" alt="@Model.Event.Title">
-                    }
-                    else
-                    {
-                        <img class="detail-img" src="@($"data:image/png;base64,{Convert.ToBase64String(Model.Event.CoverImageContent)}")" alt="@Model.Event.Title">
-                    }
+                    <img class="detail-img" src="@(UrlOptions.Value.Api.EnsureEndsWith('/') + $"api/eventhub/event/cover-image/{Model.Event.Id}")" alt="@Model.Event.Title">
                 </div>
             </div>
 
@@ -70,7 +53,7 @@
                 <h5 class="detail-head mt-4">Owner</h5>
                 <div>
                     <a href="/users/@Model.Event.OwnerUserName">
-                        <img gravatar-email="@Model.Event.OwnerEmail" default-image="Wavatar" gravatar-size="40" class="org-avatar avatar rounded-circle" data-toggle="tooltip" title="@Model.Event.OwnerUserName"/>
+                        <img gravatar-email="@Model.Event.OwnerEmail" default-image="Wavatar" gravatar-size="40" class="org-avatar avatar rounded-circle" data-bs-toggle="tooltip" title="@Model.Event.OwnerUserName"/>
                     </a>
                 </div>
                 @if (Model.IsEventOwner)

@@ -3,17 +3,18 @@
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>EventHub</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\EventHub.Domain\EventHub.Domain.csproj" />
     <ProjectReference Include="..\EventHub.Application.Contracts\EventHub.Application.Contracts.csproj" />
+    <ProjectReference Include="..\..\modules\payment\src\Payment.Application\Payment.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Ddd.Application" Version="4.4.0-rc.1" />
+    <PackageReference Include="Volo.Abp.Ddd.Application" Version="5.0.0-rc.1" />
   </ItemGroup>
 
 </Project>

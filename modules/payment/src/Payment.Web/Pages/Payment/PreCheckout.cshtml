@@ -1,0 +1,38 @@
+﻿@page
+@using Payment.Web.Pages.Payment
+@using Payment.PaymentRequests
+@inherits Payment.Web.Pages.PaymentPageBase
+@model Payment.Web.Pages.Payment.PreCheckoutPageModel
+
+@section scripts {
+<abp-script-bundle name="@typeof(PreCheckoutPageModel).FullName">
+	<abp-script src="/client-proxies/Payment-proxy.js" />
+</abp-script-bundle>
+}
+
+<main class="static-page container mt-5">
+	<abp-card class="m-5">
+		<abp-card-header>
+			<h2>@L["ProductInformation"]</h2>
+		</abp-card-header>
+		<abp-card-body>
+			<ul>
+				<li>@L["ProductName"]: @Model.PaymentRequest.ProductName</li>
+				<li>@L["Price"]: @Model.PaymentRequest.Price @Model.PaymentRequest.Currency</li>
+				<li>@L["State"]: @L["Enum:PaymentRequestState:" + Model.PaymentRequest.State]</li>
+			</ul>
+		</abp-card-body>
+		<abp-card-footer>
+			<form method="post">
+				@if (Model.PaymentRequest.State != PaymentRequestState.Waiting)
+				{
+					<abp-alert alert-type="Warning">@L["PaymentRequestIsNotWaiting"]</abp-alert>
+				}
+				else
+				{
+					<abp-button type="submit" button-type="Primary">@L["CompletePayment"]</abp-button>
+				}
+			</form>
+		</abp-card-footer>
+	</abp-card>
+</main>

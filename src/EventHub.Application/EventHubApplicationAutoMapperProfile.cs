@@ -17,7 +17,8 @@ namespace EventHub
         {
             CreateMap<Organization, OrganizationInListDto>();
             CreateMap<Organization, OrganizationProfileDto>();
-            
+            CreateMap<Organization, OrganizationDto>();
+
             CreateMap<IdentityUser, OrganizationMemberDto>();
 
             CreateMap<Event, EventDto>();

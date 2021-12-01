@@ -1,0 +1,295 @@
+﻿@page "/events"
+@using Microsoft.AspNetCore.Authorization
+@using EventHub.Admin.Permissions
+@using EventHub.Admin.Events
+@using EventHub.Events
+@using EventHub.Web
+@using Microsoft.Extensions.Options
+@using Volo.Abp.AspNetCore.Components.Notifications
+@inherits EventHubComponentBase
+@attribute [Authorize(EventHubPermissions.Events.Default)]
+@inject IEventAppService EventAppService
+@inject NavigationManager NavigationManager
+@inject IOptions<EventHubUrlOptions> UrlOptions
+
+<Card>
+    <CardHeader>
+        <h2>@L["Events"]</h2>
+    </CardHeader>
+
+    <CardBody>
+        <Form>
+            <div id="FilterSection" class="row mt-3">
+                <Column ColumnSize="ColumnSize.Is3">
+                    <Field>
+                        <FieldLabel>@L["Title"]</FieldLabel>
+                        <TextEdit TValue="string" KeyPress="OnKeyPress" @bind-Text="@Filter.Title"/>
+                    </Field>
+                </Column>
+                <Column ColumnSize="ColumnSize.Is3">
+                    <Field>
+                        <FieldLabel>@L["OrganizationDisplayName"]</FieldLabel>
+                        <TextEdit TValue="string" KeyPress="OnKeyPress" @bind-Text="@Filter.OrganizationDisplayName"/>
+                    </Field>
+                </Column>
+                <Column ColumnSize="ColumnSize.Is3">
+                    <Field>
+                        <FieldLabel>@L["MinStartTime"]</FieldLabel>
+                        <DateEdit TValue="DateTime?" Date="@Filter.MinStartTime" DateChanged="OnSelectedDateChangedForMinStartTime" />
+                    </Field>
+                </Column>
+                <Column ColumnSize="ColumnSize.Is3">
+                    <Field>
+                        <FieldLabel>@L["MaxStartTime"]</FieldLabel>
+                        <DateEdit TValue="DateTime?" Date="@Filter.MaxStartTime" DateChanged="OnSelectedDateChangedForMaxStartTime" />
+                    </Field>
+                </Column>
+                <Column ColumnSize="ColumnSize.Is3">
+                    <Field>
+                        <FieldLabel>@L["MinAttendeeCount"]</FieldLabel>
+                        <NumericEdit TValue="int?" KeyPress="OnKeyPress" @bind-Value="@Filter.MinAttendeeCount"/>
+                    </Field>
+                </Column>
+                <Column ColumnSize="ColumnSize.Is3">
+                    <Field>
+                        <FieldLabel>@L["MaxAttendeeCount"]</FieldLabel>
+                        <NumericEdit TValue="int?" KeyPress="OnKeyPress" @bind-Value="@Filter.MaxAttendeeCount"/>
+                    </Field>
+                </Column>
+            </div>
+        </Form>
+
+        <DataGrid TItem="EventInListDto"
+                  Data="EventList"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  PageSize="PageSize">
+            <DataGridColumns>
+                <DataGridEntityActionsColumn TItem="EventInListDto">
+                    <DisplayTemplate>
+                        <EntityActions TItem="EventInListDto">
+                            <EntityAction TItem="EventInListDto"
+                                          RequiredPolicy="@EventHubPermissions.Events.Update"
+                                          Clicked="() => OpenEditEventModalAsync(context)"
+                                          Text="@L["Edit"]">
+                            </EntityAction>
+                            <EntityAction TItem="EventInListDto"
+                                          RequiredPolicy="@EventHubPermissions.Events.Registrations.Default"
+                                          Clicked="@(() => NavigationManager.NavigateTo($"/event/{context.Id}/attendees"))"
+                                          Text="@L["Attendees"]">
+                            </EntityAction>
+                        </EntityActions>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+
+                <DataGridColumn TItem="EventInListDto"
+                                Field="Title"
+                                Caption="@L["Title"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="EventInListDto"
+                                Field="OrganizationDisplayName"
+                                Caption="@L["OrganizationDisplayName"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="EventInListDto"
+                                Field="AttendeeCount"
+                                Caption="@L["AttendeeCount"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="EventInListDto"
+                                Field="StartTime"
+                                Caption="@L["StartTime"]">
+                </DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+<Modal @ref="EditEventModal" Closing="@OnEditModalClosing">
+    <ModalContent Centered="true" Size="ModalSize.Large">
+        <Form id="EditEventForm">
+            <ModalHeader>
+                <ModalTitle>@L["UpdateEvent"]</ModalTitle>
+                <CloseButton Clicked="() => EditEventModal.Hide()" />
+            </ModalHeader>
+            <ModalBody>
+                <Tabs SelectedTab="@SelectedTabInEditModal" SelectedTabChanged="@OnSelectedTabChangedInEditModal">
+                    <Items>
+                        <Tab Name="@EventEditTabs.EventInfo.ToString()">@L["EventInfo"]</Tab>
+                        <Tab Name="@EventEditTabs.Timing.ToString()">@L["Timing"]</Tab>
+                        <Tab Name="@EventEditTabs.CoverImage.ToString()">@L["CoverImage"]</Tab>
+                    </Items>
+                    <Content>
+                        <TabPanel Name="@EventEditTabs.EventInfo.ToString()" Class="mt-3">
+                            <Validations Mode="ValidationMode.Auto" Model="@EditEventModal" ValidateOnLoad="false">
+                                <Validation>
+                                    <Field>
+                                        <FieldLabel>@L["Title"] *</FieldLabel>
+                                        <TextEdit TValue="string" @bind-Text="@EditingEvent.Title">
+                                            <Feedback>
+                                                <ValidationError/>
+                                            </Feedback>
+                                        </TextEdit>
+                                    </Field>
+                                </Validation>
+
+                                <Validation>
+                                    <Field>
+                                        <FieldLabel>@L["Description"] *</FieldLabel>
+                                        <MemoEdit @bind-Text="@EditingEvent.Description">
+                                            <Feedback>
+                                                <ValidationError/>
+                                            </Feedback>
+                                        </MemoEdit>
+                                    </Field>
+                                </Validation>
+                                
+                                <Validation>
+                                    <Field>
+                                        <FieldLabel>@L["IsOnline"]</FieldLabel>
+                                        <Select @bind-SelectedValue="@EditingEvent.IsOnline">
+                                            <SelectItem Value="@Boolean.TrueString">@L["Online"]</SelectItem>
+                                            <SelectItem Value="@Boolean.FalseString">@L["InPerson"]</SelectItem>
+                                        </Select>
+                                    </Field>
+                                </Validation>
+                                
+                                <Validation>
+                                    <Field>
+                                        <FieldLabel>@L["Language"]</FieldLabel>
+                                        <Select @bind-SelectedValue="@EditingEvent.Language">
+                                            @if (Languages != null && Languages.Any())
+                                            {
+                                                foreach (var language in Languages)
+                                                {
+                                                    <SelectItem Value="@language.Value">@language.Text</SelectItem>
+                                                }
+                                            }
+                                        </Select>
+                                    </Field>
+                                </Validation>
+
+                                @if (EditingEvent.IsOnline)
+                                {
+                                    <Validation>
+                                        <Field>
+                                            <FieldLabel>@L["OnlineLink"] *</FieldLabel>
+                                            <MemoEdit @bind-Text="@EditingEvent.OnlineLink">
+                                                <Feedback>
+                                                    <ValidationError/>
+                                                </Feedback>
+                                            </MemoEdit>
+                                        </Field>
+                                    </Validation>
+                                }
+                                else
+                                {
+                                    <Validation>
+                                        <Field>
+                                            <FieldLabel>@L["Country"] *</FieldLabel>
+                                            <Select @bind-SelectedValue="@EditingEvent.CountryId">
+                                                @if (Countries != null && Countries.Any())
+                                                {
+                                                    @foreach (var country in Countries)
+                                                    {
+                                                        <SelectItem Value="@country.Id">@country.Name</SelectItem>
+                                                    }
+                                                }
+                                            </Select>
+                                        </Field>
+                                    </Validation>
+
+                                    <Validation>
+                                        <Field>
+                                            <FieldLabel>@L["City"] *</FieldLabel>
+                                            <TextEdit TValue="string" @bind-Text="@EditingEvent.City">
+                                                <Feedback>
+                                                    <ValidationError/>
+                                                </Feedback>
+                                            </TextEdit>
+                                        </Field>
+                                    </Validation>
+                                }
+                                
+                                <Validation>
+                                    <Field>
+                                        <FieldLabel>@L["Capacity"]</FieldLabel>
+                                        <NumericEdit TValue="int?" @bind-Value="@EditingEvent.Capacity">
+                                            <Feedback>
+                                                <ValidationError/>
+                                            </Feedback>
+                                        </NumericEdit>
+                                    </Field>
+                                </Validation>
+
+                            </Validations>
+                        </TabPanel>
+                        <TabPanel Name="@EventEditTabs.Timing.ToString()" Class="mt-3">
+                            <Validations Mode="ValidationMode.Auto" Model="@EditEventModal" ValidateOnLoad="false">
+                                <Validation>
+                                    <Field>
+                                        <FieldLabel>@L["StartTime"] *</FieldLabel>
+                                        <DateEdit TValue="DateTime" @bind-Date="@EditingEvent.StartTime">
+                                            <Feedback>
+                                                <ValidationError/>
+                                            </Feedback>
+                                        </DateEdit>
+                                    </Field>
+                                </Validation>
+                                <Validation>
+                                    <Field>
+                                        <FieldLabel>@L["EndTime"] *</FieldLabel>
+                                        <DateEdit TValue="DateTime" @bind-Date="@EditingEvent.EndTime">
+                                            <Feedback>
+                                                <ValidationError/>
+                                            </Feedback>
+                                        </DateEdit>
+                                    </Field>
+                                </Validation>
+                            </Validations>
+                        </TabPanel>
+                        <TabPanel Name="@EventEditTabs.CoverImage.ToString()" Class="mt-3">
+                            @if (!string.IsNullOrEmpty(CoverImageUrl))
+                            {
+                                <div class="text-center mt-4">
+                                    <img src="@CoverImageUrl" class="event-cover" width="600" height="340" alt="cover-image"/>
+                                </div>
+                            }
+
+                            <div class="mt-3 mb-2">
+                                <Field Horizontal="true">
+                                    <FieldLabel ColumnSize="ColumnSize.Is3">@L["ChooseCoverImage"]</FieldLabel>
+                                    <FieldBody ColumnSize="ColumnSize.Is6">
+                                        <FileEdit MaxMessageSize="@EventConsts.MaxCoverImageFileSize" Filter="@string.Join(", ", EventConsts.AllowedCoverImageExtensions)" Changed="@OnCoverImageFileChanged" AutoReset="true"/>
+                                    </FieldBody>
+                                    <Column ColumnSize="ColumnSize.Is3">
+                                        @if (DisabledCoverImageButton)
+                                        {
+                                            <Button disabled Color="Color.Secondary" Clicked="@OnDeleteCoverImageButtonClicked">@L["DeleteCoverImage"]</Button>
+                                        }
+                                        else
+                                        {
+                                            <Button Color="Color.Warning" Clicked="@OnDeleteCoverImageButtonClicked">@L["DeleteCoverImage"]</Button>
+                                        }
+                                    </Column>
+                                </Field>
+                            </div>
+                        </TabPanel>
+                    </Content>
+                </Tabs>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="() => EditEventModal.Hide()">
+                    @L["Cancel"]
+                </Button>
+                <Button Type="ButtonType.Submit" PreventDefaultOnSubmit="true" Color="Color.Primary"
+                        Clicked="UpdateEventAsync">
+                    <i class="fa-check fa"></i> @L["Save"]
+                </Button>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>

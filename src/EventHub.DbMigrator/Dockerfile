@@ -1,4 +1,4 @@
-  FROM mcr.microsoft.com/dotnet/aspnet:5.0
-  COPY bin/Release/net5.0/ app/
+  FROM mcr.microsoft.com/dotnet/aspnet:6.0.0-bullseye-slim
+  COPY bin/Release/net6.0/ app/
   WORKDIR /app
   ENTRYPOINT ["dotnet", "EventHub.DbMigrator.dll"]

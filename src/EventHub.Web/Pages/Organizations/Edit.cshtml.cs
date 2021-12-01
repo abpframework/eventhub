@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
+using Volo.Abp.Content;
 
 namespace EventHub.Web.Pages.Organizations
 {
@@ -20,7 +21,6 @@ namespace EventHub.Web.Pages.Organizations
         
         [BindProperty] 
         public EditOrganizationViewModel Organization { get; set; }
-        public byte[] ProfilePictureContent { get; private set; }
 
         private readonly IOrganizationAppService _organizationAppService;
 
@@ -32,7 +32,6 @@ namespace EventHub.Web.Pages.Organizations
         public async Task OnGetAsync()
         {
             var organizationProfileDto = await _organizationAppService.GetProfileAsync(Name);
-            ProfilePictureContent = organizationProfileDto.ProfilePictureContent;
             
             Organization = ObjectMapper.Map<OrganizationProfileDto, EditOrganizationViewModel>(organizationProfileDto);
         }
@@ -43,18 +42,18 @@ namespace EventHub.Web.Pages.Organizations
             {
                 ValidateModel();
 
-                var input = ObjectMapper.Map<EditOrganizationViewModel, UpdateOrganizationDto>(Organization);
-                
+                var updateOrganizationDto = ObjectMapper.Map<EditOrganizationViewModel, UpdateOrganizationDto>(Organization);
+
+                await using var memoryStream = new MemoryStream();
                 if (Organization.ProfilePictureFile != null && Organization.ProfilePictureFile.Length > 0)
                 {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        await Organization.ProfilePictureFile.CopyToAsync(memoryStream);
-                        input.ProfilePictureContent = memoryStream.ToArray();
-                    }
+                    await Organization.ProfilePictureFile.CopyToAsync(memoryStream);
+                    memoryStream.Position = 0;
+                    updateOrganizationDto.ProfilePictureStreamContent = new RemoteStreamContent(memoryStream, fileName: Organization.ProfilePictureFile.FileName, contentType: Organization.ProfilePictureFile.ContentType);
                 }
                 
-                await _organizationAppService.UpdateAsync(Organization.Id, input);
+                await _organizationAppService.UpdateAsync(Organization.Id, updateOrganizationDto);
+                await memoryStream.DisposeAsync();
                 
                 return RedirectToPage("./Profile", new { name = Name });
             }

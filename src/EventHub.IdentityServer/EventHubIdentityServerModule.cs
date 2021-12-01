@@ -41,6 +41,9 @@ namespace EventHub
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAccountApplicationModule),
+        //we need to add AbpAccountHttpApiModule temporarily. (https://github.com/volosoft/volo/pull/7925).
+        //It should be removed with 5.0-beta.2.
+        typeof(AbpAccountHttpApiModule), 
         typeof(EventHubWebThemeModule),
         typeof(EventHubEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreSerilogModule)
@@ -108,6 +111,8 @@ namespace EventHub
                         bundle.AddFiles("/global-styles.css");
                     }
                 );
+
+                options.Mode = BundlingMode.None;
             });
 
             Configure<AbpAuditingOptions>(options =>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using EventHub.Admin.Permissions;
 using EventHub.Organizations.Memberships;
+using EventHub.Users;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -17,11 +18,11 @@ namespace EventHub.Admin.Organizations.Memberships
     public class OrganizationMembershipAppService : ApplicationService, IOrganizationMembershipAppService
     {
         private readonly IOrganizationMembershipRepository  _organizationMembershipRepository;
-        private readonly IRepository<IdentityUser, Guid> _userRepository;
+        private readonly IUserRepository _userRepository;
         
         public OrganizationMembershipAppService(
-            IOrganizationMembershipRepository organizationMembershipRepository, 
-            IRepository<IdentityUser, Guid> userRepository)
+            IOrganizationMembershipRepository organizationMembershipRepository,
+            IUserRepository userRepository)
         {
             _organizationMembershipRepository = organizationMembershipRepository;
             _userRepository = userRepository;

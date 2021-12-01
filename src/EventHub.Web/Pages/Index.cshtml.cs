@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Events;
 using Microsoft.AspNetCore.Authentication;
-using NUglify.Helpers;
 
 namespace EventHub.Web.Pages
 {
@@ -41,7 +40,7 @@ namespace EventHub.Web.Pages
             OnlineEvents = (await _eventAppService.GetListAsync(
                 new EventListFilterDto
                 {
-                    MinDate = Clock.Now,
+                    MinDate = Clock.Now.ClearTime(),
                     IsOnline = true,
                     MaxResultCount = 8
                 }

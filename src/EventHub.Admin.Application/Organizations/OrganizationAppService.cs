@@ -5,12 +5,13 @@ using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using EventHub.Admin.Permissions;
 using EventHub.Organizations;
+using EventHub.Users;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.BlobStoring;
+using Volo.Abp.Content;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Identity;
 
 namespace EventHub.Admin.Organizations
 {
@@ -18,12 +19,12 @@ namespace EventHub.Admin.Organizations
     public class OrganizationAppService : EventHubAdminAppService, IOrganizationAppService
     {
         private readonly IRepository<Organization, Guid> _organizationRepository;
-        private readonly IRepository<IdentityUser, Guid> _identityUserRepository;
+        private readonly IUserRepository _identityUserRepository;
         private readonly IBlobContainer<OrganizationProfilePictureContainer> _organizationBlobContainer;
 
         public OrganizationAppService(
             IRepository<Organization, Guid> organizationRepository,
-            IRepository<IdentityUser, Guid> identityUserRepository,
+            IUserRepository identityUserRepository,
             IBlobContainer<OrganizationProfilePictureContainer> organizationBlobContainer)
         {
             _organizationRepository = organizationRepository;
@@ -77,7 +78,7 @@ namespace EventHub.Admin.Organizations
 
             return await CreateOrganizationProfileDto(organization);
         }
-        
+
         public async Task<OrganizationProfileDto> GetByNameAsync(string name)
         {
             var organization = await _organizationRepository.FindAsync(x => x.Name.ToLower() == name.ToLower());
@@ -105,13 +106,13 @@ namespace EventHub.Admin.Organizations
             organization.InstagramUsername = input.InstagramUsername;
             organization.MediumUsername = input.MediumUsername;
 
-            if (input.ProfilePictureContent?.Length > 0)
+            if (input.ProfilePictureStreamContent != null && input.ProfilePictureStreamContent.ContentLength > 0)
             {
-                await SaveCoverImageAsync(organization.Id, input.ProfilePictureContent);
+                await SaveCoverImageAsync(organization.Id, input.ProfilePictureStreamContent);
             }
             else
             {
-                await DeleteCoverImageAsync(organization.Id);
+                await DeleteCoverImageAsync(blobName: id.ToString());
             }
 
             await _organizationRepository.UpdateAsync(organization);
@@ -124,7 +125,7 @@ namespace EventHub.Admin.Organizations
         {
             await _organizationRepository.DeleteAsync(id);
         }
-        
+
         private async Task<OrganizationProfileDto> CreateOrganizationProfileDto(Organization organization)
         {
             var dto = ObjectMapper.Map<Organization, OrganizationProfileDto>(organization);
@@ -133,28 +134,32 @@ namespace EventHub.Admin.Organizations
             dto.OwnerUserName = user.UserName;
             dto.OwnerEmail = user.Email;
 
-            dto.ProfilePictureContent = await GetCoverImageAsync(organization.Id);
             return dto;
         }
 
-        private async Task<byte[]> GetCoverImageAsync(Guid id)
+        [AllowAnonymous]
+        public async Task<IRemoteStreamContent> GetCoverImageAsync(Guid id)
         {
             var blobName = id.ToString();
+            var coverImageStream = await _organizationBlobContainer.GetOrNullAsync(blobName);
 
-            return await _organizationBlobContainer.GetAllBytesOrNullAsync(blobName);
+            if (coverImageStream is null)
+            {
+                return null;
+            }
+
+            return new RemoteStreamContent(coverImageStream, blobName);
         }
 
-        private async Task SaveCoverImageAsync(Guid id, byte[] coverImageContent)
+        private async Task SaveCoverImageAsync(Guid id, IRemoteStreamContent coverImageContent)
         {
             var blobName = id.ToString();
 
-            await _organizationBlobContainer.SaveAsync(blobName, coverImageContent, overrideExisting: true);
+            await _organizationBlobContainer.SaveAsync(blobName, coverImageContent.GetStream(), overrideExisting: true);
         }
 
-        private async Task DeleteCoverImageAsync(Guid id)
+        private async Task DeleteCoverImageAsync(string blobName)
         {
-            var blobName = id.ToString();
-
             await _organizationBlobContainer.DeleteAsync(blobName);
         }
     }

@@ -52,27 +52,16 @@
                 <abp-column size="_8">
                     <ul class="nav nav-tabs profile-nav" id="profileTab">
                         <li class="nav-item">
-                            <a href="#UpcomingEvents" class="nav-link active" data-toggle="tab">Upcoming Events</a>
+                            <a href="#UpcomingEvents" class="nav-link active" data-bs-toggle="tab">Upcoming Events</a>
                         </li>
                         <li class="nav-item">
-                            <a href="#AttendedEvents" class="nav-link" data-toggle="tab">Attended Events</a>
+                            <a href="#AttendedEvents" class="nav-link" data-bs-toggle="tab">Attended Events</a>
                         </li>
                         <li class="nav-item">
-                            <a href="#Organizations" class="nav-link" data-toggle="tab">Organizations</a>
+                            <a href="#Organizations" class="nav-link" data-bs-toggle="tab">Organizations</a>
                         </li>
                     </ul>
                 </abp-column>
-                @if (CurrentUser.IsAuthenticated)
-                    {
-                        @if (CurrentUser.Id == Model.User.Id)
-                        {
-                            <abp-column size="_4">
-                                <div class="text-right">
-                                    <a abp-button="Primary" size="Small" href="@Url.Page("/Organizations/New")">@L["CreateAnOrganization"]</a>
-                                </div>
-                            </abp-column>
-                        }
-                    }
             </abp-row>
             <div class="tab-content profile-content py-4">
                 <div id="UpcomingEvents" class="tab-pane fade show active">
@@ -134,7 +123,9 @@
                                                 </h3>
                                             </div>
                                         </div>
-                                        <partial name="~/Pages/Organizations/Components/OrganizationsArea/_organizationListSection.cshtml" model="@Model.Organizations"/>
+                                        <div class="row">
+                                            <partial name="~/Pages/Organizations/Components/OrganizationsArea/_organizationListSection.cshtml" model="@Model.Organizations"/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

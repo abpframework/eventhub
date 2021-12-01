@@ -20,9 +20,9 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light static-top">
     <div class="container">
         <a class="navbar-brand font-weight-bold" href="@Url.Page("/index")">
-            <img src="/assets/eventhub-logo.svg" class="logo" />
+            <img src="/assets/eventhub-logo.svg" class="logo"/>
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
@@ -43,20 +43,29 @@
             {
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link event-link" href="@UrlOptions.Value.Www@Url.Page("/events/new")">+ Create an Event</a>
+                        <div class="dropdown">
+                            <a class="nav-link event-link" type="button" id="createDropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                + Create
+                            </a>
+                            <div class="dropdown-menu m-2" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="@UrlOptions.Value.Www@Url.Page("/organizations/new")">Organization</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="@UrlOptions.Value.Www@Url.Page("/events/new")">Event</a>
+                            </div>
+                        </div>
                     </li>
-                </ul>   
+                </ul>
             }
             <ul class="navbar-nav">
 
                 @if (CurrentUser.IsAuthenticated)
                 {
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="user-avatar">
                                 <img gravatar-email="@CurrentUser.Email" default-image="Wavatar" gravatar-size="40" width="40" height="40" class="nav-avatar avatar rounded-circle"/>
                             </span>
-                            <span class="ml-2">
+                            <span class="ms-2">
                                 @if (!string.IsNullOrWhiteSpace(CurrentUser.Name) && !string.IsNullOrWhiteSpace(CurrentUser.SurName))
                                 {
                                     @(CurrentUser.Name + " " + CurrentUser.SurName)
@@ -69,7 +78,7 @@
                                 }
                             </span>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right">
+                        <div class="dropdown-menu dropdown-menu-right m-2">
                             <a class="dropdown-item" href="@(UrlOptions.Value.Account.EnsureEndsWith('/') + "account/manage")" title="@L["Account"]">
                                 <i class="fas fa-cog"></i> @L["Account"]
                             </a>
@@ -88,7 +97,7 @@
                         <a class="nav-link" href="/account/login?returnUrl=@returnUrl">Log In</a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-primary ml-lg-2" href="@UrlOptions.Value.Account/account/register?returnUrl=@returnUrl">Sign Up</a>
+                        <a class="btn btn-primary ms-lg-2" href="@UrlOptions.Value.Account/account/register?returnUrl=@returnUrl">Sign Up</a>
                     </li>
                 }
             </ul>
@@ -97,13 +106,14 @@
 </nav>
 
 @functions{
+
     public string GetPageActiveClassOrEmpty(ViewContext viewContext, string pageUrl)
     {
         if (!UrlOptions.Value.Www.Contains(Context.Request.Host.ToString()))
         {
             return "";
         }
-        
+
         var activeRoute = viewContext?.RouteData.Values["page"]?.ToString()?.ToLowerInvariant();
         pageUrl = pageUrl.ToLowerInvariant();
 

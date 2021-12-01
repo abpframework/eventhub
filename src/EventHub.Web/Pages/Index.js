@@ -26,7 +26,7 @@
         },
         dots: true,
     });
-
+    
     function cb(start, end) {
         $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
     }
@@ -49,52 +49,50 @@
         }
     }, cb);
 
-    $inputWhen.on('apply.daterangepicker', function(ev, picker) {
+    $inputWhen.on('apply.daterangepicker', function (ev, picker) {
         $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
         minDate = picker.startDate.format('MM/DD/YYYY')
         maxDate = picker.endDate.format('MM/DD/YYYY')
     });
 
-    $inputWhen.on('cancel.daterangepicker', function(ev, picker) {
+    $inputWhen.on('cancel.daterangepicker', function (ev, picker) {
         $(this).val('');
         minDate = ""
         maxDate = ""
     });
 
-    function isNullOrEmpty(str){
+    function isNullOrEmpty(str) {
         return str === null || str.match(/^ *$/) !== null;
     }
-    
+
     $('#SearchButton').on('click', '', function () {
         var language = $('#LanguageSelect').find(":selected").val();
         var countryId = $('#CountrySelect').find(":selected").val();
-        console.log(language)
-        console.log(countryId)
         var location = "/Events?"
 
-        if (minDate.length > 0 && !isNullOrEmpty(minDate)){
+        if (minDate.length > 0 && !isNullOrEmpty(minDate)) {
             location += "MinDate=" + minDate
         }
 
-        if (maxDate.length > 0 && !isNullOrEmpty(maxDate)){
+        if (maxDate.length > 0 && !isNullOrEmpty(maxDate)) {
             location += "&MaxDate=" + maxDate
         }
 
-        if (!isNullOrEmpty(language)){
+        if (!isNullOrEmpty(language)) {
             location += "&Language=" + language
         }
 
-        if (!isNullOrEmpty(countryId)){
-            if(countryId === "00000000-0000-0000-0000-000000000000"){
+        if (!isNullOrEmpty(countryId)) {
+            if (countryId === "00000000-0000-0000-0000-000000000000") {
                 location += "&IsOnline=true"
-            }else{
+            } else {
                 location += "&CountryId=" + countryId + "&IsOnline=false"
             }
         }
 
-        if (!isNullOrEmpty(location) && location !== "/Events?"){
+        if (!isNullOrEmpty(location) && location !== "/Events?") {
             window.location.replace(location)
-        }else{
+        } else {
             abp.notify.error("Please select a filter", "Search")
         }
     });

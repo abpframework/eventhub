@@ -1,3 +1,4 @@
+#nullable enable
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
@@ -16,16 +17,12 @@ namespace EventHub.Web.Helpers
 
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            if (value == null)
-            {
-                return ValidationResult.Success;
-            }
-            
             var file = value as IFormFile;
-            var extension = Path.GetExtension(file.FileName);
             
-            if (file.Length > 0 && file != null)
+            if (file is { Length: > 0 })
             {
+                var extension = Path.GetExtension(file.FileName);
+
                 if (!_allowedExtensions.Contains(extension.ToLower()))
                 {
                     return new ValidationResult("This file extension is not allowed. Allowed extensions: " + string.Join(",", _allowedExtensions));
