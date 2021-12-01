@@ -44,8 +44,6 @@ namespace EventHub.Events
             //ASSERT
             evnt.StartTime.ShouldBe(newStartTime);
             evnt.EndTime.ShouldBe(newEndTime);
-            evnt.GetLocalEvents()
-                .ShouldContain(x => x.EventData is EventTimeChangingEventData);
         }
 
         [Fact]
@@ -65,7 +63,7 @@ namespace EventHub.Events
             });
 
             exception.Code.ShouldBe(
-                EventHubErrorCodes.EventEndTimeCantBeEarlierThanStartTime);
+                EventHubErrorCodes.EndTimeCantBeEarlierThanStartTime);
         }
     }
 }

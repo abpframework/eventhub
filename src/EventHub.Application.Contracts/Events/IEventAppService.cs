@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Content;
 using Volo.Abp.SettingManagement;
 
 namespace EventHub.Events
@@ -26,7 +27,7 @@ namespace EventHub.Events
 
         Task AddSessionAsync(Guid id, AddSessionDto input);
 
-        Task<byte[]> GetCoverImageAsync(Guid id);
+        Task<IRemoteStreamContent> GetCoverImageAsync(Guid id);
     }
 
     public class AddSessionDto

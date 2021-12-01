@@ -83,7 +83,7 @@
     "CoverImagePreview": "Cover Image Preview",
     "EventTimingChangeSuccessMessage": "The time of the event has been changed successfully!",
     "PastEvent": "Past Event",
-    "EventHub:SessionEndTimeCantBeEarlierThanStartTime": "Session end time can not be earlier than the start time."
+    "EventHub:SessionEndTimeCantBeEarlierThanStartTime": "Session end time can not be earlier than the start time.",
     "Menu:OrganizationManagement": "Organization Management",
     "Menu:OrganizationMemberships": "Memberships",
     "Permission:OrganizationManagement": "Organization Management",

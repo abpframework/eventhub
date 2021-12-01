@@ -1,6 +1,6 @@
 ﻿namespace EventHub.Events
 {
-    public class SessionConsts
+    public static class SessionConsts
     {
         public const int MinTitleLength = 8;
         public const int MaxTitleLength = 128;

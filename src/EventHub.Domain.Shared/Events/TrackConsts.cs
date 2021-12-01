@@ -1,6 +1,6 @@
 ﻿namespace EventHub.Events
 {
-    public class TrackConsts
+    public static class TrackConsts
     {
         public const int MaxNameLength = 64;
     }

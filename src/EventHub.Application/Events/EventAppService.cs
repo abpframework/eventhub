@@ -272,7 +272,7 @@ namespace EventHub.Events
             await _eventRepository.UpdateAsync(@event);
         }
 
-        public async Task<byte[]> GetCoverImageAsync(Guid id)
+        public async Task<IRemoteStreamContent> GetCoverImageAsync(Guid id)
         {
             var blobName = id.ToString();
 
