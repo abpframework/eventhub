@@ -31,79 +31,42 @@
         <abp-script src="/client-proxies/Payment-proxy.js" />
     </abp-script-bundle>
 }
-
-<div class="container px-3 my-5 clearfix">
-    <abp-card>
-        <abp-card-header><h5>Shopping Cart</h5></abp-card-header>
-        <abp-card-body>
-
-            <div class="table-responsive">
-                <table class="table table-bordered m-0">
-                    <thead>
-                    <tr>
-                        <th class="text-center py-3 px-4" style="min-width: 400px;">Product Name &amp; Details</th>
-                        <th class="text-center py-3 px-4" style="width: 100px;">Total</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    <tr>
-                        <td class="p-4">
-                            <div class="media align-items-center">
-                                <div class="media-body">
-                                    <p class="font-weight-bolder">@Model.PaymentRequest.ProductName</p>
-                                    <small>
-                                        @if (!organizationPaymentRequestExtraParameterConfiguration.IsExtend)
-                                        {
-                                            <span class="text-muted">Target Plan: @OrganizationPlanType.Premium</span>
-                                            <span class="text-muted ms-1">End date: @DateTime.Now.AddMonths(planInfo.OnePremiumPeriodAsMonth).ToShortDateString()</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="text-muted">Plan: @OrganizationPlanType.Premium</span>
-                                        }
-                                        <span class="ui-product-color ui-product-color-sm align-text-bottom" style="background:#e81e2c;"></span> &nbsp;
-                                    </small>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="text-center font-weight-semibold align-middle">@Model.PaymentRequest.Price @Model.PaymentRequest.Currency</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="d-flex flex-wrap justify-content-between align-items-center pb-4">
-                <abp-container>
-                    <abp-row class="float-end">
-                        <abp-column>
-                            <div class="text-end mt-4">
-                                <label class="text-muted font-weight-normal m-0">Total price</label>
-                                <div class="text-large"><strong>@Model.PaymentRequest.Price @Model.PaymentRequest.Currency</strong></div>
-                            </div>
-                        </abp-column>
-                    </abp-row>
-                </abp-container>
-            </div>
-
-            <abp-container class="float-end">
-                <abp-row>
-                    <abp-column class="float-end">
-                        <form method="post">
-                            @if (Model.PaymentRequest.State != PaymentRequestState.Waiting)
-                            {
-                                <abp-alert alert-type="Info">Current State: @Model.PaymentRequest.State</abp-alert>
-                                <abp-alert alert-type="Warning">@L["PaymentRequestIsNotWaiting"]</abp-alert>
-                            }
-                            else
-                            {
-                                <abp-button class="mt-2 float-end" offset="_10" size="Large" type="submit" button-type="Primary">@L["Checkout"]</abp-button>
-                                <a href="@Url.Page("/Pricing", new { organizationName = organizationName })" class="btn btn-lg btn-default md-btn-flat mt-2 me-3 float-end">Back to pricing</a>
-                            }
-                        </form>
-                    </abp-column>
-                </abp-row>
-            </abp-container>
-        </abp-card-body>
-    </abp-card>
-</div>
+<main class="static-page container mt-5"> 
+    <h1 class="text-center mb-3">Shopping Cart</h1> 
+    <div class="row"> 
+        <div class="col-md-7">
+            <div class="card">
+                <div class="card-body px-5 py-4"> 
+                    <h2 class="my-4">Product Detail</h2>
+                    <h3 class="my-4">@OrganizationPlanType.Premium Account: <span class="text-primary">@organizationName.ToUpperInvariant()</span></h3>
+                    @if (!organizationPaymentRequestExtraParameterConfiguration.IsExtend)
+                    {
+                        <p>Start Date: <span class="text-dark">@DateTime.Now.ToShortDateString()</span></p>
+                        <p>End Date: <span class="text-dark">@DateTime.Now.AddMonths(planInfo.OnePremiumPeriodAsMonth).ToShortDateString()</span></p>    
+                    }
+                    else
+                    {
+                        <p>Your license will be extended for  <span class="text-dark">@planInfo.OnePremiumPeriodAsMonth</span> months.</p>
+                    }
+                </div> 
+            </div> 
+        </div>
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-body px-5 py-4"> 
+                    <h2 class="mt-4">Summary</h2> 
+                    <div class="cart-summary pt-3 pb-2">
+                        <p class="my-4">Premium Licence <span class="text-dark float-end">@Model.PaymentRequest.Price @Model.PaymentRequest.Currency</span></p>
+                        <hr>
+                        <p class="my-4">TOTAL <span class="text-dark float-end">@Model.PaymentRequest.Price @Model.PaymentRequest.Currency</span></p> 
+                    </div>
+                    <form method="post">
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-info my-4">@L["Checkout"]</button>
+                        </div>
+                    </form>
+                </div> 
+            </div> 
+        </div>  
+    </div>
+</main>

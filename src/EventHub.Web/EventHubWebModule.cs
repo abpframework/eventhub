@@ -89,23 +89,7 @@ namespace EventHub.Web
             ConfigureRazorPageOptions();
             ConfigurePremiumPlanInfo(context, configuration);
         }
-
-        private void ConfigurePremiumPlanInfo(ServiceConfigurationContext context, IConfiguration configuration)
-        {
-            context.Services.AddOptions<PremiumPlanInfoOptions>()
-                .Bind(configuration.GetSection(PremiumPlanInfoOptions.OrganizationPlanInfo))
-                .ValidateDataAnnotations()
-                .Validate(config =>
-                {
-                    if (config.IsActive)
-                    {
-                        return config.OnePremiumPeriodAsMonth > config.CanBeExtendedAfterHowManyMonths;
-                    }
-
-                    return true;
-                }, "OnePremiumPeriodAsMonth must be greater than CanBeExtendedAfterHowManyMonths.");
-        }
-
+        
         private void ConfigureBundles()
         {
             Configure<AbpBundlingOptions>(options =>
@@ -248,6 +232,22 @@ namespace EventHub.Web
             context.Services
                 .AddDataProtection()
                 .PersistKeysToStackExchangeRedis(redis, "EventHub-Protection-Keys");
+        }
+
+        private void ConfigurePremiumPlanInfo(ServiceConfigurationContext context, IConfiguration configuration)
+        {
+            context.Services.AddOptions<PremiumPlanInfoOptions>()
+                .Bind(configuration.GetSection(PremiumPlanInfoOptions.OrganizationPlanInfo))
+                .ValidateDataAnnotations()
+                .Validate(config =>
+                {
+                    if (config.IsActive)
+                    {
+                        return config.OnePremiumPeriodAsMonth > config.CanBeExtendedAfterHowManyMonths;
+                    }
+
+                    return true;
+                }, "OnePremiumPeriodAsMonth must be greater than CanBeExtendedAfterHowManyMonths.");
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

@@ -8,6 +8,7 @@
 @using EventHub.Web.PaymentRequests
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.Extensions.Options
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.SweetAlert2
 @using Volo.Abp.Timing
 @model EventHub.Web.Pages.Organizations.ProfilePageModel
 @inject IClock Clock
@@ -15,6 +16,7 @@
 @inject IOptionsSnapshot<PremiumPlanInfoOptions> PremiumPlanInfoOptionsSnapshot
 
 @section scripts {
+    <abp-script type="@typeof(Sweetalert2ScriptContributor)"/>
     <abp-script src="/Pages/Organizations/Profile.js"/>
 }
 
@@ -66,44 +68,7 @@
 
                                 @if (Model.IsOrganizationOwner)
                                 {
-                                    <a href="/organization/edit/@Model.Organization.Name" class="btn btn-primary mt-4 text-white">
-                                        <i class="far fa-edit"></i> Edit
-                                    </a>
-
-                                    @if (PremiumPlanInfoOptionsSnapshot.Value.IsActive)
-                                    {
-                                        <abp-card class="detail-head mt-4 font-weight-bold text-center">
-                                            <abp-card-body>
-                                                @if (Model.Organization.IsPremium)
-                                                {
-                                                    <span>Premium end date: @Model.Organization.PremiumEndDate!.Value.ToShortDateString()</span>
-                                                    @if (PremiumPlanInfoOptionsSnapshot.Value.IsExtendable && Model.Organization.PremiumEndDate!.Value.IsBetween(DateTime.Now, DateTime.Now.AddMonths(PremiumPlanInfoOptionsSnapshot.Value.OnePremiumPeriodAsMonth - PremiumPlanInfoOptionsSnapshot.Value.CanBeExtendedAfterHowManyMonths)))
-                                                    {
-                                                        <div class="d-grid gap-2">
-                                                            <a href="@Url.Page("/Pricing", new { organizationName = Model.Organization.Name })" class="btn btn-primary mt-3">
-                                                                <i class="fas fa-handshake"></i> @L["ExtendNow"].Value
-                                                            </a>
-                                                        </div>
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    <div class="d-grid gap-2">
-                                                        <a href="@Url.Page("/Pricing", new { organizationName = Model.Organization.Name })" class="btn btn-primary">
-                                                            <i class="fas fa-handshake"></i> @L["UpgradeToPremium"]
-                                                        </a>
-                                                    </div>
-                                                }
-                                            </abp-card-body>
-                                        </abp-card>   
-                                    }else if (Model.Organization.IsPremium)
-                                    {
-                                        <abp-card class="detail-head mt-4 font-weight-bold text-center">
-                                            <abp-card-body>
-                                                <span>Premium end date: @Model.Organization.PremiumEndDate!.Value.ToShortDateString()</span>
-                                            </abp-card-body>
-                                        </abp-card>
-                                    }
+                                    <partial name="Components/_upgradeOrExtendOrganizationSection.cshtml" model="@Model.Organization"/>
                                 }
                                 @await Component.InvokeAsync(typeof(JoinAreaViewComponent), new {organizationId = Model.Organization.Id})
                                 @await Component.InvokeAsync(typeof(MembersAreaViewComponent),
