@@ -46,7 +46,7 @@ namespace EventHub.Events
         
         public bool IsTimingChangeEmailSent { get; set; }
         
-        public bool IsDraft { get; set; }
+        public bool IsDraft { get; private set; }
         
         public ICollection<Track> Tracks { get; private set; }
         
@@ -127,6 +127,19 @@ namespace EventHub.Events
             return this;
         }
 
+        public Event AddTract(Guid trackId, string name)
+        {
+            if (Tracks.Any(x => x.Name == name))
+            {
+                throw new BusinessException(EventHubErrorCodes.TrackNameAlreadyExist)
+                    .WithData("Name", name);
+            }
+            
+            Tracks.Add(new Track(trackId, this.Id, name));
+
+            return this;
+        }
+
         public Event AddSession(
             Guid trackId,
             Guid sessionId,
@@ -148,6 +161,13 @@ namespace EventHub.Events
 
             var track = GetTrack(trackId);
             track.AddSession(sessionId, title, startTime, endTime, description, language);
+            return this;
+        }
+        
+        public Event Publish(bool isPublish)
+        {
+            IsDraft = isPublish;
+
             return this;
         }
 

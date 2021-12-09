@@ -1,0 +1,143 @@
+@using EventHub.Web.Pages.Events.Components.CreateEventArea
+@using Microsoft.AspNetCore.Http
+@model EventHub.Web.Pages.Events.Components.CreateEventArea.CreateEventAreaViewComponent.NewEventViewModel
+
+@{
+  var organizations = ViewData["Organizations"] as IList<SelectListItem>;
+  if (organizations is null || !organizations.Any())
+  {
+    throw new BadHttpRequestException("There is no organization");
+  }
+  
+  var countries = ViewData["Countries"] as IList<SelectListItem>;
+  if (countries is null || !countries.Any())
+  {
+    throw new BadHttpRequestException("There is no country");
+  }
+  
+  var languages = ViewData["Languages"] as IList<SelectListItem>;
+  if (languages is null || !languages.Any())
+  {
+    throw new BadHttpRequestException("There is no language");
+  }
+}
+
+<partial name="_progressSection.cshtml" model="@CreateEventAreaViewComponent.ProgressStepType.NewEvent"/>
+
+<form id="CreateEventForm" method="post" enctype="multipart/form-data">
+  <div class="container pt-4">
+    <div class="row py-4">
+      <div class="col-md-9 mx-auto profile-content">
+        <div class="card">
+          <div class="card-body" style="min-height: 496px">
+            <h3 class="mb-4">Create New Event</h3>
+            <div class="form">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-label-group">
+                    <select asp-for="@Model.OrganizationId" asp-items="organizations" class="form-select">
+                      @if (organizations.Count > 1)
+                      {
+                        <option selected value="">Pick an organization</option>
+                      }
+                    </select>
+                    <span asp-validation-for="@Model.OrganizationId" class="text-danger"></span>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-label-group">
+                    <input type="text" id="inputTitle" asp-for="@Model.Title" class="form-control" placeholder="Title">
+                    <label for="inputTitle">Title</label>
+                    <span asp-validation-for="@Model.Title" class="text-danger"></span>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-label-group">
+                    <input id="inputStartdate" asp-for="@Model.StartTime" class="form-control" placeholder="Start Date">
+                    <label for="inputStartdate">Start Date</label>
+                    <span asp-validation-for="@Model.StartTime" class="text-danger"></span>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-label-group">
+                    <input  id="inputEnddate" asp-for="@Model.EndTime" class="form-control" placeholder="End Date">
+                    <label for="inputEnddate">End Date</label>
+                    <span asp-validation-for="@Model.EndTime" class="text-danger"></span>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-label-group">
+                    <textarea type="text" id="inputDescription" asp-for="@Model.Description" class="form-control" placeholder="Description"></textarea>
+                    <span asp-validation-for="@Model.Description" class="text-danger"></span>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <h4 class="mb-4">Cover Image</h4>
+                  <div class="row">
+                    <div class="col-6">
+                      <div class="image-area"><img id="imageResult" src="#" alt="" class="img-fluid rounded shadow-sm mx-auto d-block"></div>
+                    </div>
+                    <div class="col-6">
+                      <div>
+                        <p class="mb-3">For horizontal format 600x400 sized upload images.</p>
+                        <input type="file" id="Event_CoverImageFile" asp-for="@Model.CoverImageFile" class="form-control border-0" hidden>
+                        <label id="upload-label" for="Event_CoverImageFile" class="btn btn-primary btn-lg text-white">Choose file</label>
+                        <span asp-validation-for="@Model.CoverImageFile" class="text-danger"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <select class="form-select" asp-for="@Model.IsOnline">
+                    <option selected="selected" value="">Event Type</option>
+                    <option value="@Boolean.TrueString">Online</option>
+                    <option value="@Boolean.FalseString">In Person</option>
+                  </select>
+                  <span asp-validation-for="@Model.IsOnline" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 event-link-group" style="display: none">
+                  <div class="form-label-group">
+                    <input type="text" id="inputOnlineLink" asp-for="@Model.OnlineLink" class="form-control" placeholder="Online Link">
+                    <label for="inputOnlineLink">Online Link</label>
+                    <span asp-validation-for="@Model.OnlineLink" class="text-danger"></span>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-label-group">
+                    <input type="number" id="inputCapacity" asp-for="@Model.Capacity" class="form-control" placeholder="Capacity">
+                    <label for="inputCapacity">Capacity</label>
+                    <span asp-validation-for="@Model.Capacity" class="text-danger"></span>
+                  </div>
+                </div>
+                <div class="col-md-6 event-location-group">
+                  <select asp-for="@Model.CountryId" asp-items="countries" class="form-select">
+                    <option selected="" value="">Country</option>
+                  </select>
+                  <span asp-validation-for="@Model.CountryId" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 event-location-group">
+                  <div class="form-label-group">
+                    <input type="text" id="inputCity" asp-for="@Model.City" class="form-control" placeholder="City">
+                    <label for="inputCity">City</label>
+                    <span asp-validation-for="@Model.City" class="text-danger"></span>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <select asp-for="@Model.Language" asp-items="languages" aria-label="en" class="form-select">
+                    <option selected value="">Language</option>
+                  </select>
+                  <span asp-validation-for="@Model.Language" class="text-danger"></span>
+                </div>
+                <div class="col-md-12 text-end">
+                  <button id="CreateEventButton" type="submit" class="btn btn-primary btn-lg">
+                          Next Step
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

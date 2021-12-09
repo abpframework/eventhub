@@ -52,7 +52,6 @@ namespace EventHub
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var configuration = context.Services.GetConfiguration();
-            var hostingEnvironment = context.Services.GetHostingEnvironment();
 
             ConfigureAuthentication(context, configuration);
             ConfigureLocalization();

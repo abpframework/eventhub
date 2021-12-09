@@ -98,5 +98,10 @@ namespace EventHub.EntityFrameworkCore.Events
 
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
+        
+        public override async Task<IQueryable<Event>> WithDetailsAsync()
+        {
+            return (await GetQueryableAsync()).Include(x => x.Tracks).ThenInclude(x => x.Sessions);
+        }
     }
 }

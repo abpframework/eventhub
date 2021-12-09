@@ -12,7 +12,6 @@ using Volo.Abp.Authorization;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Content;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Identity;
 using Volo.Abp.Users;
 
 namespace EventHub.Events
@@ -79,6 +78,8 @@ namespace EventHub.Events
                 await SaveCoverImageAsync(@event.Id, input.CoverImageStreamContent);
             }
 
+            @event.Publish(false);
+            
             await _eventRepository.InsertAsync(@event);
 
             return ObjectMapper.Map<Event, EventDto>(@event);
@@ -92,7 +93,8 @@ namespace EventHub.Events
 
             var query = from @event in eventQueryable
                 join organization in organizationQueryable on @event.OrganizationId equals organization.Id
-                select new {@event, organization};
+                where !@event.IsDraft
+                select new { @event, organization };
 
             if (input.RegisteredUserId.HasValue)
             {
@@ -147,27 +149,32 @@ namespace EventHub.Events
                 query = query.OrderBy(x => x.@event.StartTime);
             }
 
-            var items = await AsyncExecuter.ToListAsync(query);
-            var now = Clock.Now;
+            var items = (await AsyncExecuter.ToListAsync(query)).Select(a => (a.@event, a.organization)).ToList();
 
-            var events = items.Select(
-                i =>
-                {
-                    var dto = ObjectMapper.Map<Event, EventInListDto>(i.@event);
-                    dto.OrganizationName = i.organization.Name;
-                    dto.OrganizationDisplayName = i.organization.DisplayName;
-                    dto.IsLiveNow = now.IsBetween(i.@event.StartTime, i.@event.EndTime);
-                    dto.Country = i.@event.CountryName;
-                    return dto;
-                }
-            ).ToList();
+            var events = GetEventInListDtoFromEventAndOrganizationTupleList(items);
 
             return new PagedResultDto<EventInListDto>(totalCount, events);
         }
 
+        [Authorize]
+        public async Task<List<EventInListDto>> GetDraftEventsByUserId(Guid userId)
+        {
+            var eventQueryable = await _eventRepository.GetQueryableAsync();
+            var organizationQueryable = await _organizationRepository.GetQueryableAsync();
+
+            var query = from @event in eventQueryable
+                join organization in organizationQueryable on @event.OrganizationId equals organization.Id
+                where organization.OwnerUserId == userId && @event.IsDraft
+                select new { @event, organization };
+
+            var items = (await AsyncExecuter.ToListAsync(query)).Select(a => (a.@event, a.organization)).ToList();
+
+            return GetEventInListDtoFromEventAndOrganizationTupleList(items);
+        }
+
         public async Task<EventDetailDto> GetByUrlCodeAsync(string urlCode)
         {
-            var @event = await _eventRepository.GetAsync(x => x.UrlCode == urlCode);
+            var @event = await _eventRepository.GetAsync(x => x.UrlCode == urlCode, true);
             var organization = await _organizationRepository.GetAsync(@event.OrganizationId);
 
             var dto = ObjectMapper.Map<Event, EventDetailDto>(@event);
@@ -175,7 +182,7 @@ namespace EventHub.Events
             dto.OrganizationId = organization.Id;
             dto.OrganizationName = organization.Name;
             dto.OrganizationDisplayName = organization.DisplayName;
-            
+
             var user = await _userRepository.GetAsync(organization.OwnerUserId);
             dto.OwnerUserName = user.UserName;
             dto.OwnerEmail = user.Email;
@@ -232,15 +239,7 @@ namespace EventHub.Events
         public async Task UpdateAsync(Guid id, UpdateEventDto input)
         {
             var @event = await _eventRepository.GetAsync(id);
-            var organization = await _organizationRepository.GetAsync(@event.OrganizationId);
-
-            if (organization.OwnerUserId != CurrentUser.GetId())
-            {
-                throw new AbpAuthorizationException(
-                    L["EventHub:NotAuthorizedToUpdateEvent", @event.Title],
-                    EventHubErrorCodes.NotAuthorizedToUpdateEvent
-                );
-            }
+            await CheckOwnerControlAsync(@event);
 
             await _eventManager.SetLocationAsync(@event, input.IsOnline, input.OnlineLink, input.CountryId, input.City);
             @event.SetTitle(input.Title);
@@ -257,6 +256,29 @@ namespace EventHub.Events
             await _eventRepository.UpdateAsync(@event);
         }
 
+        [Authorize]
+        public async Task AddTrackAsync(Guid id, AddTractDto input)
+        {
+            var @event = await _eventRepository.GetAsync(id, true);
+            await CheckOwnerControlAsync(@event);
+            
+            @event.AddTract(
+                GuidGenerator.Create(),
+                input.Name
+            );
+            
+            await _eventRepository.UpdateAsync(@event);
+        }
+
+        [Authorize]
+        public async Task<List<TrackDto>> GetTracksAsync(Guid id)
+        {
+            var @event = await _eventRepository.GetAsync(id, true);
+
+            return ObjectMapper.Map<List<Track>, List<TrackDto>>(@event.Tracks.ToList());
+        }
+
+        [Authorize]
         public async Task AddSessionAsync(Guid id, AddSessionDto input)
         {
             var @event = await _eventRepository.GetAsync(id);
@@ -277,7 +299,7 @@ namespace EventHub.Events
             var blobName = id.ToString();
 
             var coverImageStream = await _eventBlobContainer.GetOrNullAsync(blobName);
-            
+
             if (coverImageStream is null)
             {
                 return null;
@@ -291,6 +313,37 @@ namespace EventHub.Events
             var blobName = id.ToString();
 
             await _eventBlobContainer.SaveAsync(blobName, streamContent.GetStream(), overrideExisting: true);
+        }
+        
+        private async Task CheckOwnerControlAsync(Event @event)
+        {
+            var organization = await _organizationRepository.GetAsync(@event.OrganizationId);
+
+            if (organization.OwnerUserId != CurrentUser.GetId())
+            {
+                throw new AbpAuthorizationException(
+                    L["EventHub:NotAuthorizedToUpdateEvent", @event.Title],
+                    EventHubErrorCodes.NotAuthorizedToUpdateEvent
+                );
+            }
+        }
+        
+        private List<EventInListDto> GetEventInListDtoFromEventAndOrganizationTupleList(List<(Event @event, Organization organization)> items)
+        {
+            var now = Clock.Now;
+            var events = items.Select(
+                i =>
+                {
+                    var dto = ObjectMapper.Map<Event, EventInListDto>(i.@event);
+                    dto.OrganizationName = i.organization.Name;
+                    dto.OrganizationDisplayName = i.organization.DisplayName;
+                    dto.IsLiveNow = now.IsBetween(i.@event.StartTime, i.@event.EndTime);
+                    dto.Country = i.@event.CountryName;
+                    return dto;
+                }
+            ).ToList();
+
+            return events;
         }
     }
 }

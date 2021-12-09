@@ -16,5 +16,6 @@
         public const string SessionTimeConflictsWithAnExistingSession = "EventHub:SessionTimeConflictsWithAnExistingSession";
         public const string UserNotFound = "EventHub:UserNotFound";
         public const string OrganizationNotFound = "EventHub:OrganizationNotFound";
+        public const string TrackNameAlreadyExist = "EventHub:TrackNameAlreadyExist";
     }
 }

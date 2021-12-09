@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Volo.Abp.Application.Dtos;
 
 namespace EventHub.Events
@@ -40,5 +42,12 @@ namespace EventHub.Events
         public string Language { get; set; }
 
         public int? Capacity { get; set; }
+
+        public List<TrackDto> Tracks { get; set; }
+
+        public EventDetailDto()
+        {
+            Tracks = new List<TrackDto>();
+        }
     }
 }

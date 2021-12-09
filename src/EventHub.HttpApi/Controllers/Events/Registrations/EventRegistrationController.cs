@@ -12,7 +12,7 @@ namespace EventHub.Controllers.Events.Registrations
     [Area("eventhub")]
     [ControllerName("EventRegistration")]
     [Route("api/eventhub/event-registration")]
-    public class EventRegistrationController : AbpController, IEventRegistrationAppService
+    public class EventRegistrationController : EventHubController, IEventRegistrationAppService
     {
         private readonly IEventRegistrationAppService _eventRegistrationAppService;
 

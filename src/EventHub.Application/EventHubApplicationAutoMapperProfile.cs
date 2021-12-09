@@ -27,9 +27,12 @@ namespace EventHub
                 .Ignore(x => x.OrganizationDisplayName)
                 .Ignore(x => x.IsLiveNow);
             CreateMap<Event, EventDetailDto>()
+                .ForMember(x => x.Tracks, memberOptions => memberOptions.MapFrom(m => m.Tracks))
                 .Ignore(x => x.OrganizationId)
                 .Ignore(x => x.OrganizationName)
                 .Ignore(x => x.OrganizationDisplayName);
+
+            CreateMap<Track, TrackDto>();
 
             CreateMap<IdentityUser, EventAttendeeDto>();
 

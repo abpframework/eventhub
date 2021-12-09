@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Organizations.Memberships;
-using EventHub.Web.Pages.Organizations.Components.JoinArea;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 
@@ -42,15 +41,6 @@ namespace EventHub.Web.Controllers
         {
             await _organizationMembershipAppService.LeaveAsync(organizationId);
             return NoContent();
-        }
-        
-        [HttpGet]
-        public IActionResult Widget(Guid organizationId)
-        {
-            return ViewComponent(
-                typeof(JoinAreaViewComponent),
-                new {organizationId}
-            );
         }
     }
 }

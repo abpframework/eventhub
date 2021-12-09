@@ -10,7 +10,7 @@ namespace EventHub.Web.Pages.Events.Components.RegistrationArea
 {
     [Widget(
         AutoInitialize = true,
-        RefreshUrl = "/EventRegistration/Widget",
+        RefreshUrl = "/Widgets/RegistrationArea",
         ScriptFiles = new[] {"/Pages/Events/Components/RegistrationArea/registration-area.js"}
     )]
     public class RegistrationAreaViewComponent : AbpViewComponent

@@ -12,7 +12,7 @@ namespace EventHub.Controllers.Organizations.Memberships
     [Area("eventhub")]
     [ControllerName("OrganizationMembership")]
     [Route("api/eventhub/organization-membership")]
-    public class OrganizationMembershipController : AbpController, IOrganizationMembershipAppService
+    public class OrganizationMembershipController : EventHubController, IOrganizationMembershipAppService
     {
         private readonly IOrganizationMembershipAppService _organizationMembershipAppService;
 

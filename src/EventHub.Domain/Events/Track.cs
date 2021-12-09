@@ -26,7 +26,7 @@ namespace EventHub.Events
             : base(id)
         {
             EventId = eventId;
-            Name = name;
+            SetName(name);
             Sessions = new Collection<Session>();
         }
         

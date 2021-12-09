@@ -1,6 +1,9 @@
 ﻿using System;
 using EventHub.Web.Pages.Events.Components.AttendeesArea;
+using EventHub.Web.Pages.Events.Components.CreateEventArea;
 using EventHub.Web.Pages.Events.Components.LocationArea;
+using EventHub.Web.Pages.Events.Components.RegistrationArea;
+using EventHub.Web.Pages.Organizations.Components.JoinArea;
 using EventHub.Web.Pages.Organizations.Components.MembersArea;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
@@ -45,6 +48,33 @@ namespace EventHub.Web.Controllers
             return ViewComponent(
                 typeof(LocationAreaViewComponent),
                 new {eventId}
+            );
+        }
+        
+        [HttpGet]
+        public IActionResult RegistrationArea(Guid eventId)
+        {
+            return ViewComponent(
+                typeof(RegistrationAreaViewComponent),
+                new {eventId}
+            );
+        }
+        
+        [HttpGet]
+        public IActionResult JoinArea(Guid organizationId)
+        {
+            return ViewComponent(
+                typeof(JoinAreaViewComponent),
+                new {organizationId}
+            );
+        }
+        
+        [HttpGet]
+        public IActionResult CreateEventArea(string eventUrlCode)
+        {
+            return ViewComponent(
+                typeof(CreateEventAreaViewComponent),
+                new {eventUrlCode}
             );
         }
     }

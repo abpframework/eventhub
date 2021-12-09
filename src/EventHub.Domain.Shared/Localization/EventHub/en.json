@@ -152,6 +152,7 @@
     "MaxStartTime": "Max Start Time",
     "Online": "Online",
     "InPerson": "In Person",
-    "UpgradeToPremium": "Upgrade To Premium"
+    "UpgradeToPremium": "Upgrade To Premium",
+    "EventHub:TrackNameAlreadyExist": "The track {Name} already exists"
   }
 }
