@@ -27,6 +27,8 @@ namespace EventHub.Events
 
         Task AddTrackAsync(Guid id, AddTractDto input);
 
+        Task DeleteTrackAsync(Guid id, Guid trackId);
+
         Task AddSessionAsync(Guid id, AddSessionDto input);
 
         Task<IRemoteStreamContent> GetCoverImageAsync(Guid id);

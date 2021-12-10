@@ -139,6 +139,19 @@ namespace EventHub.Events
 
             return this;
         }
+        
+        public Event RemoveTrack(Guid trackId)
+        {
+            var track = Tracks.SingleOrDefault(x => x.Id == trackId);
+            if (track is null)
+            {
+                throw new BusinessException(EventHubErrorCodes.TrackNotFound);
+            }
+            
+            Tracks.Remove(track);
+
+            return this;
+        }
 
         public Event AddSession(
             Guid trackId,

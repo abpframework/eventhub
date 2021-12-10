@@ -153,6 +153,7 @@
     "Online": "Online",
     "InPerson": "In Person",
     "UpgradeToPremium": "Upgrade To Premium",
-    "EventHub:TrackNameAlreadyExist": "The track {Name} already exists"
+    "EventHub:TrackNameAlreadyExist": "The track {Name} already exists",
+    "EventHub:TrackNotFound": "The track not found!"
   }
 }

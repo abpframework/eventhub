@@ -16,7 +16,14 @@
                             <div class="col-md-3">
                                 <div class="track-item mb-4">
                                     <span class="track-name">@track.Name</span>
-                                    <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#editTrackModal" class="mt-3 d-block text-info"><small><i class="fa fa-edit me-1"></i>Edit</small></a>
+                                        <abp-row>
+                                            <abp-column>
+                                                <a id="@track.Id" data-track-name="@track.Name" href="javascript:;" data-bs-toggle="modal" data-bs-target="#EditTrackModal" class="mt-3 d-block text-info edit-track-button"><small><i class="fa fa-edit me-1"></i>Edit</small></a>
+                                            </abp-column>
+                                            <abp-column>
+                                                <a id="@track.Id" href="javascript:;" class="mt-3 d-block text-info delete-track-button"><small><i class="fa fa-trash me-1"></i>Delete</small></a>
+                                            </abp-column>
+                                        </abp-row>
                                 </div>
                             </div>   
                         }
@@ -31,7 +38,7 @@
                 <div class="card-footer bg-white border-0 p-5 pt-1"> 
                     <div class="row">
                         <div class="col-6">
-                            <a href="#" class="btn btn-secondary"><i class="fa fa-arrow-left me-2"></i> Previous Step </a>
+                            <button id="PreviousStepButtonInTrackSession" data-target-step="@CreateEventAreaViewComponent.ProgressStepType.NewEvent" class="btn btn-secondary step-transition"><i class="fa fa-arrow-left me-2"></i> Previous Step </button>
                         </div>
                         <div class="col-6 text-end">
                             <a href="#" class="btn btn-link">Skip This Step</a>
@@ -43,7 +50,7 @@
         </div> 
     </div>
     
-    @* Add Track modal *@
+    @* Add Track Modal *@
     <div class="modal fade" id="AddTrackModal" tabindex="-1" aria-labelledby="AddTrackModal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -51,18 +58,43 @@
                     <h5 class="modal-title">Add New Track</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body profile-content px-5">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="TrackName" placeholder=" ">
-                        <label for="TrackName">Track Name</label>
+                <form  id="AddNewTrackForm" method="post">
+                    <div class="modal-body profile-content px-5">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="TrackNameInput" placeholder=" " required>
+                            <label for="TrackNameInput">Track Name</label>
+                        </div>
                     </div>
+                    <div class="modal-footer border-0 p-5 pt-2">
+                        <button type="button" class="btn btn-secondary modal-close-button" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-plus me-2"></i> Add
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    @* Edit Track Modal *@
+    <div class="modal fade" id="EditTrackModal" tabindex="-1" aria-labelledby="EditTrackModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0 p-5 pb-2">
+                    <h5 class="modal-title">Edit This Track</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-footer border-0 p-5 pt-2">
-                    <button type="button" class="btn btn-secondary modal-close-button" data-bs-dismiss="modal">Close</button>
-                    <button id="AddNewTrackButton" type="button" class="btn btn-primary">
-                        <i class="fa fa-plus me-2"></i> Add
-                    </button>
-                </div>
+                <form id="EditTrackForm">
+                    <div class="modal-body profile-content px-5">
+                        <input type="hidden" id="TrackId" value="TrackIdPlaceHolder"/>
+                        <label for="TrackNameInput" class="mb-2">Edit Track Name</label>
+                        <input type="text" class="form-control" id="TrackNameInput" placeholder="There is a track name here" required>
+                    </div>
+                    <div class="modal-footer border-0 p-5 pt-2">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-check-circle me-2"></i>Save</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

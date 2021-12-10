@@ -270,6 +270,14 @@ namespace EventHub.Events
             await _eventRepository.UpdateAsync(@event);
         }
 
+        public async Task DeleteTrackAsync(Guid id, Guid trackId)
+        {
+            var @event = await _eventRepository.GetAsync(id, true);
+            await CheckOwnerControlAsync(@event);
+
+            @event.RemoveTrack(trackId);
+        }
+
         [Authorize]
         public async Task AddSessionAsync(Guid id, AddSessionDto input)
         {

@@ -89,6 +89,13 @@ namespace EventHub.Controllers.Events
 		}
 
 		[HttpPost]
+		[Route("{id}/tracks/{trackId}")]
+		public async Task DeleteTrackAsync(Guid id, Guid trackId)
+		{
+			await _eventAppService.DeleteTrackAsync(id, trackId);
+		}
+
+		[HttpPost]
 		[Route("{id}/sessions")]
 		public async Task AddSessionAsync(Guid id, AddSessionDto input)
 		{
