@@ -88,13 +88,6 @@ namespace EventHub.Controllers.Events
 			await _eventAppService.AddTrackAsync(id, input);
 		}
 
-		[HttpGet]
-		[Route("{id}/tracks")]
-		public async Task<List<TrackDto>> GetTracksAsync(Guid id)
-		{
-			return await _eventAppService.GetTracksAsync(id);
-		}
-
 		[HttpPost]
 		[Route("{id}/sessions")]
 		public async Task AddSessionAsync(Guid id, AddSessionDto input)

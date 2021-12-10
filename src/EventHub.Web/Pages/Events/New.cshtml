@@ -88,7 +88,8 @@
     {
         @await Component.InvokeAsync(typeof(CreateEventAreaViewComponent), new
         {
-            eventUrlCode = Model.EventUrlCode
+            eventUrlCode = Model.EventUrlCode,
+            stepType = CreateEventAreaViewComponent.ProgressStepType.NewEvent
         })
     }
 </div>

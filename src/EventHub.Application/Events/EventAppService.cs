@@ -271,14 +271,6 @@ namespace EventHub.Events
         }
 
         [Authorize]
-        public async Task<List<TrackDto>> GetTracksAsync(Guid id)
-        {
-            var @event = await _eventRepository.GetAsync(id, true);
-
-            return ObjectMapper.Map<List<Track>, List<TrackDto>>(@event.Tracks.ToList());
-        }
-
-        [Authorize]
         public async Task AddSessionAsync(Guid id, AddSessionDto input)
         {
             var @event = await _eventRepository.GetAsync(id);

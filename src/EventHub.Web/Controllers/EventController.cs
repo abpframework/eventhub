@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Events;
@@ -29,19 +27,6 @@ namespace EventHub.Web.Controllers
                 ViewName = "~/Pages/Events/Components/EventsArea/_eventListSection.cshtml",
                 ViewData = ViewData
             };
-        }
-        
-        [HttpGet]
-        [Route("{id}/tracks")]
-        public async Task<IActionResult> GetTracksSection(Guid id)
-        {
-            ViewData.Model = await _eventAppService.GetTracksAsync(id);
-
-            return await Task.FromResult(new PartialViewResult
-            {
-                ViewName = "~/Pages/Events/Components/CreateEventArea/_addTrackSection.cshtml",
-                ViewData = ViewData
-            });
         }
     }
 }

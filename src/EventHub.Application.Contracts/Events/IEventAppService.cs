@@ -26,8 +26,6 @@ namespace EventHub.Events
         Task UpdateAsync(Guid id, UpdateEventDto input);
 
         Task AddTrackAsync(Guid id, AddTractDto input);
-        
-        Task<List<TrackDto>> GetTracksAsync(Guid id);
 
         Task AddSessionAsync(Guid id, AddSessionDto input);
 

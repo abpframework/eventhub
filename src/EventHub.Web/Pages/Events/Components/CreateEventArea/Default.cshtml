@@ -1,3 +1,4 @@
+@using EventHub.Web.Pages.Events.Components.CreateEventArea
 @using Microsoft.AspNetCore.Http
 @model EventHub.Web.Pages.Events.Components.CreateEventArea.CreateEventAreaViewComponent.NewEventViewModel
 
@@ -6,16 +7,23 @@
     {
         throw new BadHttpRequestException("");
     }
-    
+
     var eventId = ViewData["EventId"] as Guid?;
+    var eventUrlCode = ViewData["EventUrlCode"]?.ToString();
+
+    var result = Enum.TryParse(ViewData["StepType"]!.ToString(), out CreateEventAreaViewComponent.ProgressStepType stepType);
+    if (!result)
+    {
+        throw new BadHttpRequestException("");
+    }
 }
 
-<div id="CreateEventContainer">
+<div id="CreateEventContainer" style="@(stepType != CreateEventAreaViewComponent.ProgressStepType.NewEvent ? "display: none" : "")">
     <partial name="_newEventSection.cshtml" model="@Model"/>
 </div>
-<div id="CreateTrackContainer" style="display: none">
+<div id="CreateTrackContainer" style="@(stepType != CreateEventAreaViewComponent.ProgressStepType.NewTrack ? "display: none" : "")">
     <partial name="_addTrackSection.cshtml" model="@Model.Tracks"/>
 </div>
 
-
 <input type="hidden" id="EventId" value="@eventId"/>
+<input type="hidden" id="EventUrlCode" value="@eventUrlCode"/>

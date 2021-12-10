@@ -70,11 +70,15 @@ namespace EventHub.Web.Controllers
         }
         
         [HttpGet]
-        public IActionResult CreateEventArea(string eventUrlCode)
+        public IActionResult CreateEventArea(string eventUrlCode, CreateEventAreaViewComponent.ProgressStepType stepType)
         {
             return ViewComponent(
                 typeof(CreateEventAreaViewComponent),
-                new {eventUrlCode}
+                new
+                {
+                    eventUrlCode, 
+                    stepType
+                }
             );
         }
     }

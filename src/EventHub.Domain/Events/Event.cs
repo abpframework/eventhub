@@ -164,9 +164,9 @@ namespace EventHub.Events
             return this;
         }
         
-        public Event Publish(bool isPublish)
+        public Event Publish(bool isPublish = true)
         {
-            IsDraft = isPublish;
+            IsDraft = !isPublish;
 
             return this;
         }

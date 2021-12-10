@@ -42,7 +42,9 @@ public class CreateEventAreaViewComponent : AbpViewComponent
         _currentUser = currentUser;
     }
 
-    public async Task<IViewComponentResult> InvokeAsync(string eventUrlCode)
+    public async Task<IViewComponentResult> InvokeAsync(
+        string eventUrlCode, 
+        ProgressStepType stepType = ProgressStepType.NewEvent)
     {
         NewEventViewModel model = null;
         if (!eventUrlCode.IsNullOrWhiteSpace())
@@ -50,14 +52,16 @@ public class CreateEventAreaViewComponent : AbpViewComponent
             var @event = await _eventAppService.GetByUrlCodeAsync(eventUrlCode);
             model = ObjectMapper.Map<EventDetailDto, NewEventViewModel>(@event);
             ViewData["EventId"] = @event.Id;
+            ViewData["EventUrlCode"] = @event.UrlCode;
         }
         
         model ??= new NewEventViewModel
         {
             StartTime = DateTime.Now.ClearTime().AddDays(1).AddHours(19),
             EndTime = DateTime.Now.ClearTime().AddDays(1).AddHours(21)
-        };   
-
+        };
+        
+        ViewData["StepType"] = stepType.ToString();
         ViewData["Organizations"] = await GetOrganizationsSelectItemAsync();
         ViewData["Countries"] = await GetCountriesSelectItemAsync();
         ViewData["Languages"] = GetLanguagesSelectItem();
