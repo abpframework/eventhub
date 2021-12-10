@@ -106,13 +106,11 @@
                     abp.notify.error('Track name must be different from the previous name.');
                     return;
                 }
-                eventApiService.deleteTrack(eventIdInput.val(), trackId).then(function () {
-                    eventApiService.addTrack(eventIdInput.val(), {name: trackName}).then(function () {
-                        $('#EditTrackModal').modal('hide');
-                        abp.notify.success('Updated the track');
-                        FillFilter(stepType.NewTrack)
-                        widgetManager.refresh();
-                    });
+                eventApiService.updateTrack(eventIdInput.val(), trackId, { name: trackName}).then(function () {
+                    $('#EditTrackModal').modal('hide');
+                    abp.notify.success('Updated the track');
+                    FillFilter(stepType.NewTrack)
+                    widgetManager.refresh();
                 });
             });
         }

@@ -20,12 +20,12 @@ namespace EventHub.EntityFrameworkCore.Events
         }
 
         public async Task<int> GetCountAsync(
-            string title = null, 
-            string organizationDisplayName = null, 
-            int? minAttendeeCount = null, 
-            int? maxAttendeeCount = null, 
-            DateTime? minStartTime = null, 
-            DateTime? maxStartTime = null, 
+            string title = null,
+            string organizationDisplayName = null,
+            int? minAttendeeCount = null,
+            int? maxAttendeeCount = null,
+            DateTime? minStartTime = null,
+            DateTime? maxStartTime = null,
             CancellationToken cancellationToken = default
         )
         {
@@ -36,35 +36,36 @@ namespace EventHub.EntityFrameworkCore.Events
             var organizationQueryable = dbContext.Set<Organization>().AsQueryable();
 
             var query = (from @event in eventQueryable
-                         join organization in organizationQueryable on @event.OrganizationId equals organization.Id
-                         select new
-                         {
-                             Event = @event,
-                             Organization = organization,
-                             AttendeeCount = (from eventRegistration in eventRegistrationQueryable
-                                              where eventRegistration.EventId == @event.Id
-                                              select @eventRegistration).Count()
-                         })
-                     .WhereIf(!string.IsNullOrWhiteSpace(title), x => x.Event.Title.ToLower().Contains(title.ToLower()))
-                     .WhereIf(!string.IsNullOrWhiteSpace(organizationDisplayName), x => x.Organization.DisplayName.ToLower().Contains(organizationDisplayName.ToLower()))
-                     .WhereIf(minStartTime.HasValue, x => x.Event.StartTime >= minStartTime)
-                     .WhereIf(maxStartTime.HasValue, x => x.Event.StartTime <= maxStartTime)
-                     .WhereIf(minAttendeeCount.HasValue, x => x.AttendeeCount >= minAttendeeCount)
-                     .WhereIf(maxAttendeeCount.HasValue, x => x.AttendeeCount <= maxAttendeeCount);
+                    join organization in organizationQueryable on @event.OrganizationId equals organization.Id
+                    select new
+                    {
+                        Event = @event,
+                        Organization = organization,
+                        AttendeeCount = (from eventRegistration in eventRegistrationQueryable
+                            where eventRegistration.EventId == @event.Id
+                            select @eventRegistration).Count()
+                    })
+                .WhereIf(!string.IsNullOrWhiteSpace(title), x => x.Event.Title.ToLower().Contains(title.ToLower()))
+                .WhereIf(!string.IsNullOrWhiteSpace(organizationDisplayName),
+                    x => x.Organization.DisplayName.ToLower().Contains(organizationDisplayName.ToLower()))
+                .WhereIf(minStartTime.HasValue, x => x.Event.StartTime >= minStartTime)
+                .WhereIf(maxStartTime.HasValue, x => x.Event.StartTime <= maxStartTime)
+                .WhereIf(minAttendeeCount.HasValue, x => x.AttendeeCount >= minAttendeeCount)
+                .WhereIf(maxAttendeeCount.HasValue, x => x.AttendeeCount <= maxAttendeeCount);
 
             return await query.CountAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<List<EventWithDetails>> GetListAsync(
             string sorting = null,
-            int skipCount = 0, 
-            int maxResultCount = int.MaxValue, 
-            string title = null, 
-            string organizationDisplayName = null, 
-            int? minAttendeeCount = null, 
-            int? maxAttendeeCount = null, 
-            DateTime? minStartTime = null, 
-            DateTime? maxStartTime = null, 
+            int skipCount = 0,
+            int maxResultCount = int.MaxValue,
+            string title = null,
+            string organizationDisplayName = null,
+            int? minAttendeeCount = null,
+            int? maxAttendeeCount = null,
+            DateTime? minStartTime = null,
+            DateTime? maxStartTime = null,
             CancellationToken cancellationToken = default
         )
         {
@@ -98,10 +99,13 @@ namespace EventHub.EntityFrameworkCore.Events
 
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
-        
+
         public override async Task<IQueryable<Event>> WithDetailsAsync()
         {
-            return (await GetQueryableAsync()).Include(x => x.Tracks).ThenInclude(x => x.Sessions);
+            return (await GetQueryableAsync())
+                .Include(e => e.Tracks)
+                .ThenInclude(t => t.Sessions)
+                .ThenInclude(s => s.Speakers);
         }
     }
 }

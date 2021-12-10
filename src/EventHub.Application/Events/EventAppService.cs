@@ -187,6 +187,11 @@ namespace EventHub.Events
             dto.OwnerUserName = user.UserName;
             dto.OwnerEmail = user.Email;
 
+            foreach (var speaker in from track in dto.Tracks from session in track.Sessions from speaker in session.Speakers select speaker)
+            {
+                speaker.UserName = (await _userRepository.GetAsync(speaker.UserId)).UserName;
+            }
+
             return dto;
         }
 
@@ -264,6 +269,19 @@ namespace EventHub.Events
             
             @event.AddTract(
                 GuidGenerator.Create(),
+                input.Name
+            );
+            
+            await _eventRepository.UpdateAsync(@event);
+        }
+
+        public async Task UpdateTrackAsync(Guid id, Guid trackId, UpdateTrackDto input)
+        {
+            var @event = await _eventRepository.GetAsync(id, true);
+            await CheckOwnerControlAsync(@event);
+           
+            @event.UpdateTrack(
+                trackId,
                 input.Name
             );
             

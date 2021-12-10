@@ -140,6 +140,25 @@ namespace EventHub.Events
             return this;
         }
         
+        public Event UpdateTrack(Guid trackId, string name)
+        {
+            if (Tracks.Any(x => x.Name == name))
+            {
+                throw new BusinessException(EventHubErrorCodes.TrackNameAlreadyExist)
+                    .WithData("Name", name);
+            }
+            
+            var track = Tracks.SingleOrDefault(x => x.Id == trackId);
+            if (track is null)
+            {
+                throw new BusinessException(EventHubErrorCodes.TrackNotFound);
+            }
+
+            track.SetName(name);
+
+            return this;
+        }
+        
         public Event RemoveTrack(Guid trackId)
         {
             var track = Tracks.SingleOrDefault(x => x.Id == trackId);

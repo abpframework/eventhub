@@ -24,6 +24,9 @@
 <div id="CreateTrackContainer" style="@(stepType != CreateEventAreaViewComponent.ProgressStepType.NewTrack ? "display: none" : "")">
     <partial name="_addTrackSection.cshtml" model="@Model.Tracks"/>
 </div>
+<div id="CreateSessionContainer" style="@(stepType != CreateEventAreaViewComponent.ProgressStepType.NewSession ? "display: none" : "")">
+    <partial name="_addSessionSection.cshtml" model="@Model.Tracks"/>
+</div>
 
 <input type="hidden" id="EventId" value="@eventId"/>
 <input type="hidden" id="EventUrlCode" value="@eventUrlCode"/>

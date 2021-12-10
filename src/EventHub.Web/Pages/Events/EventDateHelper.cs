@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Text;
 using EventHub.Events;
 
@@ -20,6 +21,16 @@ namespace EventHub.Web.Pages.Events
             }
 
             sb.Append(endTime.ToString("hh:mm"));
+
+            return sb.ToString();
+        }
+        
+        public static string GetTimeRangeText(TimeOnly startTime, TimeOnly endTime)
+        {
+            var sb = new StringBuilder();
+            sb.Append(startTime.ToString("hh tt", CultureInfo.InvariantCulture));
+            sb.Append(" - ");
+            sb.Append(endTime.ToString("hh tt", CultureInfo.InvariantCulture));
 
             return sb.ToString();
         }
