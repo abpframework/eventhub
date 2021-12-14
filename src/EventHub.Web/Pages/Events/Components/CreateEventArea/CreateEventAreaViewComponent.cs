@@ -23,7 +23,8 @@ namespace EventHub.Web.Pages.Events.Components.CreateEventArea;
 [Widget(
     AutoInitialize = true,
     RefreshUrl = "/Widgets/CreateEventArea",
-    ScriptFiles = new[] { "/Pages/Events/Components/CreateEventArea/create-event-area.js" }
+    ScriptFiles = new[] { "/Pages/Events/Components/CreateEventArea/create-event-area.js" },
+    StyleFiles = new[] { "/Pages/Events/Components/CreateEventArea/create-event-area.css" }
 )]
 public class CreateEventAreaViewComponent : AbpViewComponent
 {
@@ -54,13 +55,13 @@ public class CreateEventAreaViewComponent : AbpViewComponent
             ViewData["EventId"] = @event.Id;
             ViewData["EventUrlCode"] = @event.UrlCode;
         }
-        
+
         model ??= new NewEventViewModel
         {
             StartTime = DateTime.Now.ClearTime().AddDays(1).AddHours(19),
             EndTime = DateTime.Now.ClearTime().AddDays(1).AddHours(21)
         };
-        
+
         ViewData["StepType"] = stepType.ToString();
         ViewData["Organizations"] = await GetOrganizationsSelectItemAsync();
         ViewData["Countries"] = await GetCountriesSelectItemAsync();
@@ -81,7 +82,7 @@ public class CreateEventAreaViewComponent : AbpViewComponent
             }
         ).ToList();
     }
-    
+
     private async Task<List<SelectListItem>> GetCountriesSelectItemAsync()
     {
         var result = await _eventAppService.GetCountriesLookupAsync();
@@ -169,7 +170,7 @@ public class CreateEventAreaViewComponent : AbpViewComponent
             Tracks = new List<TrackDto>();
         }
     }
-    
+
     public enum ProgressStepType : byte
     {
        NewEvent = 0,

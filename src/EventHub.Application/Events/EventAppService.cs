@@ -252,12 +252,12 @@ namespace EventHub.Events
             @event.Language = input.Language;
             @event.SetTime(input.StartTime, input.EndTime);
             await _eventManager.SetCapacityAsync(@event, input.Capacity);
-            
+
             if (input.CoverImageStreamContent != null && input.CoverImageStreamContent.ContentLength > 0)
             {
                 await SaveCoverImageAsync(@event.Id, input.CoverImageStreamContent);
             }
-            
+
             await _eventRepository.UpdateAsync(@event);
         }
 
@@ -266,28 +266,30 @@ namespace EventHub.Events
         {
             var @event = await _eventRepository.GetAsync(id, true);
             await CheckOwnerControlAsync(@event);
-            
+
             @event.AddTract(
                 GuidGenerator.Create(),
                 input.Name
             );
-            
+
             await _eventRepository.UpdateAsync(@event);
         }
 
+        [Authorize]
         public async Task UpdateTrackAsync(Guid id, Guid trackId, UpdateTrackDto input)
         {
             var @event = await _eventRepository.GetAsync(id, true);
             await CheckOwnerControlAsync(@event);
-           
+
             @event.UpdateTrack(
                 trackId,
                 input.Name
             );
-            
+
             await _eventRepository.UpdateAsync(@event);
         }
 
+        [Authorize]
         public async Task DeleteTrackAsync(Guid id, Guid trackId)
         {
             var @event = await _eventRepository.GetAsync(id, true);
@@ -332,7 +334,7 @@ namespace EventHub.Events
 
             await _eventBlobContainer.SaveAsync(blobName, streamContent.GetStream(), overrideExisting: true);
         }
-        
+
         private async Task CheckOwnerControlAsync(Event @event)
         {
             var organization = await _organizationRepository.GetAsync(@event.OrganizationId);
@@ -345,7 +347,7 @@ namespace EventHub.Events
                 );
             }
         }
-        
+
         private List<EventInListDto> GetEventInListDtoFromEventAndOrganizationTupleList(List<(Event @event, Organization organization)> items)
         {
             var now = Clock.Now;

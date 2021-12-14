@@ -1,5 +1,8 @@
 (function () {
     abp.widgets.CreateEventArea = function ($wrapper) {
+        toastr.options.timeOut = 500;
+        toastr.options.positionClass = "toast-top-right";
+
         var stepType = {
             "NewEvent": "NewEvent",
             "NewTrack": "NewTrack",
@@ -62,6 +65,9 @@
             EditTrackSubmitFormEventHandler();
             DeleteTrackButtonClickEventHandler();
 
+            OpenAddNewSessionModalClickEventHandler();
+            AddNewSessionEventHandler();
+
             PrevieousOrNextStepTransitionEventHandler()
         };
 
@@ -69,6 +75,9 @@
             var addNewTrackForm = $('#AddNewTrackForm');
             addNewTrackForm.submit(function (e) {
                 e.preventDefault();
+                if (!addNewTrackForm.valid()) {
+                    return false;
+                }
                 var trackName = addNewTrackForm.find('#TrackNameInput').val().trim();
                 eventApiService.addTrack(eventIdInput.val(), {name: trackName}).then(function () {
                     $('#AddTrackModal').modal('hide');
@@ -99,6 +108,9 @@
             var editTrackForm = $('#EditTrackForm');
             editTrackForm.submit(function (e) {
                 e.preventDefault();
+                if (!editTrackForm.valid()) {
+                    return false;
+                }
                 var trackId = editTrackForm.find('#TrackId').val();
                 var oldTrackName = $('#' + trackId).data('track-name');
                 var trackName = editTrackForm.find('#TrackNameInput').val().trim();
@@ -125,12 +137,64 @@
             });
         }
 
+        function OpenAddNewSessionModalClickEventHandler() {
+            $('.add-session-button').click(function (e) {
+                var addSessionModal = $('#AddSessionModal');
+                var clickedSessionId = this.id;
+                var trackId = $('#' + clickedSessionId).data('track-id');
+                addSessionModal.find('#TrackId').val(trackId);
+                $('#StartTimeInSession').val($('#inputStartdate').val());
+                $('#EndTimeInSession').val($('#inputEnddate').val());
+
+                function delay(callback, ms) {
+                    var timer = 0;
+                    return function() {
+                        var context = this, args = arguments;
+                        clearTimeout(timer);
+                        timer = setTimeout(function () {
+                            callback.apply(context, args);
+                        }, ms || 0);
+                    };
+                }
+                
+                $('#SpeakersInSession').keyup(delay(function (e) {
+                    eventHub.controllers.users.user.getListByUserName($(this).val()).then(function (res) {
+                        $.each(res, function (k,v) {
+                            if ( $("#suggestions option[value='" + v.userName + "']").length === 0){
+                                $("#suggestions").append($('<option>', {
+                                    value: v.userName,
+                                }));
+                            }
+                        });
+                    });
+                }, 500));
+            });
+        }
+
+        function AddNewSessionEventHandler() {
+            var addNewSessionForm = $('#AddNewSessionForm');
+            addNewSessionForm.submit(function (e) {
+                e.preventDefault();
+                if (!addNewSessionForm.valid()) {
+                    return false;
+                }
+                var input = $(this).serializeFormToObject();
+                eventApiService.addSession(eventIdInput.val(), input).then(function () {
+                    $('#AddSessionModal').modal('hide');
+                    abp.notify.success('Added the session');
+                    FillFilter(stepType.NewSession);
+                    widgetManager.refresh();
+                });
+            });
+        }
+
         function PrevieousOrNextStepTransitionEventHandler() {
             $('.step-transition').click(function (e) {
                 var clickedButtonId = this.id;
                 var targetStep = $('#' + clickedButtonId).data('target-step');
                 FillFilter(targetStep);
                 widgetManager.refresh();
+                ScrollToWrapperBegin();
             });
         }
 

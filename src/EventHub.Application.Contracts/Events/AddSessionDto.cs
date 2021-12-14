@@ -11,8 +11,12 @@ public class AddSessionDto
     [StringLength(SessionConsts.MaxTitleLength, MinimumLength = SessionConsts.MinTitleLength)]
     public string Title { get; set; }
 
+    [Required]
+    [DataType(DataType.DateTime)]
     public DateTime StartTime { get; set; }
-    
+
+    [Required]
+    [DataType(DataType.DateTime)]
     public DateTime EndTime { get; set; }
 
     [Required]

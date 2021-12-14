@@ -33,13 +33,15 @@ namespace EventHub.Events
             string title,
             DateTime startTime,
             DateTime endTime,
-            string description)
+            string description,
+            string language)
             : base(id)
         {
             TrackId = trackId;
             SetTitle(title);
             SetDescription(description);
             SetTime(startTime, endTime);
+            SetLanguage(language);
             Speakers = new Collection<Speaker>();
         }
         
@@ -64,6 +66,13 @@ namespace EventHub.Events
 
             StartTime = startTime;
             EndTime = endTime;
+            return this;
+        }
+        
+        internal Session SetLanguage(string language)
+        {
+            Language = Check.NotNullOrWhiteSpace(language, nameof(language), SessionConsts.MaxLanguageLength);
+
             return this;
         }
     }

@@ -7,7 +7,7 @@ namespace EventHub.Events;
 public class TrackDto : EntityDto<Guid>
 {
     public string Name { get; set; }
-    
+
     public List<SessionDto> Sessions { get; set; }
 
     public TrackDto()

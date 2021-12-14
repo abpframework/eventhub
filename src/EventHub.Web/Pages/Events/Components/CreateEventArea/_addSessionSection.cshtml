@@ -1,50 +1,73 @@
 @using EventHub.Web.Pages.Events
 @using EventHub.Web.Pages.Events.Components.CreateEventArea
+@using EventHub.Events
+@using Microsoft.AspNetCore.Http
 @model List<EventHub.Events.TrackDto>
 
-<partial name="_progressSection.cshtml" model="@CreateEventAreaViewComponent.ProgressStepType.NewSession"/>
+@{
+    var languages = ViewData["Languages"] as IList<SelectListItem>;
+    if (languages is null || !languages.Any())
+    {
+        throw new BadHttpRequestException("There is no language");
+    }
+    languages = languages.Select(l =>
+    {
+        if (l.Value == "en")
+        {
+            l.Selected = true;
+        }
+        return l;
+    }).ToList();
+}
+
+<partial name="_progressSection.cshtml" model="@CreateEventAreaViewComponent.ProgressStepType.NewSession" />
 
 @if (Model is not null)
 {
     <div class="row">
-        <div class="col-md-10 mx-auto">
-            <div class="card">
-                <div class="card-body profile-content p-5" style="min-height: 480px;">
-                    <h2 class="mb-4">Add Session</h2>
-                    <table class="table">
-                        <thead>
+    <div class="col-md-10 mx-auto">
+        <div class="card">
+            <div class="card-body profile-content p-5" style="min-height: 480px;">
+                <h2 class="mb-4">Add Session</h2>
+                <table class="table">
+                    <thead>
                         <tr>
                             @foreach (var track in Model)
-                            {
-                                <th class="text-center" width="25%">@track.Name</th>
-                            }
-                        </tr>
+                                {
+                                    <th class="text-center" width="25%">
+                                        @track.Name.TruncateWithPostfix(20)
+                                    </th>
+                                }
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            @foreach (var track in Model)
-                            {
-                                <td>
-                                    @foreach (var session in track.Sessions)
-                                    {
-                                        <div class="track-item">
-                                            <span class="track-name">@session.Title</span>
-                                            <small class="text-primary d-block my-2">@EventDateHelper.GetTimeRangeText(TimeOnly.FromDateTime(session.StartTime), TimeOnly.FromDateTime(session.EndTime)) | @session.Language</small>
-                                            @foreach (var speaker in session.Speakers)
-                                            {
-                                                <span class="d-block mb-2">@speaker.UserName</span>
-                                            }
-                                            <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#editSessionModal" class="mt-3 d-block text-info">
-                                                <small><i class="fa fa-edit me-1"></i>Edit</small>
+                            <tr>
+                                @foreach (var track in Model)
+                                {
+                                    <td>
+                                        @foreach (var session in track.Sessions)
+                                        {
+                                            <div class="track-item">
+                                                <span class="track-name truncate">@session.Title</span>
+                                                <small class="text-primary d-block my-2">@EventDateHelper.GetTimeRangeText(TimeOnly.FromDateTime(session.StartTime), TimeOnly.FromDateTime(session.EndTime)) | @session.Language</small>
+                                                @foreach (var speaker in session.Speakers)
+                                                {
+                                                    <span class="d-block mb-2">@speaker.UserName</span>
+                                                }
+                                                <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#editSessionModal" class="mt-3 d-block text-info">
+                                                    <small><i class="fa fa-edit me-1"></i>Edit</small>
+                                                </a>
+                                            </div>
+                                        }
+                                        <div class="big-square-btn text-center">
+                                            <a id="@track.Id-@track.Sessions.GetHashCode()" data-track-id="@track.Id" data-bs-toggle="modal" data-bs-target="#AddSessionModal" class="btn btn-outline-secondary d-block px-2 py-5 add-session-button">
+                                                <i class="fa fa-plus mb-3"></i>
+                                                <br>Add New Session
                                             </a>
                                         </div>
-                                    }
-                                    <div class="big-square-btn text-center">
-                                        <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#addSessionModal" class="btn btn-outline-secondary d-block px-2 py-5"><i class="fa fa-plus mb-3"></i><br>Add New Session</a>
-                                    </div>
-                                </td>   
-                            }
-                        </tr>
+                                    </td>
+                                }
+                            </tr>
 
                         </tbody>
                     </table>
@@ -52,7 +75,10 @@
                 <div class="card-footer bg-white border-0 p-5 pt-1">
                     <div class="row">
                         <div class="col-6">
-                            <button id="PreviousStepButtonInSessionSection" data-target-step="@CreateEventAreaViewComponent.ProgressStepType.NewTrack" class="btn btn-secondary step-transition"><i class="fa fa-arrow-left me-2"></i> Previous Step </button>
+                            <button id="PreviousStepButtonInSessionSection"
+                            data-target-step="@CreateEventAreaViewComponent.ProgressStepType.NewTrack"
+                            class="btn btn-secondary step-transition"><i class="fa fa-arrow-left me-2"></i> Previous
+                                Step </button>
                         </div>
                         <div class="col-6 text-end">
                             <button href="#" class="btn btn-success">Publish <i class="fa fa-arrow-right ms-2"></i></button>
@@ -62,7 +88,99 @@
             </div>
         </div>
     </div>
-}else
+
+    <!-- Add Session Modal -->
+    <div class="modal fade" id="AddSessionModal" tabindex="-1" aria-labelledby="AddSessionModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0 p-5 pb-2">
+                    <h5 class="modal-title">Add New Session</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="AddNewSessionForm">
+                    <input type="hidden" id="TrackId" name="TrackId" value="TrackIdPlaceHolder" />
+                    <div class="modal-body profile-content px-5">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="TitleInSession" name="Title" placeholder=" "
+                                   required minLength=@SessionConsts.MinTitleLength maxLength=@SessionConsts.MaxTitleLength>
+                            <label for="TitleInSession">Title</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <textarea type="text" class="form-control" id="DescriptionInSession" name="Description"
+                                placeholder=" " required minLength=@SessionConsts.MinDescriptionLength
+                                maxLength=@SessionConsts.MaxDescriptionLength></textarea>
+                            <label for="DescriptionInSession">Description</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="datetime-local" class="form-control" id="StartTimeInSession" name="StartTime"
+                                   placeholder=" " required>
+                            <label for="StartTimeInSession">Start Time</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="datetime-local" class="form-control" id="EndTimeInSession" name="EndTime"
+                                   placeholder=" " required>
+                            <label for="EndTimeInSession">End Time</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <select id="LanguageInSession" name="Language" asp-items="languages" aria-label="en" class="form-select" required>
+                            </select>
+                            <label for="LanguageInSession">Language</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="SpeakersInSession" placeholder=" " list="suggestions">
+                            <datalist id="suggestions">
+                            </datalist>
+                            <label for="SpeakersInSession">Speakers</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 p-5 pt-2">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-plus me-2"></i>Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Session Modal -->
+    <div class="modal fade" id="editSessionModal" tabindex="-1" aria-labelledby="editSessionModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0 p-5 pb-2">
+                    <h5 class="modal-title">Edit This Session</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body profile-content px-5">
+                    <div class="form mb-3">
+                        <label for="Title2">Title</label>
+                        <input type="text" class="form-control" id="Title2" placeholder="Lorem Upsym Title">
+                    </div>
+                    <div class="form mb-3">
+                        <label for="StartTime2">Start Time</label>
+                        <input type="text" class="form-control" id="StartTime2" placeholder="09:00">
+                    </div>
+                    <div class="form mb-3">
+                        <label for="EndTime2">End Time</label>
+                        <input type="text" class="form-control" id="EndTime2" placeholder="10:00">
+                    </div>
+                    <div class="form mb-3">
+                        <label for="Language2">Language</label>
+                        <input type="text" class="form-control" id="Language2" placeholder="English">
+                    </div>
+                    <div class="form mb-3">
+                        <label for="Speakers">Speakers</label>
+                        <input type="text" class="form-control" id="Speakers" placeholder="@@hikalkan">
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-5 pt-2">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary"><i class="fa fa-check-circle me-2"></i>Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
 {
-    <partial name="_modelNullErrorSection.cshtml"/>
+    <partial name="_modelNullErrorSection.cshtml" />
 }

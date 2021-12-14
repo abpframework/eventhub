@@ -49,6 +49,8 @@ namespace EventHub
             CreateMap<Country, CountryLookupDto>();
 
             CreateMap<IdentityUser, UserDto>();
+            
+            CreateMap<UserWithoutDetails, UserInListDto>();
         }
     }
 }

@@ -58,7 +58,7 @@ namespace EventHub.Events
                 }
             }
             
-            Sessions.Add(new Session(sessionId, Id, title, startTime, endTime, description));
+            Sessions.Add(new Session(sessionId, Id, title, startTime, endTime, description, language));
             
             return this;
         }

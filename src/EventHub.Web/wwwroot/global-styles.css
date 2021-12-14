@@ -214,3 +214,11 @@
 .rounded-3 {
     border-radius: 1rem !important;
 }
+
+.truncate {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    width: 140px;
+}

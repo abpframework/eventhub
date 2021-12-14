@@ -57,6 +57,10 @@ p {
     word-wrap: break-word;
 }
 
+textarea {
+    height: 90px!important;
+}
+
 /*NAVBAR*/
 .navbar {
     box-shadow: 0 5px 10px rgba(0, 4, 74, 0.05) !important;
