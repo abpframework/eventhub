@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace EventHub.Events;
@@ -24,4 +25,11 @@ public class AddSessionDto
     public string Description { get; set; }
 
     public string Language { get; set; }
+    
+    public List<string> SpeakerUserNames { get; set; }
+
+    public AddSessionDto()
+    {
+        SpeakerUserNames = new List<string>();
+    }
 }

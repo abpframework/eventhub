@@ -29,7 +29,7 @@ namespace EventHub.Users
             var userQueryable = await _userRepository.GetQueryableAsync();
 
             var query = userQueryable
-                .Where(u => u.UserName.Contains(username))
+                .Where(u => u.UserName.ToLower().Contains(username))
                 .Select(x => new UserWithoutDetails
                 {
                     Id = x.Id,

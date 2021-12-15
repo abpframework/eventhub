@@ -34,7 +34,8 @@ namespace EventHub.Events
             DateTime startTime,
             DateTime endTime,
             string description,
-            string language)
+            string language,
+            ICollection<Guid> speakerUserIds)
             : base(id)
         {
             TrackId = trackId;
@@ -42,7 +43,9 @@ namespace EventHub.Events
             SetDescription(description);
             SetTime(startTime, endTime);
             SetLanguage(language);
+            
             Speakers = new Collection<Speaker>();
+            AddSpeakers(speakerUserIds);
         }
         
         public Session SetTitle(string title)
@@ -73,6 +76,30 @@ namespace EventHub.Events
         {
             Language = Check.NotNullOrWhiteSpace(language, nameof(language), SessionConsts.MaxLanguageLength);
 
+            return this;
+        }
+        
+        internal Session AddSpeakers(ICollection<Guid> userIds)
+        {
+            foreach (var userId in userIds)
+            {
+                AddSpeaker(userId);
+            }
+
+            return this;
+        }
+        
+        internal Session AddSpeaker(Guid userId)
+        {
+            Speakers.Add(new Speaker(Id, userId));
+
+            return this;
+        }
+
+        internal Session RemoveSpeaker(Guid userId)
+        {
+            Speakers.RemoveAll(t => t.UserId == userId);
+            
             return this;
         }
     }

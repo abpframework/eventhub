@@ -32,6 +32,7 @@ namespace EventHub.Controllers.Users
         [Route("contains/{username}")]
         public async Task<List<UserInListDto>> GetListByUserName(string username)
         {
+            username = username.Trim().ToLower();
             return await _userAppService.GetListByUserName(username);
         }
     }

@@ -101,36 +101,28 @@
                     <input type="hidden" id="TrackId" name="TrackId" value="TrackIdPlaceHolder" />
                     <div class="modal-body profile-content px-5">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="TitleInSession" name="Title" placeholder=" "
-                                   required minLength=@SessionConsts.MinTitleLength maxLength=@SessionConsts.MaxTitleLength>
-                            <label for="TitleInSession">Title</label>
+                            <input type="text" class="form-control" id="TitleInNewSessionModal" name="Title" placeholder=" " required minLength=@SessionConsts.MinTitleLength maxLength=@SessionConsts.MaxTitleLength />
+                            <label for="TitleInNewSessionModal">Title</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <textarea type="text" class="form-control" id="DescriptionInSession" name="Description"
-                                placeholder=" " required minLength=@SessionConsts.MinDescriptionLength
-                                maxLength=@SessionConsts.MaxDescriptionLength></textarea>
-                            <label for="DescriptionInSession">Description</label>
+                            <textarea type="text" class="form-control" id="DescriptionInNewSessionModal" name="Description" placeholder=" " required minLength=@SessionConsts.MinDescriptionLength maxLength=@SessionConsts.MaxDescriptionLength></textarea>
+                            <label for="DescriptionInNewSessionModal">Description</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="datetime-local" class="form-control" id="StartTimeInSession" name="StartTime"
-                                   placeholder=" " required>
-                            <label for="StartTimeInSession">Start Time</label>
+                            <input type="datetime-local" class="form-control" id="StartTimeInNewSessionModal" name="StartTime" placeholder=" " required />
+                            <label for="StartTimeInNewSessionModal">Start Time</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="datetime-local" class="form-control" id="EndTimeInSession" name="EndTime"
-                                   placeholder=" " required>
-                            <label for="EndTimeInSession">End Time</label>
+                            <input type="datetime-local" class="form-control" id="EndTimeInNewSessionModal" name="EndTime"placeholder=" " required />
+                            <label for="EndTimeInNewSessionModal">End Time</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <select id="LanguageInSession" name="Language" asp-items="languages" aria-label="en" class="form-select" required>
+                            <select id="LanguageInNewSessionModal" name="Language" asp-items="languages" aria-label="en" class="form-select" required>
                             </select>
-                            <label for="LanguageInSession">Language</label>
+                            <label for="LanguageInNewSessionModal">Language</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="SpeakersInSession" placeholder=" " list="suggestions">
-                            <datalist id="suggestions">
-                            </datalist>
-                            <label for="SpeakersInSession">Speakers</label>
+                            <input type="text" class="form-control" id="SpeakersInNewSessionModal" placeholder="Speakers" data-multiple />
                         </div>
                     </div>
                     <div class="modal-footer border-0 p-5 pt-2">

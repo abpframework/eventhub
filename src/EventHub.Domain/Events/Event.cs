@@ -179,7 +179,8 @@ namespace EventHub.Events
             DateTime startTime, 
             DateTime endTime,
             string description,
-            string language)
+            string language,
+            ICollection<Guid> speakerUserIds)
         {
             if (startTime > endTime)
             {
@@ -192,7 +193,7 @@ namespace EventHub.Events
             }
 
             var track = GetTrack(trackId);
-            track.AddSession(sessionId, title, startTime, endTime, description, language);
+            track.AddSession(sessionId, title, startTime, endTime, description, language, speakerUserIds);
             return this;
         }
         

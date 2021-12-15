@@ -7,6 +7,7 @@ using EventHub.Events.Registrations;
 using EventHub.Organizations;
 using EventHub.Users;
 using Microsoft.AspNetCore.Authorization;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
 using Volo.Abp.BlobStoring;
@@ -184,6 +185,14 @@ namespace EventHub.Events
             dto.OrganizationDisplayName = organization.DisplayName;
 
             var user = await _userRepository.GetAsync(organization.OwnerUserId);
+            if (@event.IsDraft)
+            {
+                if (user.Id != CurrentUser.GetId())
+                {
+                    throw new AbpAuthorizationException();
+                }
+            }
+            
             dto.OwnerUserName = user.UserName;
             dto.OwnerEmail = user.Email;
 
@@ -302,6 +311,7 @@ namespace EventHub.Events
         public async Task AddSessionAsync(Guid id, AddSessionDto input)
         {
             var @event = await _eventRepository.GetAsync(id);
+            
             @event.AddSession(
                 input.TrackId,
                 GuidGenerator.Create(),
@@ -309,8 +319,10 @@ namespace EventHub.Events
                 input.StartTime,
                 input.EndTime,
                 input.Description,
-                input.Language
+                input.Language,
+                await GetUserIdsByUserNamesAsync(input.SpeakerUserNames)
             );
+            
             await _eventRepository.UpdateAsync(@event);
         }
 
@@ -333,6 +345,24 @@ namespace EventHub.Events
             var blobName = id.ToString();
 
             await _eventBlobContainer.SaveAsync(blobName, streamContent.GetStream(), overrideExisting: true);
+        }
+        
+        private async Task<List<Guid>> GetUserIdsByUserNamesAsync(List<string> userNames)
+        {
+            var speakerUserIDs = new List<Guid>();
+            foreach (var userName in userNames.Where(userName => !userName.IsNullOrWhiteSpace()))
+            {
+                var user = await _userRepository.FindAsync(x => x.UserName == userName.Trim());
+                if (user is null)
+                {
+                    throw new BusinessException(EventHubErrorCodes.UserNotFound)
+                        .WithData("UserName", userName);
+                }
+
+                speakerUserIDs.Add(user.Id);
+            }
+
+            return speakerUserIDs;
         }
 
         private async Task CheckOwnerControlAsync(Event @event)

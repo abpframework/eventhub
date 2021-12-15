@@ -42,7 +42,8 @@ namespace EventHub.Events
             DateTime startTime,
             DateTime endTime, 
             string description,
-            string language)
+            string language,
+            ICollection<Guid> speakerUserIds)
         {
             if (startTime > endTime)
             {
@@ -58,7 +59,7 @@ namespace EventHub.Events
                 }
             }
             
-            Sessions.Add(new Session(sessionId, Id, title, startTime, endTime, description, language));
+            Sessions.Add(new Session(sessionId, Id, title, startTime, endTime, description, language, speakerUserIds));
             
             return this;
         }

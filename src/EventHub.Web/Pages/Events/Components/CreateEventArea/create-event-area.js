@@ -8,7 +8,7 @@
             "NewTrack": "NewTrack",
             "NewSession": "NewSession"
         }
-        
+
         var widgetManager = $wrapper.data('abp-widget-manager');
         var eventApiService = eventHub.controllers.events.event;
         var eventIdInput = $('#EventId');
@@ -18,7 +18,7 @@
             eventUrlCode: "",
             stepType: stepType.NewEvent
         }
-        
+
         var getFilters = function () {
             return filter;
         }
@@ -26,7 +26,7 @@
         var init = function () {
             FocusTrackNameInputInModalEventHandler("AddTrackModal")
             FocusTrackNameInputInModalEventHandler("EditTrackModal")
-            
+
             if (eventIdInput.val().length === 36) {
                 // TODO: Add organization in UppdateEventDto
                 $('#OrganizationId').prop("disabled", true).removeAttr('name');
@@ -87,13 +87,13 @@
                 });
             });
         }
-        
+
         function FocusTrackNameInputInModalEventHandler(elementId) {
-            $('#'+ elementId).on('shown.bs.modal', function () {
+            $('#' + elementId).on('shown.bs.modal', function () {
                 $(this).find('input[type=text]').trigger('focus')
             });
         }
-        
+
         function OpenEditTrackModalClickEventHandler() {
             $('.edit-track-button').click(function (e) {
                 var editTrackModal = $('#EditTrackModal');
@@ -114,11 +114,11 @@
                 var trackId = editTrackForm.find('#TrackId').val();
                 var oldTrackName = $('#' + trackId).data('track-name');
                 var trackName = editTrackForm.find('#TrackNameInput').val().trim();
-                if (trackName === oldTrackName){
+                if (trackName === oldTrackName) {
                     abp.notify.error('Track name must be different from the previous name.');
                     return;
                 }
-                eventApiService.updateTrack(eventIdInput.val(), trackId, { name: trackName}).then(function () {
+                eventApiService.updateTrack(eventIdInput.val(), trackId, {name: trackName}).then(function () {
                     $('#EditTrackModal').modal('hide');
                     abp.notify.success('Updated the track');
                     FillFilter(stepType.NewTrack)
@@ -126,7 +126,7 @@
                 });
             });
         }
-        
+
         function DeleteTrackButtonClickEventHandler() {
             $('.delete-track-button').click(function (e) {
                 eventApiService.deleteTrack(eventIdInput.val(), this.id).then(function () {
@@ -143,31 +143,10 @@
                 var clickedSessionId = this.id;
                 var trackId = $('#' + clickedSessionId).data('track-id');
                 addSessionModal.find('#TrackId').val(trackId);
-                $('#StartTimeInSession').val($('#inputStartdate').val());
-                $('#EndTimeInSession').val($('#inputEnddate').val());
+                $('#StartTimeInNewSessionModal').val($('#inputStartdate').val());
+                $('#EndTimeInNewSessionModal').val($('#inputEnddate').val());
 
-                function delay(callback, ms) {
-                    var timer = 0;
-                    return function() {
-                        var context = this, args = arguments;
-                        clearTimeout(timer);
-                        timer = setTimeout(function () {
-                            callback.apply(context, args);
-                        }, ms || 0);
-                    };
-                }
-                
-                $('#SpeakersInSession').keyup(delay(function (e) {
-                    eventHub.controllers.users.user.getListByUserName($(this).val()).then(function (res) {
-                        $.each(res, function (k,v) {
-                            if ( $("#suggestions option[value='" + v.userName + "']").length === 0){
-                                $("#suggestions").append($('<option>', {
-                                    value: v.userName,
-                                }));
-                            }
-                        });
-                    });
-                }, 500));
+                CreateAutoCompleteByElement("SpeakersInNewSessionModal");
             });
         }
 
@@ -175,10 +154,15 @@
             var addNewSessionForm = $('#AddNewSessionForm');
             addNewSessionForm.submit(function (e) {
                 e.preventDefault();
+              
                 if (!addNewSessionForm.valid()) {
                     return false;
                 }
+
+                var userNameList = $('#SpeakersInNewSessionModal').val().split(/[ , ]+/);
+                userNameList = userNameList.filter(v => v !== '');
                 var input = $(this).serializeFormToObject();
+                input.speakerUserNames = userNameList;
                 eventApiService.addSession(eventIdInput.val(), input).then(function () {
                     $('#AddSessionModal').modal('hide');
                     abp.notify.success('Added the session');
@@ -198,6 +182,51 @@
             });
         }
 
+        function CreateAutoCompleteByElement(id) {
+            var element = document.getElementById(id);
+            var awesomplete = new Awesomplete(element, {
+                filter: function (text, input) {
+                    return Awesomplete.FILTER_CONTAINS(text, input.match(/[^,]*$/)[0]);
+                },
+
+                item: function (text, input) {
+                    return Awesomplete.ITEM(text, input.match(/[^,]*$/)[0]);
+                },
+
+                replace: function (text) {
+                    var before = this.input.value.match(/^.+,\s*|/)[0];
+                    this.input.value = before + text + " , ";
+                },
+                list: []
+            });
+
+            function delay(callback, ms) {
+                var timer = 0;
+                return function () {
+                    var context = this, args = arguments;
+                    clearTimeout(timer);
+                    timer = setTimeout(function () {
+                        callback.apply(context, args);
+                    }, ms || 0);
+                };
+            }
+
+            $('#' + id).keyup(delay(function (e) {
+                var filterText = $(this).val().split(/[ ,]+/);
+                eventHub.controllers.users.user.getListByUserName(filterText[filterText.length-1]).then(function (res) {
+                    var userNames = []
+                    $.each(res, function (i, v) {
+                        if (!$('#' + id).val().includes(v.userName)){
+                            userNames.push(v.userName);
+                        }
+                    });
+
+                    awesomplete.list = userNames
+                    awesomplete.evaluate();
+                });
+            }, 500));
+        }
+        
         function FillFilter(stepType) {
             filter.stepType = stepType;
             filter.eventUrlCode = eventUrlCodeInput.val();
@@ -209,18 +238,18 @@
             }, 100);
         }
 
-        $(document).ajaxSend(function( event, jqxhr, settings, exception ) {
+        $(document).ajaxSend(function (event, jqxhr, settings, exception) {
             ButtonsBusy(true)
         });
-        
-        $(document).ajaxComplete(function( event, jqxhr, settings, exception ) {
+
+        $(document).ajaxComplete(function (event, jqxhr, settings, exception) {
             ButtonsBusy(false)
         });
 
         function ButtonsBusy(isBusy) {
-            if (isBusy){
+            if (isBusy) {
                 $('button[type=submit]').attr('disabled', 'disabled')
-            }else{
+            } else {
                 $('button[type=submit]').removeAttr('disabled')
             }
         }
