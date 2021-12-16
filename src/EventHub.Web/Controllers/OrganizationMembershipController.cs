@@ -17,7 +17,6 @@ namespace EventHub.Web.Controllers
         }
         
         [HttpGet]
-        [Route("get-list")]
         public async Task<IActionResult> GetList(OrganizationMemberListFilterDto input)
         {
             ViewData.Model = (await _organizationMembershipAppService.GetMembersAsync(input)).Items.ToList();

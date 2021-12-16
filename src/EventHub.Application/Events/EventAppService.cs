@@ -13,7 +13,6 @@ using Volo.Abp.Authorization;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Content;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Identity;
 using Volo.Abp.Users;
 
 namespace EventHub.Events
@@ -159,11 +158,12 @@ namespace EventHub.Events
         }
 
         [Authorize]
-        public async Task<List<EventInListDto>> GetDraftEventsByUserId(Guid userId)
+        public async Task<List<EventInListDto>> GetDraftEventsByCurrentUser()
         {
             var eventQueryable = await _eventRepository.GetQueryableAsync();
             var organizationQueryable = await _organizationRepository.GetQueryableAsync();
 
+            var userId = CurrentUser.GetId();
             var query = from @event in eventQueryable
                 join organization in organizationQueryable on @event.OrganizationId equals organization.Id
                 where organization.OwnerUserId == userId && @event.IsDraft
@@ -177,6 +177,16 @@ namespace EventHub.Events
         public async Task<EventDetailDto> GetByUrlCodeAsync(string urlCode)
         {
             var @event = await _eventRepository.GetAsync(x => x.UrlCode == urlCode, true);
+            if (@event.IsDraft)
+            {
+                if (!CurrentUser.Id.HasValue)
+                {
+                    throw new AbpAuthorizationException();
+                }
+
+                await CheckIfValidOwnerAsync(@event);
+            }
+            
             var organization = await _organizationRepository.GetAsync(@event.OrganizationId);
 
             var dto = ObjectMapper.Map<Event, EventDetailDto>(@event);
@@ -254,7 +264,7 @@ namespace EventHub.Events
         public async Task UpdateAsync(Guid id, UpdateEventDto input)
         {
             var @event = await _eventRepository.GetAsync(id);
-            await CheckIfValidOwner(@event);
+            await CheckIfValidOwnerAsync(@event);
 
             await _eventManager.SetLocationAsync(@event, input.IsOnline, input.OnlineLink, input.CountryId, input.City);
             @event.SetTitle(input.Title);
@@ -275,7 +285,7 @@ namespace EventHub.Events
         public async Task AddTrackAsync(Guid id, AddTractDto input)
         {
             var @event = await _eventRepository.GetAsync(id, true);
-            await CheckIfValidOwner(@event);
+            await CheckIfValidOwnerAsync(@event);
 
             @event.AddTract(
                 GuidGenerator.Create(),
@@ -289,7 +299,7 @@ namespace EventHub.Events
         public async Task UpdateTrackAsync(Guid id, Guid trackId, UpdateTrackDto input)
         {
             var @event = await _eventRepository.GetAsync(id, true);
-            await CheckIfValidOwner(@event);
+            await CheckIfValidOwnerAsync(@event);
 
             @event.UpdateTrack(
                 trackId,
@@ -303,7 +313,7 @@ namespace EventHub.Events
         public async Task DeleteTrackAsync(Guid id, Guid trackId)
         {
             var @event = await _eventRepository.GetAsync(id, true);
-            await CheckIfValidOwner(@event);
+            await CheckIfValidOwnerAsync(@event);
 
             @event.RemoveTrack(trackId);
         }
@@ -313,7 +323,7 @@ namespace EventHub.Events
         {
             await CheckIfValidUserNamesAsync(input.SpeakerUserNames);
             var @event = await _eventRepository.GetAsync(id);
-            await CheckIfValidOwner(@event);
+            await CheckIfValidOwnerAsync(@event);
             
             @event.AddSession(
                 input.TrackId,
@@ -334,7 +344,7 @@ namespace EventHub.Events
         {
             await CheckIfValidUserNamesAsync(input.SpeakerUserNames);
             var @event = await _eventRepository.GetAsync(id);
-            await CheckIfValidOwner(@event);
+            await CheckIfValidOwnerAsync(@event);
             
             @event.UpdateSession(
                 trackId,
@@ -354,7 +364,7 @@ namespace EventHub.Events
         public async Task DeleteSessionAsync(Guid id, Guid trackId, Guid sessionId)
         {
             var @event = await _eventRepository.GetAsync(id, true);
-            await CheckIfValidOwner(@event);
+            await CheckIfValidOwnerAsync(@event);
 
             @event.RemoveSession(trackId, sessionId);
         }
@@ -391,7 +401,7 @@ namespace EventHub.Events
             return await AsyncExecuter.ToListAsync(query);
         }
 
-        private async Task CheckIfValidOwner(Event @event)
+        private async Task CheckIfValidOwnerAsync(Event @event)
         {
             var organization = await _organizationRepository.GetAsync(@event.OrganizationId);
 

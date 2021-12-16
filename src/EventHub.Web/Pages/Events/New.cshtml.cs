@@ -45,7 +45,7 @@ namespace EventHub.Web.Pages.Events
 
             if (IsHasOrganizations && !IsCreateNew)
             {
-                DraftEventList = await _eventAppService.GetDraftEventsByUserId(CurrentUser.GetId());
+                DraftEventList = await _eventAppService.GetDraftEventsByCurrentUser();
             }
         }
     }

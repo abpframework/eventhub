@@ -6,7 +6,8 @@
         var stepType = {
             "NewEvent": "NewEvent",
             "NewTrack": "NewTrack",
-            "NewSession": "NewSession"
+            "NewSession": "NewSession",
+            "Preview": "Preview"
         }
 
         var widgetManager = $wrapper.data('abp-widget-manager');

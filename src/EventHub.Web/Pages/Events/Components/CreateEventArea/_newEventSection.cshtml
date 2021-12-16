@@ -3,22 +3,28 @@
 @model EventHub.Web.Pages.Events.Components.CreateEventArea.CreateEventAreaViewComponent.NewEventViewModel
 
 @{
-  var organizations = ViewData["Organizations"] as IList<SelectListItem>;
-  if (organizations is null || !organizations.Any())
+  var organizations = new List<SelectListItem>();
+  var countries = new List<SelectListItem>();
+  var languages = new List<SelectListItem>();
+  @if (ViewData["StepType"]!.ToString() == CreateEventAreaViewComponent.ProgressStepType.NewEvent.ToString())
   {
-    throw new BadHttpRequestException("There is no organization");
-  }
+    organizations = ViewData["Organizations"] as List<SelectListItem>;
+    if (organizations is null || !organizations.Any())
+    {
+      throw new BadHttpRequestException("There is no organization");
+    }
 
-  var countries = ViewData["Countries"] as IList<SelectListItem>;
-  if (countries is null || !countries.Any())
-  {
-    throw new BadHttpRequestException("There is no country");
-  }
+    countries = ViewData["Countries"] as List<SelectListItem>;
+    if (countries is null || !countries.Any())
+    {
+      throw new BadHttpRequestException("There is no country");
+    }
 
-  var languages = ViewData["Languages"] as IList<SelectListItem>;
-  if (languages is null || !languages.Any())
-  {
-    throw new BadHttpRequestException("There is no language");
+    languages = ViewData["Languages"] as List<SelectListItem>;
+    if (languages is null || !languages.Any())
+    {
+      throw new BadHttpRequestException("There is no language");
+    }
   }
 }
 

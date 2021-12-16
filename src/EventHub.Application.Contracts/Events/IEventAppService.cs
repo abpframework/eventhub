@@ -13,7 +13,7 @@ namespace EventHub.Events
 
         Task<PagedResultDto<EventInListDto>> GetListAsync(EventListFilterDto input);
 
-        Task<List<EventInListDto>> GetDraftEventsByUserId(Guid userId);
+        Task<List<EventInListDto>> GetDraftEventsByCurrentUser();
 
         Task<EventDetailDto> GetByUrlCodeAsync(string urlCode);
 

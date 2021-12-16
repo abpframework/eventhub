@@ -63,11 +63,33 @@ public class CreateEventAreaViewComponent : AbpViewComponent
         };
 
         ViewData["StepType"] = stepType.ToString();
-        ViewData["Organizations"] = await GetOrganizationsSelectItemAsync();
-        ViewData["Countries"] = await GetCountriesSelectItemAsync();
-        ViewData["Languages"] = GetLanguagesSelectItem();
+        switch (stepType)
+        {
+            case ProgressStepType.NewEvent:
+                ViewData["Organizations"] = await GetOrganizationsSelectItemAsync();
+                ViewData["Countries"] = await GetCountriesSelectItemAsync();
+                ViewData["Languages"] = GetLanguagesSelectItem();
+                break;
+            case ProgressStepType.NewSession:
+                ViewData["Languages"] = GetLanguagesSelectItem();
+                break;
+            case ProgressStepType.Preview:
+                ViewData["OrganizationName"] = await GetOrganizationNameAsync(model.OrganizationId);
+                if (model.CountryId is not null)
+                {
+                    ViewData["CountryName"] = await GetCountryNameAsync(model.CountryId!.Value);
+                }
+                break;
+        }
 
         return View("~/Pages/Events/Components/CreateEventArea/Default.cshtml", model);
+    }
+
+    private async Task<string> GetOrganizationNameAsync(Guid organizationId)
+    {
+        var organizationList = (await _organizationAppService.GetOrganizationsByUserIdAsync(_currentUser.GetId())).Items;
+
+        return organizationList.Single(x => x.Id == organizationId).Name;
     }
 
     private async Task<List<SelectListItem>> GetOrganizationsSelectItemAsync()
@@ -83,6 +105,13 @@ public class CreateEventAreaViewComponent : AbpViewComponent
         ).ToList();
     }
 
+    private async Task<string> GetCountryNameAsync(Guid countryId)
+    {
+        var countries = await _eventAppService.GetCountriesLookupAsync();
+
+        return countries.Single(x => x.Id == countryId).Name;
+    }
+    
     private async Task<List<SelectListItem>> GetCountriesSelectItemAsync()
     {
         var result = await _eventAppService.GetCountriesLookupAsync();
@@ -175,6 +204,7 @@ public class CreateEventAreaViewComponent : AbpViewComponent
     {
        NewEvent = 0,
        NewTrack,
-       NewSession
+       NewSession,
+       Preview
     }
 }

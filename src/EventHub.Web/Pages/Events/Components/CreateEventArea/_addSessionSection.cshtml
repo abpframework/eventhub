@@ -5,19 +5,23 @@
 @model List<EventHub.Events.TrackDto>
 
 @{
-    var languages = ViewData["Languages"] as IList<SelectListItem>;
-    if (languages is null || !languages.Any())
+    var languages = new List<SelectListItem>();
+    @if (ViewData["StepType"]!.ToString() == CreateEventAreaViewComponent.ProgressStepType.NewSession.ToString())
     {
-        throw new BadHttpRequestException("There is no language");
-    }
-    languages = languages.Select(l =>
-    {
-        if (l.Value == "en")
+        languages = ViewData["Languages"] as List<SelectListItem>;
+        if (languages is null || !languages.Any())
         {
-            l.Selected = true;
+            throw new BadHttpRequestException("There is no language");
         }
-        return l;
-    }).ToList();
+        languages = languages.Select(l =>
+        {
+            if (l.Value == "en")
+            {
+                l.Selected = true;
+            }
+            return l;
+        }).ToList();
+    }
 }
 
 <partial name="_progressSection.cshtml" model="@CreateEventAreaViewComponent.ProgressStepType.NewSession" />
@@ -55,7 +59,7 @@
                                             <input type="hidden" id="SpeakersOfSession-@session.Id" value="@(session.Speakers.Any() ? string.Join(", ", session.Speakers.Select(x => x.UserName)).EnsureEndsWith(',').EnsureEndsWith(' ') : "")"/>
                                                                                                                                                                                                                                                 
                                             <div class="track-item">
-                                                <span class="track-name truncate">@session.Title</span>
+                                                <span class="track-name">@session.Title.TruncateWithPostfix(25)</span>
                                                 <small class="text-primary d-block my-2">@EventDateHelper.GetTimeRangeText(TimeOnly.FromDateTime(session.StartTime), TimeOnly.FromDateTime(session.EndTime)) | @session.Language</small>
                                                 @foreach (var speaker in session.Speakers)
                                                 {
@@ -97,7 +101,7 @@
                                 Step </button>
                         </div>
                         <div class="col-6 text-end">
-                            <button href="#" class="btn btn-success">Publish <i class="fa fa-arrow-right ms-2"></i></button>
+                            <button id="PreviewButtonInSessionSection" data-target-step="@CreateEventAreaViewComponent.ProgressStepType.Preview" class="btn btn-primary step-transition">Preview <i class="fa fa-arrow-right ms-2"></i></button>
                         </div>
                     </div>
                 </div>

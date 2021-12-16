@@ -41,10 +41,10 @@ namespace EventHub.Controllers.Events
 		}
 
 		[HttpGet]
-		[Route("draft-events-by-user-id/{userId}")]
-		public async Task<List<EventInListDto>> GetDraftEventsByUserId(Guid userId)
+		[Route("draft-events-by-user-id")]
+		public async Task<List<EventInListDto>> GetDraftEventsByCurrentUser()
 		{
-			return await _eventAppService.GetDraftEventsByUserId(userId);
+			return await _eventAppService.GetDraftEventsByCurrentUser();
 		}
 
 		[HttpGet]

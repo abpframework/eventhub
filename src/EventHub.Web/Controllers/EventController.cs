@@ -6,7 +6,6 @@ using Volo.Abp.AspNetCore.Mvc;
 
 namespace EventHub.Web.Controllers
 {
-    [Route("api/event")]
     public class EventController : AbpController
     {
         private readonly IEventAppService _eventAppService;
@@ -17,7 +16,6 @@ namespace EventHub.Web.Controllers
         }
         
         [HttpGet]
-        [Route("get-list")]
         public async Task<IActionResult> GetList(EventListFilterDto input)
         {
             ViewData.Model = (await _eventAppService.GetListAsync(input)).Items.ToList();

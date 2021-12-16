@@ -1,0 +1,218 @@
+@using EventHub.Web.Pages.Events
+@using EventHub.Web.Pages.Events.Components.CreateEventArea
+@using Microsoft.AspNetCore.Http
+@model EventHub.Web.Pages.Events.Components.CreateEventArea.CreateEventAreaViewComponent.NewEventViewModel
+
+@{
+    var organizationName = "";
+    var countryName = "";
+    @if (ViewData["StepType"]!.ToString() == CreateEventAreaViewComponent.ProgressStepType.Preview.ToString())
+    {
+        organizationName = ViewData["OrganizationName"] as string;
+        if (organizationName.IsNullOrWhiteSpace())
+        {
+            throw new BadHttpRequestException("Organization name cannot be empty!");
+        }
+
+        countryName = ViewData["CountryName"] as string;
+        if (Model is {CountryId: { } } && countryName.IsNullOrWhiteSpace())
+        {
+            throw new BadHttpRequestException("Country name cannot be empty when CountryId exists!");
+        }
+    }
+}
+
+@if (Model is not null)
+{
+    <div class="row"> 
+        <div class="col-md-10 mx-auto">
+            <div class="card">
+                <div class="card-body profile-content p-5" style="min-height: 480px;"> 
+                    <h2 class="mb-5">Event Preview</h2>  
+                    <div class="row mb-4">
+                        <div class="col-md-4"> 
+                            <span>Organization Name:</span>
+                        </div>
+                        <div class="col-md-8"> 
+                            <span class="preview-item">@organizationName</span>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4"> 
+                            <span>Title:</span>
+                        </div>
+                        <div class="col-md-8"> 
+                            <span class="preview-item">@Model.Title</span>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4"> 
+                            <span>Start Date:</span>
+                        </div>
+                        <div class="col-md-8">
+                            <span class="preview-item">@Model.StartTime.ToShortDateString() - @Model.StartTime.ToShortTimeString()</span>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4"> 
+                            <span>End Date:</span>
+                        </div>
+                        <div class="col-md-8"> 
+                            <span class="preview-item">@Model.EndTime.ToShortDateString() - @Model.EndTime.ToShortTimeString()</span>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4"> 
+                            <span>Event’s Explanation:</span>
+                        </div>
+                        <div class="col-md-8"> 
+                            <p class="preview-item">@Model.Description</p>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4"> 
+                            <span>Cover Image:</span>
+                        </div>
+                        <div class="col-md-8"> 
+                            <img src="https://api.openeventhub.com/api/eventhub/event/cover-image/3a003fb9-611a-db0c-82b2-7299ff8e8ce7" class="w-100 rounded-3">
+                        </div>
+                    </div>
+                    @if (Model.IsOnline != null && Model.IsOnline!.Value)
+                    {
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                <span>Event Type:</span>
+                            </div>
+                            <div class="col-md-8">
+                                <span class="preview-item">Online</span>
+                            </div>
+                        </div>
+                        @if (!Model.OnlineLink.IsNullOrWhiteSpace())
+                        {
+                            <div class="row mb-4">
+                                <div class="col-md-4">
+                                    <span>Url:</span>
+                                </div>
+                                <div class="col-md-8">
+                                    <span class="preview-item">@Model.OnlineLink</span>
+                                </div>
+                            </div>   
+                        }
+                    }
+                    else if (Model.CountryId.HasValue && !Model.City.IsNullOrEmpty())
+                    {
+                        <div class="row mb-4">
+                            <div class="col-md-4"> 
+                                <span>Country:</span>
+                            </div>
+                            <div class="col-md-8"> 
+                                <span class="preview-item">@countryName</span>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-4"> 
+                                <span>City:</span>
+                            </div>
+                            <div class="col-md-8"> 
+                                <span class="preview-item">@Model.City</span>
+                            </div>
+                        </div>   
+                    }
+                    @if (!Model.Language.IsNullOrWhiteSpace())
+                    {
+                        <div class="row mb-4">
+                            <div class="col-md-4"> 
+                                <span>Language:</span>
+                            </div>
+                            <div class="col-md-8"> 
+                                <span class="preview-item">@Model.Language</span>
+                            </div>
+                        </div>
+                    }
+                    @if (Model.Capacity.HasValue)
+                    {
+                        <div class="row mb-4">
+                            <div class="col-md-4"> 
+                                <span>Capacity:</span>
+                            </div>
+                            <div class="col-md-8"> 
+                                <span class="preview-item">@Model.Capacity</span>
+                            </div>
+                        </div>
+                    }
+                    @if (Model.Tracks.Any())
+                    {
+                        <div class="row mb-4">
+                            <div class="col-md-4"> 
+                                <span>Tracks:</span>
+                            </div>
+                            <div class="col-md-8"> 
+                                <span class="preview-item">@Model.Tracks.Count</span>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-4"> 
+                                <span>Sessions:</span>
+                            </div> 
+                        </div>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                @foreach (var track in Model.Tracks)
+                                {
+                                    <th class="text-center" width="25%">@track.Name</th>
+                                }
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                @foreach (var track in Model.Tracks)
+                                {
+                                    <td>
+                                        @if (track.Sessions.Any())
+                                        {
+                                            @foreach (var session in track.Sessions)
+                                            {
+                                                <div class="track-item">
+                                                    <span class="track-name">@session.Title.TruncateWithPostfix(25)</span>
+                                                    <small class="text-primary d-block my-2">@EventDateHelper.GetTimeRangeText(TimeOnly.FromDateTime(session.StartTime), TimeOnly.FromDateTime(session.EndTime)) | @session.Language</small>
+                                                    @foreach (var speaker in session.Speakers)
+                                                    {
+                                                        <span class="d-block mb-2">@speaker.UserName</span>
+                                                    }
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <div class="track-item">
+                                                <span class="track-name text-primary">There is no session!</span>
+                                                 <span class="d-block mb-2">Please add session.</span>
+                                            </div>
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                            </tbody>
+                        </table> 
+                    }
+                </div>
+                <div class="card-footer bg-white border-0 p-5 pt-1"> 
+                    <div class="row">
+                        <div class="col-6">
+                            <button id="PreviousStepButtonInPreviewSection" data-target-step="@CreateEventAreaViewComponent.ProgressStepType.NewTrack" class="btn btn-secondary step-transition"><i class="fa fa-arrow-left me-2"></i> Previous Step </button>
+                        </div>
+                        <div class="col-6 text-end">
+                            <button href="#" class="btn btn-success">Publish <i class="fa fa-arrow-right ms-2"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+}
+else
+{
+    <partial name="_modelNullErrorSection.cshtml" />
+}
+    
