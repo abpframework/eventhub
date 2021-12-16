@@ -156,6 +156,7 @@
     "EventHub:TrackNameAlreadyExist": "The track {Name} already exists",
     "EventHub:TrackNotFound": "The track not found!",
     "EventHub:SessionNotFound": "The session not found!",
-    "EventHub:SessionTimeShouldBeInTheEventTime": "Session time should be in the event time!"
+    "EventHub:SessionTimeShouldBeInTheEventTime": "Session time should be in the event time!",
+    "EventHub:SessionTimeConflictsWithAnExistingSession": "Session time conflicts with an existing session!"
   }
 }

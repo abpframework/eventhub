@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Events;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace EventHub.Controllers.Events
 {
 	[RemoteService(Name = EventHubRemoteServiceConsts.RemoteServiceName)]
-	[Area("eventhubm")]
+	[Area("eventhub")]
 	[ControllerName("Event")]
 	[Route("api/eventhub/event")]
 	public class EventController : EventHubController, IEventAppService
@@ -106,6 +107,7 @@ namespace EventHub.Controllers.Events
 		[Route("{id}/sessions")]
 		public async Task AddSessionAsync(Guid id, AddSessionDto input)
 		{
+			input.SpeakerUserNames = input.SpeakerUserNames.Where(x => !x.IsNullOrWhiteSpace()).ToList();
 			await _eventAppService.AddSessionAsync(id, input);
 		}
 
@@ -113,7 +115,15 @@ namespace EventHub.Controllers.Events
 		[Route("{id}/tracks/{trackId}/sessions/{sessionId}")]
 		public async Task UpdateSessionAsync(Guid id, Guid trackId, Guid sessionId, UpdateSessionDto input)
 		{
+			input.SpeakerUserNames = input.SpeakerUserNames.Where(x => !x.IsNullOrWhiteSpace()).ToList();
 			await _eventAppService.UpdateSessionAsync(id, trackId, sessionId, input);
+		}
+
+		[HttpDelete]
+		[Route("{id}/tracks/{trackId}/sessions/{sessionId}")]
+		public async Task DeleteSessionAsync(Guid id, Guid trackId, Guid sessionId)
+		{
+			await _eventAppService.DeleteSessionAsync(id, trackId, sessionId);
 		}
 
 		[HttpGet]

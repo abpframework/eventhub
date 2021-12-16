@@ -40,9 +40,9 @@ namespace EventHub.Events
         internal Track AddSession(
             Guid sessionId,
             string title,
-            DateTime startTime,
-            DateTime endTime, 
             string description,
+            DateTime startTime,
+            DateTime endTime,
             string language,
             ICollection<Guid> speakerUserIds)
         {
@@ -51,17 +51,54 @@ namespace EventHub.Events
                 throw new BusinessException(EventHubErrorCodes.EndTimeCantBeEarlierThanStartTime);
             }
 
-            foreach (var session in Sessions)
-            {
-                if (startTime.IsBetween(session.StartTime, session.EndTime) ||
-                    endTime.IsBetween(session.StartTime, session.EndTime))
-                {
-                    throw new BusinessException(EventHubErrorCodes.SessionTimeConflictsWithAnExistingSession);
-                }
-            }
-            
+            CheckIfValidSessionTime(startTime);
+            CheckIfValidSessionTime(endTime);
+
             Sessions.Add(new Session(sessionId, Id, title, startTime, endTime, description, language, speakerUserIds));
             
+            return this;
+        }
+
+        internal Track UpdateSession(
+            Guid sessionId,
+            string title,
+            string description,
+            DateTime startTime,
+            DateTime endTime,
+            string language,
+            ICollection<Guid> speakerUserIds)
+        {
+            if (startTime > endTime)
+            {
+                throw new BusinessException(EventHubErrorCodes.EndTimeCantBeEarlierThanStartTime);
+            }
+
+            var session = Sessions.Single(x => x.Id == sessionId);
+            
+            if (session.StartTime != startTime)
+            {
+                CheckIfValidSessionTime(endTime);
+            }
+
+            if (session.EndTime != endTime)
+            {
+                CheckIfValidSessionTime(endTime);
+            }
+            
+            session.SetTitle(title);
+            session.SetDescription(description);
+            session.SetTime(startTime, endTime);
+            session.SetLanguage(language);
+
+            if (!speakerUserIds.Any())
+            {
+                session.RemoveSpeakers(session.Speakers.Select(x => x.UserId).ToList());
+                return this;
+            }
+            
+            var speakersToBeRemoved = session.Speakers.Where(x => speakerUserIds.Any(s => s != x.UserId)).Select(x => x.UserId).ToList();
+            session.RemoveSpeakers(speakersToBeRemoved);
+            session.AddSpeakers(speakerUserIds);
             return this;
         }
         
@@ -76,6 +113,17 @@ namespace EventHub.Events
             Sessions.Remove(session);
 
             return this;
+        }
+        
+        private void CheckIfValidSessionTime(DateTime date)
+        {
+            foreach (var session in Sessions)
+            {
+                if (date.IsBetween(session.StartTime, session.EndTime))
+                {
+                    throw new BusinessException(EventHubErrorCodes.SessionTimeConflictsWithAnExistingSession);
+                }
+            }
         }
     }
 }

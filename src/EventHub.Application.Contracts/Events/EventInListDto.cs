@@ -4,7 +4,7 @@ using Volo.Abp.Auditing;
 
 namespace EventHub.Events
 {
-    public class EventInListDto : EntityDto<Guid>, IHasModificationTime, IHasCreationTime
+    public class EventInListDto : EntityDto<Guid>, IHasCreationTime, IHasModificationTime
     {
         public string OrganizationName { get; set; }
 

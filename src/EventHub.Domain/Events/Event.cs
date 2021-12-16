@@ -176,12 +176,13 @@ namespace EventHub.Events
             Guid trackId,
             Guid sessionId,
             string title,
+            string description,
             DateTime startTime, 
             DateTime endTime,
-            string description,
             string language,
             ICollection<Guid> speakerUserIds)
         {
+            // TODO: This control is already done in Track and even Session. Do you really need this?
             if (startTime > endTime)
             {
                 throw new BusinessException(EventHubErrorCodes.EndTimeCantBeEarlierThanStartTime);
@@ -193,7 +194,7 @@ namespace EventHub.Events
             }
 
             var track = GetTrack(trackId);
-            track.AddSession(sessionId, title, startTime, endTime, description, language, speakerUserIds);
+            track.AddSession(sessionId, title, description,startTime, endTime, language, speakerUserIds);
             return this;
         }
 
@@ -208,9 +209,20 @@ namespace EventHub.Events
             ICollection<Guid> speakerUserIds)
         {
             var track = GetTrack(trackId);
-            
+            track.UpdateSession(sessionId, title, description, startTime, endTime, language, speakerUserIds);
+            return this;
+        }
+        
+        public Event RemoveSession(Guid trackId, Guid sessionId)
+        {
+            var track = Tracks.SingleOrDefault(x => x.Id == trackId);
+            if (track is null)
+            {
+                throw new BusinessException(EventHubErrorCodes.TrackNotFound);
+            }
+
             track.RemoveSession(sessionId);
-            AddSession(trackId, sessionId, title, startTime, endTime, description, language, speakerUserIds);
+
             return this;
         }
         

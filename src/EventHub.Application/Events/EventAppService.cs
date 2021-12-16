@@ -254,7 +254,7 @@ namespace EventHub.Events
         public async Task UpdateAsync(Guid id, UpdateEventDto input)
         {
             var @event = await _eventRepository.GetAsync(id);
-            await CheckOwnerControlAsync(@event);
+            await CheckIfValidOwner(@event);
 
             await _eventManager.SetLocationAsync(@event, input.IsOnline, input.OnlineLink, input.CountryId, input.City);
             @event.SetTitle(input.Title);
@@ -275,7 +275,7 @@ namespace EventHub.Events
         public async Task AddTrackAsync(Guid id, AddTractDto input)
         {
             var @event = await _eventRepository.GetAsync(id, true);
-            await CheckOwnerControlAsync(@event);
+            await CheckIfValidOwner(@event);
 
             @event.AddTract(
                 GuidGenerator.Create(),
@@ -289,7 +289,7 @@ namespace EventHub.Events
         public async Task UpdateTrackAsync(Guid id, Guid trackId, UpdateTrackDto input)
         {
             var @event = await _eventRepository.GetAsync(id, true);
-            await CheckOwnerControlAsync(@event);
+            await CheckIfValidOwner(@event);
 
             @event.UpdateTrack(
                 trackId,
@@ -303,7 +303,7 @@ namespace EventHub.Events
         public async Task DeleteTrackAsync(Guid id, Guid trackId)
         {
             var @event = await _eventRepository.GetAsync(id, true);
-            await CheckOwnerControlAsync(@event);
+            await CheckIfValidOwner(@event);
 
             @event.RemoveTrack(trackId);
         }
@@ -311,11 +311,34 @@ namespace EventHub.Events
         [Authorize]
         public async Task AddSessionAsync(Guid id, AddSessionDto input)
         {
+            await CheckIfValidUserNamesAsync(input.SpeakerUserNames);
             var @event = await _eventRepository.GetAsync(id);
-
+            await CheckIfValidOwner(@event);
+            
             @event.AddSession(
                 input.TrackId,
                 GuidGenerator.Create(),
+                input.Title,
+                input.Description,
+                Clock.Normalize(input.StartTime),
+                Clock.Normalize(input.EndTime),
+                input.Language,
+                await GetUserIdsByUserNamesAsync(input.SpeakerUserNames)
+            );
+            
+            await _eventRepository.UpdateAsync(@event);
+        }
+
+        [Authorize]
+        public async Task UpdateSessionAsync(Guid id, Guid trackId, Guid sessionId, UpdateSessionDto input)
+        {
+            await CheckIfValidUserNamesAsync(input.SpeakerUserNames);
+            var @event = await _eventRepository.GetAsync(id);
+            await CheckIfValidOwner(@event);
+            
+            @event.UpdateSession(
+                trackId,
+                sessionId,
                 input.Title,
                 Clock.Normalize(input.StartTime),
                 Clock.Normalize(input.EndTime),
@@ -328,22 +351,12 @@ namespace EventHub.Events
         }
 
         [Authorize]
-        public async Task UpdateSessionAsync(Guid id, Guid trackId, Guid sessionId, UpdateSessionDto input)
+        public async Task DeleteSessionAsync(Guid id, Guid trackId, Guid sessionId)
         {
-            var @event = await _eventRepository.GetAsync(id);
+            var @event = await _eventRepository.GetAsync(id, true);
+            await CheckIfValidOwner(@event);
 
-            @event.UpdateSession(
-                trackId,
-                sessionId,
-                input.Title,
-                Clock.Normalize(input.StartTime),
-                Clock.Normalize(input.EndTime),
-                input.Description,
-                input.Language,
-                await GetUserIdsByUserNamesAsync(input.SpeakerUserNames)
-            );
-            
-            await _eventRepository.UpdateAsync(@event, true);
+            @event.RemoveSession(trackId, sessionId);
         }
 
         public async Task<IRemoteStreamContent> GetCoverImageAsync(Guid id)
@@ -378,7 +391,7 @@ namespace EventHub.Events
             return await AsyncExecuter.ToListAsync(query);
         }
 
-        private async Task CheckOwnerControlAsync(Event @event)
+        private async Task CheckIfValidOwner(Event @event)
         {
             var organization = await _organizationRepository.GetAsync(@event.OrganizationId);
 
@@ -388,6 +401,19 @@ namespace EventHub.Events
                     L["EventHub:NotAuthorizedToUpdateEvent", @event.Title],
                     EventHubErrorCodes.NotAuthorizedToUpdateEvent
                 );
+            }
+        }
+        
+        private async Task CheckIfValidUserNamesAsync(List<string> speakerUserNames)
+        {
+            foreach (var userName in speakerUserNames)
+            {
+                var user = await _userRepository.FindAsync(x => x.UserName == userName.Trim());
+                if (user is null)
+                {
+                    throw new BusinessException(EventHubErrorCodes.UserNotFound)
+                        .WithData("UserName", userName);
+                }
             }
         }
 

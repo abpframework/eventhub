@@ -35,6 +35,8 @@ namespace EventHub.Events
 
         Task UpdateSessionAsync(Guid id, Guid trackId, Guid sessionId, UpdateSessionDto input);
         
+        Task DeleteSessionAsync(Guid id, Guid trackId, Guid sessionId);
+        
         Task<IRemoteStreamContent> GetCoverImageAsync(Guid id);
     }
 }

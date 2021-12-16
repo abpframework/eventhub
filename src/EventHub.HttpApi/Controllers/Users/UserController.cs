@@ -4,12 +4,11 @@ using EventHub.Members;
 using EventHub.Users;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
-using Volo.Abp.AspNetCore.Mvc;
 
 namespace EventHub.Controllers.Users
 {
     [RemoteService(Name = EventHubRemoteServiceConsts.RemoteServiceName)]
-    [Area("eventhubm")]
+    [Area("eventhub")]
     [ControllerName("User")]
     [Route("/api/eventhub/users")]
     public class UserController : EventHubController, IUserAppService

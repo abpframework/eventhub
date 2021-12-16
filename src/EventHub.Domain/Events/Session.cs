@@ -91,7 +91,17 @@ namespace EventHub.Events
         
         internal Session AddSpeaker(Guid userId)
         {
-            Speakers.Add(new Speaker(Id, userId));
+            Speakers.AddIfNotContains(new Speaker(Id, userId));
+
+            return this;
+        }
+        
+        internal Session RemoveSpeakers(ICollection<Guid> userIds)
+        {
+            foreach (var userId in userIds)
+            {
+                RemoveSpeaker(userId);
+            }
 
             return this;
         }

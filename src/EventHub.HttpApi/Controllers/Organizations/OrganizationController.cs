@@ -11,7 +11,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace EventHub.Controllers.Organizations
 {
     [RemoteService(Name = EventHubRemoteServiceConsts.RemoteServiceName)]
-    [Area("eventhubm")]
+    [Area("eventhub")]
     [ControllerName("Organization")]
     [Route("api/eventhub/organization")]
     public class OrganizationController : EventHubController, IOrganizationAppService

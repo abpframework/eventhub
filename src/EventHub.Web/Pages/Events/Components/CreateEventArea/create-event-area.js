@@ -1,6 +1,5 @@
 (function () {
     abp.widgets.CreateEventArea = function ($wrapper) {
-        var l = abp.localization.getResource('EventHub');
         toastr.options.timeOut = 500;
         toastr.options.preventDuplicates = true;
         
@@ -71,6 +70,7 @@
             AddNewSessionEventHandler();
             OpenEditSessionModalClickEventHandler();
             EditSessionEventHandler();
+            DeleteSessionButtonClickEventHandler();
 
             PrevieousOrNextStepTransitionEventHandler()
         };
@@ -221,6 +221,19 @@
             });
         }
 
+        function DeleteSessionButtonClickEventHandler() {
+            $('.delete-session-button').click(function (e) {
+                var clickedSessionId = this.id;
+                var trackId = $('#' + clickedSessionId).data('track-id');
+                
+                eventApiService.deleteSession(eventIdInput.val(), trackId, clickedSessionId).then(function () {
+                    abp.notify.success('Successfully deleted');
+                    FillFilter(stepType.NewSession)
+                    widgetManager.refresh();
+                });
+            });
+        }
+        
         function PrevieousOrNextStepTransitionEventHandler() {
             $('.step-transition').click(function (e) {
                 var clickedButtonId = this.id;
@@ -297,11 +310,12 @@
 
         abp.ajax.showError = function (error) {
             abp.notify.error(
-                l(error.code),
+                error.message,
                 'Error',
                 toastr.options = {
-                    timeOut: 2000,
-                    progressBar: true
+                    timeOut: 2500,
+                    progressBar: true,
+                    positionClass: "toast-bottom-right"
                 }
             );
         }
