@@ -196,6 +196,23 @@ namespace EventHub.Events
             track.AddSession(sessionId, title, startTime, endTime, description, language, speakerUserIds);
             return this;
         }
+
+        public Event UpdateSession(
+            Guid trackId,
+            Guid sessionId,
+            string title,
+            DateTime startTime, 
+            DateTime endTime,
+            string description,
+            string language,
+            ICollection<Guid> speakerUserIds)
+        {
+            var track = GetTrack(trackId);
+            
+            track.RemoveSession(sessionId);
+            AddSession(trackId, sessionId, title, startTime, endTime, description, language, speakerUserIds);
+            return this;
+        }
         
         public Event Publish(bool isPublish = true)
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 
@@ -61,6 +62,19 @@ namespace EventHub.Events
             
             Sessions.Add(new Session(sessionId, Id, title, startTime, endTime, description, language, speakerUserIds));
             
+            return this;
+        }
+        
+        internal Track RemoveSession(Guid sessionId)
+        {
+            var session = Sessions.SingleOrDefault(x => x.Id == sessionId);
+            if (session is null)
+            {
+                throw new BusinessException(EventHubErrorCodes.SessionNotFound);
+            }
+            
+            Sessions.Remove(session);
+
             return this;
         }
     }

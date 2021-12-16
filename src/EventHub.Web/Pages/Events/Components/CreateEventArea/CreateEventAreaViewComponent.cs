@@ -59,7 +59,7 @@ public class CreateEventAreaViewComponent : AbpViewComponent
         model ??= new NewEventViewModel
         {
             StartTime = DateTime.Now.ClearTime().AddDays(1).AddHours(19),
-            EndTime = DateTime.Now.ClearTime().AddDays(1).AddHours(21)
+            EndTime = DateTime.Now.ClearTime().AddDays(2).AddHours(21)
         };
 
         ViewData["StepType"] = stepType.ToString();

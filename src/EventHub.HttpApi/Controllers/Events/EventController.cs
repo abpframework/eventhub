@@ -109,6 +109,13 @@ namespace EventHub.Controllers.Events
 			await _eventAppService.AddSessionAsync(id, input);
 		}
 
+		[HttpPut]
+		[Route("{id}/tracks/{trackId}/sessions/{sessionId}")]
+		public async Task UpdateSessionAsync(Guid id, Guid trackId, Guid sessionId, UpdateSessionDto input)
+		{
+			await _eventAppService.UpdateSessionAsync(id, trackId, sessionId, input);
+		}
+
 		[HttpGet]
 		[Route("cover-image/{id}")]
 		public async Task<IRemoteStreamContent> GetCoverImageAsync(Guid id)

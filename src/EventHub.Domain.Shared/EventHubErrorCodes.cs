@@ -18,5 +18,6 @@
         public const string OrganizationNotFound = "EventHub:OrganizationNotFound";
         public const string TrackNameAlreadyExist = "EventHub:TrackNameAlreadyExist";
         public const string TrackNotFound = "EventHub:TrackNotFound";
+        public const string SessionNotFound = "EventHub:SessionNotFound";
     }
 }

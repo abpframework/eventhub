@@ -1,8 +1,9 @@
 (function () {
     abp.widgets.CreateEventArea = function ($wrapper) {
+        var l = abp.localization.getResource('EventHub');
         toastr.options.timeOut = 500;
-        toastr.options.positionClass = "toast-top-right";
-
+        toastr.options.preventDuplicates = true;
+        
         var stepType = {
             "NewEvent": "NewEvent",
             "NewTrack": "NewTrack",
@@ -24,6 +25,7 @@
         }
 
         var init = function () {
+            $('#CreateEventButton').removeAttr('disabled')
             FocusTrackNameInputInModalEventHandler("AddTrackModal")
             FocusTrackNameInputInModalEventHandler("EditTrackModal")
 
@@ -67,6 +69,8 @@
 
             OpenAddNewSessionModalClickEventHandler();
             AddNewSessionEventHandler();
+            OpenEditSessionModalClickEventHandler();
+            EditSessionEventHandler();
 
             PrevieousOrNextStepTransitionEventHandler()
         };
@@ -172,6 +176,51 @@
             });
         }
 
+        function OpenEditSessionModalClickEventHandler() {
+            $('.edit-session-button').click(function (e) {
+                var editSessionModal = $('#EditSessionModal');
+
+                var clickedSessionId = this.id;
+                var trackId = $('#' + clickedSessionId).data('track-id');
+
+                editSessionModal.find('#TrackId').val(trackId);
+                editSessionModal.find('#SessionId').val(clickedSessionId);
+
+                var titleOfSession = $('#TitleOfSession-' + clickedSessionId).val();
+                $('#EditModalTitle').html('Edit ' + abp.utils.truncateStringWithPostfix(titleOfSession, 10) + ' Session');
+                editSessionModal.find('#TitleInEditSessionModal').val(titleOfSession);
+                editSessionModal.find('#DescriptionInEditSessionModal').val($('#DescriptionOfSession-' + clickedSessionId).val());
+                editSessionModal.find('#StartTimeInEditSessionModal').val($('#StartTimeOfSession-' + clickedSessionId).val());
+                editSessionModal.find('#EndTimeInEditSessionModal').val($('#EndTimeOfSession-' + clickedSessionId).val());
+                editSessionModal.find('#LanguageInEditSessionModal').val($('#LanguageOfSession-' + clickedSessionId).val());
+                editSessionModal.find('#SpeakersInEditSessionModal').val($('#SpeakersOfSession-' + clickedSessionId).val());
+
+                CreateAutoCompleteByElement("SpeakersInEditSessionModal");
+            });
+        }
+
+        function EditSessionEventHandler() {
+            var editSessionForm = $('#EditSessionForm');
+            editSessionForm.submit(function (e) {
+                e.preventDefault();
+
+                if (!editSessionForm.valid()) {
+                    return false;
+                }
+
+                var userNameList = $('#SpeakersInEditSessionModal').val().split(/[ , ]+/);
+                userNameList = userNameList.filter(v => v !== '');
+                var input = editSessionForm.serializeFormToObject();
+                input.speakerUserNames = userNameList;
+                eventApiService.updateSession(eventIdInput.val(), editSessionForm.find('#TrackId').val(), editSessionForm.find('#SessionId').val(), input).then(function () {
+                    $('#EditSessionModal').modal('hide');
+                    abp.notify.success('Updated the session');
+                    FillFilter(stepType.NewSession);
+                    widgetManager.refresh();
+                });
+            });
+        }
+
         function PrevieousOrNextStepTransitionEventHandler() {
             $('.step-transition').click(function (e) {
                 var clickedButtonId = this.id;
@@ -246,6 +295,17 @@
             ButtonsBusy(false)
         });
 
+        abp.ajax.showError = function (error) {
+            abp.notify.error(
+                l(error.code),
+                'Error',
+                toastr.options = {
+                    timeOut: 2000,
+                    progressBar: true
+                }
+            );
+        }
+        
         function ButtonsBusy(isBusy) {
             if (isBusy) {
                 $('button[type=submit]').attr('disabled', 'disabled')

@@ -47,6 +47,13 @@
                                     <td>
                                         @foreach (var session in track.Sessions)
                                         {
+                                            <input type="hidden" id="TitleOfSession-@session.Id" value="@session.Title"/>
+                                            <input type="hidden" id="DescriptionOfSession-@session.Id" value="@session.Description"/>
+                                            <input type="datetime-local" id="StartTimeOfSession-@session.Id" value="@session.StartTime.ToString("s")" style="display: none"/>
+                                            <input type="datetime-local" id="EndTimeOfSession-@session.Id" value="@session.EndTime.ToString("s")" style="display: none"/>
+                                            <input type="hidden" id="LanguageOfSession-@session.Id" value="@session.Language"/>
+                                            <input type="hidden" id="SpeakersOfSession-@session.Id" value="@(session.Speakers.Any() ? string.Join(", ", session.Speakers.Select(x => x.UserName)).EnsureEndsWith(',').EnsureEndsWith(' ') : "")"/>
+                                                                                                                                                                                                                                                
                                             <div class="track-item">
                                                 <span class="track-name truncate">@session.Title</span>
                                                 <small class="text-primary d-block my-2">@EventDateHelper.GetTimeRangeText(TimeOnly.FromDateTime(session.StartTime), TimeOnly.FromDateTime(session.EndTime)) | @session.Language</small>
@@ -54,7 +61,7 @@
                                                 {
                                                     <span class="d-block mb-2">@speaker.UserName</span>
                                                 }
-                                                <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#editSessionModal" class="mt-3 d-block text-info">
+                                                <a id="@session.Id" data-track-id="@track.Id" href="javascript:;" data-bs-toggle="modal" data-bs-target="#EditSessionModal" class="mt-3 d-block text-info edit-session-button">
                                                     <small><i class="fa fa-edit me-1"></i>Edit</small>
                                                 </a>
                                             </div>
@@ -135,39 +142,49 @@
     </div>
     
     <!-- Edit Session Modal -->
-    <div class="modal fade" id="editSessionModal" tabindex="-1" aria-labelledby="editSessionModal" aria-hidden="true">
+    <div class="modal fade" id="EditSessionModal" tabindex="-1" aria-labelledby="EditSessionModal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header border-0 p-5 pb-2">
-                    <h5 class="modal-title">Edit This Session</h5>
+                    <h5 id="EditModalTitle" class="modal-title">Edit Session</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body profile-content px-5">
-                    <div class="form mb-3">
-                        <label for="Title2">Title</label>
-                        <input type="text" class="form-control" id="Title2" placeholder="Lorem Upsym Title">
+                <form id="EditSessionForm">
+                    <input type="hidden" id="TrackId" value="TrackIdPlaceHolder"/>
+                    <input type="hidden" id="SessionId" value="SessionIdPlaceHolder"/>
+
+                    <div class="modal-body profile-content px-5">
+                        <div class="form mb-3">
+                            <label for="TitleInEditSessionModal">Title</label>
+                            <input type="text" class="form-control" id="TitleInEditSessionModal" name="Title" placeholder=" " required minLength=@SessionConsts.MinTitleLength maxLength=@SessionConsts.MaxTitleLength />
+                        </div>
+                        <div class="form mb-3">
+                            <label for="DescriptionInEditSessionModal">Description</label>
+                            <textarea type="text" class="form-control" id="DescriptionInEditSessionModal" name="Description" placeholder=" " required minLength=@SessionConsts.MinDescriptionLength maxLength=@SessionConsts.MaxDescriptionLength></textarea>
+                        </div>
+                        <div class="form mb-3">
+                            <label for="StartTimeInEditSessionModal">Start Time</label>
+                            <input type="datetime-local" class="form-control" id="StartTimeInEditSessionModal" name="StartTime" placeholder=" " required />
+                        </div>
+                        <div class="form mb-3">
+                            <label for="EndTimeInEditSessionModal">End Time</label>
+                            <input type="datetime-local" class="form-control" id="EndTimeInEditSessionModal" name="EndTime" placeholder=" " required />
+                        </div>
+                        <div class="form mb-3">
+                            <label for="LanguageInEditSessionModal">Language</label>
+                            <select id="LanguageInEditSessionModal" name="Language" asp-items="languages" aria-label="en" class="form-select" required>
+                            </select>
+                        </div>
+                        <div class="form mb-3">
+                            <label for="SpeakersInEditSessionModal">Speakers</label>
+                            <input type="text" class="form-control" id="SpeakersInEditSessionModal" placeholder="Speakers" data-multiple />
+                        </div>
                     </div>
-                    <div class="form mb-3">
-                        <label for="StartTime2">Start Time</label>
-                        <input type="text" class="form-control" id="StartTime2" placeholder="09:00">
+                    <div class="modal-footer border-0 p-5 pt-2">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-check-circle me-2"></i>Save</button>
                     </div>
-                    <div class="form mb-3">
-                        <label for="EndTime2">End Time</label>
-                        <input type="text" class="form-control" id="EndTime2" placeholder="10:00">
-                    </div>
-                    <div class="form mb-3">
-                        <label for="Language2">Language</label>
-                        <input type="text" class="form-control" id="Language2" placeholder="English">
-                    </div>
-                    <div class="form mb-3">
-                        <label for="Speakers">Speakers</label>
-                        <input type="text" class="form-control" id="Speakers" placeholder="@@hikalkan">
-                    </div>
-                </div>
-                <div class="modal-footer border-0 p-5 pt-2">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary"><i class="fa fa-check-circle me-2"></i>Save</button>
-                </div>
+                </form>
             </div>
         </div>
     </div>

@@ -13,6 +13,7 @@ using Volo.Abp.Authorization;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Content;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Identity;
 using Volo.Abp.Users;
 
 namespace EventHub.Events
@@ -64,8 +65,8 @@ namespace EventHub.Events
             var @event = await _eventManager.CreateAsync(
                 organization,
                 input.Title,
-                input.StartTime,
-                input.EndTime,
+                Clock.Normalize(input.StartTime),
+                Clock.Normalize(input.EndTime),
                 input.Description
             );
 
@@ -259,7 +260,7 @@ namespace EventHub.Events
             @event.SetTitle(input.Title);
             @event.SetDescription(input.Description);
             @event.Language = input.Language;
-            @event.SetTime(input.StartTime, input.EndTime);
+            @event.SetTime(Clock.Normalize(input.StartTime), Clock.Normalize(input.EndTime));
             await _eventManager.SetCapacityAsync(@event, input.Capacity);
 
             if (input.CoverImageStreamContent != null && input.CoverImageStreamContent.ContentLength > 0)
@@ -311,19 +312,38 @@ namespace EventHub.Events
         public async Task AddSessionAsync(Guid id, AddSessionDto input)
         {
             var @event = await _eventRepository.GetAsync(id);
-            
+
             @event.AddSession(
                 input.TrackId,
                 GuidGenerator.Create(),
                 input.Title,
-                input.StartTime,
-                input.EndTime,
+                Clock.Normalize(input.StartTime),
+                Clock.Normalize(input.EndTime),
                 input.Description,
                 input.Language,
                 await GetUserIdsByUserNamesAsync(input.SpeakerUserNames)
             );
             
             await _eventRepository.UpdateAsync(@event);
+        }
+
+        [Authorize]
+        public async Task UpdateSessionAsync(Guid id, Guid trackId, Guid sessionId, UpdateSessionDto input)
+        {
+            var @event = await _eventRepository.GetAsync(id);
+
+            @event.UpdateSession(
+                trackId,
+                sessionId,
+                input.Title,
+                Clock.Normalize(input.StartTime),
+                Clock.Normalize(input.EndTime),
+                input.Description,
+                input.Language,
+                await GetUserIdsByUserNamesAsync(input.SpeakerUserNames)
+            );
+            
+            await _eventRepository.UpdateAsync(@event, true);
         }
 
         public async Task<IRemoteStreamContent> GetCoverImageAsync(Guid id)
@@ -349,20 +369,13 @@ namespace EventHub.Events
         
         private async Task<List<Guid>> GetUserIdsByUserNamesAsync(List<string> userNames)
         {
-            var speakerUserIDs = new List<Guid>();
-            foreach (var userName in userNames.Where(userName => !userName.IsNullOrWhiteSpace()))
-            {
-                var user = await _userRepository.FindAsync(x => x.UserName == userName.Trim());
-                if (user is null)
-                {
-                    throw new BusinessException(EventHubErrorCodes.UserNotFound)
-                        .WithData("UserName", userName);
-                }
+            var userQueryable = await _userRepository.GetQueryableAsync();
 
-                speakerUserIDs.Add(user.Id);
-            }
-
-            return speakerUserIDs;
+            var query = userQueryable
+                    .Where(u => userNames.Any(p => p == u.UserName))
+                    .Select(x => x.Id);
+            
+            return await AsyncExecuter.ToListAsync(query);
         }
 
         private async Task CheckOwnerControlAsync(Event @event)
