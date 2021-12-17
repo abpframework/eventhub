@@ -191,9 +191,9 @@
                                         }
                                         else
                                         {
-                                            <div class="track-item">
-                                                <span class="track-name text-primary">There is no session!</span>
-                                                 <span class="d-block mb-2">Please add session.</span>
+                                            <div class="track-item text-center">
+                                                <span class="track-name text-primary"><i class="fas fa-exclamation-circle"></i> There is no session!</span>
+                                                 <span class="d-block mb-2 mt-3">Please add session.</span>
                                             </div>
                                         }
                                     </td>
@@ -206,7 +206,14 @@
                 <div class="card-footer bg-white border-0 p-5 pt-1"> 
                     <div class="row">
                         <div class="col-6">
-                            <button id="PreviousStepButtonInPreviewSection" data-target-step="@CreateEventAreaViewComponent.ProgressStepType.NewTrack" class="btn btn-secondary step-transition"><i class="fa fa-arrow-left me-2"></i> Previous Step </button>
+                            @if (Model.Tracks.Any() && Model.Tracks.First().Sessions.Any())
+                            {
+                                <button id="PreviousStepButtonInPreviewSection" data-target-step="@CreateEventAreaViewComponent.ProgressStepType.NewSession" class="btn btn-secondary step-transition"><i class="fa fa-arrow-left me-2"></i> Previous Step </button>
+                            }
+                            else
+                            {
+                                <button id="PreviousStepButtonInPreviewSection" data-target-step="@CreateEventAreaViewComponent.ProgressStepType.NewTrack" class="btn btn-secondary step-transition"><i class="fa fa-arrow-left me-2"></i> Previous Step </button>
+                            }
                         </div>
                         <div class="col-6 text-end">
                             <button href="#" class="btn btn-success">Publish <i class="fa fa-arrow-right ms-2"></i></button>
