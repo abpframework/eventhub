@@ -3,8 +3,9 @@
 .border-light {
     border-color: #E1E5E9 !important;
 }
-.text-info { 
-    color: #6F32E2!important;
+
+.text-info {
+    color: #6F32E2 !important;
 }
 
 
@@ -34,8 +35,8 @@
 
 .progresses ul li.create-steps.blue {
     color: #fff;
-    background-color: #00044A;  
-    border-color: #00044A;  
+    background-color: #00044A;
+    border-color: #00044A;
 }
 
 .progresses ul li.create-steps span {
@@ -44,12 +45,12 @@
     left: -30px;
     font-size: 0.8rem;
     width: 90px;
-    color:#bfc6cd;
-} 
+    color: #bfc6cd;
+}
 
-.progresses ul li.create-steps.blue  span { 
-    color:#00044A;
-} 
+.progresses ul li.create-steps.blue span {
+    color: #00044A;
+}
 
 .progresses .progress {
     height: 2px;
@@ -59,64 +60,73 @@
     background-color: #DCE0E5;
     border-radius: 10px
 }
-.progress-bar { 
-    background-color: #00044A; 
+
+.progress-bar {
+    background-color: #00044A;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link { 
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
     background-color: #00044A !important;
 }
 
-.big-square-btn .btn {    
+.big-square-btn .btn {
     border: 1px solid rgba(107, 126, 146, 0.20);
     min-height: 177px;
     background: rgba(107, 126, 146, 0.05);
 }
-.big-square-btn .btn:hover {    
+
+.big-square-btn .btn:hover {
     color: #E8345D;
     background: #fff;
 }
-.big-square-btn .fa-plus {    
-    border: 2px dashed; 
+
+.big-square-btn .fa-plus {
+    border: 2px dashed;
     width: 34px;
     height: 34px;
     border-radius: 34px;
     line-height: 30px;
 }
 
-.track-item {    
+.track-item {
     border: 1px solid rgba(107, 126, 146, 0.20);
     padding: 1.5em;
     border-radius: 10px;
     min-height: 177px;
     margin-bottom: 1em;
 }
-.track-item .track-name{    
+
+.track-item .track-name {
     font-weight: 500;
     font-size: 1.125em;
     color: #03044a;
 }
+
 .table > :not(:first-child) {
     border-top: 1px solid currentColor;
-} 
-.table td, .table th { 
+}
+
+.table td, .table th {
     font-weight: normal;
     padding: 16px 8px;
     color: #6B7E92;
 }
+
 .text-primary {
     color: #E8345D !important;
-} 
+}
+
 .preview-item {
     color: #00044A;
 }
 
-.price small{
+.price small {
     font-size: 20px;
     color: #00044A;
     font-weight: 800;
 }
-.price span{
+
+.price span {
     font-size: 60px;
     color: #00044A;
     font-weight: 800;
@@ -127,11 +137,13 @@
     padding: 0;
     margin: 0 30px 0 40px;
 }
-.list-check-icon li{
+
+.list-check-icon li {
     margin: 1em 2em;
 }
+
 .list-check-icon .fa {
-    color:#E8345D; 
+    color: #E8345D;
     margin: 0 10px 0 -28px;
 }
 
@@ -140,16 +152,19 @@
     border-color: #6F32E2;
     color: white;
 }
+
 .btn-info:hover {
     background: #662ad6;
     border-color: #662ad6;
     color: white;
 }
+
 .btn-check:focus + .btn-info, .btn-info:focus {
     background: #662ad6;
     border-color: #662ad6;
     color: white;
 }
+
 .faq.shown {
     background-color: #fff9f7;
 }
@@ -167,17 +182,17 @@
 }
 
 .faq-container .faq button.btn.btn-faq.collapsed {
-    
+
 }
 
-.faq-container .faq button.btn.btn-faq .fas{    
+.faq-container .faq button.btn.btn-faq .fas {
     position: absolute;
     top: 15px;
     left: 0px;
 }
 
-.faq-container .faq button.btn.btn-faq.collapsed .fas{
-    color:#E8345D;   
+.faq-container .faq button.btn.btn-faq.collapsed .fas {
+    color: #E8345D;
     transform: rotate(180deg);
 }
 
@@ -196,14 +211,15 @@
     padding: 15px 0 10px 0;
 }
 
-.btn-check:focus + .btn, .btn:focus { 
+.btn-check:focus + .btn, .btn:focus {
     box-shadow: none;
 }
 
 .text-dark {
     font-weight: 700;
     color: #03044a !important;
-} 
+}
+
 .modal-icon {
     display: block;
     font-size: 64px;
@@ -211,6 +227,7 @@
     margin-bottom: 30px;
     color: #6F32E2;
 }
+
 .rounded-3 {
     border-radius: 1rem !important;
 }
@@ -222,3 +239,18 @@
     overflow: hidden;
     width: 140px;
 }
+.nav-tabs .nav-link {
+    width: 217px !important;
+    left: 452px !important;
+    top: 567px !important;
+    border-radius: unset !important;
+    font-size: 20px !important;
+    line-height: 24px !important;
+    color: #6B7E92 !important;
+}
+
+.nav-tabs .active, .btn:hover {
+    color: #00044A !important;
+    border: unset !important;
+}
+

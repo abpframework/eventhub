@@ -79,6 +79,15 @@
                             eventUrlCodeInput.val(response.urlCode);
                         }
                         SwitchToTrackCreation()
+                    },
+                    error: function (errorRaw) {
+                        abp.notify.error(errorRaw.responseJSON.error.message, 'Error', 
+                            toastr.options = {
+                                timeOut: 2500,
+                                progressBar: true,
+                                positionClass: "toast-bottom-right"
+                            }
+                        );
                     }
                 });
             });
@@ -392,9 +401,13 @@
         function NewEventFormInputAreaChangeHandler() {
             var isOnline = $("#IsOnline option:selected").val()
             if (isOnline === "True") {
+                $("#CountryId").attr("required", false);
+                $("#inputCity").attr("required", false);
                 $(".event-link-group").show();
                 $(".event-location-group").hide();
             } else {
+                $("#CountryId").attr("required", true);
+                $("#inputCity").attr("required", true);
                 $(".event-link-group").hide();
                 $(".event-location-group").show();
             }
@@ -464,7 +477,7 @@
                             readURL(file);
                         }
                     }
-
+                    
                     var objectURL = URL.createObjectURL(file);
                     img.src = objectURL;
                 });
@@ -474,6 +487,10 @@
                         var reader = new FileReader();
 
                         reader.onload = function (e) {
+                            if (eventIdInput.val().length === 36){
+                                $('.image-area').css('display', 'none').removeClass('d-block');
+                                $('.result-area').css('display', '');
+                            }
                             $('#imageResult').attr('src', e.target.result);
                             infoArea.textContent = 'File name: ' + input.name;
                         }
