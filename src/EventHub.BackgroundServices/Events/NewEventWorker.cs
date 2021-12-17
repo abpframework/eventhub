@@ -34,7 +34,7 @@ namespace EventHub.Events
 
             var queryable = await eventRepository.GetQueryableAsync();
             var newEvents = await asyncExecuter.ToListAsync(
-                queryable.Where(x => x.IsEmailSentToMembers == false)
+                queryable.Where(x => x.IsEmailSentToMembers == false && !x.IsDraft)
             );
 
             var fiveMinutesLater = clock.Now.AddMinutes(5);

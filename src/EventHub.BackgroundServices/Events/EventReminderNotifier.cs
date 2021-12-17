@@ -37,7 +37,7 @@ namespace EventHub.Events
 
         public async Task NotifyAsync(Event @event)
         {
-            if (@event is null || @event.IsRemindingEmailSent)
+            if (@event is null || @event.IsRemindingEmailSent || !@event.IsDraft)
             {
                 return;
             }
@@ -47,7 +47,7 @@ namespace EventHub.Events
 
             var userQuery = from eventRegistration in registrationQueryable
                 join user in userQueryable on eventRegistration.UserId equals user.Id
-                where eventRegistration.EventId == @event.Id
+                where eventRegistration.EventId == @event.Id && !@event.IsDraft
                 select user;
 
             var users = await _asyncExecuter.ToListAsync(userQuery);

@@ -37,7 +37,7 @@ namespace EventHub.Events
 
         public async Task NotifyAsync(Event @event)
         {
-            if (@event is null || @event.IsEmailSentToMembers)
+            if (@event is null || @event.IsEmailSentToMembers || !@event.IsDraft)
             {
                 return;
             }
