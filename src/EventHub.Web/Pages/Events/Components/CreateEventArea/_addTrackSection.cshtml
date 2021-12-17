@@ -43,7 +43,7 @@
                         </div>
                         <div class="col-6 text-end">
                             <button id="SkipThisStepButtonInTrackSection" data-target-step="@CreateEventAreaViewComponent.ProgressStepType.Preview" class="btn btn-link step-transition text-decoration-none">Skip This Step</button>
-                            <button id="NextStepButtonInTrackSection" data-target-step="@CreateEventAreaViewComponent.ProgressStepType.NewSession" class="btn btn-primary step-transition">Next Step <i class="fa fa-arrow-right ms-2"></i></button>
+                            <button id="NextStepButtonInTrackSection" data-target-step="@CreateEventAreaViewComponent.ProgressStepType.NewSession" class="btn btn-primary step-transition" @(Model.Any() ? "" : "disabled")>Next Step <i class="fa fa-arrow-right ms-2"></i></button>
                         </div>
                     </div>
                 </div>

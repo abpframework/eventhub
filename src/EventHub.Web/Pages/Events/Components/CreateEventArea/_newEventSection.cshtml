@@ -1,11 +1,16 @@
+@using EventHub.Web
 @using EventHub.Web.Pages.Events.Components.CreateEventArea
 @using Microsoft.AspNetCore.Http
+@using Microsoft.Extensions.Options
 @model EventHub.Web.Pages.Events.Components.CreateEventArea.CreateEventAreaViewComponent.NewEventViewModel
+@inject IOptions<EventHubUrlOptions> UrlOptions
 
 @{
   var organizations = new List<SelectListItem>();
   var countries = new List<SelectListItem>();
   var languages = new List<SelectListItem>();
+  var eventId = ViewData["EventId"] as Guid?;
+  
   @if (ViewData["StepType"]!.ToString() == CreateEventAreaViewComponent.ProgressStepType.NewEvent.ToString())
   {
     organizations = ViewData["Organizations"] as List<SelectListItem>;
@@ -82,7 +87,14 @@
                     <h4 class="mb-4">Cover Image</h4>
                     <div class="row">
                       <div class="col-6">
-                        <div class="image-area"><img id="imageResult" src="#" alt="" class="img-fluid rounded shadow-sm mx-auto d-block"></div>
+                        @if (eventId.HasValue)
+                        {
+                          <div class="image-area img-fluid rounded shadow-sm mx-auto d-block" style="background-image: url(@(UrlOptions.Value.Api.EnsureEndsWith('/') + $"api/eventhub/event/cover-image/{eventId}")" alt="@Model.Title"></div>
+                        }
+                        else
+                        {
+                          <div class="image-area"><img id="imageResult" src="#" alt="" class="img-fluid rounded shadow-sm mx-auto d-block"></div>
+                        }
                       </div>
                       <div class="col-6">
                         <div>
@@ -136,7 +148,8 @@
                     <span asp-validation-for="@Model.Language" class="text-danger"></span>
                   </div>
                   <div class="col-md-12 text-end">
-                    <button id="CreateEventButton" disabled type="submit" class="btn btn-primary btn-lg">
+                    <button id="CreateEventButton" disabled type="submit" class="btn btn-primary btn-lg" 
+                            data-url="@(eventId.HasValue ? Url.ActionLink("Update", "Event", new {Area = "eventhub", id = eventId!.Value}, null) : Url.ActionLink("Create", "Event", new {Area = "eventhub"}, null))">
                             Next Step
                     </button>
                   </div>

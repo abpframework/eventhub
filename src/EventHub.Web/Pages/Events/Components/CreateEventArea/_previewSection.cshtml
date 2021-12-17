@@ -1,13 +1,19 @@
+@using EventHub.Web
 @using EventHub.Web.Pages.Events
 @using EventHub.Web.Pages.Events.Components.CreateEventArea
 @using Microsoft.AspNetCore.Http
+@using Microsoft.Extensions.Options
 @model EventHub.Web.Pages.Events.Components.CreateEventArea.CreateEventAreaViewComponent.NewEventViewModel
+@inject IOptions<EventHubUrlOptions> UrlOptions
 
 @{
     var organizationName = "";
     var countryName = "";
+    Guid? eventId = null; 
     @if (ViewData["StepType"]!.ToString() == CreateEventAreaViewComponent.ProgressStepType.Preview.ToString())
     {
+        eventId = ViewData["EventId"] as Guid?;
+        
         organizationName = ViewData["OrganizationName"] as string;
         if (organizationName.IsNullOrWhiteSpace())
         {
@@ -74,7 +80,7 @@
                             <span>Cover Image:</span>
                         </div>
                         <div class="col-md-8"> 
-                            <img src="https://api.openeventhub.com/api/eventhub/event/cover-image/3a003fb9-611a-db0c-82b2-7299ff8e8ce7" class="w-100 rounded-3">
+                            <div class="w-100 rounded-3 event-thumbnail" style="background-image: url(@(UrlOptions.Value.Api.EnsureEndsWith('/') + $"api/eventhub/event/cover-image/{eventId}")" alt="@Model.Title"></div>
                         </div>
                     </div>
                     @if (Model.IsOnline != null && Model.IsOnline!.Value)

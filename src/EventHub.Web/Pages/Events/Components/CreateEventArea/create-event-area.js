@@ -1,5 +1,6 @@
 (function () {
     abp.widgets.CreateEventArea = function ($wrapper) {
+        var l = abp.localization.getResource('EventHub');
         toastr.options.timeOut = 500;
         toastr.options.preventDuplicates = true;
         
@@ -28,7 +29,9 @@
             $('#CreateEventButton').removeAttr('disabled')
             FocusTrackNameInputInModalEventHandler("AddTrackModal")
             FocusTrackNameInputInModalEventHandler("EditTrackModal")
-
+            NewEventFormInputAreaChangeHandler();
+            FilFileInputChangeEventHandler();
+            
             if (eventIdInput.val().length === 36) {
                 // TODO: Add organization in UppdateEventDto
                 $('#OrganizationId').prop("disabled", true).removeAttr('name');
@@ -39,21 +42,46 @@
                 if (!$(this).valid()) {
                     return false;
                 }
-                var input = $(this).serializeFormToObject();
+                
+                var formData = new FormData();
+                formData = FillNewEventFormData(formData);
 
+                var httpMetod = 'POST'
                 if (eventIdInput.val().length === 36) {
-                    eventApiService.update(eventIdInput.val(), input).then(function () {
-                        abp.notify.success('Updated event');
-                        SwitchToTrackCreation()
-                    });
-                } else {
-                    eventApiService.create(input).then(function (eventCreatedResponse) {
-                        abp.notify.success('Created event as a draft');
-                        eventIdInput.val(eventCreatedResponse.id);
-                        eventUrlCodeInput.val(eventCreatedResponse.urlCode);
-                        SwitchToTrackCreation()
-                    });
+                    httpMetod = 'PUT'
                 }
+
+                $.ajax({
+                    xhr: function() {
+                        var xhr = new window.XMLHttpRequest();
+                        xhr.upload.addEventListener("progress", function(evt) {
+                            if (evt.lengthComputable) {
+                                var percentComplete = evt.loaded / evt.total;
+                                percentComplete = parseInt(percentComplete * 100);
+                                if(percentComplete !== 100){
+                                    $('#CreateEventButton').prop( "disabled", true);
+                                }
+                            }
+                        }, false);
+
+                        return xhr;
+                    },
+                    url: $('#CreateEventButton').data('url'),
+                    data: formData,
+                    type: httpMetod,
+                    contentType: false,
+                    processData: false,
+                    success: function(response){
+                        if (eventIdInput.val().length === 36) {
+                            abp.notify.success('Updated event');
+                        }else{
+                            abp.notify.success('Created event as a draft');
+                            eventIdInput.val(response.id);
+                            eventUrlCodeInput.val(response.urlCode);   
+                        }
+                        SwitchToTrackCreation()
+                    }
+                });
             });
 
             function SwitchToTrackCreation() {
@@ -61,7 +89,7 @@
                 $('#CreateTrackContainer').css('display', '');
                 ScrollToWrapperBegin();
             }
-
+            
             AddNewTrackSubmitFormEventHandler();
             OpenEditTrackModalClickEventHandler();
             EditTrackSubmitFormEventHandler();
@@ -75,6 +103,23 @@
 
             PrevieousOrNextStepTransitionEventHandler()
         };
+        
+        function FillNewEventFormData(formData) {
+            var fileInput = document.getElementById('Event_CoverImageFile');
+            formData.append("OrganizationId", $('#OrganizationId').val().trim());
+            formData.append("Title", $('#inputTitle').val().trim());
+            formData.append("StartTime", $('#inputStartdate').val().trim());
+            formData.append("EndTime", $('#inputEnddate').val().trim());
+            formData.append("Description", $('#inputDescription').val().trim());
+            formData.append("CoverImageStreamContent",  fileInput.files[0]);
+            formData.append("IsOnline", $('#IsOnline').val().trim());
+            formData.append("OnlineLink", $('#inputOnlineLink').val().trim());
+            formData.append("CountryId", $('#CountryId').val().trim());
+            formData.append("City", $('#inputCity').val().trim());
+            formData.append("Language", $('#Language').val().trim());
+            formData.append("Capacity", $('#inputCapacity').val().trim());
+            return formData;
+        }
 
         function AddNewTrackSubmitFormEventHandler() {
             var addNewTrackForm = $('#AddNewTrackForm');
@@ -326,6 +371,101 @@
                 $('button[type=submit]').attr('disabled', 'disabled')
             } else {
                 $('button[type=submit]').removeAttr('disabled')
+            }
+        }
+        
+        function NewEventFormInputAreaChangeHandler() {
+            var isOnline = $("#IsOnline option:selected").val()
+            if (isOnline === "True") {
+                $(".event-link-group").show();
+                $(".event-location-group").hide();
+            } else {
+                $(".event-link-group").hide();
+                $(".event-location-group").show();
+            }
+
+            $('#IsOnline').on('change', '', function () {
+                var isOnline = $("#IsOnline option:selected").val()
+                if (isOnline === "True") {
+                    $("#CountryId").attr("required", false);
+                    $("#inputCity").attr("required", false);
+                    $(".event-link-group").show();
+                    $(".event-location-group").hide();
+                } else {
+                    $("#CountryId").attr("required", true);
+                    $("#inputCity").attr("required", true);
+                    $(".event-link-group").hide();
+                    $(".event-location-group").show();
+                }
+            });
+        }
+        
+        function FilFileInputChangeEventHandler() {
+            var file;
+            var infoArea = document.getElementById('upload-label');
+            var fileInput = document.getElementById('Event_CoverImageFile');
+            
+            if (fileInput !== null) {
+                fileInput.addEventListener('change', function () {
+                    var showFile = true;
+
+                    file = fileInput.files[0];
+
+                    if (file === undefined) {
+                        $('#Event_CoverImageFile').val('');
+                        $('#imageResult').attr('src', '#');
+                        infoArea.textContent = 'Choose file'
+                        return;
+                    }
+
+                    var permittedExtensions = ["jpg", "jpeg", "png"]
+                    var fileExtension = $(this).val().split('.').pop();
+                    if (permittedExtensions.indexOf(fileExtension) === -1) {
+                        showFile = false;
+                        abp.message.error(l('EventCoverImageExtensionNotAllowed'))
+                            .then(() => {
+                                $('#Event_CoverImageFile').val('');
+                                file = null;
+                            });
+                    } else if (file.size > 1024 * 1024) {
+                        showFile = false;
+                        abp.message.error(l('EventCoverImageSizeExceedMessage'))
+                            .then(() => {
+                                $('#Event_CoverImageFile').val('');
+                                file = null;
+                            });
+                    }
+
+                    var img = new Image();
+                    img.onload = function () {
+                        var imageError = true;
+                        var sizes = {
+                            width: this.width,
+                            height: this.height
+                        };
+                        URL.revokeObjectURL(this.src);
+
+                        if (showFile && imageError) {
+                            readURL(file);
+                        }
+                    }
+
+                    var objectURL = URL.createObjectURL(file);
+                    img.src = objectURL;
+                });
+
+                function readURL(input) {
+                    if (input) {
+                        var reader = new FileReader();
+
+                        reader.onload = function (e) {
+                            $('#imageResult').attr('src', e.target.result);
+                            infoArea.textContent = 'File name: ' + input.name;
+                        }
+
+                        reader.readAsDataURL(input);
+                    }
+                }
             }
         }
 
