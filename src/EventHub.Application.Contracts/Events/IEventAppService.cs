@@ -24,6 +24,8 @@ namespace EventHub.Events
         Task<bool> IsEventOwnerAsync(Guid id);
 
         Task UpdateAsync(Guid id, UpdateEventDto input);
+        
+        Task<string> PublishAsync(Guid id);
 
         Task AddTrackAsync(Guid id, AddTractDto input);
         

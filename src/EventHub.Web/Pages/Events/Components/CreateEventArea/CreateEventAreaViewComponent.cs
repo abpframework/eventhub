@@ -13,9 +13,11 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
+using Volo.Abp.Authorization;
 using Volo.Abp.Users;
 
 namespace EventHub.Web.Pages.Events.Components.CreateEventArea;
@@ -62,25 +64,7 @@ public class CreateEventAreaViewComponent : AbpViewComponent
             EndTime = DateTime.Now.ClearTime().AddDays(2).AddHours(21)
         };
 
-        ViewData["StepType"] = stepType.ToString();
-        switch (stepType)
-        {
-            case ProgressStepType.NewEvent:
-                ViewData["Organizations"] = await GetOrganizationsSelectItemAsync();
-                ViewData["Countries"] = await GetCountriesSelectItemAsync();
-                ViewData["Languages"] = GetLanguagesSelectItem();
-                break;
-            case ProgressStepType.NewSession:
-                ViewData["Languages"] = GetLanguagesSelectItem();
-                break;
-            case ProgressStepType.Preview:
-                ViewData["OrganizationName"] = await GetOrganizationNameAsync(model.OrganizationId);
-                if (model.CountryId is not null)
-                {
-                    ViewData["CountryName"] = await GetCountryNameAsync(model.CountryId!.Value);
-                }
-                break;
-        }
+        await FillViewDataAsync(stepType, model);
 
         return View("~/Pages/Events/Components/CreateEventArea/Default.cshtml", model);
     }
@@ -140,6 +124,30 @@ public class CreateEventAreaViewComponent : AbpViewComponent
                 Text = cultureInfo.EnglishName
             }
         ).ToList();
+    }
+    
+    private async Task FillViewDataAsync(ProgressStepType stepType, NewEventViewModel model)
+    {
+        ViewData["StepType"] = stepType.ToString();
+        switch (stepType)
+        {
+            case ProgressStepType.NewEvent:
+                ViewData["Organizations"] = await GetOrganizationsSelectItemAsync();
+                ViewData["Countries"] = await GetCountriesSelectItemAsync();
+                ViewData["Languages"] = GetLanguagesSelectItem();
+                break;
+            case ProgressStepType.NewSession:
+                ViewData["Languages"] = GetLanguagesSelectItem();
+                break;
+            case ProgressStepType.Preview:
+                ViewData["OrganizationName"] = await GetOrganizationNameAsync(model.OrganizationId);
+                if (model.CountryId is not null)
+                {
+                    ViewData["CountryName"] = await GetCountryNameAsync(model.CountryId!.Value);
+                }
+
+                break;
+        }
     }
 
     public class NewEventViewModel

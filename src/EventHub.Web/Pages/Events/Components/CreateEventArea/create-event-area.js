@@ -33,8 +33,7 @@
             FilFileInputChangeEventHandler();
             
             if (eventIdInput.val().length === 36) {
-                // TODO: Add organization in UppdateEventDto
-                $('#OrganizationId').prop("disabled", true).removeAttr('name');
+                $('#OrganizationId').prop("disabled", true); // Once the Organization is selected, it cannot be changed again.
             }
 
             $("#CreateEventForm").submit(function (e) {
@@ -75,9 +74,9 @@
                         if (eventIdInput.val().length === 36) {
                             abp.notify.success('Updated event');
                         }else{
-                            abp.notify.success('Created event as a draft');
+                            abp.notify.success('Created event as a draft' , '', toastr.options.timeOut = 2500);
                             eventIdInput.val(response.id);
-                            eventUrlCodeInput.val(response.urlCode);   
+                            eventUrlCodeInput.val(response.urlCode);
                         }
                         SwitchToTrackCreation()
                     }
@@ -100,6 +99,8 @@
             OpenEditSessionModalClickEventHandler();
             EditSessionEventHandler();
             DeleteSessionButtonClickEventHandler();
+
+            PublishEventButtonClickEventHandler();
 
             PrevieousOrNextStepTransitionEventHandler()
         };
@@ -179,6 +180,7 @@
 
         function DeleteTrackButtonClickEventHandler() {
             $('.delete-track-button').click(function (e) {
+                e.preventDefault();
                 eventApiService.deleteTrack(eventIdInput.val(), this.id).then(function () {
                     abp.notify.success('Successfully deleted');
                     FillFilter(stepType.NewTrack)
@@ -224,6 +226,7 @@
 
         function OpenEditSessionModalClickEventHandler() {
             $('.edit-session-button').click(function (e) {
+                e.preventDefault();
                 var editSessionModal = $('#EditSessionModal');
 
                 var clickedSessionId = this.id;
@@ -269,6 +272,7 @@
 
         function DeleteSessionButtonClickEventHandler() {
             $('.delete-session-button').click(function (e) {
+                e.preventDefault();
                 var clickedSessionId = this.id;
                 var trackId = $('#' + clickedSessionId).data('track-id');
                 
@@ -276,6 +280,17 @@
                     abp.notify.success('Successfully deleted');
                     FillFilter(stepType.NewSession)
                     widgetManager.refresh();
+                });
+            });
+        }
+        
+        function PublishEventButtonClickEventHandler() {
+            $('#PublishButton').click(function (e) {
+                e.preventDefault();
+                eventApiService.publish(eventIdInput.val()).then(function (res) {
+                    e.prefe
+                    abp.notify.success('Event Published');
+                    window.location.replace('https://' + window.location.host + '/events/' + res);
                 });
             });
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 using EventHub.Countries;
 using EventHub.Events.Registrations;
@@ -181,7 +182,7 @@ namespace EventHub.Events
             {
                 if (!CurrentUser.Id.HasValue)
                 {
-                    throw new AbpAuthorizationException();
+                    throw new AuthenticationException();
                 }
 
                 await CheckIfValidOwnerAsync(@event);
@@ -279,6 +280,19 @@ namespace EventHub.Events
             }
 
             await _eventRepository.UpdateAsync(@event);
+        }
+
+        [Authorize]
+        public async Task<string> PublishAsync(Guid id)
+        {
+            var @event = await _eventRepository.GetAsync(id);
+            await CheckIfValidOwnerAsync(@event);
+
+            @event.Publish();
+            
+            await _eventRepository.UpdateAsync(@event, true);
+
+            return @event.UrlCode;
         }
 
         [Authorize]

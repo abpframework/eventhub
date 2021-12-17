@@ -32,7 +32,7 @@ namespace EventHub.Events
 
         public string Url { get; set; }
         
-        public DateTime CreationTime { get; }
+        public DateTime CreationTime { get; set; }
 
         public DateTime? LastModificationTime { get; set; }
     }

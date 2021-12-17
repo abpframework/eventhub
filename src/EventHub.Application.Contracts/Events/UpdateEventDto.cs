@@ -7,8 +7,6 @@ namespace EventHub.Events
 {
     public class UpdateEventDto
     {
-        //TODO: Add OrganizationId
-        
         [Required]
         [StringLength(EventConsts.MaxTitleLength, MinimumLength = EventConsts.MinTitleLength)]
         public string Title { get; set; }

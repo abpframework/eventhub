@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 
@@ -91,7 +92,12 @@ namespace EventHub.Events
         
         internal Session AddSpeaker(Guid userId)
         {
-            Speakers.AddIfNotContains(new Speaker(Id, userId));
+            if (Speakers.Any(x => x.UserId == userId))
+            {
+                return this;
+            }
+            
+            Speakers.Add(new Speaker(Id, userId));
 
             return this;
         }

@@ -82,6 +82,13 @@ namespace EventHub.Controllers.Events
 			await _eventAppService.UpdateAsync(id, input);
 		}
 
+		[HttpPut]
+		[Route("/publish/{id}")]
+		public async Task<string> PublishAsync(Guid id)
+		{
+			return await _eventAppService.PublishAsync(id);
+		}
+
 		[HttpPost]
 		[Route("{id}/tracks")]
 		public async Task AddTrackAsync(Guid id, AddTractDto input)
