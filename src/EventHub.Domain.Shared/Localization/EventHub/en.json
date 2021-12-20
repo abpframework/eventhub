@@ -158,6 +158,7 @@
     "EventHub:SessionNotFound": "The session not found!",
     "EventHub:SessionTimeShouldBeInTheEventTime": "Session time should be in the event time!",
     "EventHub:SessionTimeConflictsWithAnExistingSession": "Session time conflicts with an existing session!",
-    "EventHub:DraftEventNotFound": "The draft event not found!"
+    "EventHub:DraftEventNotFound": "The draft event not found!",
+    "EventHub:SessionTitleAlreadyExist": "The session {Title} already exists"
   }
 }

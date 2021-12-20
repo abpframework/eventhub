@@ -78,31 +78,33 @@ namespace EventHub
 
         private async Task CreateEventsAsync()
         {
+            var pastEvent = new Event(
+                _eventHubTestData.AbpBlazorPastEventId,
+                _eventHubTestData.OrganizationVolosoftId,
+                _eventHubTestData.AbpBlazorPastEventUrlCode,
+                _eventHubTestData.AbpBlazorPastEventTitle,
+                _clock.Now.ClearTime().AddDays(-2).AddHours(15),
+                _clock.Now.ClearTime().AddDays(-2).AddHours(17),
+                "This is a past event about Blazor and the ABP Framework."
+            );
+            pastEvent.Publish();
             await _eventRepository.InsertAsync(
-                new Event(
-                    _eventHubTestData.AbpBlazorPastEventId,
-                    _eventHubTestData.OrganizationVolosoftId,
-                    _eventHubTestData.AbpBlazorPastEventUrlCode,
-                    _eventHubTestData.AbpBlazorPastEventTitle,
-                    _clock.Now.ClearTime().AddDays(-2).AddHours(15),
-                    _clock.Now.ClearTime().AddDays(-2).AddHours(17),
-                    "This is a past event about Blazor and the ABP Framework."
-                )
+                pastEvent
             );
 
+            var futureEvent = new Event(
+                _eventHubTestData.AbpMicroservicesFutureEventId,
+                _eventHubTestData.OrganizationVolosoftId,
+                _eventHubTestData.AbpMicroservicesFutureEventUrlCode,
+                _eventHubTestData.AbpMicroservicesFutureEventTitle,
+                _clock.Now.ClearTime().AddDays(1).AddHours(15),
+                _clock.Now.ClearTime().AddDays(1).AddHours(17),
+                "This is a future event about the ABP Framework and Microservices that is set for tomorrow."
+            );
+            futureEvent.Capacity = 1;
+            futureEvent.Publish();
             await _eventRepository.InsertAsync(
-                new Event(
-                    _eventHubTestData.AbpMicroservicesFutureEventId,
-                    _eventHubTestData.OrganizationVolosoftId,
-                    _eventHubTestData.AbpMicroservicesFutureEventUrlCode,
-                    _eventHubTestData.AbpMicroservicesFutureEventTitle,
-                    _clock.Now.ClearTime().AddDays(1).AddHours(15),
-                    _clock.Now.ClearTime().AddDays(1).AddHours(17),
-                    "This is a future event about the ABP Framework and Microservices that is set for tomorrow."
-                )
-                {
-                    Capacity = 1
-                }
+               futureEvent
             );
         }
     }

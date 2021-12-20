@@ -20,5 +20,7 @@
         public const string TrackNotFound = "EventHub:TrackNotFound";
         public const string SessionNotFound = "EventHub:SessionNotFound";
         public const string DraftEventNotFound = "EventHub:DraftEventNotFound";
+        public const string SessionTitleAlreadyExist = "EventHub:SessionTitleAlreadyExist";
+
     }
 }

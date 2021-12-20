@@ -71,6 +71,8 @@ namespace EventHub.Events
             SetTitle(title);
             SetDescription(description);
             SetTimeInternal(startTime, endTime);
+
+            Publish(false);
             
             Tracks = new Collection<Track>();
         }
@@ -182,16 +184,7 @@ namespace EventHub.Events
             string language,
             ICollection<Guid> speakerUserIds)
         {
-            // TODO: This control is already done in Track and even Session. Do you really need this?
-            if (startTime > endTime)
-            {
-                throw new BusinessException(EventHubErrorCodes.EndTimeCantBeEarlierThanStartTime);
-            }
-            
-            if (startTime < this.StartTime || this.EndTime < endTime)
-            {
-                throw new BusinessException(EventHubErrorCodes.SessionTimeShouldBeInTheEventTime);
-            }
+            CheckIfValidSessionTime(startTime, endTime);
 
             var track = GetTrack(trackId);
             track.AddSession(sessionId, title, description,startTime, endTime, language, speakerUserIds);
@@ -202,12 +195,14 @@ namespace EventHub.Events
             Guid trackId,
             Guid sessionId,
             string title,
+            string description,
             DateTime startTime, 
             DateTime endTime,
-            string description,
             string language,
             ICollection<Guid> speakerUserIds)
         {
+            CheckIfValidSessionTime(startTime, endTime);
+
             var track = GetTrack(trackId);
             track.UpdateSession(sessionId, title, description, startTime, endTime, language, speakerUserIds);
             return this;
@@ -237,6 +232,20 @@ namespace EventHub.Events
         {
             return Tracks.FirstOrDefault(t => t.Id == trackId) ??
                    throw new EntityNotFoundException(typeof(Track), trackId);
+        }
+        
+        private void CheckIfValidSessionTime(DateTime startTime, DateTime endTime)
+        {
+            // TODO: This control is already done in Track and even Session. Do you really need this?
+            if (startTime > endTime)
+            {
+                throw new BusinessException(EventHubErrorCodes.SessionEndTimeCantBeEarlierThanStartTime);
+            }
+
+            if (startTime < this.StartTime || this.EndTime < endTime)
+            {
+                throw new BusinessException(EventHubErrorCodes.SessionTimeShouldBeInTheEventTime);
+            }
         }
     }
 }

@@ -46,6 +46,12 @@ namespace EventHub.Events
             string language,
             ICollection<Guid> speakerUserIds)
         {
+            if (Sessions.Any(s => s.Title == title))
+            {
+                throw new BusinessException(EventHubErrorCodes.SessionTitleAlreadyExist)
+                    .WithData("Title", title);
+            }
+            
             if (startTime > endTime)
             {
                 throw new BusinessException(EventHubErrorCodes.EndTimeCantBeEarlierThanStartTime);
@@ -77,12 +83,12 @@ namespace EventHub.Events
             
             if (session.StartTime != startTime)
             {
-                CheckIfValidSessionTime(endTime);
+                CheckIfValidSessionTime(endTime, sessionId);
             }
 
             if (session.EndTime != endTime)
             {
-                CheckIfValidSessionTime(endTime);
+                CheckIfValidSessionTime(endTime, sessionId);
             }
             
             session.SetTitle(title);
@@ -115,10 +121,15 @@ namespace EventHub.Events
             return this;
         }
         
-        private void CheckIfValidSessionTime(DateTime date)
+        private void CheckIfValidSessionTime(DateTime date, Guid? sessionId = null)
         {
             foreach (var session in Sessions)
             {
+                if (sessionId.HasValue && sessionId!.Value == session.Id)
+                {
+                    continue;
+                }
+                
                 if (date.IsBetween(session.StartTime, session.EndTime))
                 {
                     throw new BusinessException(EventHubErrorCodes.SessionTimeConflictsWithAnExistingSession);
