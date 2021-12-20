@@ -849,7 +849,7 @@ p .text-primary {
     }
 }
 
-.nav-tabs.profile-nav .nav-item .nav-link {
+.nav-tabs.profile-nav .nav-item .nav-link, .detail-tabs .nav-tabs .nav-item .nav-link {
     border: 0;
     color: #00044A;
     font-size: 16px;
@@ -857,7 +857,7 @@ p .text-primary {
 }
 
 .nav-tabs.profile-nav .nav-item.show .nav-link,
-.nav-tabs.profile-nav .nav-link.active {
+.nav-tabs.profile-nav .nav-link.active, .detail-tabs .nav-tabs .nav-item .nav-link.active, .detail-tabs .nav-tabs .nav-item.show .nav-link {
     color: #00044A;
     background: none;
     border: 0;

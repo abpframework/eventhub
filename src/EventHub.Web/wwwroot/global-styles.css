@@ -239,18 +239,9 @@
     overflow: hidden;
     width: 140px;
 }
+
 .nav-tabs .nav-link {
-    width: 217px !important;
-    left: 452px !important;
-    top: 567px !important;
-    border-radius: unset !important;
-    font-size: 20px !important;
-    line-height: 24px !important;
-    color: #6B7E92 !important;
+    font-size: 20px;
+    line-height: 24px;
+    color: #6B7E92;
 }
-
-.nav-tabs .active, .btn:hover {
-    color: #00044A !important;
-    border: unset !important;
-}
-

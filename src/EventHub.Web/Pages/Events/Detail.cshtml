@@ -2,7 +2,6 @@
 @inject IHtmlLocalizer<EventHubResource> L
 @using EventHub.Localization
 @using EventHub.Web
-@using EventHub.Web.Helpers
 @using EventHub.Web.Pages.Events
 @using EventHub.Web.Pages.Events.Components.AttendeesArea
 @using EventHub.Web.Pages.Events.Components.EventsArea
@@ -37,7 +36,7 @@
     ViewBag.OgImage = coverImageUrl;
 }
 
-<div class="bg-white py-5">
+<div class="py-5">
     <div class="container detail-page pb-4">
         <div class="row">
             <div class="col-md-7">
@@ -72,75 +71,79 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-7">
-                @if (Model.Event.Tracks.Any())
-                {
-                    <abp-tabs>
-                        <abp-tab class="tab" title="Description">
+            <div class="col-12 mt-4">
+                <div class="card">
+                    <div class="card-body p-5">
+                        @if (Model.Event.Tracks.Any())
+                        {
+                            <abp-tabs class="detail-tabs">
+                                <abp-tab class="tab" title="Description">
+                                    <h5 class="detail-head mt-5 font-weight-bold">Event Description</h5>
+                                    <p id="EventDescription">
+                                        @Model.Event.Description
+                                    </p>
+                      
+                                    <h5 class="detail-head mt-5 font-weight-bold">Date</h5>
+                                    <p>
+                                        @EventDateHelper.GetDateRangeText(Model.Event.StartTime, Model.Event.EndTime)
+                                    </p>
+                                    @await Component.InvokeAsync(typeof(AttendeesAreaViewComponent), new { eventId = Model.Event.Id })
+                                </abp-tab>
+                                <abp-tab class="tab" title=" Track / Session">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            @foreach (var track in Model.Event.Tracks)
+                                            {
+                                                @if (track.Sessions.Any())
+                                                {
+                                                    <th class="text-center" width="25%">@track.Name</th>
+                                                }
+                                            }
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            @foreach (var track in Model.Event.Tracks)
+                                            {
+                                                @if (track.Sessions.Any())
+                                                {
+                                                    <td>
+                                                        @foreach (var session in track.Sessions)
+                                                        {
+                                                            <div class="track-item">
+                                                                <span class="track-name">@session.Title.TruncateWithPostfix(25)</span>
+                                                                <small class="text-primary d-block my-2">@EventDateHelper.GetTimeRangeText(TimeOnly.FromDateTime(session.StartTime), TimeOnly.FromDateTime(session.EndTime)) | @session.Language</small>
+                                                                @foreach (var speaker in session.Speakers)
+                                                                {
+                                                                    <span class="d-block mb-2">@speaker.UserName</span>
+                                                                }
+                                                            </div>
+                                                        }
+                                                    </td>
+                                                }
+                                            }
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </abp-tab>
+                            </abp-tabs>
+                        }
+                        else
+                        {
                             <h5 class="detail-head mt-5 font-weight-bold">Event Description</h5>
                             <p id="EventDescription">
                                 @Model.Event.Description
                             </p>
-
+                      
                             <h5 class="detail-head mt-5 font-weight-bold">Date</h5>
                             <p>
                                 @EventDateHelper.GetDateRangeText(Model.Event.StartTime, Model.Event.EndTime)
                             </p>
                             @await Component.InvokeAsync(typeof(AttendeesAreaViewComponent), new { eventId = Model.Event.Id })
-                        </abp-tab>
-                        <abp-tab class="tab" title=" Track / Session">
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    @foreach (var track in Model.Event.Tracks)
-                                    {
-                                        @if (track.Sessions.Any())
-                                        {
-                                            <th class="text-center" width="25%">@track.Name</th>
-                                        }
-                                    }
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    @foreach (var track in Model.Event.Tracks)
-                                    {
-                                        @if (track.Sessions.Any())
-                                        {
-                                            <td>
-                                                @foreach (var session in track.Sessions)
-                                                {
-                                                    <div class="track-item">
-                                                        <span class="track-name">@session.Title.TruncateWithPostfix(25)</span>
-                                                        <small class="text-primary d-block my-2">@EventDateHelper.GetTimeRangeText(TimeOnly.FromDateTime(session.StartTime), TimeOnly.FromDateTime(session.EndTime)) | @session.Language</small>
-                                                        @foreach (var speaker in session.Speakers)
-                                                        {
-                                                            <span class="d-block mb-2">@speaker.UserName</span>
-                                                        }
-                                                    </div>
-                                                }
-                                            </td>
-                                        }
-                                    }
-                                </tr>
-                                </tbody>
-                            </table>
-                        </abp-tab>
-                    </abp-tabs> 
-                }
-                else
-                {
-                    <h5 class="detail-head mt-5 font-weight-bold">Event Description</h5>
-                    <p id="EventDescription">
-                        @Model.Event.Description
-                    </p>
-
-                    <h5 class="detail-head mt-5 font-weight-bold">Date</h5>
-                    <p>
-                        @EventDateHelper.GetDateRangeText(Model.Event.StartTime, Model.Event.EndTime)
-                    </p>
-                    @await Component.InvokeAsync(typeof(AttendeesAreaViewComponent), new { eventId = Model.Event.Id })
-                }
+                        }  
+                    </div>
+                </div>
             </div>
         </div>
     </div>
