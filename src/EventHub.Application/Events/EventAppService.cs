@@ -79,8 +79,6 @@ namespace EventHub.Events
             {
                 await SaveCoverImageAsync(@event.Id, input.CoverImageStreamContent);
             }
-
-            @event.Publish(false);
             
             await _eventRepository.InsertAsync(@event);
 
@@ -333,14 +331,14 @@ namespace EventHub.Events
         }
 
         [Authorize]
-        public async Task AddSessionAsync(Guid id, AddSessionDto input)
+        public async Task AddSessionAsync(Guid id, Guid trackId, AddSessionDto input)
         {
             await CheckIfValidUserNamesAsync(input.SpeakerUserNames);
             var @event = await _eventRepository.GetAsync(id);
             await CheckIfValidOwnerAsync(@event);
             
             @event.AddSession(
-                input.TrackId,
+                trackId,
                 GuidGenerator.Create(),
                 input.Title,
                 input.Description,
@@ -364,9 +362,9 @@ namespace EventHub.Events
                 trackId,
                 sessionId,
                 input.Title,
+                input.Description,
                 Clock.Normalize(input.StartTime),
                 Clock.Normalize(input.EndTime),
-                input.Description,
                 input.Language,
                 await GetUserIdsByUserNamesAsync(input.SpeakerUserNames)
             );

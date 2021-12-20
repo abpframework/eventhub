@@ -111,11 +111,11 @@ namespace EventHub.Controllers.Events
 		}
 
 		[HttpPost]
-		[Route("{id}/sessions")]
-		public async Task AddSessionAsync(Guid id, AddSessionDto input)
+		[Route("{id}/tracks/{trackId}/sessions")]
+		public async Task AddSessionAsync(Guid id, Guid trackId, AddSessionDto input)
 		{
 			input.SpeakerUserNames = input.SpeakerUserNames.Where(x => !x.IsNullOrWhiteSpace()).ToList();
-			await _eventAppService.AddSessionAsync(id, input);
+			await _eventAppService.AddSessionAsync(id, trackId, input);
 		}
 
 		[HttpPut]

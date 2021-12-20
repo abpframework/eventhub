@@ -220,11 +220,14 @@
                     return false;
                 }
 
+                var addSessionModal = $('#AddSessionModal');
+                var trackId = addSessionModal.find('#TrackId').val();
+                
                 var userNameList = $('#SpeakersInNewSessionModal').val().split(/[ , ]+/);
                 userNameList = userNameList.filter(v => v !== '');
                 var input = $(this).serializeFormToObject();
                 input.speakerUserNames = userNameList;
-                eventApiService.addSession(eventIdInput.val(), input).then(function () {
+                eventApiService.addSession(eventIdInput.val(), trackId, input).then(function () {
                     $('#AddSessionModal').modal('hide');
                     abp.notify.success('Added the session');
                     FillFilter(stepType.NewSession);

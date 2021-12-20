@@ -33,7 +33,7 @@ namespace EventHub.Events
 
         Task DeleteTrackAsync(Guid id, Guid trackId);
 
-        Task AddSessionAsync(Guid id, AddSessionDto input);
+        Task AddSessionAsync(Guid id, Guid trackId, AddSessionDto input);
 
         Task UpdateSessionAsync(Guid id, Guid trackId, Guid sessionId, UpdateSessionDto input);
         

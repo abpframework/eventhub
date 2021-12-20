@@ -6,8 +6,6 @@ namespace EventHub.Events;
 
 public class AddSessionDto
 {
-    public Guid TrackId { get; set; }
-
     [Required]
     [StringLength(SessionConsts.MaxTitleLength, MinimumLength = SessionConsts.MinTitleLength)]
     public string Title { get; set; }
