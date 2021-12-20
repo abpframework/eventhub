@@ -186,6 +186,8 @@ namespace EventHub.Events
         {
             CheckIfValidSessionTime(startTime, endTime);
 
+            // TODO(berkansasmaz): Add domain rule: The same user cannot be a speaker in more than one session at the same time.
+
             var track = GetTrack(trackId);
             track.AddSession(sessionId, title, description,startTime, endTime, language, speakerUserIds);
             return this;
