@@ -409,11 +409,10 @@ namespace EventHub.Events
             var userQueryable = await _userRepository.GetQueryableAsync();
 
             var query = userQueryable
-                    .Where(u => userNames.Any(p => p == u.UserName))
+                    .Where(u => userNames.Contains(u.UserName))
                     .Select(x => x.Id);
             
             var userIds = await AsyncExecuter.ToListAsync(query);
-
             if (userIds.Count != userNames.Count)
             {
                 await CheckIfValidUserNamesAsync(userNames);
