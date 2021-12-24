@@ -439,8 +439,8 @@ namespace EventHub.Events
         {
             foreach (var userName in speakerUserNames)
             {
-                var user = await _userRepository.FindAsync(x => x.UserName == userName.Trim());
-                if (user is null)
+                var user = await _userRepository.AnyAsync(x => x.UserName == userName.Trim());
+                if (!user)
                 {
                     throw new BusinessException(EventHubErrorCodes.UserNotFound)
                         .WithData("UserName", userName);
