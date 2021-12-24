@@ -180,7 +180,7 @@
                                             @foreach (var session in track.Sessions)
                                             {
                                                 <div class="track-item">
-                                                    <span class="track-name">@session.Title.TruncateWithPostfix(25)</span>
+                                                    <span class="track-name">@session.Title.TruncateWithPostfix(55)</span>
                                                     <small class="text-primary d-block my-2">@EventDateHelper.GetTimeRangeText(TimeOnly.FromDateTime(session.StartTime), TimeOnly.FromDateTime(session.EndTime)) | @session.Language</small>
                                                     @foreach (var speaker in session.Speakers)
                                                     {

@@ -129,7 +129,7 @@ namespace EventHub.Events
             return this;
         }
 
-        public Event AddTract(Guid trackId, string name)
+        public Event AddTrack(Guid trackId, string name)
         {
             if (Tracks.Any(x => x.Name == name))
             {
@@ -228,6 +228,11 @@ namespace EventHub.Events
             IsDraft = !isPublish;
 
             return this;
+        }
+
+        public bool IsLive(DateTime now)
+        {
+            return now.IsBetween(StartTime, EndTime);
         }
 
         private Track GetTrack(Guid trackId)

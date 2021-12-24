@@ -108,8 +108,6 @@ namespace EventHub.EntityFrameworkCore
                 b.HasKey(x => new {x.SessionId, x.UserId});
 
                 b.HasOne<IdentityUser>().WithMany().HasForeignKey(x => x.UserId).IsRequired();
-
-                b.HasIndex(x => new {x.UserId, x.SessionId});
             });
 
             builder.Entity<EventRegistration>(b =>

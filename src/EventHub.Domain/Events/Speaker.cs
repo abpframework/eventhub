@@ -9,6 +9,11 @@ namespace EventHub.Events
         
         public Guid UserId { get; private set; }
 
+        private Speaker()
+        {
+            
+        }
+        
         public Speaker(Guid sessionId, Guid userId)
         {
             SessionId = sessionId;

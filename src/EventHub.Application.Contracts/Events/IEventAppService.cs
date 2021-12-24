@@ -27,7 +27,7 @@ namespace EventHub.Events
         
         Task<string> PublishAsync(Guid id);
 
-        Task AddTrackAsync(Guid id, AddTractDto input);
+        Task AddTrackAsync(Guid id, AddTrackDto input);
         
         Task UpdateTrackAsync(Guid id, Guid trackId, UpdateTrackDto input);
 

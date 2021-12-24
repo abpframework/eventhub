@@ -294,12 +294,12 @@ namespace EventHub.Events
         }
 
         [Authorize]
-        public async Task AddTrackAsync(Guid id, AddTractDto input)
+        public async Task AddTrackAsync(Guid id, AddTrackDto input)
         {
             var @event = await _eventRepository.GetAsync(id, true);
             await CheckIfValidOwnerAsync(@event);
 
-            @event.AddTract(
+            @event.AddTrack(
                 GuidGenerator.Create(),
                 input.Name
             );
@@ -328,12 +328,13 @@ namespace EventHub.Events
             await CheckIfValidOwnerAsync(@event);
 
             @event.RemoveTrack(trackId);
+            
+            await _eventRepository.UpdateAsync(@event);
         }
 
         [Authorize]
         public async Task AddSessionAsync(Guid id, Guid trackId, AddSessionDto input)
         {
-            await CheckIfValidUserNamesAsync(input.SpeakerUserNames);
             var @event = await _eventRepository.GetAsync(id);
             await CheckIfValidOwnerAsync(@event);
             
@@ -354,7 +355,6 @@ namespace EventHub.Events
         [Authorize]
         public async Task UpdateSessionAsync(Guid id, Guid trackId, Guid sessionId, UpdateSessionDto input)
         {
-            await CheckIfValidUserNamesAsync(input.SpeakerUserNames);
             var @event = await _eventRepository.GetAsync(id);
             await CheckIfValidOwnerAsync(@event);
             
@@ -379,6 +379,8 @@ namespace EventHub.Events
             await CheckIfValidOwnerAsync(@event);
 
             @event.RemoveSession(trackId, sessionId);
+            
+            await _eventRepository.UpdateAsync(@event);
         }
 
         public async Task<IRemoteStreamContent> GetCoverImageAsync(Guid id)
@@ -410,7 +412,14 @@ namespace EventHub.Events
                     .Where(u => userNames.Any(p => p == u.UserName))
                     .Select(x => x.Id);
             
-            return await AsyncExecuter.ToListAsync(query);
+            var userIds = await AsyncExecuter.ToListAsync(query);
+
+            if (userIds.Count != userNames.Count)
+            {
+                await CheckIfValidUserNamesAsync(userNames);
+            }
+
+            return userIds;
         }
 
         private async Task CheckIfValidOwnerAsync(Event @event)
@@ -448,7 +457,7 @@ namespace EventHub.Events
                     var dto = ObjectMapper.Map<Event, EventInListDto>(i.@event);
                     dto.OrganizationName = i.organization.Name;
                     dto.OrganizationDisplayName = i.organization.DisplayName;
-                    dto.IsLiveNow = now.IsBetween(i.@event.StartTime, i.@event.EndTime);
+                    dto.IsLiveNow = i.@event.IsLive(now);
                     dto.Country = i.@event.CountryName;
                     return dto;
                 }

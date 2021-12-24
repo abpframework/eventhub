@@ -238,7 +238,7 @@ namespace EventHub.Events
 
             var eventDetailDto = await _eventAppService.GetByUrlCodeAsync(_testData.AbpMicroservicesFutureEventUrlCode);
 
-            await _eventAppService.AddTrackAsync(eventDetailDto.Id, new AddTractDto
+            await _eventAppService.AddTrackAsync(eventDetailDto.Id, new AddTrackDto
             {
                 Name = "Track-1"
             });
@@ -256,7 +256,7 @@ namespace EventHub.Events
 
             var eventDetailDto = await _eventAppService.GetByUrlCodeAsync(_testData.AbpMicroservicesFutureEventUrlCode);
 
-            await _eventAppService.AddTrackAsync(eventDetailDto.Id, new AddTractDto
+            await _eventAppService.AddTrackAsync(eventDetailDto.Id, new AddTrackDto
             {
                 Name = "Track-1"
             });

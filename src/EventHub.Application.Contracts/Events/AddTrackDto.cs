@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EventHub.Events;
 
-public class AddTractDto
+public class AddTrackDto
 {
     [Required]
     [StringLength(TrackConsts.MaxNameLength)]

@@ -90,7 +90,7 @@
                                     @await Component.InvokeAsync(typeof(AttendeesAreaViewComponent), new { eventId = Model.Event.Id })
                                 </abp-tab>
                                 <abp-tab class="tab" title=" Track / Session">
-                                    <table class="table">
+                                    <table class="table mt-3">
                                         <thead>
                                         <tr>
                                             @foreach (var track in Model.Event.Tracks)
@@ -112,7 +112,7 @@
                                                         @foreach (var session in track.Sessions)
                                                         {
                                                             <div class="track-item">
-                                                                <span class="track-name">@session.Title.TruncateWithPostfix(25)</span>
+                                                                <span class="track-name">@session.Title.TruncateWithPostfix(55)</span>
                                                                 <small class="text-primary d-block my-2">@EventDateHelper.GetTimeRangeText(TimeOnly.FromDateTime(session.StartTime), TimeOnly.FromDateTime(session.EndTime)) | @session.Language</small>
                                                                 @foreach (var speaker in session.Speakers)
                                                                 {

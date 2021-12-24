@@ -49,7 +49,7 @@ namespace EventHub.Events
                 "In this event, we will introduce the ABP Framework and explore the fundamental features."
             );
 
-            @event.AddTract(Guid.NewGuid(), "Track-1");
+            @event.AddTrack(Guid.NewGuid(), "Track-1");
 
             @event.Tracks.ShouldContain(x => x.Name == "Track-1");
         }
@@ -67,9 +67,9 @@ namespace EventHub.Events
                 "In this event, we will introduce the ABP Framework and explore the fundamental features."
             );
             
-            @event.AddTract(Guid.NewGuid(), "Track-1");
+            @event.AddTrack(Guid.NewGuid(), "Track-1");
 
-            var exception = Assert.Throws<BusinessException>(() => { @event.AddTract(Guid.NewGuid(), "Track-1"); });
+            var exception = Assert.Throws<BusinessException>(() => { @event.AddTrack(Guid.NewGuid(), "Track-1"); });
             
             exception.Code.ShouldBe(EventHubErrorCodes.TrackNameAlreadyExist);
         }
@@ -87,8 +87,8 @@ namespace EventHub.Events
                 "In this event, we will introduce the ABP Framework and explore the fundamental features."
             );
 
-            @event.AddTract(Guid.NewGuid(), "Track-1");
-            @event.AddTract(Guid.NewGuid(), "Track-2");
+            @event.AddTrack(Guid.NewGuid(), "Track-1");
+            @event.AddTrack(Guid.NewGuid(), "Track-2");
             
             @event.Tracks.ShouldContain(x => x.Name == "Track-2");
         }
@@ -107,8 +107,8 @@ namespace EventHub.Events
             );
 
             var track1Id = Guid.NewGuid();
-            @event.AddTract(track1Id, "Track-1");
-            @event.AddTract(Guid.NewGuid(), "Track-2");
+            @event.AddTrack(track1Id, "Track-1");
+            @event.AddTrack(Guid.NewGuid(), "Track-2");
 
             var exception = Assert.Throws<BusinessException>(() => { @event.UpdateTrack(track1Id, "Track-2"); });
             
@@ -147,8 +147,8 @@ namespace EventHub.Events
             );
 
             var track1Id = Guid.NewGuid();
-            @event.AddTract(track1Id, "Track-1");
-            @event.AddTract(Guid.NewGuid(), "Track-2");
+            @event.AddTrack(track1Id, "Track-1");
+            @event.AddTrack(Guid.NewGuid(), "Track-2");
 
             @event.RemoveTrack(track1Id);
             
@@ -187,7 +187,7 @@ namespace EventHub.Events
             );
 
             var track1Id = Guid.NewGuid();
-            @event.AddTract(track1Id, "Track-1");
+            @event.AddTrack(track1Id, "Track-1");
             var session1Id = Guid.NewGuid();
             @event.AddSession(track1Id, session1Id, "Session-1 Title", "Session-1 desc".PadLeft(50, 't'), DateTime.Now, DateTime.Now, "en", new List<Guid>());
 
@@ -210,7 +210,7 @@ namespace EventHub.Events
             );
             
             var track1Id = Guid.NewGuid();
-            @event.AddTract(track1Id, "Track-1");
+            @event.AddTrack(track1Id, "Track-1");
             @event.AddSession(track1Id, Guid.NewGuid(), "Session-1 Title", "Session-1 desc".PadLeft(50, 't'), DateTime.Now, DateTime.Now.AddHours(1), "en", new List<Guid>());
 
             var exception = Assert.Throws<BusinessException>(() =>
@@ -235,7 +235,7 @@ namespace EventHub.Events
             );
             
             var track1Id = Guid.NewGuid();
-            @event.AddTract(track1Id, "Track-1");
+            @event.AddTrack(track1Id, "Track-1");
             var exception = Assert.Throws<BusinessException>(() =>
             {
                 @event.AddSession(track1Id, Guid.NewGuid(), "Session-1 Title", "Session-1 desc".PadLeft(50, 't'), DateTime.Now.AddHours(2), DateTime.Now.AddHours(1), "en", new List<Guid>());
@@ -258,7 +258,7 @@ namespace EventHub.Events
             );
             
             var track1Id = Guid.NewGuid();
-            @event.AddTract(track1Id, "Track-1");
+            @event.AddTrack(track1Id, "Track-1");
             var exception = Assert.Throws<BusinessException>(() =>
             {
                 @event.AddSession(track1Id, Guid.NewGuid(), "Session-1 Title", "Session-1 desc".PadLeft(50, 't'), DateTime.Now.AddHours(2), DateTime.Now.AddDays(3), "en", new List<Guid>());
@@ -281,7 +281,7 @@ namespace EventHub.Events
             );
             
             var track1Id = Guid.NewGuid();
-            @event.AddTract(track1Id, "Track-1");
+            @event.AddTrack(track1Id, "Track-1");
             
             @event.AddSession(track1Id, Guid.NewGuid(), "Session-1 Title", "Session-1 desc".PadLeft(50, 't'), DateTime.Now, DateTime.Now.AddDays(1), "en", new List<Guid>());
 
@@ -307,7 +307,7 @@ namespace EventHub.Events
             );
             
             var track1Id = Guid.NewGuid();
-            @event.AddTract(track1Id, "Track-1");
+            @event.AddTrack(track1Id, "Track-1");
 
             var speakerUserIds = new List<Guid>();
             speakerUserIds.Add(_testData.UserAdminId);
@@ -337,7 +337,7 @@ namespace EventHub.Events
             );
             
             var track1Id = Guid.NewGuid();
-            @event.AddTract(track1Id, "Track-1");
+            @event.AddTrack(track1Id, "Track-1");
 
             var speakerUserIds = new List<Guid>();
             speakerUserIds.Add(_testData.UserAdminId);
@@ -376,7 +376,7 @@ namespace EventHub.Events
             );
             
             var track1Id = Guid.NewGuid();
-            @event.AddTract(track1Id, "Track-1");
+            @event.AddTrack(track1Id, "Track-1");
 
             var speakerUserIds = new List<Guid>();
             speakerUserIds.Add(_testData.UserAdminId);

@@ -91,7 +91,7 @@ namespace EventHub.Controllers.Events
 
 		[HttpPost]
 		[Route("{id}/tracks")]
-		public async Task AddTrackAsync(Guid id, AddTractDto input)
+		public async Task AddTrackAsync(Guid id, AddTrackDto input)
 		{
 			await _eventAppService.AddTrackAsync(id, input);
 		}
