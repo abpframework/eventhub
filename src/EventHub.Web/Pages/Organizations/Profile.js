@@ -20,7 +20,7 @@ $(function () {
                 if (r.extraProperties.Status === "COMPLETED") {
                     Swal.fire({
                         title: 'Thank you for your purchase!',
-                        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam utnulla consequat.',
+                        text: 'Your Organization has been upgraded to Premium.',
                         imageUrl: '/assets/success.svg',
                         imageHeight: "70",
                         imageWidth: "70",
