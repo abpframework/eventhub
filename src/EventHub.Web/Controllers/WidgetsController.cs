@@ -1,6 +1,6 @@
 ﻿using System;
 using EventHub.Web.Pages.Events.Components.AttendeesArea;
-using EventHub.Web.Pages.Events.Components.CreateEventArea;
+using EventHub.Web.Pages.Events.Components.CreateOrEditEventArea;
 using EventHub.Web.Pages.Events.Components.LocationArea;
 using EventHub.Web.Pages.Events.Components.RegistrationArea;
 using EventHub.Web.Pages.Organizations.Components.JoinArea;
@@ -70,10 +70,10 @@ namespace EventHub.Web.Controllers
         }
         
         [HttpGet]
-        public IActionResult CreateEventArea(string eventUrlCode, CreateEventAreaViewComponent.ProgressStepType stepType)
+        public IActionResult CreateOrEditEventArea(string eventUrlCode, CreateOrEditEventAreaViewComponent.ProgressStepType stepType)
         {
             return ViewComponent(
-                typeof(CreateEventAreaViewComponent),
+                typeof(CreateOrEditEventAreaViewComponent),
                 new
                 {
                     eventUrlCode, 

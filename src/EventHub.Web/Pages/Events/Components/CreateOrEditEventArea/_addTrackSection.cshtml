@@ -1,8 +1,8 @@
-@using EventHub.Web.Pages.Events.Components.CreateEventArea
 @using EventHub.Events
+@using EventHub.Web.Pages.Events.Components.CreateOrEditEventArea
 @model List<EventHub.Events.TrackDto>
 
-<partial name="_progressSection.cshtml" model="@CreateEventAreaViewComponent.ProgressStepType.NewTrack"/>
+<partial name="_progressSection.cshtml" model="@CreateOrEditEventAreaViewComponent.ProgressStepType.Track"/>
 
 @if (Model is not null)
 {
@@ -39,11 +39,11 @@
                 <div class="card-footer bg-white border-0 p-5 pt-1"> 
                     <div class="row">
                         <div class="col-6">
-                            <button id="PreviousStepButtonInTrackSection" data-target-step="@CreateEventAreaViewComponent.ProgressStepType.NewEvent" class="btn btn-secondary step-transition"><i class="fa fa-arrow-left me-2"></i> Previous Step </button>
+                            <button id="PreviousStepButtonInTrackSection" data-target-step="@CreateOrEditEventAreaViewComponent.ProgressStepType.Event" class="btn btn-secondary step-transition"><i class="fa fa-arrow-left me-2"></i> Previous Step </button>
                         </div>
                         <div class="col-6 text-end">
-                            <button id="SkipThisStepButtonInTrackSection" data-target-step="@CreateEventAreaViewComponent.ProgressStepType.Preview" class="btn btn-link step-transition text-decoration-none">Skip This Step</button>
-                            <button id="NextStepButtonInTrackSection" data-target-step="@CreateEventAreaViewComponent.ProgressStepType.NewSession" class="btn btn-primary step-transition" @(Model.Any() ? "" : "disabled")>Next Step <i class="fa fa-arrow-right ms-2"></i></button>
+                            <button id="SkipThisStepButtonInTrackSection" data-target-step="@CreateOrEditEventAreaViewComponent.ProgressStepType.Preview" class="btn btn-link step-transition text-decoration-none">Skip This Step</button>
+                            <button id="NextStepButtonInTrackSection" data-target-step="@CreateOrEditEventAreaViewComponent.ProgressStepType.Session" class="btn btn-primary step-transition" @(Model.Any() ? "" : "disabled")>Next Step <i class="fa fa-arrow-right ms-2"></i></button>
                         </div>
                     </div>
                 </div>

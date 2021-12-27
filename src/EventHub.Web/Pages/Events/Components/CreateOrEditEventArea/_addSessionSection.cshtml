@@ -1,12 +1,12 @@
 @using EventHub.Web.Pages.Events
-@using EventHub.Web.Pages.Events.Components.CreateEventArea
 @using EventHub.Events
+@using EventHub.Web.Pages.Events.Components.CreateOrEditEventArea
 @using Microsoft.AspNetCore.Http
 @model List<EventHub.Events.TrackDto>
 
 @{
     var languages = new List<SelectListItem>();
-    @if (ViewData["StepType"]!.ToString() == CreateEventAreaViewComponent.ProgressStepType.NewSession.ToString())
+    @if (ViewData["StepType"]!.ToString() == CreateOrEditEventAreaViewComponent.ProgressStepType.Session.ToString())
     {
         languages = ViewData["Languages"] as List<SelectListItem>;
         if (languages is null || !languages.Any())
@@ -24,7 +24,7 @@
     }
 }
 
-<partial name="_progressSection.cshtml" model="@CreateEventAreaViewComponent.ProgressStepType.NewSession" />
+<partial name="_progressSection.cshtml" model="@CreateOrEditEventAreaViewComponent.ProgressStepType.Session" />
 
 @if (Model is not null)
 {
@@ -96,12 +96,12 @@
                     <div class="row">
                         <div class="col-6">
                             <button id="PreviousStepButtonInSessionSection"
-                            data-target-step="@CreateEventAreaViewComponent.ProgressStepType.NewTrack"
+                            data-target-step="@CreateOrEditEventAreaViewComponent.ProgressStepType.Track"
                             class="btn btn-secondary step-transition"><i class="fa fa-arrow-left me-2"></i> Previous
                                 Step </button>
                         </div>
                         <div class="col-6 text-end">
-                            <button id="PreviewButtonInSessionSection" data-target-step="@CreateEventAreaViewComponent.ProgressStepType.Preview" class="btn btn-primary step-transition">Preview <i class="fa fa-arrow-right ms-2"></i></button>
+                            <button id="PreviewButtonInSessionSection" data-target-step="@CreateOrEditEventAreaViewComponent.ProgressStepType.Preview" class="btn btn-primary step-transition">Preview <i class="fa fa-arrow-right ms-2"></i></button>
                         </div>
                     </div>
                 </div>

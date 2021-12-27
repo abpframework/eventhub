@@ -1,7 +1,7 @@
 ﻿@page "/events/new/{eventUrlCode?}"
 @inject IHtmlLocalizer<EventHubResource> L
 @using EventHub.Localization
-@using EventHub.Web.Pages.Events.Components.CreateEventArea
+@using EventHub.Web.Pages.Events.Components.CreateOrEditEventArea
 @using Microsoft.AspNetCore.Mvc.Localization
 @model EventHub.Web.Pages.Events.NewPageModel
 
@@ -90,10 +90,10 @@
     }
     else
     {
-        @await Component.InvokeAsync(typeof(CreateEventAreaViewComponent), new
+        @await Component.InvokeAsync(typeof(CreateOrEditEventAreaViewComponent), new
         {
             eventUrlCode = Model.EventUrlCode,
-            stepType = CreateEventAreaViewComponent.ProgressStepType.NewEvent
+            stepType = CreateOrEditEventAreaViewComponent.ProgressStepType.Event
         })
     }
 </div>

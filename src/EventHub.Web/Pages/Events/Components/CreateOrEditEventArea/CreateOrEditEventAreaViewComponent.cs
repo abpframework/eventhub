@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
@@ -13,29 +12,27 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
-using Volo.Abp.Authorization;
 using Volo.Abp.Users;
 
-namespace EventHub.Web.Pages.Events.Components.CreateEventArea;
+namespace EventHub.Web.Pages.Events.Components.CreateOrEditEventArea;
 
 [Widget(
     AutoInitialize = true,
-    RefreshUrl = "/Widgets/CreateEventArea",
-    ScriptFiles = new[] { "/Pages/Events/Components/CreateEventArea/create-event-area.js" },
-    StyleFiles = new[] { "/Pages/Events/Components/CreateEventArea/create-event-area.css" }
+    RefreshUrl = "/Widgets/CreateOrEditEventArea",
+    ScriptFiles = new[] { "/Pages/Events/Components/CreateOrEditEventArea/create-or-edit-event-area.js" },
+    StyleFiles = new[] { "/Pages/Events/Components/CreateOrEditEventArea/create-or-edit-event-area.css" }
 )]
-public class CreateEventAreaViewComponent : AbpViewComponent
+public class CreateOrEditEventAreaViewComponent : AbpViewComponent
 {
     private readonly IEventAppService _eventAppService;
     private readonly IOrganizationAppService _organizationAppService;
 
     private readonly ICurrentUser _currentUser;
 
-    public CreateEventAreaViewComponent(
+    public CreateOrEditEventAreaViewComponent(
         IEventAppService eventAppService,
         IOrganizationAppService organizationAppService,
         ICurrentUser currentUser)
@@ -46,8 +43,8 @@ public class CreateEventAreaViewComponent : AbpViewComponent
     }
 
     public async Task<IViewComponentResult> InvokeAsync(
-        string eventUrlCode, 
-        ProgressStepType stepType = ProgressStepType.NewEvent)
+        string eventUrlCode,
+        ProgressStepType stepType = ProgressStepType.Event)
     {
         NewEventViewModel model = null;
         if (!eventUrlCode.IsNullOrWhiteSpace())
@@ -66,7 +63,7 @@ public class CreateEventAreaViewComponent : AbpViewComponent
 
         await FillViewDataAsync(stepType, model);
 
-        return View("~/Pages/Events/Components/CreateEventArea/Default.cshtml", model);
+        return View("~/Pages/Events/Components/CreateOrEditEventArea/Default.cshtml", model);
     }
 
     private async Task<string> GetOrganizationNameAsync(Guid organizationId)
@@ -131,12 +128,12 @@ public class CreateEventAreaViewComponent : AbpViewComponent
         ViewData["StepType"] = stepType.ToString();
         switch (stepType)
         {
-            case ProgressStepType.NewEvent:
+            case ProgressStepType.Event:
                 ViewData["Organizations"] = await GetOrganizationsSelectItemAsync();
                 ViewData["Countries"] = await GetCountriesSelectItemAsync();
                 ViewData["Languages"] = GetLanguagesSelectItem();
                 break;
-            case ProgressStepType.NewSession:
+            case ProgressStepType.Session:
                 ViewData["Languages"] = GetLanguagesSelectItem();
                 break;
             case ProgressStepType.Preview:
@@ -145,7 +142,6 @@ public class CreateEventAreaViewComponent : AbpViewComponent
                 {
                     ViewData["CountryName"] = await GetCountryNameAsync(model.CountryId!.Value);
                 }
-
                 break;
         }
     }
@@ -210,9 +206,9 @@ public class CreateEventAreaViewComponent : AbpViewComponent
 
     public enum ProgressStepType : byte
     {
-       NewEvent = 0,
-       NewTrack,
-       NewSession,
+       Event = 0,
+       Track,
+       Session,
        Preview
     }
 }

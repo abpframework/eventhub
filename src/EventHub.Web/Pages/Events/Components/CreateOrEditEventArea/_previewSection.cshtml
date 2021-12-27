@@ -1,16 +1,16 @@
 @using EventHub.Web
 @using EventHub.Web.Pages.Events
-@using EventHub.Web.Pages.Events.Components.CreateEventArea
+@using EventHub.Web.Pages.Events.Components.CreateOrEditEventArea
 @using Microsoft.AspNetCore.Http
 @using Microsoft.Extensions.Options
-@model EventHub.Web.Pages.Events.Components.CreateEventArea.CreateEventAreaViewComponent.NewEventViewModel
+@model EventHub.Web.Pages.Events.Components.CreateOrEditEventArea.CreateOrEditEventAreaViewComponent.NewEventViewModel
 @inject IOptions<EventHubUrlOptions> UrlOptions
 
 @{
     var organizationName = "";
     var countryName = "";
     Guid? eventId = null; 
-    @if (ViewData["StepType"]!.ToString() == CreateEventAreaViewComponent.ProgressStepType.Preview.ToString())
+    @if (ViewData["StepType"]!.ToString() == CreateOrEditEventAreaViewComponent.ProgressStepType.Preview.ToString())
     {
         eventId = ViewData["EventId"] as Guid?;
         
@@ -208,11 +208,11 @@
                         <div class="col-6">
                             @if (Model.Tracks.Any() && Model.Tracks.First().Sessions.Any())
                             {
-                                <button id="PreviousStepButtonInPreviewSection" data-target-step="@CreateEventAreaViewComponent.ProgressStepType.NewSession" class="btn btn-secondary step-transition"><i class="fa fa-arrow-left me-2"></i> Previous Step </button>
+                                <button id="PreviousStepButtonInPreviewSection" data-target-step="@CreateOrEditEventAreaViewComponent.ProgressStepType.Session" class="btn btn-secondary step-transition"><i class="fa fa-arrow-left me-2"></i> Previous Step </button>
                             }
                             else
                             {
-                                <button id="PreviousStepButtonInPreviewSection" data-target-step="@CreateEventAreaViewComponent.ProgressStepType.NewTrack" class="btn btn-secondary step-transition"><i class="fa fa-arrow-left me-2"></i> Previous Step </button>
+                                <button id="PreviousStepButtonInPreviewSection" data-target-step="@CreateOrEditEventAreaViewComponent.ProgressStepType.Track" class="btn btn-secondary step-transition"><i class="fa fa-arrow-left me-2"></i> Previous Step </button>
                             }
                         </div>
                         <div class="col-6 text-end">

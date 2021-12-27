@@ -1,0 +1,20 @@
+@using EventHub.Web.Pages.Events.Components.CreateOrEditEventArea
+@model EventHub.Web.Pages.Events.Components.CreateOrEditEventArea.CreateOrEditEventAreaViewComponent.ProgressStepType
+
+@{
+    var eventId = ViewData["EventId"] as Guid?;
+    var prefixOfStep = eventId.HasValue ? "Edit" : "New";
+}
+
+<div class="px-4 py-1">
+    <div class="progresses py-4">
+        <ul class="d-flex align-items-center justify-content-between">
+            <li id="step-1" class="create-steps @(Model == CreateOrEditEventAreaViewComponent.ProgressStepType.Event ? "blue" : "")">1<span>@prefixOfStep Event</span></li>
+            <li id="step-2" class="create-steps @(Model == CreateOrEditEventAreaViewComponent.ProgressStepType.Track ? "blue" : "")">2<span>@prefixOfStep Track</span></li>
+            <li id="step-3" class="create-steps @(Model == CreateOrEditEventAreaViewComponent.ProgressStepType.Session ? "blue" : "")">3<span>@prefixOfStep Session</span></li>
+        </ul>
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+    </div>
+</div>

@@ -1,13 +1,13 @@
 (function () {
-    abp.widgets.CreateEventArea = function ($wrapper) {
+    abp.widgets.CreateOrEditEventArea = function ($wrapper) {
         var l = abp.localization.getResource('EventHub');
         toastr.options.timeOut = 500;
         toastr.options.preventDuplicates = true;
         
         var stepType = {
-            "NewEvent": "NewEvent",
-            "NewTrack": "NewTrack",
-            "NewSession": "NewSession",
+            "Event": "Event",
+            "Track": "Track",
+            "Session": "Session",
             "Preview": "Preview"
         }
 
@@ -18,7 +18,7 @@
 
         var filter = {
             eventUrlCode: "",
-            stepType: stepType.NewEvent
+            stepType: stepType.Event
         }
 
         var getFilters = function () {
@@ -142,7 +142,7 @@
                 eventApiService.addTrack(eventIdInput.val(), {name: trackName}).then(function () {
                     $('#AddTrackModal').modal('hide');
                     abp.notify.success('Added the track');
-                    FillFilter(stepType.NewTrack);
+                    FillFilter(stepType.Track);
                     widgetManager.refresh();
                 });
             });
@@ -181,7 +181,7 @@
                 eventApiService.updateTrack(eventIdInput.val(), trackId, {name: trackName}).then(function () {
                     $('#EditTrackModal').modal('hide');
                     abp.notify.success('Updated the track');
-                    FillFilter(stepType.NewTrack)
+                    FillFilter(stepType.Track)
                     widgetManager.refresh();
                 });
             });
@@ -192,7 +192,7 @@
                 e.preventDefault();
                 eventApiService.deleteTrack(eventIdInput.val(), this.id).then(function () {
                     abp.notify.success('Successfully deleted');
-                    FillFilter(stepType.NewTrack)
+                    FillFilter(stepType.Track)
                     widgetManager.refresh();
                 });
             });
@@ -230,7 +230,7 @@
                 eventApiService.addSession(eventIdInput.val(), trackId, input).then(function () {
                     $('#AddSessionModal').modal('hide');
                     abp.notify.success('Added the session');
-                    FillFilter(stepType.NewSession);
+                    FillFilter(stepType.Session);
                     widgetManager.refresh();
                 });
             });
@@ -276,7 +276,7 @@
                 eventApiService.updateSession(eventIdInput.val(), editSessionForm.find('#TrackId').val(), editSessionForm.find('#SessionId').val(), input).then(function () {
                     $('#EditSessionModal').modal('hide');
                     abp.notify.success('Updated the session');
-                    FillFilter(stepType.NewSession);
+                    FillFilter(stepType.Session);
                     widgetManager.refresh();
                 });
             });
@@ -290,7 +290,7 @@
                 
                 eventApiService.deleteSession(eventIdInput.val(), trackId, clickedSessionId).then(function () {
                     abp.notify.success('Successfully deleted');
-                    FillFilter(stepType.NewSession)
+                    FillFilter(stepType.Session)
                     widgetManager.refresh();
                 });
             });

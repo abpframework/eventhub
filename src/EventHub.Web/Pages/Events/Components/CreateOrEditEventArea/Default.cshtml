@@ -1,0 +1,35 @@
+@using EventHub.Web.Pages.Events.Components.CreateOrEditEventArea
+@using Microsoft.AspNetCore.Http
+@model EventHub.Web.Pages.Events.Components.CreateOrEditEventArea.CreateOrEditEventAreaViewComponent.NewEventViewModel
+
+@{
+    if (Model is null)
+    {
+        throw new BadHttpRequestException("");
+    }
+
+    var eventId = ViewData["EventId"] as Guid?;
+    var eventUrlCode = ViewData["EventUrlCode"]?.ToString();
+
+    var result = Enum.TryParse(ViewData["StepType"]!.ToString(), out CreateOrEditEventAreaViewComponent.ProgressStepType stepType);
+    if (!result)
+    {
+        throw new BadHttpRequestException("");
+    }
+}
+
+<div id="CreateEventContainer" style="@(stepType != CreateOrEditEventAreaViewComponent.ProgressStepType.Event ? "display: none" : "")">
+    <partial name="_newEventSection.cshtml" model="@Model"/>
+</div>
+<div id="CreateTrackContainer" style="@(stepType != CreateOrEditEventAreaViewComponent.ProgressStepType.Track ? "display: none" : "")">
+    <partial name="_addTrackSection.cshtml" model="@Model.Tracks"/>
+</div>
+<div id="CreateSessionContainer" style="@(stepType != CreateOrEditEventAreaViewComponent.ProgressStepType.Session ? "display: none" : "")">
+    <partial name="_addSessionSection.cshtml" model="@Model.Tracks"/>
+</div>
+<div id="PreviewContainer" style="@(stepType != CreateOrEditEventAreaViewComponent.ProgressStepType.Preview ? "display: none" : "")">
+    <partial name="_previewSection.cshtml" model="@Model"/>
+</div>
+
+<input type="hidden" id="EventId" value="@eventId"/>
+<input type="hidden" id="EventUrlCode" value="@eventUrlCode"/>

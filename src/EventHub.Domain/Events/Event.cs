@@ -243,7 +243,7 @@ namespace EventHub.Events
         
         private void CheckIfValidSessionTime(DateTime startTime, DateTime endTime)
         {
-            // TODO: This control is already done in Track and even Session. Do you really need this?
+            // TODO(berkansasmaz): This control is already done in Track and even Session. Do you really need this?
             if (startTime > endTime)
             {
                 throw new BusinessException(EventHubErrorCodes.SessionEndTimeCantBeEarlierThanStartTime);

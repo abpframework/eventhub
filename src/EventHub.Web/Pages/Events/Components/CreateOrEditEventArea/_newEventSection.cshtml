@@ -1,8 +1,8 @@
 @using EventHub.Web
-@using EventHub.Web.Pages.Events.Components.CreateEventArea
+@using EventHub.Web.Pages.Events.Components.CreateOrEditEventArea
 @using Microsoft.AspNetCore.Http
 @using Microsoft.Extensions.Options
-@model EventHub.Web.Pages.Events.Components.CreateEventArea.CreateEventAreaViewComponent.NewEventViewModel
+@model EventHub.Web.Pages.Events.Components.CreateOrEditEventArea.CreateOrEditEventAreaViewComponent.NewEventViewModel
 @inject IOptions<EventHubUrlOptions> UrlOptions
 
 @{
@@ -11,7 +11,7 @@
   var languages = new List<SelectListItem>();
   var eventId = ViewData["EventId"] as Guid?;
   
-  @if (ViewData["StepType"]!.ToString() == CreateEventAreaViewComponent.ProgressStepType.NewEvent.ToString())
+  @if (ViewData["StepType"]!.ToString() == CreateOrEditEventAreaViewComponent.ProgressStepType.Event.ToString())
   {
     organizations = ViewData["Organizations"] as List<SelectListItem>;
     if (organizations is null || !organizations.Any())
@@ -33,7 +33,7 @@
   }
 }
 
-<partial name="_progressSection.cshtml" model="@CreateEventAreaViewComponent.ProgressStepType.NewEvent" />
+<partial name="_progressSection.cshtml" model="@CreateOrEditEventAreaViewComponent.ProgressStepType.Event" />
 @if (Model is not null)
 {
   <form id="CreateEventForm" method="post" enctype="multipart/form-data">
