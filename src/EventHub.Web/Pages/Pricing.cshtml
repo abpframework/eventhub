@@ -1,33 +1,34 @@
 @page "/pricing/{organizationName}"
 @using EventHub.Localization
+@using EventHub.Web.PaymentRequests
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Options
 @model EventHub.Web.Pages.Pricing
 @inject IHtmlLocalizer<EventHubResource> L
+@inject IOptionsSnapshot<PremiumPlanInfoOptions> PremiumPlanInfoOptionsSnapshot
 
 @section styles {
   <abp-style src="/Pages/Pricing.css" />
 }
 
-@* TODO(berkansasmaz): Use real words instead of dummy words.*@
 <main class="static-page container mt-5"> 
     <h1 class="text-center mb-3">Pricing</h1>
-    <p class="text-center mb-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ut nulla consequat, tempus sapien in,
-        pellentesque nunc. Sed at nunc pellentesque, fermentum mi et, fermentum massa. </p>
+    <p class="text-center mb-5">Simple plans for everyone</p>
     <div class="row"> 
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body px-4 py-4 text-center"> 
                     <h2 class="mt-4">Normal Account</h2>
-                    <p class="my-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam utnulla consequat, tempus sapien in.</p>
+                    <p class="my-4">For individuals and small teams trying out EventHub for an unlimited period.</p>
                     <div class="price mb-4">
                         <small>$</small>
                         <span>0</span>
                     </div>
                     <ul class="list-check-icon mb-4 text-start">
-                        <li><i class="fa fa-check-circle"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit. </li>
-                        <li><i class="fa fa-check-circle"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit. </li>
-                        <li><i class="fa fa-check-circle"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit. </li> 
-                    </ul> 
+                        <li><i class="fa fa-check-circle"></i> Unlimited event creation. </li>
+                        <li><i class="fa fa-check-circle"></i> Adding unlimited tracks and sessions to events. </li>
+                        <li><i class="fa fa-check-circle"></i> Unlimited participant capacity for events. </li> 
+                    </ul>
                 </div> 
             </div> 
         </div>
@@ -37,18 +38,17 @@
                  <div class="card">
                      <div class="card-body px-4 py-4 text-center">
                          <h2 class="mt-4">Premium Account</h2>
-                         <p class="my-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam utnulla consequat, tempus sapien in.</p>
+                         <p class="my-4">For medium teams and large teams who want to highlight their organization for a year.</p>
                          <div class="price mb-4">
                              <small>$</small>
                              <span>@Model.PremiumPlanInfo.Price</span>
                          </div>
                          <ul class="list-check-icon mb-4 text-start">
-                             <li><i class="fa fa-check-circle"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit. </li>
-                             <li><i class="fa fa-check-circle"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit. </li>
-                             <li><i class="fa fa-check-circle"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit adipiscing elit. </li>
-                             <li><i class="fa fa-check-circle"></i> Lorem ipsum adipiscing elit dolor sit amet, consectetur adipiscing elit. </li>
-                             <li><i class="fa fa-check-circle"></i> Lorem adipiscing elit adipiscing elitipsum dolor sit amet, consectetur adipiscing elit. </li>
-                             <li><i class="fa fa-check-circle"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit. </li>
+                             <li><i class="fa fa-check-circle"></i> Unlimited event creation. </li>
+                             <li><i class="fa fa-check-circle"></i> Adding unlimited tracks and sessions to events. </li>
+                             <li><i class="fa fa-check-circle"></i> Unlimited participant capacity for events. </li> 
+                             <li><i class="fa fa-check-circle"></i> Be more prominent in the organization list. </li>
+                             <li><i class="fa fa-check-circle"></i> More coming soon. </li>
                          </ul>
                           @if (Model.Organization.IsPremium)
                           {
@@ -71,52 +71,43 @@
              </div>
          }
         <h2 class="text-center mb-3">Frequently Asked Questions</h2>
- 
-        <div id="accordion" class="mb-5 pb-5 faq-container"> 
-            <div class="faq shown" data-anchor-id="accordion1">
-                <div class="faq-header">
-                    <h5><button class="btn btn-faq" data-bs-toggle="collapse" data-bs-target="#accordion1" aria-expanded="false" aria-controls="accordion1">Lorem ipsum dolor sit amet, consectetur adipiscing elit?<i class="fas fa-chevron-up"></i> </button></h5>
-                </div>
-                <div id="accordion1" class="collapse show" data-bs-parent="#accordion" style="">
-                    <div class="faq-body">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        </p>
-                    </div>
-                </div>
-            </div>  
-            <div class="faq" data-anchor-id="accordion12">
-                <div class="faq-header">
-                    <h5><button class="btn btn-faq collapsed" data-bs-toggle="collapse" data-bs-target="#accordion12" aria-expanded="false" aria-controls="accordion12">What onsectetur adipiscinglor sit amet?<i class="fas fa-chevron-up"></i> </button></h5>
-                </div>
-                <div id="accordion12" class="collapse" data-bs-parent="#accordion" style="">
-                    <div class="faq-body">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        </p>
-                    </div>
-                </div>
-            </div>  
-            <div class="faq" data-anchor-id="accordion123">
-                <div class="faq-header">
-                    <h5><button class="btn btn-faq collapsed" data-bs-toggle="collapse" data-bs-target="#accordion123" aria-expanded="false" aria-controls="accordion123">What onsectetur adipiscing elit. Lorem ipsum dolor sit amet?<i class="fas fa-chevron-up"></i> </button></h5>
-                </div>
-                <div id="accordion123" class="collapse" data-bs-parent="#accordion" style="">
-                    <div class="faq-body">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        </p>
-                    </div>
-                </div>
-            </div>  
-            <div class="faq" data-anchor-id="accordion124">
-                <div class="faq-header">
-                    <h5><button class="btn btn-faq collapsed" data-bs-toggle="collapse" data-bs-target="#accordion124" aria-expanded="false" aria-controls="accordion124">Asectetur adipiscing elorem ipsum dolor sit amet?<i class="fas fa-chevron-up"></i> </button></h5>
-                </div>
-                <div id="accordion124" class="collapse" data-bs-parent="#accordion" style="">
-                    <div class="faq-body">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        </p>
-                    </div>
-                </div>
-            </div>  
-        </div>
+         <div id="accordion" class="mb-5 pb-5 faq-container">
+             <div class="faq" data-anchor-id="accordion124">
+                 <div class="faq-header">
+                     <h5><button class="btn btn-faq collapsed" data-bs-toggle="collapse" data-bs-target="#accordion124" aria-expanded="false" aria-controls="accordion124">What is premium organization?<i class="fas fa-chevron-up"></i> </button></h5>
+                 </div>
+                 <div id="accordion124" class="collapse" data-bs-parent="#accordion" style="">
+                     <div class="faq-body">
+                         <p>With Premium organization, you can reach more people by highlighting your organization. However, for now, it has no different from a normal organization in terms of feature set.
+                         </p>
+                     </div>
+                 </div>
+             </div>
+             <div class="faq" data-anchor-id="accordion12">
+                 <div class="faq-header">
+                     <h5><button class="btn btn-faq collapsed" data-bs-toggle="collapse" data-bs-target="#accordion12" aria-expanded="false" aria-controls="accordion12">How do I renew my plan?<i class="fas fa-chevron-up"></i> </button></h5>
+                 </div>
+                 <div id="accordion12" class="collapse" data-bs-parent="#accordion" style="">
+                     <div class="faq-body">
+                         @{
+                             var  canExtendBeforeHowManyMonths = PremiumPlanInfoOptionsSnapshot.Value.OnePremiumPeriodAsMonth - PremiumPlanInfoOptionsSnapshot.Value.CanBeExtendedAfterHowManyMonths;
+                         }
+                         <p>@(canExtendBeforeHowManyMonths == PremiumPlanInfoOptionsSnapshot.Value.OnePremiumPeriodAsMonth ? "You " : "In the last " + canExtendBeforeHowManyMonths + " months of your premium period, you") can renew your plan by going to the Organization detail page.
+                         </p>
+                     </div>
+                 </div>
+             </div>
+             <div class="faq" data-anchor-id="accordion123">
+                 <div class="faq-header">
+                     <h5><button class="btn btn-faq collapsed" data-bs-toggle="collapse" data-bs-target="#accordion123" aria-expanded="false" aria-controls="accordion123">What happens when my license period ends?<i class="fas fa-chevron-up"></i> </button></h5>
+                 </div>
+                 <div id="accordion123" class="collapse" data-bs-parent="#accordion" style="">
+                     <div class="faq-body">
+                         <p>Don't worry about even if your organization has run out of premium, you can upgrade back to the Premium plan at any time.
+                         </p>
+                     </div>
+                 </div>
+             </div>
+         </div>
     </div>
 </main>
