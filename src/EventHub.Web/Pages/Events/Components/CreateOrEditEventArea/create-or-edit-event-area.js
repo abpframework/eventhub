@@ -93,8 +93,8 @@
             });
 
             function SwitchToTrackCreation() {
-                $('#CreateEventContainer').css('display', 'none');
-                $('#CreateTrackContainer').css('display', '');
+                $('#EventContainer').css('display', 'none');
+                $('#TrackContainer').css('display', '');
                 ScrollToWrapperBegin();
             }
             

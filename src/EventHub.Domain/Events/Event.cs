@@ -185,9 +185,7 @@ namespace EventHub.Events
             ICollection<Guid> speakerUserIds)
         {
             CheckIfValidSessionTime(startTime, endTime);
-
-            // TODO(berkansasmaz): Add domain rule: The same user cannot be a speaker in more than one session at the same time.
-
+            
             var track = GetTrack(trackId);
             track.AddSession(sessionId, title, description,startTime, endTime, language, speakerUserIds);
             return this;
@@ -243,12 +241,6 @@ namespace EventHub.Events
         
         private void CheckIfValidSessionTime(DateTime startTime, DateTime endTime)
         {
-            // TODO(berkansasmaz): This control is already done in Track and even Session. Do you really need this?
-            if (startTime > endTime)
-            {
-                throw new BusinessException(EventHubErrorCodes.SessionEndTimeCantBeEarlierThanStartTime);
-            }
-
             if (startTime < this.StartTime || this.EndTime < endTime)
             {
                 throw new BusinessException(EventHubErrorCodes.SessionTimeShouldBeInTheEventTime);

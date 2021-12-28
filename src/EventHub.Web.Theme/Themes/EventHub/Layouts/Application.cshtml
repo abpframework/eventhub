@@ -44,7 +44,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <title>@pageTitle</title>
-    @* TODO(berkansasmaz): Get SEO content from the marketing team *@
     <meta name="description" content="@(!string.IsNullOrEmpty(ViewBag.Description) ? ViewBag.Description : "EventHub Description")"/>
     <meta property="og:title" content="@(!string.IsNullOrWhiteSpace(ViewBag.OgTitle) ? ViewBag.OgTitle : "EventHub Title")"/>
     <meta property="og:url" content="@Context.Request.GetDisplayUrl()"/>

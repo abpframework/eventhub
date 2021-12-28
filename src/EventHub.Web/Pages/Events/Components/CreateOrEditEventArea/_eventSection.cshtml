@@ -42,7 +42,7 @@
         <div class="col-md-9 mx-auto profile-content">
           <div class="card">
             <div class="card-body" style="min-height: 496px">
-              <h3 class="mb-4">Create New Event</h3>
+              <h3 class="mb-4">@(eventId.HasValue ? "Edit" : "Create New") Event</h3>
               <div class="form">
                 <div class="row">
                   <div class="col-md-6">
@@ -152,7 +152,7 @@
                   <div class="col-md-12 text-end">
                     <button id="CreateEventButton" disabled type="submit" class="btn btn-primary btn-lg" 
                             data-url="@(eventId.HasValue ? Url.ActionLink("Update", "Event", new {Area = "eventhub", id = eventId!.Value}, null) : Url.ActionLink("Create", "Event", new {Area = "eventhub"}, null))">
-                            Next Step
+                            Next Step <i class="fa fa-arrow-right ms-2"></i>
                     </button>
                   </div>
                 </div>

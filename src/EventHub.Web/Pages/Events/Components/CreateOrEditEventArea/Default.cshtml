@@ -18,14 +18,14 @@
     }
 }
 
-<div id="CreateEventContainer" style="@(stepType != CreateOrEditEventAreaViewComponent.ProgressStepType.Event ? "display: none" : "")">
-    <partial name="_newEventSection.cshtml" model="@Model"/>
+<div id="EventContainer" style="@(stepType != CreateOrEditEventAreaViewComponent.ProgressStepType.Event ? "display: none" : "")">
+    <partial name="_eventSection.cshtml" model="@Model"/>
 </div>
-<div id="CreateTrackContainer" style="@(stepType != CreateOrEditEventAreaViewComponent.ProgressStepType.Track ? "display: none" : "")">
-    <partial name="_addTrackSection.cshtml" model="@Model.Tracks"/>
+<div id="TrackContainer" style="@(stepType != CreateOrEditEventAreaViewComponent.ProgressStepType.Track ? "display: none" : "")">
+    <partial name="_trackSection.cshtml" model="@Model.Tracks"/>
 </div>
-<div id="CreateSessionContainer" style="@(stepType != CreateOrEditEventAreaViewComponent.ProgressStepType.Session ? "display: none" : "")">
-    <partial name="_addSessionSection.cshtml" model="@Model.Tracks"/>
+<div id="SessionContainer" style="@(stepType != CreateOrEditEventAreaViewComponent.ProgressStepType.Session ? "display: none" : "")">
+    <partial name="_sessionSection.cshtml" model="@Model.Tracks"/>
 </div>
 <div id="PreviewContainer" style="@(stepType != CreateOrEditEventAreaViewComponent.ProgressStepType.Preview ? "display: none" : "")">
     <partial name="_previewSection.cshtml" model="@Model"/>

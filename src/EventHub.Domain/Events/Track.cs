@@ -54,7 +54,7 @@ namespace EventHub.Events
             
             if (startTime > endTime)
             {
-                throw new BusinessException(EventHubErrorCodes.EndTimeCantBeEarlierThanStartTime);
+                throw new BusinessException(EventHubErrorCodes.SessionEndTimeCantBeEarlierThanStartTime);
             }
 
             CheckIfValidSessionTime(startTime);
@@ -76,7 +76,7 @@ namespace EventHub.Events
         {
             if (startTime > endTime)
             {
-                throw new BusinessException(EventHubErrorCodes.EndTimeCantBeEarlierThanStartTime);
+                throw new BusinessException(EventHubErrorCodes.SessionEndTimeCantBeEarlierThanStartTime);
             }
 
             var session = Sessions.Single(x => x.Id == sessionId);

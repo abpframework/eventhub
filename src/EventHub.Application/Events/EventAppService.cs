@@ -262,7 +262,6 @@ namespace EventHub.Events
         [Authorize]
         public async Task UpdateAsync(Guid id, UpdateEventDto input)
         {
-            // TODO(berkansasmaz): Should it be updated on past events?
             var @event = await _eventRepository.GetAsync(id);
             await CheckIfValidOwnerAsync(@event);
 
