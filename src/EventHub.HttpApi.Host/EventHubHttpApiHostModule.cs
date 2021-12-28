@@ -30,6 +30,7 @@ using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Swashbuckle;
+using Volo.Abp.Timing;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
 
@@ -52,7 +53,6 @@ namespace EventHub
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var configuration = context.Services.GetConfiguration();
-            var hostingEnvironment = context.Services.GetHostingEnvironment();
 
             ConfigureAuthentication(context, configuration);
             ConfigureLocalization();
@@ -64,6 +64,7 @@ namespace EventHub
             ConfigureSwaggerServices(context, configuration);
             ConfigureBackgroundJobs();
             ConfigureAutoApiControllers();
+            ConfigureTiming();
         }
         
         private void ConfigureAutoApiControllers()
@@ -185,6 +186,11 @@ namespace EventHub
         private void ConfigureCookies(ServiceConfigurationContext context)
         {
             context.Services.AddSameSiteCookiePolicy();
+        }
+        
+        private void ConfigureTiming()
+        {
+            Configure<AbpClockOptions>(options => { options.Kind = DateTimeKind.Utc; });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

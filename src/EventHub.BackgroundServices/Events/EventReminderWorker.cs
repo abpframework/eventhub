@@ -32,7 +32,7 @@ namespace EventHub.Events
             var queryable = await eventRepository.GetQueryableAsync();
             var query = queryable.Where(x =>
                 x.IsRemindingEmailSent == false &&
-                x.StartTime <= thirtyMinutesLater
+                x.StartTime <= thirtyMinutesLater && !x.IsDraft
             );
 
             var events = await asyncExecuter.ToListAsync(query);

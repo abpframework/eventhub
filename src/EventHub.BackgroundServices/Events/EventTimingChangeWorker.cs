@@ -31,7 +31,7 @@ namespace EventHub.Events
             var asyncExecuter = workerContext.ServiceProvider.GetRequiredService<IAsyncQueryableExecuter>();
 
             var queryable = await eventRepository.GetQueryableAsync();
-            var query = queryable.Where(x => !x.IsTimingChangeEmailSent);
+            var query = queryable.Where(x => !x.IsTimingChangeEmailSent && !x.IsDraft);
 
             var events = await asyncExecuter.ToListAsync(query);
 

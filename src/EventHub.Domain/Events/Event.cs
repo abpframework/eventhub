@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using Volo.Abp;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Auditing;
 
 namespace EventHub.Events
@@ -41,7 +45,11 @@ namespace EventHub.Events
         public int TimingChangeCount  { get; set; }
         
         public bool IsTimingChangeEmailSent { get; set; }
-
+        
+        public bool IsDraft { get; private set; }
+        
+        public ICollection<Track> Tracks { get; private set; }
+        
         private Event()
         {
 
@@ -59,9 +67,14 @@ namespace EventHub.Events
         {
             OrganizationId = organizationId;
             UrlCode = Check.NotNullOrWhiteSpace(urlCode, urlCode, EventConsts.UrlCodeLength, EventConsts.UrlCodeLength);
+            
             SetTitle(title);
             SetDescription(description);
             SetTimeInternal(startTime, endTime);
+
+            Publish(false);
+            
+            Tracks = new Collection<Track>();
         }
 
         public Event SetTitle(string title)
@@ -83,29 +96,155 @@ namespace EventHub.Events
             {
                 return this;
             }
-            
-            if (TimingChangeCount >= EventConsts.MaxTimingChangeCountForUser)
+
+            if (!IsDraft)
             {
-                throw new BusinessException(EventHubErrorCodes.CantChangeEventTiming)
-                    .WithData("MaxTimingChangeLimit", EventConsts.MaxTimingChangeCountForUser);
+                if (TimingChangeCount >= EventConsts.MaxTimingChangeCountForUser)
+                {
+                    throw new BusinessException(EventHubErrorCodes.CantChangeEventTiming)
+                        .WithData("MaxTimingChangeLimit", EventConsts.MaxTimingChangeCountForUser);
+                }
             }
             
-            AddLocalEvent(new EventTimeChangingEventData(this, StartTime, EndTime));
+            SetTimeInternal(startTime, endTime);
 
-            return SetTimeInternal(startTime, endTime);
+            if (!IsDraft)
+            {
+                TimingChangeCount++;
+                IsTimingChangeEmailSent = false;
+            }
+            
+            return this;
         }
 
         private Event SetTimeInternal(DateTime startTime, DateTime endTime)
         {
             if (startTime > endTime)
             {
-                throw new BusinessException(EventHubErrorCodes.EventEndTimeCantBeEarlierThanStartTime);
+                throw new BusinessException(EventHubErrorCodes.EndTimeCantBeEarlierThanStartTime);
             }
 
             StartTime = startTime;
             EndTime = endTime;
-            TimingChangeCount++;
             return this;
+        }
+
+        public Event AddTrack(Guid trackId, string name)
+        {
+            if (Tracks.Any(x => x.Name == name))
+            {
+                throw new BusinessException(EventHubErrorCodes.TrackNameAlreadyExist)
+                    .WithData("Name", name);
+            }
+            
+            Tracks.Add(new Track(trackId, this.Id, name));
+
+            return this;
+        }
+        
+        public Event UpdateTrack(Guid trackId, string name)
+        {
+            if (Tracks.Any(x => x.Name == name))
+            {
+                throw new BusinessException(EventHubErrorCodes.TrackNameAlreadyExist)
+                    .WithData("Name", name);
+            }
+            
+            var track = Tracks.SingleOrDefault(x => x.Id == trackId);
+            if (track is null)
+            {
+                throw new BusinessException(EventHubErrorCodes.TrackNotFound);
+            }
+
+            track.SetName(name);
+
+            return this;
+        }
+        
+        public Event RemoveTrack(Guid trackId)
+        {
+            var track = Tracks.SingleOrDefault(x => x.Id == trackId);
+            if (track is null)
+            {
+                throw new BusinessException(EventHubErrorCodes.TrackNotFound);
+            }
+            
+            Tracks.Remove(track);
+
+            return this;
+        }
+
+        public Event AddSession(
+            Guid trackId,
+            Guid sessionId,
+            string title,
+            string description,
+            DateTime startTime, 
+            DateTime endTime,
+            string language,
+            ICollection<Guid> speakerUserIds)
+        {
+            CheckIfValidSessionTime(startTime, endTime);
+            
+            var track = GetTrack(trackId);
+            track.AddSession(sessionId, title, description,startTime, endTime, language, speakerUserIds);
+            return this;
+        }
+
+        public Event UpdateSession(
+            Guid trackId,
+            Guid sessionId,
+            string title,
+            string description,
+            DateTime startTime, 
+            DateTime endTime,
+            string language,
+            ICollection<Guid> speakerUserIds)
+        {
+            CheckIfValidSessionTime(startTime, endTime);
+
+            var track = GetTrack(trackId);
+            track.UpdateSession(sessionId, title, description, startTime, endTime, language, speakerUserIds);
+            return this;
+        }
+        
+        public Event RemoveSession(Guid trackId, Guid sessionId)
+        {
+            var track = Tracks.SingleOrDefault(x => x.Id == trackId);
+            if (track is null)
+            {
+                throw new BusinessException(EventHubErrorCodes.TrackNotFound);
+            }
+
+            track.RemoveSession(sessionId);
+
+            return this;
+        }
+        
+        public Event Publish(bool isPublish = true)
+        {
+            IsDraft = !isPublish;
+
+            return this;
+        }
+
+        public bool IsLive(DateTime now)
+        {
+            return now.IsBetween(StartTime, EndTime);
+        }
+
+        private Track GetTrack(Guid trackId)
+        {
+            return Tracks.FirstOrDefault(t => t.Id == trackId) ??
+                   throw new EntityNotFoundException(typeof(Track), trackId);
+        }
+        
+        private void CheckIfValidSessionTime(DateTime startTime, DateTime endTime)
+        {
+            if (startTime < this.StartTime || this.EndTime < endTime)
+            {
+                throw new BusinessException(EventHubErrorCodes.SessionTimeShouldBeInTheEventTime);
+            }
         }
     }
 }

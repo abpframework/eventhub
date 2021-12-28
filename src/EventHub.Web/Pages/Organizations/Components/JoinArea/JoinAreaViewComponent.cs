@@ -10,7 +10,7 @@ namespace EventHub.Web.Pages.Organizations.Components.JoinArea
 {
     [Widget(
         AutoInitialize = true,
-        RefreshUrl = "/OrganizationMembership/Widget",
+        RefreshUrl = "/Widgets/JoinArea",
         ScriptFiles = new[] {"/Pages/Organizations/Components/JoinArea/join-area.js"}
     )]
     public class JoinAreaViewComponent : AbpViewComponent

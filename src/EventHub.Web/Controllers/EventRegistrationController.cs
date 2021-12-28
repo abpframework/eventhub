@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using EventHub.Events.Registrations;
-using EventHub.Web.Pages.Events.Components.RegistrationArea;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 
@@ -28,15 +27,6 @@ namespace EventHub.Web.Controllers
         {
             await _eventRegistrationAppService.UnregisterAsync(eventId);
             return NoContent();
-        }
-
-        [HttpGet]
-        public IActionResult Widget(Guid eventId)
-        {
-            return ViewComponent(
-                typeof(RegistrationAreaViewComponent),
-                new {eventId}
-            );
         }
     }
 }

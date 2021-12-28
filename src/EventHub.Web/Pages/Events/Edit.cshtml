@@ -1,135 +1,19 @@
 @page "/event/edit/{url}"
-@inject IHtmlLocalizer<EventHubResource> L
-@using EventHub.Localization
-@using EventHub.Web
-@using Microsoft.AspNetCore.Mvc.Localization
-@using Microsoft.Extensions.Options
+@using EventHub.Web.Pages.Events.Components.CreateOrEditEventArea
 @model EventHub.Web.Pages.Events.EditPageModel
-@inject IOptions<EventHubUrlOptions> UrlOptions
 
 @section scripts {
-    <abp-script src="/Pages/Events/Edit.js"/>
+    <abp-script src="/libs/awesomplete/awesomplete.min.js" />
 }
 
-<form method="post" enctype="multipart/form-data">
-    <div class="container pt-4">
-        <div class="row py-4">
-            <div class="col-md-9 mx-auto profile-content">
+@section styles {
+    <abp-style src="/libs/awesomplete/awesomplete.css" />
+}
 
-                <div class="card">
-                    <div class="card-body" style="min-height: 496px">
-                        <h3 class="mb-4">Edit Event</h3>
-                        <div class="form">
-                            <div class="row">
-                                <input type="hidden" value="@Model.Url" id="event-detail-url"/>
-                                <abp-input asp-for="Event.Id"/>
-                                <div class="col-md-6">
-                                    <div class="form-label-group">
-                                        <select asp-for="Event.OrganizationId" asp-items="Model.Organizations" class="form-select">
-                                            <option selected value="">Organization</option>
-                                        </select>
-                                        <span asp-validation-for="Event.OrganizationId" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-label-group">
-                                        <input type="text" id="inputTitle" asp-for="Event.Title" class="form-control" placeholder="Title">
-                                        <label for="inputTitle">Title</label>
-                                        <span asp-validation-for="Event.Title" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-label-group">
-                                        <input id="inputStartdate" asp-for="Event.StartTime" class="form-control" placeholder="Start Date">
-                                        <label for="inputStartdate">Start Date</label>
-                                        <span asp-validation-for="Event.StartTime" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-label-group">
-                                        <input id="inputEnddate" asp-for="Event.EndTime" class="form-control" placeholder="End Date">
-                                        <label for="inputEnddate">End Date</label>
-                                        <span asp-validation-for="Event.EndTime" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-label-group form-floating">
-                                        <textarea rows="5" type="text" id="inputDescription" asp-for="Event.Description" class="form-control" placeholder="Description"></textarea>
-                                        <span asp-validation-for="Event.Description" class="text-danger"></span>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-12">
-                                    <h4 class="mb-4">Cover Image</h4>
-                                    <div class="row">
-                                        <div class="col-5">
-                                            <div class="image-area">
-                                                <img id="imageResult" src="@(UrlOptions.Value.Api.EnsureEndsWith('/') + $"api/eventhub/event/cover-image/{Model.Event.Id}")" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
-                                            </div>
-                                        </div>
-                                        <div class="col-7">
-                                            <div>
-                                                <p class="mb-3">For horizontal format 600x300 sized upload images.</p>
-                                                <input type="file" id="Event_CoverImageFile" asp-for="Event.CoverImageFile" class="form-control border-0" hidden>
-                                                <label id="upload-label" for="Event_CoverImageFile" class="btn btn-primary btn-lg text-white">Choose file</label>
-                                                <span asp-validation-for="Event.CoverImageFile" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <select class="form-select" asp-for="Event.IsOnline">
-                                        <option selected="selected" value="">Event Type</option>
-                                        <option value="@Boolean.TrueString">Online</option>
-                                        <option value="@Boolean.FalseString">In Person</option>
-                                    </select>
-                                    <span asp-validation-for="Event.IsOnline" class="text-danger"></span>
-                                </div>
-                                <div class="col-md-6 event-link-group" style="display: none">
-                                    <div class="form-label-group">
-                                        <input type="text" id="inputOnlineLink" asp-for="Event.OnlineLink" class="form-control" placeholder="Online Link">
-                                        <label for="inputOnlineLink">Online Link</label>
-                                        <span asp-validation-for="Event.OnlineLink" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-label-group">
-                                        <input type="number" id="inputCapacity" asp-for="Event.Capacity" class="form-control" placeholder="Capacity">
-                                        <label for="inputCapacity">Capacity</label>
-                                        <span asp-validation-for="Event.Capacity" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 event-location-group">
-                                    <select asp-for="Event.CountryId" asp-items="Model.Countries" class="form-select">
-                                        <option selected="" value="">Country</option>
-                                    </select>
-                                    <span asp-validation-for="Event.CountryId" class="text-danger"></span>
-                                </div>
-                                <div class="col-md-6 event-location-group">
-                                    <div class="form-label-group">
-                                        <input type="text" id="inputCity" asp-for="Event.City" class="form-control" placeholder="City">
-                                        <label for="inputCity">City</label>
-                                        <span asp-validation-for="Event.City" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <select asp-for="Event.Language" asp-items="Model.Languages" aria-label="en" class="form-select">
-                                        <option selected value="">Language</option>
-                                    </select>
-                                    <span asp-validation-for="Event.Language" class="text-danger"></span>
-                                </div>
-
-
-                                <div class="col-md-12 text-end">
-                                    <button type="submit" class="btn btn-primary btn-lg">
-                                        @L["Submit"]
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</form>
+<div class="container mt-5">
+    @await Component.InvokeAsync(typeof(CreateOrEditEventAreaViewComponent), new
+    {
+        eventUrlCode = Model.UrlCode,
+        stepType = CreateOrEditEventAreaViewComponent.ProgressStepType.Event
+    })
+</div>

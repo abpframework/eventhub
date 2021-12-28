@@ -10,13 +10,12 @@ namespace EventHub.Countries
 
         private Country()
         {
-            
         }
 
         internal Country(
-            Guid id, 
+            Guid id,
             string name)
-        : base(id)
+            : base(id)
         {
             Name = Check.NotNullOrWhiteSpace(name, nameof(name), CountryConsts.MaxNameLength);
         }

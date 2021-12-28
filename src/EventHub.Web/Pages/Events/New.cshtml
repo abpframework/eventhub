@@ -1,145 +1,99 @@
-﻿@page "/events/new"
+﻿@page "/events/new/{eventUrlCode?}"
 @inject IHtmlLocalizer<EventHubResource> L
 @using EventHub.Localization
+@using EventHub.Web.Pages.Events.Components.CreateOrEditEventArea
 @using Microsoft.AspNetCore.Mvc.Localization
 @model EventHub.Web.Pages.Events.NewPageModel
 
 @section scripts {
-    <abp-script src="/Pages/Events/New.js"/>
+    <abp-script src="/libs/awesomplete/awesomplete.min.js" />
 }
 
-@if (!Model.Organizations.Any())
-{
-  <div class="container mt-5"> 
-    <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto ">
-            <div class="card" >
-                <div class="card-body text-center p-lg-5">
-                    <h4 class="mb-4">@L["NewEventYouHaveNoOrganizationYetMessage"]</h4>
-                    <a abp-button="Primary" href="@Url.Page("/Organizations/New")">@L["CreateAnOrganization"]</a>
-                </div>
-            </div> 
-        </div>
-    </div>
-  </div>
+@section styles {
+    <abp-style src="/libs/awesomplete/awesomplete.css" />
 }
-else
-{
-  <form method="post" enctype="multipart/form-data">
-    <div class="container pt-4">
-      <div class="row py-4">
-        <div class="col-md-9 mx-auto profile-content">      
-          <div class="card">
-            <div class="card-body" style="min-height: 496px"> 
-              <h3 class="mb-4">Create New Event</h3>
-              <div class="form">
-                <div class="row">
-                  <div class="col-md-6"> 
-                    <div class="form-label-group">
-                      <select asp-for="Event.OrganizationId" asp-items="Model.Organizations" class="form-select">
-                        @if (Model.Organizations.Count > 1)
-                        {
-                          <option selected value="">Pick an organization</option>
-                        }
-                      </select>
-                      <span asp-validation-for="Event.OrganizationId" class="text-danger"></span>
+
+<div class="container mt-5">
+    @if (!Model.IsHasOrganizations)
+    {
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto ">
+                <div class="card">
+                    <div class="card-body text-center p-lg-5">
+                        <h4 class="mb-4">@L["NewEventYouHaveNoOrganizationYetMessage"]</h4>
+                        <a abp-button="Primary" href="@Url.Page("/Organizations/New")">@L["CreateAnOrganization"]</a>
                     </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-label-group">
-                      <input type="text" id="inputTitle" asp-for="Event.Title" class="form-control" placeholder="Title">
-                      <label for="inputTitle">Title</label>
-                      <span asp-validation-for="Event.Title" class="text-danger"></span>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-label-group">
-                      <input id="inputStartdate" asp-for="Event.StartTime" class="form-control" placeholder="Start Date">
-                      <label for="inputStartdate">Start Date</label>
-                      <span asp-validation-for="Event.StartTime" class="text-danger"></span>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-label-group">
-                      <input  id="inputEnddate" asp-for="Event.EndTime" class="form-control" placeholder="End Date">
-                      <label for="inputEnddate">End Date</label>
-                      <span asp-validation-for="Event.EndTime" class="text-danger"></span>
-                    </div>
-                  </div>
-                  <div class="col-md-12">
-                    <div class="form-label-group">
-                      <textarea rows="5" type="text" id="inputDescription" asp-for="Event.Description" class="form-control" placeholder="Description"></textarea> 
-                      <span asp-validation-for="Event.Description" class="text-danger"></span>
-                    </div>
-                  </div>  
-                  <div class="col-md-12"> 
-                    <h4 class="mb-4">Cover Image</h4> 
-                    <div class="row">
-                      <div class="col-6"> 
-                        <div class="image-area"><img id="imageResult" src="#" alt="" class="img-fluid rounded shadow-sm mx-auto d-block"></div>
-                      </div>
-                      <div class="col-6"> 
-                        <div>
-                          <p class="mb-3">For horizontal format 600x400 sized upload images.</p>
-                          <input type="file" id="Event_CoverImageFile" asp-for="Event.CoverImageFile" class="form-control border-0" hidden>
-                          <label id="upload-label" for="Event_CoverImageFile" class="btn btn-primary btn-lg text-white">Choose file</label>
-                          <span asp-validation-for="Event.CoverImageFile" class="text-danger"></span>
-                        </div>
-                      </div>
-                    </div> 
-                  </div>
-                  <div class="col-md-6">
-                    <select class="form-select" asp-for="Event.IsOnline">
-                      <option selected="selected" value="">Event Type</option>
-                      <option value="@Boolean.TrueString">Online</option>
-                      <option value="@Boolean.FalseString">In Person</option>
-                    </select>
-                    <span asp-validation-for="Event.IsOnline" class="text-danger"></span>
-                  </div>
-                  <div class="col-md-6 event-link-group" style="display: none">
-                    <div class="form-label-group">
-                      <input type="text" id="inputOnlineLink" asp-for="Event.OnlineLink" class="form-control" placeholder="Online Link">
-                      <label for="inputOnlineLink">Online Link</label>
-                      <span asp-validation-for="Event.OnlineLink" class="text-danger"></span>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-label-group">
-                      <input type="number" id="inputCapacity" asp-for="Event.Capacity" class="form-control" placeholder="Capacity">
-                      <label for="inputCapacity">Capacity</label>
-                      <span asp-validation-for="Event.Capacity" class="text-danger"></span>
-                    </div>
-                  </div>
-                  <div class="col-md-6 event-location-group">
-                    <select asp-for="Event.CountryId" asp-items="Model.Countries" class="form-select">
-                      <option selected="" value="">Country</option>
-                    </select>
-                    <span asp-validation-for="Event.CountryId" class="text-danger"></span>
-                  </div>
-                  <div class="col-md-6 event-location-group">
-                    <div class="form-label-group">
-                      <input type="text" id="inputCity" asp-for="Event.City" class="form-control" placeholder="City">
-                      <label for="inputCity">City</label>
-                      <span asp-validation-for="Event.City" class="text-danger"></span>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <select asp-for="Event.Language" asp-items="Model.Languages" aria-label="en" class="form-select">
-                      <option selected value="">Language</option>
-                    </select>
-                    <span asp-validation-for="Event.Language" class="text-danger"></span>
-                  </div> 
-                  <div class="col-md-12 text-end">
-                    <button type="submit" class="btn btn-primary btn-lg"> 
-                      Publish New Event
-                    </button>
-                  </div>
                 </div>
-              </div>
             </div>
-          </div> 
-        </div> 
-      </div> 
-    </div>
-  </form>
-}
+        </div>
+    }
+    else if (Model.DraftEventList.Any())
+    {
+        <h1 class="text-center mb-3">Create an Event</h1>
+        <p class="text-center mb-5">
+            You can create a new event or proceed through the draft events you have created before.
+        </p>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body px-4 py-5 text-center">
+                        <svg width="50" height="58" viewBox="0 0 50 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M33.0445 28.1094H9.31281C8.68249 28.1094 8.17188 28.6205 8.17188 29.2515C8.17188 29.8825 8.68249 30.394 9.31281 30.394H33.0445C33.6748 30.394 34.1854 29.8825 34.1854 29.2515C34.1854 28.6209 33.6748 28.1094 33.0445 28.1094Z" fill="#E8345D"/>
+                            <path d="M33.0445 34.8032H9.31281C8.68249 34.8032 8.17188 35.3143 8.17188 35.9453C8.17188 36.5763 8.68249 37.0879 9.31281 37.0879H33.0445C33.6748 37.0879 34.1854 36.5763 34.1854 35.9453C34.1854 35.3143 33.6748 34.8032 33.0445 34.8032Z" fill="#E8345D"/>
+                            <path d="M33.0445 41.4976H9.31281C8.68249 41.4976 8.17188 42.0087 8.17188 42.6397C8.17188 43.2707 8.68249 43.7822 9.31281 43.7822H33.0445C33.6748 43.7822 34.1854 43.2707 34.1854 42.6397C34.1854 42.0087 33.6748 41.4976 33.0445 41.4976Z" fill="#E8345D"/>
+                            <path d="M48.0044 5.61362H44.3885V1.99791C44.3885 0.896072 43.4919 0 42.3894 0H37.5942C36.4935 0 35.5981 0.896072 35.5981 1.99791V5.61317H31.9827C31.1161 5.61317 30.3785 6.16896 30.1019 6.94246H12.6346C12.332 6.94246 12.0418 7.06282 11.8281 7.27699L0.333931 18.791C0.120145 19.0051 0 19.2959 0 19.599V54.9016C0 56.6101 1.38917 58 3.09637 58H39.7387C41.4459 58 42.8351 56.6101 42.8351 54.9016V39.4692C42.8351 38.8382 42.324 38.3267 41.6941 38.3267C41.0643 38.3267 40.5536 38.8382 40.5536 39.4692V54.9016C40.5536 55.3428 40.1804 55.7153 39.7387 55.7153H3.09637C2.65466 55.7153 2.28142 55.3428 2.28142 54.9016V20.7411H10.3103C12.2212 20.7411 13.7755 19.1857 13.7755 17.2736V9.22711H29.9831V12.4114C29.9831 13.5132 30.8802 14.4093 31.9827 14.4093H35.5981V18.0246C35.5981 19.1282 36.4935 20.026 37.5942 20.026H40.5532V29.1438C40.5532 29.7744 41.0643 30.2859 41.6941 30.2859C42.324 30.2859 42.8346 29.7744 42.8346 29.1438V19.9742C43.7233 19.7707 44.3885 18.9751 44.3885 18.025V14.4093H48.0039C49.1047 14.4093 50 13.5132 50 12.4114V7.61462C50 6.51102 49.1047 5.61362 48.0044 5.61362ZM10.3103 18.4564H3.8941L11.4937 10.8431V17.2736C11.4937 17.9259 10.9632 18.4564 10.3103 18.4564ZM47.7186 12.1246H43.2481C42.6177 12.1246 42.1071 12.6362 42.1071 13.2672V17.7413H37.8795V13.2672C37.8795 12.6362 37.3689 12.1246 36.739 12.1246H32.265V7.89827H36.739C37.3689 7.89827 37.8795 7.38673 37.8795 6.75572V2.28465H42.1071V6.75572C42.1071 7.38673 42.6177 7.89827 43.2481 7.89827H47.7186V12.1246Z" fill="#E8345D"/>
+                            <path d="M41.6937 33.1411C41.0633 33.1411 40.5527 33.6526 40.5527 34.2837V34.3067C40.5527 34.9372 41.0638 35.4488 41.6937 35.4488C42.3235 35.4488 42.8342 34.9372 42.8342 34.3067V34.2837C42.8346 33.6526 42.3235 33.1411 41.6937 33.1411Z" fill="#E8345D"/>
+                        </svg>
+                        <h2 class="mt-4">Create a New Event</h2>
+                        <p class="my-4">Create your own Eventhub group and benefit from a community of millions.</p>
+                        <a href="@Url.Page("/events/new", new {isCreateNew = true})" class="btn btn-primary">Create</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body px-4 py-5 text-center">
+                        <svg width="42" height="56" viewBox="0 0 42 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M40.9071 0H12.456C12.4436 0 12.4313 0.00128174 12.4193 0.00170898C12.4069 0.00213622 12.3946 0.00299073 12.3822 0.00384521C12.3361 0.00683594 12.29 0.0119629 12.2452 0.020935C12.2439 0.020935 12.2431 0.020935 12.2422 0.0213622C12.1965 0.0303345 12.1517 0.0435792 12.1074 0.0585327C12.0958 0.0623779 12.0839 0.0666504 12.0724 0.0709229C12.0314 0.0863037 11.9913 0.103821 11.952 0.123901C11.949 0.12561 11.9456 0.126892 11.9422 0.128601C11.9008 0.150818 11.8616 0.176453 11.8231 0.203369C11.8133 0.210632 11.8031 0.218323 11.7933 0.226013C11.7549 0.255066 11.7182 0.285828 11.6836 0.320435L0.320063 11.6971C0.285497 11.7318 0.254344 11.7693 0.225325 11.8074C0.217643 11.8172 0.210388 11.827 0.20356 11.8369C0.176248 11.8757 0.150216 11.9155 0.128025 11.9569C0.126745 11.9595 0.125892 11.9616 0.125038 11.9642C0.104127 12.0039 0.0862037 12.0453 0.0708408 12.0876C0.0665732 12.0988 0.0623056 12.1099 0.0584649 12.121C0.0435287 12.1658 0.0302994 12.2111 0.0209108 12.2573V12.2581C0.011949 12.3038 0.00682802 12.3508 0.00384076 12.3978C0.00298726 12.4098 0.00213375 12.4218 0.001707 12.4337C0.00128026 12.4461 0 12.4585 0 12.4709V54.9062C0 55.5104 0.489057 56 1.09248 56H40.9075C41.5105 56 42 55.5104 42 54.9062V1.09375C41.9996 0.489624 41.5105 0 40.9071 0ZM11.3635 3.73456V11.3771H3.72981L11.3635 3.73456ZM39.8146 53.8125H2.18497V13.5646H12.456C13.0594 13.5646 13.5485 13.0746 13.5485 12.4709V2.1875H39.815V53.8125H39.8146Z" fill="#E8345D"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.3835 20.3442C6.78007 20.3442 6.29102 20.8339 6.29102 21.438V37.2427C6.29102 37.8468 6.78007 38.3364 7.3835 38.3364C7.98693 38.3364 8.47598 37.8468 8.47598 37.2427V22.5317H26.4473V28.1146C26.1631 28.0936 25.8759 28.0825 25.5866 28.0825C19.2088 28.0825 14.0199 33.277 14.0199 39.6626C14.0199 39.9514 14.031 40.239 14.0523 40.5239H11.7534C11.15 40.5239 10.6609 41.0135 10.6609 41.6177C10.6609 42.2218 11.15 42.7114 11.7534 42.7114H14.4309C15.3313 46.0046 17.6605 48.8001 20.8654 50.2365C21.4164 50.4835 22.0625 50.2365 22.3091 49.6849C22.5558 49.1338 22.3091 48.4865 21.7582 48.24C18.3847 46.728 16.2049 43.3613 16.2049 39.6626C16.2049 34.4835 20.4135 30.27 25.5866 30.27C30.7596 30.27 34.9683 34.4835 34.9683 39.6626C34.9683 43.3613 32.7889 46.728 29.4154 48.24C28.8644 48.4865 28.6178 49.1338 28.8644 49.6849C29.0462 50.0912 29.4448 50.3322 29.8622 50.3322C30.0116 50.3322 30.1631 50.3015 30.3081 50.2365C34.4664 48.3729 37.1532 44.2222 37.1532 39.6626C37.1532 34.3323 33.5374 29.8325 28.6323 28.4905V21.438C28.6323 20.8339 28.1428 20.3442 27.5398 20.3442H7.3835Z" fill="#E8345D"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M25.5886 49.0552C24.9869 49.0552 24.4961 49.5461 24.4961 50.1489C24.4961 50.7513 24.9869 51.2427 25.5886 51.2427C26.1903 51.2427 26.6811 50.7513 26.6811 50.1489C26.6811 49.5461 26.1903 49.0552 25.5886 49.0552Z" fill="#E8345D"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.3835 40.5239C6.78178 40.5239 6.29102 41.0153 6.29102 41.6177C6.29102 42.2201 6.78178 42.7114 7.3835 42.7114C7.98522 42.7114 8.47598 42.2201 8.47598 41.6177C8.47598 41.0153 7.98522 40.5239 7.3835 40.5239Z" fill="#E8345D"/>
+                        </svg>
+                        <h2 class="my-4">Drafts</h2>
+                        @foreach (var draftEvent in Model.DraftEventList)
+                        {
+                            <div class="card card-body border-light mb-0 mt-3">
+                                <div class="row">
+                                    <div class="col-7 text-start">
+                                        <a href="@Url.Page("/events/new", new {eventUrlCode = draftEvent.UrlCode})" class="text-info stretched-link text-decoration-none">@draftEvent.Title</a>
+                                    </div>
+                                    <div class="col-5 text-end">
+                                        <span>
+                                            Last edit:
+                                            @if (!draftEvent.LastModificationTime.HasValue)
+                                            {
+                                                <span>@draftEvent.CreationTime.ToShortDateString()</span>
+                                            }
+                                            else
+                                            {
+                                                <span>@draftEvent.LastModificationTime!.Value.ToShortDateString()</span>
+                                            }
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>   
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        @await Component.InvokeAsync(typeof(CreateOrEditEventAreaViewComponent), new
+        {
+            eventUrlCode = Model.EventUrlCode,
+            stepType = CreateOrEditEventAreaViewComponent.ProgressStepType.Event
+        })
+    }
+</div>

@@ -3,9 +3,7 @@ using Volo.Abp.AspNetCore.Mvc;
 
 namespace EventHub.Controllers
 {
-    /* Inherit your controllers from this class.
-     */
-    public abstract class EventHubController : AbpController
+    public abstract class EventHubController : AbpControllerBase
     {
         protected EventHubController()
         {

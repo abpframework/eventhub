@@ -23,7 +23,7 @@
                         <div class="col-9">
                             <div class="event-info">
                                 <h5>@eventDto.Title</h5>
-                                <small>@eventDto.StartTime.ToString("hh tt", CultureInfo.InvariantCulture) - @eventDto.EndTime.ToString("hh tt", CultureInfo.InvariantCulture) | @EventDateHelper.GetLocationInfo(eventDto)</small>
+                                <small>@EventDateHelper.GetTimeRangeText(TimeOnly.FromDateTime(eventDto.StartTime), TimeOnly.FromDateTime(eventDto.EndTime)) | @EventDateHelper.GetLocationInfo(eventDto)</small>
                                 <p>@eventDto.Description</p>
                             </div>
                             <a href="@Url.Page("/Events/Detail", new { url = eventDto.Url })" class="btn btn-link p-0">Learn More <img src="/assets/more-btn.svg"></a>

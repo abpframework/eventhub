@@ -31,6 +31,13 @@ namespace EventHub
                 .Ignore(x => x.OrganizationName)
                 .Ignore(x => x.OrganizationDisplayName);
 
+            CreateMap<Track, TrackDto>();
+
+            CreateMap<Session, SessionDto>();
+            
+            CreateMap<Speaker, SpeakerDto>()
+                .Ignore(x => x.UserName);
+
             CreateMap<IdentityUser, EventAttendeeDto>();
 
             CreateMap<Event, EventLocationDto>()
@@ -39,6 +46,8 @@ namespace EventHub
             CreateMap<Country, CountryLookupDto>();
 
             CreateMap<IdentityUser, UserDto>();
+            
+            CreateMap<UserWithoutDetails, UserInListDto>();
         }
     }
 }

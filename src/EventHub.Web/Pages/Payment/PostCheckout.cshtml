@@ -1,32 +1,15 @@
 @page
-@using EventHub.Organizations
 @using EventHub.Web
-@using Microsoft.AspNetCore.Http
 @using Microsoft.Extensions.Options
-@using Newtonsoft.Json
-@using Payment.Web.Pages.Payment
 @using Payment.PaymentRequests
 @using Volo.Abp.Users
 @inherits Payment.Web.Pages.PaymentPageBase
-@model Payment.Web.Pages.Payment.PostCheckoutPageModel
+@model EventHub.Web.Pages.Payment.CustomPostCheckoutPageModel
 @inject IOptions<EventHubUrlOptions> UrlOptions
 @inject ICurrentUser CurrentUser
 
 @{
     PageLayout.Content.Title = L["PaymentResult"] + L["Enum:PaymentRequestState:" + Model.PaymentRequest.State];
-    
-    var isExistExtraProperties = Model.PaymentRequest.ExtraProperties.TryGetValue(nameof(OrganizationPaymentRequestExtraParameterConfiguration), out var ExtraProperties);
-    if (!isExistExtraProperties)
-    {
-        throw new BadHttpRequestException("");
-    }
-    
-    var organizationPaymentExtraParameterConfiguration = JsonConvert.DeserializeObject<OrganizationPaymentRequestExtraParameterConfiguration>(ExtraProperties.ToString());
-    if (organizationPaymentExtraParameterConfiguration is null)
-    {
-        throw new BadHttpRequestException("");
-    }
-    var organizationName = organizationPaymentExtraParameterConfiguration.OrganizationName;
 }
 
 <main class="static-page container mt-5 text-center">
@@ -69,7 +52,7 @@
               <div class="col-md-8 mx-auto text-center">
                   <hr class="mt-4 mb-5" />
                   <a href="/" class="btn btn-sm btn-outline-primary">Home page</a>
-                  <a href="@UrlOptions.Value.Www/organizations/@organizationName" class="btn btn-sm btn-primary">My Organization</a>
+                  <a href="@UrlOptions.Value.Www/organizations/@Model.OrganizationName" class="btn btn-sm btn-primary">My Organization</a>
               </div>
           </div>
     </div>

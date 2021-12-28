@@ -14,33 +14,33 @@ namespace Payment.Web.Pages.Payment
 
         public PaymentRequestDto PaymentRequest { get; set; }
 
-        private readonly IPaymentRequestAppService _paymentRequestAppService;
-        private readonly IPaymentUrlBuilder _paymentUrlBuilder;
+        protected IPaymentRequestAppService PaymentRequestAppService { get; }
+        protected IPaymentUrlBuilder PaymentUrlBuilder { get; }
 
         public PreCheckoutPageModel(
             IPaymentRequestAppService paymentRequestAppService,
             IPaymentUrlBuilder paymentUrlBuilder)
         {
-            _paymentRequestAppService = paymentRequestAppService;
-            _paymentUrlBuilder = paymentUrlBuilder;
+            PaymentRequestAppService = paymentRequestAppService;
+            PaymentUrlBuilder = paymentUrlBuilder;
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public virtual async Task<IActionResult> OnGetAsync()
         {
-            PaymentRequest = await _paymentRequestAppService.GetAsync(PaymentRequestId);
+            PaymentRequest = await PaymentRequestAppService.GetAsync(PaymentRequestId);
 
             return Page();
         }
 
-        public async Task OnPostAsync()
+        public virtual async Task OnPostAsync()
         {
-            PaymentRequest = await _paymentRequestAppService.GetAsync(PaymentRequestId);
+            PaymentRequest = await PaymentRequestAppService.GetAsync(PaymentRequestId);
 
-            var result = await _paymentRequestAppService.StartPaymentAsync(new StartPaymentDto
+            var result = await PaymentRequestAppService.StartPaymentAsync(new StartPaymentDto
             {
                 PaymentRequestId = PaymentRequest.Id,
-                ReturnUrl = _paymentUrlBuilder.BuildReturnUrl(PaymentRequestId).AbsoluteUri,
-                CancelUrl = _paymentUrlBuilder.BuildCheckoutUrl(PaymentRequestId).AbsoluteUri
+                ReturnUrl = PaymentUrlBuilder.BuildReturnUrl(PaymentRequestId).AbsoluteUri,
+                CancelUrl = PaymentUrlBuilder.BuildCheckoutUrl(PaymentRequestId).AbsoluteUri
             });
 
             Response.Redirect(result.CheckoutLink);

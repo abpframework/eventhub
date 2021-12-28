@@ -1,9 +1,10 @@
 ﻿using System;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Auditing;
 
 namespace EventHub.Events
 {
-    public class EventInListDto : EntityDto<Guid>
+    public class EventInListDto : EntityDto<Guid>, IHasCreationTime, IHasModificationTime
     {
         public string OrganizationName { get; set; }
 
@@ -30,5 +31,9 @@ namespace EventHub.Events
         public string UrlCode { get; set; }
 
         public string Url { get; set; }
+        
+        public DateTime CreationTime { get; set; }
+
+        public DateTime? LastModificationTime { get; set; }
     }
 }

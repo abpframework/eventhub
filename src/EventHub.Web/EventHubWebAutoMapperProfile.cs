@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EventHub.Events;
 using EventHub.Organizations;
+using EventHub.Web.Pages.Events.Components.CreateOrEditEventArea;
 using EventHub.Web.Pages.Organizations;
 using Volo.Abp.AutoMapper;
 using EditPageModel = EventHub.Web.Pages.Events.EditPageModel;
@@ -12,12 +13,11 @@ namespace EventHub.Web
         public EventHubWebAutoMapperProfile()
         {
             CreateMap<NewPageModel.CreateOrganizationViewModel, CreateOrganizationDto>();
-            CreateMap<Pages.Events.NewPageModel.NewEventViewModel, CreateEventDto>()
+            CreateMap<CreateOrEditEventAreaViewComponent.NewEventViewModel, CreateEventDto>()
                 .Ignore(x => x.CoverImageStreamContent);
             CreateMap<OrganizationProfileDto, EditOrganizationViewModel>();
             CreateMap<EditOrganizationViewModel, UpdateOrganizationDto>();
-            CreateMap<EventDetailDto, EditPageModel.EditEventViewModel>();
-            CreateMap<EditPageModel.EditEventViewModel, UpdateEventDto>();
+            CreateMap<EventDetailDto, CreateOrEditEventAreaViewComponent.NewEventViewModel>();
         }
     }
 }

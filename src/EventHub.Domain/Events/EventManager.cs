@@ -53,7 +53,7 @@ namespace EventHub.Events
                 var registeredUserCount = await _eventRegistrationRepository.CountAsync(x => x.EventId == @event.Id);
                 if (capacity.Value < registeredUserCount)
                 {
-                    throw new BusinessException(EventHubErrorCodes.CapacityCantBeLowerThanRegisteredUserCount);
+                    throw new BusinessException(EventHubErrorCodes.CapacityCanNotBeLowerThanRegisteredUserCount);
                 }
             }
 

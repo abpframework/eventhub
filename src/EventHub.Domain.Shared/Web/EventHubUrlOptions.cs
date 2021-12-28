@@ -23,12 +23,12 @@ namespace EventHub.Web
         {
             return GetConfigValue(configuration, nameof(Account), AccountDefaultValue);
         }
-        
+
         public static string GetWwwConfigValue(IConfiguration configuration)
         {
             return GetConfigValue(configuration, nameof(Www), WwwDefaultValue);
         }
-        
+
         public static string GetApiInternalConfigValue(IConfiguration configuration)
         {
             return GetConfigValue(configuration, nameof(ApiInternal), ApiInternalDefaultValue);
@@ -38,7 +38,7 @@ namespace EventHub.Web
         {
             return GetConfigValue(configuration, nameof(Api), ApiDefaultValue);
         }
-        
+
         public static string GetAdminConfigValue(IConfiguration configuration)
         {
             return GetConfigValue(configuration, nameof(Admin), AdminDefaultValue);
@@ -53,7 +53,7 @@ namespace EventHub.Web
         {
             return $"{ConfigurationName}:{appName}";
         }
-        
+
         private static string GetConfigValue(
             IConfiguration configuration,
             string appName,

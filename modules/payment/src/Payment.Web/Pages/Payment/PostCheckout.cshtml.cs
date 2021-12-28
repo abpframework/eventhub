@@ -16,42 +16,42 @@ namespace Payment.Web.Pages.Payment
 
         public string GoBackLink { get; set; }
 
-        private readonly IPaymentRequestAppService _paymentRequestAppService;
-        private readonly PaymentWebOptions _paymentWebOptions;
-        private readonly IPaymentUrlBuilder _paymentUrlBuilder;
+        protected IPaymentRequestAppService PaymentRequestAppService { get; }
+        protected PaymentWebOptions PaymentWebOptions { get; }
+        protected IPaymentUrlBuilder PaymentUrlBuilder { get; }
 
         public PostCheckoutPageModel(
             IPaymentRequestAppService appService,
             IOptions<PaymentWebOptions> paymentWebOptions,
             IPaymentUrlBuilder paymentUrlBuilder)
         {
-            _paymentRequestAppService = appService;
-            _paymentWebOptions = paymentWebOptions.Value;
-            _paymentUrlBuilder = paymentUrlBuilder;
+            PaymentRequestAppService = appService;
+            PaymentWebOptions = paymentWebOptions.Value;
+            PaymentUrlBuilder = paymentUrlBuilder;
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public virtual async Task<IActionResult> OnGetAsync()
         {
             if (Token.IsNullOrWhiteSpace())
             {
                 return BadRequest();
             }
 
-            PaymentRequest = await _paymentRequestAppService.CompleteAsync(Token);
+            PaymentRequest = await PaymentRequestAppService.CompleteAsync(Token);
 
-            GoBackLink = _paymentUrlBuilder.BuildCheckoutUrl(PaymentRequest.Id).AbsoluteUri;
+            GoBackLink = PaymentUrlBuilder.BuildCheckoutUrl(PaymentRequest.Id).AbsoluteUri;
 
             if (PaymentRequest.State == PaymentRequestState.Completed 
-                && !_paymentWebOptions.PaymentSuccessfulCallbackUrl.IsNullOrWhiteSpace())
+                && !PaymentWebOptions.PaymentSuccessfulCallbackUrl.IsNullOrWhiteSpace())
             {
-                var callbackUrl = _paymentWebOptions.PaymentSuccessfulCallbackUrl + "?paymentRequestId=" + PaymentRequest.Id;
+                var callbackUrl = PaymentWebOptions.PaymentSuccessfulCallbackUrl + "?paymentRequestId=" + PaymentRequest.Id;
                 Response.Redirect(callbackUrl);
             }
 
             if (PaymentRequest.State == PaymentRequestState.Failed
-                && !_paymentWebOptions.PaymentFailureCallbackUrl.IsNullOrWhiteSpace())
+                && !PaymentWebOptions.PaymentFailureCallbackUrl.IsNullOrWhiteSpace())
             {
-                var callbackUrl = _paymentWebOptions.PaymentFailureCallbackUrl + "?paymentRequestId=" + PaymentRequest.Id;
+                var callbackUrl = PaymentWebOptions.PaymentFailureCallbackUrl + "?paymentRequestId=" + PaymentRequest.Id;
                 Response.Redirect(callbackUrl);
             }
 

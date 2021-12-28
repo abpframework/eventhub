@@ -48,9 +48,9 @@
                                 + Create
                             </a>
                             <div class="dropdown-menu m-2" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="@UrlOptions.Value.Www@Url.Page("/organizations/new")">Organization</a>
+                                <a class="dropdown-item" href="@UrlOptions.Value.Www.EnsureEndsWith('/')organizations/new">Organization</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="@UrlOptions.Value.Www@Url.Page("/events/new")">Event</a>
+                                <a class="dropdown-item" href="@UrlOptions.Value.Www.EnsureEndsWith('/')events/new">Event</a>
                             </div>
                         </div>
                     </li>

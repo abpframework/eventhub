@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Events.Registrations;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Shouldly;
+using Volo.Abp;
 using Volo.Abp.Authorization;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Timing;
@@ -226,6 +229,107 @@ namespace EventHub.Events
             updatedEvent.Title.ShouldBe("Updated_Microservices_Event_Title");
             updatedEvent.Description.ShouldBe("Updated_Microservices_Event_Description-Updated_Microservices_Event_Description-Updated_Blazor_Microservices_Description");
             updatedEvent.IsOnline.ShouldBeTrue();
+        }
+        
+        [Fact]
+        public async Task Should_Add_The_Track()
+        {
+            Login(_testData.UserAdminId);
+
+            var eventDetailDto = await _eventAppService.GetByUrlCodeAsync(_testData.AbpMicroservicesFutureEventUrlCode);
+
+            await _eventAppService.AddTrackAsync(eventDetailDto.Id, new AddTrackDto
+            {
+                Name = "Track-1"
+            });
+
+            var updatedEvent = await _eventAppService.GetByUrlCodeAsync(_testData.AbpMicroservicesFutureEventUrlCode);
+            
+            updatedEvent.ShouldNotBeNull();
+            updatedEvent.Tracks.ShouldContain(x => x.Name == "Track-1");
+        }
+        
+        [Fact]
+        public async Task Should_Add_The_Session()
+        {
+            Login(_testData.UserAdminId);
+
+            var eventDetailDto = await _eventAppService.GetByUrlCodeAsync(_testData.AbpMicroservicesFutureEventUrlCode);
+
+            await _eventAppService.AddTrackAsync(eventDetailDto.Id, new AddTrackDto
+            {
+                Name = "Track-1"
+            });
+
+            var updatedEvent = await _eventAppService.GetByUrlCodeAsync(_testData.AbpMicroservicesFutureEventUrlCode);
+
+            var speakerUserNames = new List<string>();
+            speakerUserNames.Add(_testData.UserAdminUserName);
+            speakerUserNames.Add(_testData.UserJohnUserName);
+            await _eventAppService.AddSessionAsync(eventDetailDto.Id, updatedEvent.Tracks.First().Id, new AddSessionDto
+            {
+                Title = "Session-1 Title",
+                Description = "Session-1 Description".PadLeft(50, 't'),
+                StartTime = updatedEvent.StartTime.AddSeconds(1),
+                EndTime = updatedEvent.StartTime.AddSeconds(50),
+                Language = "tr",
+                SpeakerUserNames = speakerUserNames
+            });
+            
+            updatedEvent = await _eventAppService.GetByUrlCodeAsync(_testData.AbpMicroservicesFutureEventUrlCode);
+            
+            updatedEvent.ShouldNotBeNull();
+            updatedEvent.Tracks.ShouldContain(x => x.Name == "Track-1");
+            var track = updatedEvent.Tracks.Single(x => x.Name == "Track-1");
+           
+            
+            track.Sessions.ShouldContain(x => x.Title == "Session-1 Title");
+            track.Sessions.ShouldContain(x => x.StartTime == updatedEvent.StartTime.AddSeconds(1));
+            track.Sessions.ShouldContain(x => x.EndTime == updatedEvent.StartTime.AddSeconds(50));
+            track.Sessions.ShouldContain(x => x.Language == "tr");
+            
+            var session = track.Sessions.Single(x => x.Title == "Session-1 Title");
+            session.Speakers.ShouldContain(x => x.UserId == _testData.UserAdminId);
+            session.Speakers.ShouldContain(x => x.UserId == _testData.UserJohnId);
+        }
+        
+        [Fact]
+        public async Task Should_Publish_Event()
+        {
+            Login(_testData.UserAdminId);
+
+            var eventDto = await _eventAppService.CreateAsync(
+                new CreateEventDto
+                {
+                    OrganizationId = _testData.OrganizationVolosoftId,
+                    Title = "Introduction to the ABP Framework",
+                    Description = "In this event, we will introduce the ABP Framework and explore the fundamental features.",
+                    StartTime = DateTime.Now.AddDays(1),
+                    EndTime = DateTime.Now.AddDays(1).AddHours(3),
+                    IsOnline = true,
+                    Capacity = 2,
+                    Language = "en"
+                }
+            );
+
+            Login(_testData.UserJohnId);
+            
+            var exception = await Assert.ThrowsAsync<AbpAuthorizationException>(async () =>
+            {
+                await _eventAppService.GetByUrlCodeAsync(eventDto.UrlCode);
+            });
+            
+            exception.Code.ShouldBe(EventHubErrorCodes.NotAuthorizedToUpdateEvent);
+            
+            Login(_testData.UserAdminId);
+            
+            await _eventAppService.PublishAsync(eventDto.Id);
+            
+            Login(_testData.UserJohnId);
+            
+            var @event = await _eventAppService.GetByUrlCodeAsync(eventDto.UrlCode);
+            @event.ShouldNotBeNull();
+            @event.Title.ShouldBe("Introduction to the ABP Framework");
         }
 
         private void Login(Guid userId)

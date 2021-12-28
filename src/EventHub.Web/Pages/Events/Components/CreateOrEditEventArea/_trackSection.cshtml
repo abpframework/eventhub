@@ -1,0 +1,105 @@
+@using EventHub.Events
+@using EventHub.Web.Pages.Events.Components.CreateOrEditEventArea
+@model List<EventHub.Events.TrackDto>
+
+<partial name="_progressSection.cshtml" model="@CreateOrEditEventAreaViewComponent.ProgressStepType.Track"/>
+
+@if (Model is not null)
+{
+    <div class="row"> 
+        <div class="col-md-10 mx-auto">
+            <div class="card">
+                <div class="card-body profile-content p-5" style="min-height: 480px;"> 
+                    <h2 class="mb-4">Add Track</h2> 
+                    <div class="row">
+                        @foreach (var track in Model)
+                        {
+                            <div class="col-md-3">
+                                <div class="track-item mb-4">
+                                    <span class="track-name truncate">@track.Name</span>
+                                        <abp-row>
+                                            <abp-column>
+                                                <a id="@track.Id" data-track-name="@track.Name" href="javascript:;" data-bs-toggle="modal" data-bs-target="#EditTrackModal" class="mt-3 d-block text-info edit-track-button"><small><i class="fa fa-edit me-1"></i>Edit</small></a>
+                                            </abp-column>
+                                            <abp-column>
+                                                <a id="@track.Id" href="javascript:;" class="mt-3 d-block text-info delete-track-button"><small><i class="fa fa-trash me-1"></i>Delete</small></a>
+                                            </abp-column>
+                                        </abp-row>
+                                </div>
+                            </div>   
+                        }
+                        <div class="col-md-3">  
+                            <div class="big-square-btn mb-4 text-center"> 
+                                <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#AddTrackModal" class="btn btn-outline-secondary d-block px-2 py-5"><i class="fa fa-plus mb-3"></i><br>Add New Track</a>
+                            </div> 
+                        </div>
+                    </div>
+                </div> 
+
+                <div class="card-footer bg-white border-0 p-5 pt-1"> 
+                    <div class="row">
+                        <div class="col-6">
+                            <button id="PreviousStepButtonInTrackSection" data-target-step="@CreateOrEditEventAreaViewComponent.ProgressStepType.Event" class="btn btn-secondary step-transition"><i class="fa fa-arrow-left me-2"></i> Previous Step </button>
+                        </div>
+                        <div class="col-6 text-end">
+                            <button id="SkipThisStepButtonInTrackSection" data-target-step="@CreateOrEditEventAreaViewComponent.ProgressStepType.Preview" class="btn btn-link step-transition text-decoration-none">Skip This Step</button>
+                            <button id="NextStepButtonInTrackSection" data-target-step="@CreateOrEditEventAreaViewComponent.ProgressStepType.Session" class="btn btn-primary step-transition" @(Model.Any() ? "" : "disabled")>Next Step <i class="fa fa-arrow-right ms-2"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </div> 
+    </div>
+    
+    @* Add Track Modal *@
+    <div class="modal fade" id="AddTrackModal" tabindex="-1" aria-labelledby="AddTrackModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0 p-5 pb-2">
+                    <h5 class="modal-title">Add New Track</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form  id="AddNewTrackForm" method="post">
+                    <div class="modal-body profile-content px-5">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="TrackNameInput" placeholder=" " required data-val-length-max="@TrackConsts.MaxNameLength">
+                            <label for="TrackNameInput">Track Name</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 p-5 pt-2">
+                        <button type="button" class="btn btn-secondary modal-close-button" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-plus me-2"></i> Add
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    @* Edit Track Modal *@
+    <div class="modal fade" id="EditTrackModal" tabindex="-1" aria-labelledby="EditTrackModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0 p-5 pb-2">
+                    <h5 class="modal-title">Edit This Track</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="EditTrackForm">
+                    <div class="modal-body profile-content px-5">
+                        <input type="hidden" id="TrackId" value="TrackIdPlaceHolder"/>
+                        <label for="TrackNameInput" class="mb-2">Edit Track Name</label>
+                        <input type="text" class="form-control" id="TrackNameInput" placeholder="There is a track name here" required data-val-length-max="@TrackConsts.MaxNameLength">
+                    </div>
+                    <div class="modal-footer border-0 p-5 pt-2">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-check-circle me-2"></i>Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}else
+{
+    <partial name="_modelNullErrorSection.cshtml"/>
+}

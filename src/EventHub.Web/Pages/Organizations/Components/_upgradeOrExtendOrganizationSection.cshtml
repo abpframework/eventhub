@@ -1,0 +1,56 @@
+@using EventHub.Web.PaymentRequests
+@using Microsoft.Extensions.Options
+@model EventHub.Organizations.OrganizationProfileDto
+@inject IOptionsSnapshot<PremiumPlanInfoOptions> PremiumPlanInfoOptionsSnapshot
+
+<abp-container class="mt-4">
+    <abp-row>
+        @if (Model.IsPremium && PremiumPlanInfoOptionsSnapshot.Value.IsActive && PremiumPlanInfoOptionsSnapshot.Value.IsExtendable && Model.PremiumEndDate!.Value.IsBetween(DateTime.Now, DateTime.Now.AddMonths(PremiumPlanInfoOptionsSnapshot.Value.OnePremiumPeriodAsMonth - PremiumPlanInfoOptionsSnapshot.Value.CanBeExtendedAfterHowManyMonths)))
+        {
+            <span class="mb-2 ms-5 text-center strong">Premium end date: @Model.PremiumEndDate!.Value.ToShortDateString()</span>
+        }
+        <abp-column>
+            <a href="/organization/edit/@Model.Name" class="btn btn-success text-white">Edit</a>
+        </abp-column>
+        <abp-column size="_9">
+            @if (PremiumPlanInfoOptionsSnapshot.Value.IsActive)
+            {
+                @if (Model.IsPremium)
+                {
+                    @if (PremiumPlanInfoOptionsSnapshot.Value.IsExtendable && Model.PremiumEndDate!.Value.IsBetween(DateTime.Now, DateTime.Now.AddMonths(PremiumPlanInfoOptionsSnapshot.Value.OnePremiumPeriodAsMonth - PremiumPlanInfoOptionsSnapshot.Value.CanBeExtendedAfterHowManyMonths)))
+                    {
+                        <div class="d-grid gap-2">
+                            <a href="@Url.Page("/Pricing", new { organizationName = Model.Name })" class="btn btn-info">
+                                <i class="fas fa-crown me-2"></i> Extend Now
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-info">
+                                <span class="mt-2">Premium end date: @Model.PremiumEndDate!.Value.ToShortDateString()</span>
+                            </button>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="d-grid gap-2">
+                        <a href="@Url.Page("/Pricing", new { organizationName = Model.Name })" class="btn btn-info">
+                            <i class="fas fa-crown me-2"></i> Upgrade To @PremiumPlanInfoOptionsSnapshot.Value.PlanType
+                        </a>
+                    </div>
+                }
+            }
+            else
+            {
+                <abp-card class="text-center">
+                    <abp-card-body>
+                        <span>Premium end date: @Model.PremiumEndDate!.Value.ToShortDateString()</span>
+                    </abp-card-body>
+                </abp-card>
+            }
+        </abp-column>
+    </abp-row>
+</abp-container>

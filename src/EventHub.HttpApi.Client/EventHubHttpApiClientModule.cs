@@ -2,6 +2,7 @@
 using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
 using Payment;
+using Volo.Abp.VirtualFileSystem;
 
 namespace EventHub
 {
@@ -20,6 +21,11 @@ namespace EventHub
                 typeof(EventHubApplicationContractsModule).Assembly,
                 RemoteServiceName
             );
+            
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<EventHubHttpApiClientModule>();
+            });
         }
     }
 }

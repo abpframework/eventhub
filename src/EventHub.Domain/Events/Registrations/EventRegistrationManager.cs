@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.Guids;
 using Volo.Abp.Identity;
@@ -37,12 +38,14 @@ namespace EventHub.Events.Registrations
                 return;
             }
             
-            var registrationCount = await _eventRegistrationRepository.GetCountAsync(@event.Id);
-
-            if (@event.Capacity != null &&  registrationCount >= @event.Capacity)
+            if (@event.Capacity != null)
             {
-                throw new BusinessException(EventHubErrorCodes.CapacityOfEventFull)
-                    .WithData("EventTitle", @event.Title);
+                var registrationCount = await _eventRegistrationRepository.CountAsync(x => x.EventId == @event.Id);
+                if (registrationCount >= @event.Capacity)
+                {
+                    throw new BusinessException(EventHubErrorCodes.CapacityOfEventFull)
+                        .WithData("EventTitle", @event.Title);
+                }
             }
                 
             await _eventRegistrationRepository.InsertAsync(

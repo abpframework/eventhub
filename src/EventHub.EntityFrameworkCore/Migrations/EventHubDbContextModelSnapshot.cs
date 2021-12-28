@@ -19,7 +19,7 @@ namespace EventHub.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.PostgreSql)
-                .HasAnnotation("ProductVersion", "6.0.0-rc.2.21480.5")
+                .HasAnnotation("ProductVersion", "6.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -98,6 +98,9 @@ namespace EventHub.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(false)
                         .HasColumnName("IsDeleted");
+
+                    b.Property<bool>("IsDraft")
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsEmailSentToMembers")
                         .HasColumnType("boolean");
@@ -206,6 +209,77 @@ namespace EventHub.Migrations
                     b.HasIndex("EventId", "UserId");
 
                     b.ToTable("EhEventRegistrations", (string)null);
+                });
+
+            modelBuilder.Entity("EventHub.Events.Session", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<Guid>("TrackId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TrackId");
+
+                    b.ToTable("EhEventSessions", (string)null);
+                });
+
+            modelBuilder.Entity("EventHub.Events.Speaker", b =>
+                {
+                    b.Property<Guid>("SessionId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("SessionId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("EhEventSpeakers", (string)null);
+                });
+
+            modelBuilder.Entity("EventHub.Events.Track", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("EhEventTracks", (string)null);
                 });
 
             modelBuilder.Entity("EventHub.Organizations.Memberships.OrganizationMembership", b =>
@@ -2253,7 +2327,8 @@ namespace EventHub.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name", "ProviderName", "ProviderKey");
+                    b.HasIndex("TenantId", "Name", "ProviderName", "ProviderKey")
+                        .IsUnique();
 
                     b.ToTable("AbpPermissionGrants", (string)null);
                 });
@@ -2284,7 +2359,8 @@ namespace EventHub.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name", "ProviderName", "ProviderKey");
+                    b.HasIndex("Name", "ProviderName", "ProviderKey")
+                        .IsUnique();
 
                     b.ToTable("AbpSettings", (string)null);
                 });
@@ -2315,6 +2391,39 @@ namespace EventHub.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EventHub.Events.Session", b =>
+                {
+                    b.HasOne("EventHub.Events.Track", null)
+                        .WithMany("Sessions")
+                        .HasForeignKey("TrackId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EventHub.Events.Speaker", b =>
+                {
+                    b.HasOne("EventHub.Events.Session", null)
+                        .WithMany("Speakers")
+                        .HasForeignKey("SessionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Volo.Abp.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EventHub.Events.Track", b =>
+                {
+                    b.HasOne("EventHub.Events.Event", null)
+                        .WithMany("Tracks")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -2617,6 +2726,21 @@ namespace EventHub.Migrations
                         .HasForeignKey("IdentityResourceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("EventHub.Events.Event", b =>
+                {
+                    b.Navigation("Tracks");
+                });
+
+            modelBuilder.Entity("EventHub.Events.Session", b =>
+                {
+                    b.Navigation("Speakers");
+                });
+
+            modelBuilder.Entity("EventHub.Events.Track", b =>
+                {
+                    b.Navigation("Sessions");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
