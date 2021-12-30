@@ -5,7 +5,6 @@ using EventHub.Organizations;
 using EventHub.Organizations.Memberships;
 using Microsoft.EntityFrameworkCore;
 using Payment.EntityFrameworkCore;
-using System;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;

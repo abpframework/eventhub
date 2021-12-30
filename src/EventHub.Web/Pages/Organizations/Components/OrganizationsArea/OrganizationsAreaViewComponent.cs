@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using EventHub.Organizations;
 using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 
@@ -38,7 +37,7 @@ namespace EventHub.Web.Pages.Organizations.Components.OrganizationsArea
 
             return View(
                 "~/Pages/Organizations/Components/OrganizationsArea/Default.cshtml",
-                new OrganizationsAreaViewComponent.ListAreaViewComponentModel
+                new ListAreaViewComponentModel
                 {
                     Organizations = result.Items,
                     TotalCount = result.TotalCount,

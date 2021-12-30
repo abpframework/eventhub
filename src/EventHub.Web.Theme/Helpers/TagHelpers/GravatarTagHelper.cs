@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Http;
@@ -97,7 +98,7 @@ namespace EventHub.Web.Theme.Helpers.TagHelpers
         private string GetDefaultImageParameter()
         {
             return "&d=" + (!string.IsNullOrEmpty(DefaultImageUrl)
-                ? System.Net.WebUtility.UrlEncode(DefaultImageUrl)
+                ? WebUtility.UrlEncode(DefaultImageUrl)
                 : GetEnumDescription(DefaultImage));
         }
 

@@ -5,13 +5,13 @@
 @using Volo.Abp.AspNetCore.Mvc.UI.Widgets.Components.WidgetStyles
 @using Volo.Abp.Localization
 @using Volo.Abp.Ui.Branding
+@using Microsoft.AspNetCore.Http.Extensions
+@using Microsoft.Extensions.Options
+@using EventHub.Web
 @using EventHub.Web.Theme.Bundling
 @using EventHub.Web.Theme.Themes.EventHub.Components.Footer
 @using EventHub.Web.Theme.Themes.EventHub.Components.MainNavbar
 @using EventHub.Web.Theme.Themes.EventHub.Components.PageAlerts
-@using EventHub.Web
-@using Microsoft.AspNetCore.Http.Extensions
-@using Microsoft.Extensions.Options
 @inject IBrandingProvider BrandingProvider
 @inject IPageLayout PageLayout
 @inject IOptions<EventHubUrlOptions> UrlOptions

@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Shouldly;
-using Volo.Abp.Domain.Repositories;
 using Xunit;
 
 namespace EventHub.Events.Registrations

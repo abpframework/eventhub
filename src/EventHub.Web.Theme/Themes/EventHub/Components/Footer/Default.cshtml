@@ -1,7 +1,8 @@
-﻿@using EventHub.Web
-@using Microsoft.AspNetCore.Http.Extensions
+﻿@using Microsoft.AspNetCore.Http.Extensions
 @using Microsoft.Extensions.Options
 @using Volo.Abp.Users
+@using EventHub.Web
+@using System.Net
 @inject ICurrentUser CurrentUser
 @inject IOptions<EventHubUrlOptions> UrlOptions
 
@@ -20,8 +21,8 @@
                     <h5>Account</h5>
                     <div class="footer-links">
 
-                        <a href="@UrlOptions.Value.Account/account/register?returnUrl=@UrlOptions.Value.Www@(System.Net.WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery()))" class="d-block">Sign Up</a>
-                        <a href="/account/login?returnUrl=@(System.Net.WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery()))" class="d-block">Log In</a>
+                        <a href="@UrlOptions.Value.Account/account/register?returnUrl=@UrlOptions.Value.Www@(WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery()))" class="d-block">Sign Up</a>
+                        <a href="/account/login?returnUrl=@(WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery()))" class="d-block">Log In</a>
 
                     </div>
                 }

@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using EventHub.Admin.Permissions;
-using Volo.Abp.Application.Dtos;
-using EventHub.Events.Registrations;
-using Microsoft.AspNetCore.Authorization;
 using EventHub.Events;
+using EventHub.Events.Registrations;
 using EventHub.Users;
+using Microsoft.AspNetCore.Authorization;
+using Volo.Abp.Application.Dtos;
 
 namespace EventHub.Admin.Events.Registrations
 {

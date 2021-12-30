@@ -1,4 +1,7 @@
 @page "/users/{userName}"
+@inject ICurrentUser CurrentUser
+@inject IClock Clock
+@inject IHtmlLocalizer<EventHubResource> L
 @using System.Globalization
 @using EventHub.Localization
 @using EventHub.Web.Pages.Events.Components.EventsArea
@@ -6,9 +9,6 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.Timing
 @using Volo.Abp.Users
-@inject ICurrentUser CurrentUser
-@inject IClock Clock
-@inject IHtmlLocalizer<EventHubResource> L
 @model EventHub.Web.Pages.UserModel
 
 @section styles {

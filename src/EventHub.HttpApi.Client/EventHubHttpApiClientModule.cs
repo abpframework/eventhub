@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Payment;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
-using Payment;
 using Volo.Abp.VirtualFileSystem;
 
 namespace EventHub

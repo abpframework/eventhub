@@ -1,7 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Payment;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.BlobStoring.Database;
 using Volo.Abp.Emailing;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer;
@@ -9,9 +11,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.IdentityServer;
 using Volo.Abp.SettingManagement;
-using Volo.Abp.BlobStoring.Database;
 using Volo.Abp.VirtualFileSystem;
-using Payment;
 
 namespace EventHub
 {

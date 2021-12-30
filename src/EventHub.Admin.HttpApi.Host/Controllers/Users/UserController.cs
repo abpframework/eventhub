@@ -1,6 +1,6 @@
-﻿using EventHub.Admin.Users;
+﻿using System.Threading.Tasks;
+using EventHub.Admin.Users;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;

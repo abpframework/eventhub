@@ -1,11 +1,5 @@
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
-using Localization.Resources.AbpUi;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using EventHub.EntityFrameworkCore;
 using EventHub.Localization;
 using EventHub.Utils;
@@ -14,8 +8,14 @@ using EventHub.Web.Theme;
 using EventHub.Web.Theme.Bundling;
 using IdentityServer4.Configuration;
 using IdentityServer4.Extensions;
+using Localization.Resources.AbpUi;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using StackExchange.Redis;
 using Volo.Abp;
 using Volo.Abp.Account;
@@ -41,8 +41,6 @@ namespace EventHub
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAccountApplicationModule),
-        //we need to add AbpAccountHttpApiModule temporarily. (https://github.com/volosoft/volo/pull/7925).
-        //It should be removed with 5.0-beta.2.
         typeof(AbpAccountHttpApiModule), 
         typeof(EventHubWebThemeModule),
         typeof(EventHubEntityFrameworkCoreModule),

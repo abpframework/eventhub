@@ -11,7 +11,6 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 
-
 namespace EventHub.Admin.Organizations.Memberships
 {
     [Authorize(EventHubPermissions.Organizations.Memberships.Default)]

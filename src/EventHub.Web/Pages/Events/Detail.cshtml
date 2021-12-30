@@ -1,5 +1,7 @@
 ﻿@page "/events/{url}"
 @inject IHtmlLocalizer<EventHubResource> L
+@inject ICurrentUser CurrentUser
+@inject IClock Clock
 @using EventHub.Localization
 @using EventHub.Web
 @using EventHub.Web.Pages.Events
@@ -11,8 +13,6 @@
 @using Microsoft.Extensions.Options
 @using Volo.Abp.Timing
 @using Volo.Abp.Users
-@inject ICurrentUser CurrentUser
-@inject IClock Clock
 @model EventHub.Web.Pages.Events.DetailPageModel
 @inject IOptions<EventHubUrlOptions> UrlOptions
 

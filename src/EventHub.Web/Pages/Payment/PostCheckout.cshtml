@@ -1,9 +1,9 @@
 @page
+@inherits Payment.Web.Pages.PaymentPageBase
 @using EventHub.Web
 @using Microsoft.Extensions.Options
 @using Payment.PaymentRequests
 @using Volo.Abp.Users
-@inherits Payment.Web.Pages.PaymentPageBase
 @model EventHub.Web.Pages.Payment.CustomPostCheckoutPageModel
 @inject IOptions<EventHubUrlOptions> UrlOptions
 @inject ICurrentUser CurrentUser
