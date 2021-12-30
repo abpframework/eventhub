@@ -19,15 +19,15 @@
             <div class="card">
                 <div class="card-body px-4 py-4 text-center"> 
                     <h2 class="mt-4">Free Account</h2>
-                    <p class="my-4">For individuals and small teams trying out EventHub for an unlimited period.</p>
+                    <p class="my-4">For individuals and small organizations.</p>
                     <div class="price mb-4">
                         <small>$</small>
                         <span>0</span>
                     </div>
                     <ul class="list-check-icon mb-4 text-start">
-                        <li><i class="fa fa-check-circle"></i> Unlimited event creation. </li>
-                        <li><i class="fa fa-check-circle"></i> Adding unlimited tracks and sessions to events. </li>
-                        <li><i class="fa fa-check-circle"></i> Unlimited participant capacity for events. </li> 
+                        <li><i class="fa fa-check-circle"></i> 2 events in a year. </li>
+                        <li><i class="fa fa-check-circle"></i> Up to 2 tracks for an event. </li>
+                        <li><i class="fa fa-check-circle"></i> Up to 1,000 attendees per event. </li> 
                     </ul>
                 </div> 
             </div> 
@@ -38,17 +38,17 @@
                  <div class="card">
                      <div class="card-body px-4 py-4 text-center">
                          <h2 class="mt-4">Premium Account</h2>
-                         <p class="my-4">For medium teams and large teams who want to highlight their organization for a year.</p>
+                         <p class="my-4">For those organize regular events.</p>
                          <div class="price mb-4">
                              <small>$</small>
                              <span>@Model.PremiumPlanInfo.Price</span>
                          </div>
                          <ul class="list-check-icon mb-4 text-start">
-                             <li><i class="fa fa-check-circle"></i> Unlimited event creation. </li>
-                             <li><i class="fa fa-check-circle"></i> Adding unlimited tracks and sessions to events. </li>
-                             <li><i class="fa fa-check-circle"></i> Unlimited participant capacity for events. </li> 
+                             <li><i class="fa fa-check-circle"></i> Unlimited events. </li>
+                             <li><i class="fa fa-check-circle"></i> Unlimited tracks and sessions for an event. </li>
+                             <li><i class="fa fa-check-circle"></i> Unlimited attendees. </li> 
                              <li><i class="fa fa-check-circle"></i> Be more prominent in the organization list. </li>
-                             <li><i class="fa fa-check-circle"></i> More coming soon. </li>
+                             <li><i class="fa fa-check-circle"></i> Premium badge in the organization page. </li>
                          </ul>
                           @if (Model.Organization.IsPremium)
                           {
@@ -72,17 +72,6 @@
          }
         <h2 class="text-center mb-3">Frequently Asked Questions</h2>
          <div id="accordion" class="mb-5 pb-5 faq-container">
-             <div class="faq" data-anchor-id="accordion124">
-                 <div class="faq-header">
-                     <h5><button class="btn btn-faq collapsed" data-bs-toggle="collapse" data-bs-target="#accordion124" aria-expanded="false" aria-controls="accordion124">What is premium organization?<i class="fas fa-chevron-up"></i> </button></h5>
-                 </div>
-                 <div id="accordion124" class="collapse" data-bs-parent="#accordion" style="">
-                     <div class="faq-body">
-                         <p>With Premium organization, you can reach more people by highlighting your organization. However, for now, it has no different from a normal organization in terms of feature set.
-                         </p>
-                     </div>
-                 </div>
-             </div>
              <div class="faq" data-anchor-id="accordion12">
                  <div class="faq-header">
                      <h5><button class="btn btn-faq collapsed" data-bs-toggle="collapse" data-bs-target="#accordion12" aria-expanded="false" aria-controls="accordion12">How do I renew my plan?<i class="fas fa-chevron-up"></i> </button></h5>
