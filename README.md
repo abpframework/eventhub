@@ -7,6 +7,7 @@ This is a reference application built with the ABP Framework. It implements Doma
 ## How to run
 
 * Run `etc/docker/up.ps1` before running the solution.
+* Run `EventHub.IdentityServer`
 * Run `EventHub.HttpApi.Host`
 * Run `EventHub.Web`
 * Run `EventHub.Admin.HttpApi.Host`
