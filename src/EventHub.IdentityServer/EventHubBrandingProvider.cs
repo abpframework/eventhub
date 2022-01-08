@@ -1,5 +1,5 @@
-﻿using Volo.Abp.Ui.Branding;
-using Volo.Abp.DependencyInjection;
+﻿using Volo.Abp.DependencyInjection;
+using Volo.Abp.Ui.Branding;
 
 namespace EventHub
 {

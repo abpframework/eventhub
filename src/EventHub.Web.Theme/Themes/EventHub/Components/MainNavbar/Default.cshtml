@@ -1,17 +1,18 @@
-﻿@using EventHub.Web
+﻿@using Microsoft.AspNetCore.Http.Extensions
 @using Microsoft.Extensions.Localization
-@using Volo.Abp.Users
-@using EventHub.Localization
-@using Microsoft.AspNetCore.Http.Extensions
 @using Microsoft.Extensions.Options
 @using Volo.Abp.Localization
+@using Volo.Abp.Users
+@using EventHub.Localization
+@using EventHub.Web
+@using System.Net
 @inject ICurrentUser CurrentUser
 @inject ILanguageProvider LanguageProvider
 @inject IStringLocalizer<EventHubResource> L
 @inject IOptions<EventHubUrlOptions> UrlOptions
 
 @{
-    var returnUrl = System.Net.WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery());
+    var returnUrl = WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery());
     if (returnUrl.IsNullOrWhiteSpace())
     {
         returnUrl = "/";

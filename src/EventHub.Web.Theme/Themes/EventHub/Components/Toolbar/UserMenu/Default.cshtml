@@ -1,12 +1,11 @@
-﻿@using Localization.Resources.AbpUi
-@using Microsoft.AspNetCore.Mvc.Localization
-@using Volo.Abp.MultiTenancy
-@using Volo.Abp.UI.Navigation
-@using Volo.Abp.Users
-@inject ICurrentUser CurrentUser
+﻿@inject ICurrentUser CurrentUser
 @inject ICurrentTenant CurrentTenant
 @inject IHtmlLocalizer<AbpUiResource> L
-@model ApplicationMenu
+@using Volo.Abp.Users
+@using Volo.Abp.MultiTenancy
+@using Localization.Resources.AbpUi
+@using Microsoft.AspNetCore.Mvc.Localization
+@model Volo.Abp.UI.Navigation.ApplicationMenu
 <div class="dropdown">
     <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         @if (CurrentUser.TenantId != null)

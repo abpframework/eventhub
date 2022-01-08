@@ -1,6 +1,6 @@
-﻿@using EventHub.Localization
+﻿@inject IHtmlLocalizer<EventHubResource> L
+@using EventHub.Localization
 @using Microsoft.AspNetCore.Mvc.Localization
-@inject IHtmlLocalizer<EventHubResource> L
 @model EventHub.Web.Pages.Events.Components.RegistrationArea.RegistrationAreaViewComponent.RegistrationAreaViewComponentModel
 <div data-event-id="@Model.EventId">
     @if (Model.IsLoggedIn)

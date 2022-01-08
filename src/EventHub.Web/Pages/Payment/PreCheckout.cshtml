@@ -1,12 +1,11 @@
 @page
+@inherits Payment.Web.Pages.PaymentPageBase
 @using EventHub.Organizations
 @using EventHub.Web.PaymentRequests
 @using Microsoft.AspNetCore.Http
 @using Microsoft.Extensions.Options
 @using Newtonsoft.Json
 @using Payment.Web.Pages.Payment
-@using Payment.PaymentRequests
-@inherits Payment.Web.Pages.PaymentPageBase
 @model Payment.Web.Pages.Payment.PreCheckoutPageModel
 @inject IOptionsSnapshot<PremiumPlanInfoOptions> PremiumPlanInfoOptionsSnapshot
 

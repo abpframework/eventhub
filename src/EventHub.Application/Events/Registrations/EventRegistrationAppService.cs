@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using EventHub.Users;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Users;
 using Volo.Abp.Identity;
+using Volo.Abp.Users;
 
 namespace EventHub.Events.Registrations
 {

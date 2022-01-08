@@ -4,7 +4,6 @@ using EventHub.Organizations;
 using EventHub.Web.Pages.Events.Components.CreateOrEditEventArea;
 using EventHub.Web.Pages.Organizations;
 using Volo.Abp.AutoMapper;
-using EditPageModel = EventHub.Web.Pages.Events.EditPageModel;
 
 namespace EventHub.Web
 {

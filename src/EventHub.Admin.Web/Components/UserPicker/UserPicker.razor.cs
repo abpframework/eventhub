@@ -1,11 +1,11 @@
-﻿using Blazorise;
-using EventHub.Admin.Users;
-using Microsoft.AspNetCore.Components;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Blazorise;
 using Blazorise.DataGrid;
+using EventHub.Admin.Users;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Volo.Abp.Application.Dtos;
 
@@ -120,9 +120,11 @@ namespace EventHub.Admin.Web.Components.UserPicker
             await SaveFormAsync.InvokeAsync();
         }
 
-        private void ClosingUserPickerModal(ModalClosingEventArgs eventArgs)
+        private Task ClosingUserPickerModal(ModalClosingEventArgs eventArgs)
         {
             eventArgs.Cancel = eventArgs.CloseReason == CloseReason.FocusLostClosing;
+            
+            return Task.CompletedTask;
         }
     }
 }

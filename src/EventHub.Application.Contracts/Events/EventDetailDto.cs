@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Volo.Abp.Application.Dtos;
 
 namespace EventHub.Events

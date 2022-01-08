@@ -4,7 +4,6 @@ using EventHub.Organizations.Memberships;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.AspNetCore.Mvc;
 
 namespace EventHub.Controllers.Organizations.Memberships
 {

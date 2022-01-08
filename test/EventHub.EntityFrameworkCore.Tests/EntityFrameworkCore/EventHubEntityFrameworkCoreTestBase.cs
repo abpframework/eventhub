@@ -1,6 +1,4 @@
-﻿using Volo.Abp;
-
-namespace EventHub.EntityFrameworkCore
+﻿namespace EventHub.EntityFrameworkCore
 {
     public abstract class EventHubEntityFrameworkCoreTestBase : EventHubTestBase<EventHubEntityFrameworkCoreTestModule> 
     {

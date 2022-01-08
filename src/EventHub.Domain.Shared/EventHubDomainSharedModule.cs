@@ -1,8 +1,10 @@
 using EventHub.Localization;
 using EventHub.Web;
 using Microsoft.Extensions.DependencyInjection;
+using Payment;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.BlobStoring.Database;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer;
 using Volo.Abp.Localization;
@@ -12,8 +14,6 @@ using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
-using Volo.Abp.BlobStoring.Database;
-using Payment;
 
 namespace EventHub
 {

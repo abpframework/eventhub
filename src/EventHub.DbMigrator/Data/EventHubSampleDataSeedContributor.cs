@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using EventHub.Events;
 using EventHub.Events.Registrations;
 using EventHub.Organizations;
-using EventHub.Users;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;

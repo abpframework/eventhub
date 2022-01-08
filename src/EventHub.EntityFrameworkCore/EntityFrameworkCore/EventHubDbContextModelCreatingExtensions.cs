@@ -4,7 +4,6 @@ using EventHub.Events.Registrations;
 using EventHub.Organizations;
 using EventHub.Organizations.Memberships;
 using Microsoft.EntityFrameworkCore;
-using System;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.Identity;

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using EventHub.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using EventHub.Data;
 using Volo.Abp.DependencyInjection;
 
 namespace EventHub.EntityFrameworkCore

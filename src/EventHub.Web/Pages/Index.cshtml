@@ -1,14 +1,13 @@
 ﻿@page
-@model EventHub.Web.Pages.IndexModel
 @using System.Globalization
-@using Microsoft.AspNetCore.Mvc.Localization
 @using EventHub.Localization
 @using EventHub.Web
-@using EventHub.Web.Helpers
 @using EventHub.Web.Pages.Events.Components.EventsArea
+@using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.Extensions.Options
 @using Volo.Abp.Timing
 @using Volo.Abp.Users
+@model EventHub.Web.Pages.IndexModel
 @inject ICurrentUser CurrentUser
 @inject IClock Clock
 @inject IHtmlLocalizer<EventHubResource> L

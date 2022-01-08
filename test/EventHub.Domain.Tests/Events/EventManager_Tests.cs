@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using EventHub.Events.Registrations;
 using EventHub.Organizations;
-using NSubstitute;
 using Shouldly;
 using Volo.Abp.Domain.Repositories;
 using Xunit;

@@ -1,10 +1,10 @@
 ﻿@page
+@inject IThemeManager ThemeManager
+@inject IHtmlLocalizer<AccountResource> L
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.Account.Localization
 @using Volo.Abp.Account.Web.Pages.Account
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming
-@inject IThemeManager ThemeManager
-@inject IHtmlLocalizer<AccountResource> L
 @model ManageModel
 @{
     Layout = ThemeManager.CurrentTheme.GetApplicationLayout();

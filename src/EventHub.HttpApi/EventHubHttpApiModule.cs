@@ -1,9 +1,9 @@
-﻿using Localization.Resources.AbpUi;
-using EventHub.Localization;
+﻿using EventHub.Localization;
+using Localization.Resources.AbpUi;
+using Payment;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Payment;
 
 namespace EventHub
 {

@@ -1,15 +1,15 @@
-﻿using Microsoft.AspNetCore.Components;
-using System;
-using System.Threading.Tasks;
-using EventHub.Admin.Events.Registrations;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Blazorise;
-using Volo.Abp.Application.Dtos;
 using Blazorise.DataGrid;
+using EventHub.Admin.Events.Registrations;
 using EventHub.Admin.Permissions;
 using EventHub.Admin.Web.Components.UserPicker;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components;
+using Volo.Abp.Application.Dtos;
 
 namespace EventHub.Admin.Web.Pages
 {

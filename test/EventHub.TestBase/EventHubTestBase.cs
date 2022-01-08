@@ -8,8 +8,8 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
-using Volo.Abp.Uow;
 using Volo.Abp.Testing;
+using Volo.Abp.Uow;
 using Volo.Abp.Users;
 
 namespace EventHub

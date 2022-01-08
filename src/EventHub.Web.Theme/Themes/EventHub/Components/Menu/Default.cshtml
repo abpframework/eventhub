@@ -1,5 +1,4 @@
-﻿@using Volo.Abp.UI.Navigation
-@model ApplicationMenu
+﻿@model Volo.Abp.UI.Navigation.ApplicationMenu
 @foreach (var menuItem in Model.Items)
 {
     var elementId = string.IsNullOrEmpty(menuItem.ElementId) ? string.Empty : $"id=\"{menuItem.ElementId}\"";

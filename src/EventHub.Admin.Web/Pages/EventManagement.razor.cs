@@ -1,17 +1,16 @@
-﻿using EventHub.Admin.Events;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Blazorise;
 using Blazorise.DataGrid;
-using Volo.Abp.Application.Dtos;
-using System;
-using System.ComponentModel;
+using EventHub.Admin.Events;
 using Microsoft.AspNetCore.Components.Web;
-using System.IO;
-using System.Globalization;
-using EventHub.Events;
 using Volo.Abp;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Content;
 
 namespace EventHub.Admin.Web.Pages
@@ -102,9 +101,11 @@ namespace EventHub.Admin.Web.Pages
             await EditEventModal.Show();
         }
 
-        private void OnEditModalClosing(CancelEventArgs e)
+        private Task OnEditModalClosing(CancelEventArgs e)
         {
             SelectedTabInEditModal = EventEditTabs.EventInfo.ToString();
+            
+            return Task.CompletedTask;
         }
 
         private void OnSelectedTabChangedInEditModal(string name)

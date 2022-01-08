@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.Authorization;
 using Volo.Abp.Autofac;
@@ -27,7 +28,7 @@ namespace EventHub
 
             PreConfigure<IIdentityServerBuilder>(identityServerBuilder =>
             {
-                identityServerBuilder.AddDeveloperSigningCredential(false, System.Guid.NewGuid().ToString());
+                identityServerBuilder.AddDeveloperSigningCredential(false, Guid.NewGuid().ToString());
             });
         }
 
