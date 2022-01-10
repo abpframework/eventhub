@@ -14,7 +14,7 @@ spec:
   tls:
   - hosts:
       - {{ .Values.global.accountDomain }}
-    secretName: {{ .Release.Name }}-{{ .Chart.Name }}-tls
+    secretName: {{ .Release.Name }}-{{ .Chart.Name }}-tls2
   rules:
   - host: "{{ .Values.global.accountDomain }}"
     http:
