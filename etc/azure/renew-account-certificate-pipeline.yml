@@ -2,3 +2,7 @@ schedules:
 - cron: 0 0 23 * *
   displayName: Monhtly renew the account website certificate
 
+- task: PowerShell@2
+  displayName: Renew the certificate
+  inputs:
+    filePath: 'etc/azure/scripts/renew-account-certificate.ps1'
