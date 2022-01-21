@@ -1,7 +1,10 @@
 schedules:
 - cron: 0 0 23 * *
   displayName: Monhtly renew the account website certificate
-
+  branches:
+    include:
+    - main
+    
 steps:
 - task: PowerShell@2
   displayName: Renew the certificate
