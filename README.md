@@ -14,3 +14,7 @@ This is a reference application built with the ABP Framework. It implements Doma
 * Run `EventHub.Web.Admin`
 
 `admin` user's password is `1q2w3E*`
+
+## See live
+
+See the solution live on https://openeventhub.com
