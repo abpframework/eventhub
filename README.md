@@ -12,7 +12,7 @@ This solution is originally prepared to be a real-world example for the **Master
 
 **The book is the only source that explains this solution**. This solution is highly referred in *Understanding the Reference Solution*, *Domain Driven Design* and other parts of the book.
 
-**You can order the book on [Amazon](https://www.amazon.com/gp/product/B097Z2DM8Q) or on [Packt](https://www.packtpub.com/product/mastering-abp-framework/9781801079242).**
+**You can order the book on [Amazon](https://www.amazon.com/gp/product/B097Z2DM8Q) or on [Packt's website](https://www.packtpub.com/product/mastering-abp-framework/9781801079242).**
 
 ## Requirements
 
