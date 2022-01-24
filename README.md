@@ -14,28 +14,6 @@ This solution is originally prepared to be a real-world example for the **Master
 
 **You can order the book on [Amazon](https://www.amazon.com/gp/product/B097Z2DM8Q) or on [Packt's website](https://www.packtpub.com/product/mastering-abp-framework/9781801079242).**
 
-## Solution Structure
-
-![Solution Structure](etc/images/solution-structure.png)
-
-The main solution structure of this application is like in the image above. It is mainly separated into two folders (and multiple projects under these folders) named **src** (which contains all application codes) and **test** (which contains all related tests).
-
-### src
-
-The application codes are separated into four folders: **account**, **admin**, **common** and **www**.
-
-* **account**: Contains a single project named `EventHub.IdentityServer`. It's the central identity server of the application. All applications (public web application and back-office/admin application) use this server for authentication/authorization purposes.
-
-* **admin**: Contains admin-side projects of the solution. All admin-related operations are under of these folders. UI is **Blazor WASM** for the admin side.
-
-* **common**: Contains common services and infrastructure details such as **background services**, **database migrator**, **entity framework core** etc.
-
-* **www**: Contains public website projects of the solution. All public website operations are under of these folders. UI is **MVC/Razor Pages** for the public web-side.
-
-### test
-
-Contains tests of the application codes.
-
 ## Requirements
 
 * .NET 6.0+
@@ -65,6 +43,28 @@ See the solution live on https://openeventhub.com
 
 ![Home Page](etc/images/homepage.png)
 
+#### Event Creation Page
+
+Event creation process consists of three steps: "Create a New Event", "Add Tracks to the Event (optional)" and "Add Sessions to the Tracks (optional)".
+
+* After these steps, an "Event Preview" page is shown to the user to check the event details and publish the event.
+
+##### Create a New Event
+
+![Event Creation Page](etc/images/event-creation-page.png)
+
+##### Add Tracks to the Event (optional)
+
+![Event Creation Page - Tracks](etc/images/event-creation-page-tracks.png)
+
+##### Add Sessions to the Tracks (optional)
+
+![Event Creation Page - Sessions](etc/images/event-creation-page-sessions.png)
+
+#### New Event Preview Page
+
+![Event Creation Page - Preview](etc/images/event-creation-page-preview.png)
+
 #### Events Page
 
 ![Events Page](etc/images/events-page.png)
@@ -76,6 +76,10 @@ See the solution live on https://openeventhub.com
 #### Organizations Page
 
 ![Organizations Page](etc/images/organizations-page.png)
+
+#### Organization Detail Page
+
+![Organization Detail Page](etc/images/organization-detail-page.png)
 
 #### Profile Page
 
