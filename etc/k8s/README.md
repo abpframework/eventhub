@@ -18,6 +18,7 @@
 
 * Run `build-images.ps1` in the `scripts` directory.
 * Run `minikube-load-images.ps1` in the `scripts` directory(only for `minikube`). 
+* Run `kubectl config set-context --current --namespace=eventhub`
 * Run `deploy-staging.ps1` in the `helm-chart` directory. It is deployed with the `eventhub` namespace.
 * *You may wait ~30 seconds on first run for preparing the database*.
 * Browse https://eh-st-www and https://eh-st-admin

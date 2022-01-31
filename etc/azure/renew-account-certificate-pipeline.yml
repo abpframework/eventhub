@@ -1,12 +1,75 @@
 schedules:
 - cron: 0 0 23 * *
-  displayName: Monhtly renew the account website certificate
+  displayName: Monthly renew the account website certificate
   branches:
     include:
     - main
     
 steps:
-- task: PowerShell@2
-  displayName: Renew the certificate
+- task: Kubernetes@1
   inputs:
-    filePath: 'etc/azure/scripts/renew-account-certificate.ps1'
+    connectionType: 'Azure Resource Manager'
+    azureSubscriptionEndpoint: 'volosoft (fe02ef9f-9e1c-4e40-b924-505981688dd8)'
+    azureResourceGroup: 'volo'
+    kubernetesCluster: 'volo'
+    namespace: 'kube-system'
+    command: 'delete'
+    arguments: '-f etc/azure/scripts/corednsms.yaml --ignore-not-found=true'
+    secretType: 'dockerRegistry'
+    containerRegistryType: 'Azure Container Registry'
+- task: Kubernetes@1
+  inputs:
+    connectionType: 'Azure Resource Manager'
+    azureSubscriptionEndpoint: 'volosoft (fe02ef9f-9e1c-4e40-b924-505981688dd8)'
+    azureResourceGroup: 'volo'
+    kubernetesCluster: 'volo'
+    namespace: 'kube-system'
+    command: 'delete'
+    arguments: 'pod -l k8s-app=kube-dns --ignore-not-found=true'
+    secretType: 'dockerRegistry'
+    containerRegistryType: 'Azure Container Registry'
+- task: Kubernetes@1
+  inputs:
+    connectionType: 'Azure Resource Manager'
+    azureSubscriptionEndpoint: 'volosoft (fe02ef9f-9e1c-4e40-b924-505981688dd8)'
+    azureResourceGroup: 'volo'
+    kubernetesCluster: 'volo'
+    namespace: 'kube-system'
+    command: 'rollout'
+    arguments: 'status deployment coredns'
+    secretType: 'dockerRegistry'
+    containerRegistryType: 'Azure Container Registry'
+- task: Kubernetes@1
+  inputs:
+    continueOnError: true
+    connectionType: 'Azure Resource Manager'
+    azureSubscriptionEndpoint: 'volosoft (fe02ef9f-9e1c-4e40-b924-505981688dd8)'
+    azureResourceGroup: 'volo'
+    kubernetesCluster: 'volo'
+    namespace: 'eventhub'
+    command: 'delete'
+    arguments: 'certificate eh-az-account-tls'
+    secretType: 'dockerRegistry'
+    containerRegistryType: 'Azure Container Registry'
+- task: Kubernetes@1
+  inputs:
+    connectionType: 'Azure Resource Manager'
+    azureSubscriptionEndpoint: 'volosoft (fe02ef9f-9e1c-4e40-b924-505981688dd8)'
+    azureResourceGroup: 'volo'
+    kubernetesCluster: 'volo'
+    namespace: 'kube-system'
+    command: 'apply'
+    arguments: '-f etc/azure/scripts/corednsms.yaml'
+    secretType: 'dockerRegistry'
+    containerRegistryType: 'Azure Container Registry'
+- task: Kubernetes@1
+  inputs:
+    connectionType: 'Azure Resource Manager'
+    azureSubscriptionEndpoint: 'volosoft (fe02ef9f-9e1c-4e40-b924-505981688dd8)'
+    azureResourceGroup: 'volo'
+    kubernetesCluster: 'volo'
+    namespace: 'kube-system'
+    command: 'delete'
+    arguments: 'pod -l k8s-app=kube-dns'
+    secretType: 'dockerRegistry'
+    containerRegistryType: 'Azure Container Registry'
