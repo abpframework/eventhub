@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using EventHub.Organizations;
 using Microsoft.AspNetCore.Mvc;
@@ -83,6 +84,13 @@ namespace EventHub.Controllers.Organizations
             Response.ContentType = remoteStreamContent.ContentType;
 
             return remoteStreamContent;
+        }
+
+        [HttpGet]
+        [Route("plan-infos")]
+        public async Task<List<PlanInfoDefinitionDto>> GetPlanInfosAsync()
+        {
+            return await _organizationAppService.GetPlanInfosAsync();
         }
     }
 }

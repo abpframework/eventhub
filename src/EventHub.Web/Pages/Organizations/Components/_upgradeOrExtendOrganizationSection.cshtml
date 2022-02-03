@@ -1,11 +1,14 @@
-@using EventHub.Web.PaymentRequests
-@using Microsoft.Extensions.Options
+@using EventHub.Organizations
 @model EventHub.Organizations.OrganizationProfileDto
-@inject IOptionsSnapshot<PremiumPlanInfoOptions> PremiumPlanInfoOptionsSnapshot
+@inject IOrganizationAppService OrganizationAppService
+
+@{
+    var premiumPlanInfo = (await OrganizationAppService.GetPlanInfosAsync()).MaxBy(x => x.Price)!;
+}
 
 <abp-container class="mt-4">
     <abp-row>
-        @if (Model.IsPremium && PremiumPlanInfoOptionsSnapshot.Value.IsActive && PremiumPlanInfoOptionsSnapshot.Value.IsExtendable && Model.PremiumEndDate!.Value.IsBetween(DateTime.Now, DateTime.Now.AddMonths(PremiumPlanInfoOptionsSnapshot.Value.OnePremiumPeriodAsMonth - PremiumPlanInfoOptionsSnapshot.Value.CanBeExtendedAfterHowManyMonths)))
+        @if (Model.IsPremium && premiumPlanInfo.IsActive && premiumPlanInfo.IsExtendable && Model.PremiumEndDate!.Value.IsBetween(DateTime.Now, DateTime.Now.AddMonths(premiumPlanInfo.OnePremiumPeriodAsMonth!.Value - premiumPlanInfo.CanBeExtendedAfterHowManyMonths!.Value)))
         {
             <span class="mb-2 ms-5 text-center strong">Premium end date: @Model.PremiumEndDate!.Value.ToShortDateString()</span>
         }
@@ -13,11 +16,11 @@
             <a href="/organization/edit/@Model.Name" class="btn btn-success text-white">Edit</a>
         </abp-column>
         <abp-column size="_9">
-            @if (PremiumPlanInfoOptionsSnapshot.Value.IsActive)
+            @if (premiumPlanInfo.IsActive)
             {
                 @if (Model.IsPremium)
                 {
-                    @if (PremiumPlanInfoOptionsSnapshot.Value.IsExtendable && Model.PremiumEndDate!.Value.IsBetween(DateTime.Now, DateTime.Now.AddMonths(PremiumPlanInfoOptionsSnapshot.Value.OnePremiumPeriodAsMonth - PremiumPlanInfoOptionsSnapshot.Value.CanBeExtendedAfterHowManyMonths)))
+                    @if (premiumPlanInfo.IsExtendable && Model.PremiumEndDate!.Value.IsBetween(DateTime.Now, DateTime.Now.AddMonths(premiumPlanInfo.OnePremiumPeriodAsMonth!.Value - premiumPlanInfo.CanBeExtendedAfterHowManyMonths!.Value)))
                     {
                         <div class="d-grid gap-2">
                             <a href="@Url.Page("/Pricing", new { organizationName = Model.Name })" class="btn btn-info">
@@ -38,7 +41,7 @@
                 {
                     <div class="d-grid gap-2">
                         <a href="@Url.Page("/Pricing", new { organizationName = Model.Name })" class="btn btn-info">
-                            <i class="fas fa-crown me-2"></i> Upgrade To @PremiumPlanInfoOptionsSnapshot.Value.PlanType
+                            <i class="fas fa-crown me-2"></i> Upgrade To @premiumPlanInfo.PlanType
                         </a>
                     </div>
                 }

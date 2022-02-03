@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Organizations.Memberships;
+using EventHub.Organizations.PaymentRequests;
 using EventHub.Users;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
@@ -21,19 +22,22 @@ namespace EventHub.Organizations
         private readonly OrganizationManager _organizationManager;
         private readonly IBlobContainer<OrganizationProfilePictureContainer> _organizationBlobContainer;
         private readonly IUserRepository _userRepository;
+        private readonly IPlanInfoDefinitionStore _planInfoDefinitionStore;
 
         public OrganizationAppService(
             IRepository<Organization, Guid> organizationRepository,
             IOrganizationMembershipRepository organizationMembershipsRepository,
             OrganizationManager organizationManager,
             IBlobContainer<OrganizationProfilePictureContainer> organizationBlobContainer,
-            IUserRepository userRepository)
+            IUserRepository userRepository, 
+            IPlanInfoDefinitionStore planInfoDefinitionStore)
         {
             _organizationRepository = organizationRepository;
             _organizationMembershipsRepository = organizationMembershipsRepository;
             _organizationManager = organizationManager;
             _organizationBlobContainer = organizationBlobContainer;
             _userRepository = userRepository;
+            _planInfoDefinitionStore = planInfoDefinitionStore;
         }
 
         [Authorize]
@@ -162,6 +166,13 @@ namespace EventHub.Organizations
 
             return new RemoteStreamContent(pictureContent, blobName);
         }
+
+        [Authorize]
+        public async Task<List<PlanInfoDefinitionDto>> GetPlanInfosAsync()
+        {
+            var dd = await _planInfoDefinitionStore.GetPlanInfosAsync();
+            return ObjectMapper.Map<List<PlanInfoDefinition>, List<PlanInfoDefinitionDto>>(dd);
+        } 
 
         private async Task SaveProfilePictureAsync(Guid id, IRemoteStreamContent streamContent)
         {

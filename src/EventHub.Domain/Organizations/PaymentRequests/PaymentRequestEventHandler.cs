@@ -135,11 +135,11 @@ namespace EventHub.Organizations.PaymentRequests
             if (organizationPaymentRequestExtraParameter.IsExtend)
             {
                 organization.UpgradeToPremium(
-                    organization.PremiumEndDate!.Value.AddMonths(organizationPaymentRequestExtraParameter.PremiumPeriodAsMonth));
+                    organization.PremiumEndDate!.Value.AddMonths(organizationPaymentRequestExtraParameter.PremiumPeriodAsMonth!.Value));
             }
             else
             {
-                organization.UpgradeToPremium(DateTime.Now.AddMonths(organizationPaymentRequestExtraParameter.PremiumPeriodAsMonth));
+                organization.UpgradeToPremium(DateTime.Now.AddMonths(organizationPaymentRequestExtraParameter.PremiumPeriodAsMonth!.Value));
             }
             
             return await _organizationRepository.UpdateAsync(organization, true);

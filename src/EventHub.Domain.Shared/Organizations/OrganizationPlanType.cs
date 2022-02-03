@@ -2,6 +2,7 @@ namespace EventHub.Organizations
 {
     public enum OrganizationPlanType : byte
     {
-        Premium,
+        Free = 0,
+        Premium
     }
 }

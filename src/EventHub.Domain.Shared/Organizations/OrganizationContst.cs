@@ -27,6 +27,8 @@
 
         public const int MaxMediumUsernameLength = 24;
         
+        public const string ProductNamePrefix = "EventHub";
+
         public static string[] AllowedProfilePictureExtensions = { ".jpg", ".png" };
     }
 }

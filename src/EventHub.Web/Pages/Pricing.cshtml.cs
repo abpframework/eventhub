@@ -1,9 +1,9 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using EventHub.Organizations;
-using EventHub.Web.PaymentRequests;
+using EventHub.Web.Pages.Payment;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Payment.PaymentRequests;
 using Payment.Web.PaymentRequest;
 using Volo.Abp.Authorization;
@@ -21,26 +21,24 @@ namespace EventHub.Web.Pages
         [BindProperty]
         public OrganizationPlanType TargetPlanToUpgrade { get; set; }
         
-        [CanBeNull] 
-        public PremiumPlanInfoOptions PremiumPlanInfo { get; private set; }
+        [NotNull] 
+        public List<PlanInfoDefinitionDto> PlanInfos { get; private set; }
         
         public OrganizationProfileDto Organization { get; private set; }
 
         private readonly IOrganizationAppService _organizationAppService;
         private readonly IPaymentRequestAppService _paymentRequestAppService;
         private readonly IPaymentUrlBuilder _paymentUrlBuilder;
-        private readonly IOptionsSnapshot<PremiumPlanInfoOptions> _premiumPlanInfoOptionsSnapshot;
 
         public Pricing(
             IOrganizationAppService organizationAppService,
             IPaymentRequestAppService paymentRequestAppService,
-            IPaymentUrlBuilder paymentUrlBuilder,
-            IOptionsSnapshot<PremiumPlanInfoOptions> premiumPlanInfoOptionsSnapshot)
+            IPaymentUrlBuilder paymentUrlBuilder)
         {
             _organizationAppService = organizationAppService;
             _paymentRequestAppService = paymentRequestAppService;
             _paymentUrlBuilder = paymentUrlBuilder;
-            _premiumPlanInfoOptionsSnapshot = premiumPlanInfoOptionsSnapshot;
+            PlanInfos = new List<PlanInfoDefinitionDto>();
         }
 
         public async Task OnGetAsync()
@@ -50,19 +48,16 @@ namespace EventHub.Web.Pages
             {
                 throw new AbpAuthorizationException();
             }
-            
-            if (_premiumPlanInfoOptionsSnapshot.Value.IsActive)
-            {
-                PremiumPlanInfo = _premiumPlanInfoOptionsSnapshot.Value;
-            }
 
+            PlanInfos = await _organizationAppService.GetPlanInfosAsync();
         }
 
-        public async Task<IActionResult> OnPostUpgradeAsync()
+        public async Task<IActionResult> OnPostUpgradeToPremiumAsync()
         {
             var organization = await GetOrganizationProfileAsync();
+            PlanInfos = await _organizationAppService.GetPlanInfosAsync();
 
-            var plan =  _premiumPlanInfoOptionsSnapshot.Value;
+            var plan = PlanInfoHelper.GetPlan(OrganizationPlanType.Premium, PlanInfos);
             if (plan is null || !plan.IsActive)
             {
                 Alerts.Danger("Premium plan is currently inactive!");
@@ -74,11 +69,13 @@ namespace EventHub.Web.Pages
             return Redirect(_paymentUrlBuilder.BuildCheckoutUrl(paymentRequest.Id).AbsoluteUri);
         }
         
-        public async Task<IActionResult> OnPostExtendAsync()
+        public async Task<IActionResult> OnPostExtendToPremiumAsync()
         {
             var organization = await GetOrganizationProfileAsync();
 
-            var plan =  _premiumPlanInfoOptionsSnapshot.Value;
+            PlanInfos = await _organizationAppService.GetPlanInfosAsync();
+
+            var plan = PlanInfoHelper.GetPlan(OrganizationPlanType.Premium, PlanInfos);
             if (plan is null || !plan.IsActive)
             {
                 Alerts.Danger("Premium plan is currently inactive!");
@@ -102,7 +99,7 @@ namespace EventHub.Web.Pages
         }
 
         private async Task<PaymentRequestDto> CreatePaymentRequestAsync(
-            PremiumPlanInfoOptions plan,
+            PlanInfoDefinitionDto plan,
             OrganizationProfileDto organization, 
             bool isExtend = false)
         {
@@ -110,8 +107,8 @@ namespace EventHub.Web.Pages
             {
                 CustomerId = CurrentUser.GetId().ToString(),
                 Price = plan.Price,
-                ProductId = PremiumPlanInfoOptions.GetProductId(plan, isExtend),
-                ProductName = PremiumPlanInfoOptions.GetProductName(plan, organization.Name, isExtend),
+                ProductId = PlanInfoHelper.GetProductId(plan, isExtend),
+                ProductName = PlanInfoHelper.GetProductName(plan, organization.Name, isExtend),
                 ExtraProperties =
                 {
                     {
@@ -120,7 +117,8 @@ namespace EventHub.Web.Pages
                         {
                             OrganizationName = OrganizationName,
                             PremiumPeriodAsMonth = plan.OnePremiumPeriodAsMonth,
-                            IsExtend = isExtend
+                            IsExtend = isExtend,
+                            TargetPlanType = TargetPlanToUpgrade
                         }
                     }
                 }
