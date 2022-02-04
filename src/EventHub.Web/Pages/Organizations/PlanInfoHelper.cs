@@ -66,7 +66,7 @@ public static class PlanInfoHelper
         return productNameStringBuilder.ToString();
     }
     
-    public static string GetRestrictionInfoByCount(uint? count)
+    public static string GetFeatureInfoByCount(uint? count)
     {
         count ??= uint.MaxValue;
         return count == uint.MaxValue ? "Unlimited" : count.ToString();

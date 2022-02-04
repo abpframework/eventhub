@@ -21,7 +21,7 @@ namespace EventHub.Web.Pages
         [BindProperty]
         public OrganizationPlanType TargetPlanToUpgrade { get; set; }
         
-        [NotNull] 
+        [ItemNotNull]
         public List<PlanInfoDefinitionDto> PlanInfos { get; private set; }
         
         public OrganizationProfileDto Organization { get; private set; }

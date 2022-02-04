@@ -6,7 +6,6 @@ using System.Linq;
 using EventHub.EntityFrameworkCore;
 using EventHub.Events;
 using EventHub.Organizations;
-using EventHub.Organizations.PaymentRequests;
 using EventHub.Organizations.Plans;
 using EventHub.Utils;
 using EventHub.Web;
@@ -201,33 +200,7 @@ namespace EventHub
             context.Services.AddOptions<List<PlanInfoDefinition>>()
                 .Bind(configuration.GetSection(PlanInfoDefinition.PlanInfo))
                 .ValidateDataAnnotations()
-                .Validate(configOfDefinitions =>
-                {
-                    foreach (var config in configOfDefinitions)
-                    {
-                        var isValidPlanType = Enum.IsDefined(typeof(OrganizationPlanType), config.PlanType);
-                        if (!isValidPlanType)
-                        {
-                            return false;
-                        }
-
-                        var isExistSamePlan = configOfDefinitions.Count(x =>
-                            x.Price == config.Price && x.PlanType == config.PlanType);
-                        if (isExistSamePlan > 1)
-                        {
-                            return false;
-                        }
-                        
-                        if (config.IsActive && config.IsExtendable)
-                        {
-                            Check.NotNull(config.OnePaidEnrollmentPeriodAsMonth, nameof(config.OnePaidEnrollmentPeriodAsMonth));
-                            Check.NotNull(config.CanBeExtendedAfterHowManyMonths, nameof(config.CanBeExtendedAfterHowManyMonths));
-                            return config.OnePaidEnrollmentPeriodAsMonth > config.CanBeExtendedAfterHowManyMonths;
-                        }
-                    }
-
-                    return true;
-                }, "PlanInfoDefinition is not valid!");
+                .Validate(PlanInfoDefinition.IsValid, "PlanInfoDefinition is not valid!");
 
             var planInfos = context.Services.GetRequiredServiceLazy<IOptions<List<PlanInfoDefinition>>>();
  
