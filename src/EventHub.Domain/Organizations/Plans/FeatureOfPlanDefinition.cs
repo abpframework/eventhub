@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
 
-namespace EventHub.Organizations.PaymentRequests;
+namespace EventHub.Organizations.Plans;
 
 public class FeatureOfPlanDefinition
 {

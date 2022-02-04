@@ -1,6 +1,6 @@
 @page "/pricing/{organizationName}"
 @using EventHub.Localization
-@using EventHub.Web.Pages.Payment
+@using EventHub.Web.Pages.Organizations
 @using Microsoft.AspNetCore.Mvc.Localization
 @model EventHub.Web.Pages.Pricing
 @inject IHtmlLocalizer<EventHubResource> L
@@ -16,7 +16,7 @@
         @foreach (var plan in Model.PlanInfos)
         {
             <div class="col-md-6">
-                <div class="card">
+                <div class="card plan-card">
                     <div class="card-body px-4 py-4 text-center">
                         <h2 class="mt-4">@plan.PlanType Account</h2>
                         <p class="my-4">@L[plan.Description]</p>
@@ -33,9 +33,9 @@
                                 <li><i class="fa fa-check-circle"></i> @additionalFeatureInfo </li>
                             }
                         </ul>
-                        @if (Model.Organization.IsPremium && plan.Price > 0)
+                        @if (Model.Organization.PlanType == plan.PlanType && plan.Price > 0)
                         {
-                            <form id="Extend" method="post" asp-page-handler="ExtendToPremium">
+                            <form id="Extend" method="post" asp-page-handler="Extend">
                                 <abp-input asp-for="TargetPlanToUpgrade" value="@plan.PlanType"></abp-input>
                                 <abp-input asp-for="OrganizationName"></abp-input>
                                 <a onclick="document.getElementById('Extend').submit()" class="btn btn-info my-4"><i class="fas fa-crown me-2"></i> Extend Now</a>
@@ -43,10 +43,10 @@
                         }
                         else if (plan.IsExtendable)
                         {
-                            <form id="Upgrade" method="post" asp-page-handler="UpgradeToPremium">
+                            <form id="Upgrade-@plan.PlanType" method="post" asp-page-handler="Upgrade">
                                 <abp-input asp-for="TargetPlanToUpgrade" value="@plan.PlanType"></abp-input>
                                 <abp-input asp-for="OrganizationName"></abp-input>
-                                <a onclick="document.getElementById('Upgrade').submit()" class="btn btn-info my-4"><i class="fas fa-crown me-2"></i> Upgrade to @plan.PlanType</a>
+                                <a onclick="document.getElementById('Upgrade-@plan.PlanType').submit()" class="btn btn-info my-4"><i class="fas fa-crown me-2"></i> Upgrade to @plan.PlanType</a>
                             </form>
                         }
                     </div>
@@ -65,8 +65,15 @@
                         {
                             @if (plan.IsExtendable)
                             {
-                                var canExtendBeforeHowManyMonths = plan!.OnePremiumPeriodAsMonth - plan!.CanBeExtendedAfterHowManyMonths;
-                                <p>For @plan.PlanType, @(canExtendBeforeHowManyMonths == plan!.OnePremiumPeriodAsMonth ? "You " : "in the last " + canExtendBeforeHowManyMonths + " months of your " + plan.PlanType.ToString().ToLower() + " period, you") can renew your plan by going to the Organization detail page.</p>      
+                                var canExtendBeforeHowManyMonths = plan.OnePaidEnrollmentPeriodAsMonth!.Value - plan.CanBeExtendedAfterHowManyMonths!.Value;
+                                @if (canExtendBeforeHowManyMonths != 0)
+                                {
+                                    <p>For @plan.PlanType, @(canExtendBeforeHowManyMonths == plan.OnePaidEnrollmentPeriodAsMonth!.Value ? "You " : "in the last " + canExtendBeforeHowManyMonths + " months of your " + plan.PlanType.ToString().ToLower() + " period, you") can renew your plan by going to the organization detail page.</p>
+                                }
+                                else
+                                {
+                                    <p>For @plan.PlanType, when your @plan.PlanType period expires, you can repurchase your plan by going to the organization detail page.</p>
+                                }
                             }
                             else
                             {
@@ -83,7 +90,7 @@
                 </div>
                 <div id="accordion123" class="collapse" data-bs-parent="#accordion" style="">
                     <div class="faq-body">
-                        <p>Don't worry about even if your organization has run out of premium, you can upgrade back to the Premium plan at any time.
+                        <p>Don't worry about even if your organization has run out of premium, you can upgrade back to the plan at any time.
                         </p>
                     </div>
                 </div>

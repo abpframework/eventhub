@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using EventHub.Organizations;
-using EventHub.Web.Pages.Payment;
+using EventHub.Web.Pages.Organizations;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Payment.PaymentRequests;
@@ -52,12 +52,11 @@ namespace EventHub.Web.Pages
             PlanInfos = await _organizationAppService.GetPlanInfosAsync();
         }
 
-        public async Task<IActionResult> OnPostUpgradeToPremiumAsync()
+        public async Task<IActionResult> OnPostUpgradeAsync()
         {
             var organization = await GetOrganizationProfileAsync();
             PlanInfos = await _organizationAppService.GetPlanInfosAsync();
-
-            var plan = PlanInfoHelper.GetPlan(OrganizationPlanType.Premium, PlanInfos);
+            var plan = PlanInfoHelper.GetPlan(TargetPlanToUpgrade, PlanInfos);
             if (plan is null || !plan.IsActive)
             {
                 Alerts.Danger("Premium plan is currently inactive!");
@@ -69,13 +68,13 @@ namespace EventHub.Web.Pages
             return Redirect(_paymentUrlBuilder.BuildCheckoutUrl(paymentRequest.Id).AbsoluteUri);
         }
         
-        public async Task<IActionResult> OnPostExtendToPremiumAsync()
+        public async Task<IActionResult> OnPostExtendAsync()
         {
             var organization = await GetOrganizationProfileAsync();
 
             PlanInfos = await _organizationAppService.GetPlanInfosAsync();
 
-            var plan = PlanInfoHelper.GetPlan(OrganizationPlanType.Premium, PlanInfos);
+            var plan = PlanInfoHelper.GetPlan(TargetPlanToUpgrade, PlanInfos);
             if (plan is null || !plan.IsActive)
             {
                 Alerts.Danger("Premium plan is currently inactive!");
@@ -116,7 +115,7 @@ namespace EventHub.Web.Pages
                         new OrganizationPaymentRequestExtraParameterConfiguration
                         {
                             OrganizationName = OrganizationName,
-                            PremiumPeriodAsMonth = plan.OnePremiumPeriodAsMonth,
+                            PremiumPeriodAsMonth = plan.OnePaidEnrollmentPeriodAsMonth,
                             IsExtend = isExtend,
                             TargetPlanType = TargetPlanToUpgrade
                         }

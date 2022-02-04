@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Organizations.Memberships;
 using EventHub.Organizations.PaymentRequests;
+using EventHub.Organizations.Plans;
 using EventHub.Users;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
@@ -170,8 +171,8 @@ namespace EventHub.Organizations
         [Authorize]
         public async Task<List<PlanInfoDefinitionDto>> GetPlanInfosAsync()
         {
-            var dd = await _planInfoDefinitionStore.GetPlanInfosAsync();
-            return ObjectMapper.Map<List<PlanInfoDefinition>, List<PlanInfoDefinitionDto>>(dd);
+            var planInfoDefinitions = await _planInfoDefinitionStore.GetPlanInfosAsync();
+            return ObjectMapper.Map<List<PlanInfoDefinition>, List<PlanInfoDefinitionDto>>(planInfoDefinitions);
         } 
 
         private async Task SaveProfilePictureAsync(Guid id, IRemoteStreamContent streamContent)

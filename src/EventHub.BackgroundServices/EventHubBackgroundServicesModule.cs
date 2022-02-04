@@ -47,7 +47,7 @@ namespace EventHub
             context.AddBackgroundWorker<NewEventWorker>();
             context.AddBackgroundWorker<EventTimingChangeWorker>();
             
-            context.AddBackgroundWorker<OrganizationPremiumEndDateWorker>();
+            context.AddBackgroundWorker<OrganizationPaidEnrollmentEndDateWorker>();
         }
     }
 }

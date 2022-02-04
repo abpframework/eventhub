@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
 
-namespace EventHub.Organizations.PaymentRequests;
+namespace EventHub.Organizations.Plans;
 
 public class PlanInfoDefinition
 {
@@ -25,13 +26,18 @@ public class PlanInfoDefinition
 
     [CanBeNull]
     [Range(1, 24, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
-    public int? OnePremiumPeriodAsMonth { get; set; } = 12;
+    public int? OnePaidEnrollmentPeriodAsMonth { get; set; } = 12;
     
     public FeatureOfPlanDefinition Feature { get; set; }
 
     public PlanInfoDefinition()
     {
-        Feature = new FeatureOfPlanDefinition();
-        Feature.AdditionalFeatureInfos = new List<string>();
+        Feature = new FeatureOfPlanDefinition
+        {
+            MaxAllowedEventsCount = uint.MaxValue,
+            MaxAllowedTracksCountInOneEvent = uint.MaxValue,
+            MaxAllowedAttendeesCountInOneEvent = uint.MaxValue,
+            AdditionalFeatureInfos = new List<string>()
+        };
     }
 }

@@ -14,7 +14,7 @@ public class PlanInfoDefinitionDto
     
     public int? CanBeExtendedAfterHowManyMonths { get; set; }
 
-    public int? OnePremiumPeriodAsMonth { get; set; }
+    public int? OnePaidEnrollmentPeriodAsMonth { get; set; }
     
     public FeatureOfPlanDefinitionDto Feature { get; set; }
     

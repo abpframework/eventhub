@@ -1,3 +1,4 @@
+@using EventHub.Organizations
 @using EventHub.Web
 @using Microsoft.Extensions.Options
 @model List<EventHub.Organizations.OrganizationInListDto>
@@ -14,9 +15,9 @@
                     <div class="event-info">
                         <h5>
                             @organization.DisplayName
-                            @if (organization.IsPremium)
+                            @if (organization.PlanType != OrganizationPlanType.Free)
                             {
-                                <span class="align-top text-dark font-weight-bold" style="font-size: x-small" abp-badge-pill="Warning"> Premium </span>
+                                <span class="align-top text-dark font-weight-bold" style="font-size: x-small" abp-badge-pill="Warning"> @organization.PlanType </span>
                             }
                         </h5>
                        

@@ -18,10 +18,10 @@ namespace EventHub.Events.Registrations
             clock.Now.Returns(DateTime.Now);
 
             var registrationManager = new EventRegistrationManager(
-                null, null, clock
+                null, null, clock, null
             );
 
-            var evnt = new Event(
+            var @event = new Event(
                 Guid.NewGuid(),
                 Guid.NewGuid(),
                 "1a8j3v0d",
@@ -31,7 +31,7 @@ namespace EventHub.Events.Registrations
                 "In this event, we will introduce the ABP Framework..."
             );
 
-            registrationManager.IsPastEvent(evnt).ShouldBeTrue();
+            registrationManager.IsPastEvent(@event).ShouldBeTrue();
         }
 
         [Fact]
@@ -58,7 +58,7 @@ namespace EventHub.Events.Registrations
             clock.Now.Returns(DateTime.Now);
 
             var registrationManager = new EventRegistrationManager(
-                repository, guidGenerator, clock
+                repository, guidGenerator, clock, null
             );
 
             await registrationManager.RegisterAsync(evnt, user);

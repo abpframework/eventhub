@@ -1,6 +1,7 @@
 @page
 @inherits Payment.Web.Pages.PaymentPageBase
 @using EventHub.Organizations
+@using EventHub.Web.Pages.Organizations
 @using EventHub.Web.Pages.Payment
 @using Microsoft.AspNetCore.Http
 @using Newtonsoft.Json
@@ -40,11 +41,11 @@
                     @if (!organizationPaymentRequestExtraParameterConfiguration.IsExtend && planInfo.IsExtendable)
                     {
                         <p>Start Date: <span class="text-dark">@DateTime.Now.ToShortDateString()</span></p>
-                        <p>End Date: <span class="text-dark">@DateTime.Now.AddMonths(planInfo.OnePremiumPeriodAsMonth!.Value).ToShortDateString()</span></p>
+                        <p>End Date: <span class="text-dark">@DateTime.Now.AddMonths(planInfo.OnePaidEnrollmentPeriodAsMonth!.Value).ToShortDateString()</span></p>
                     }
                     else
                     {
-                        <p>Your license will be extended for  <span class="text-dark">@planInfo.OnePremiumPeriodAsMonth!.Value</span> months.</p>
+                        <p>Your license will be extended for  <span class="text-dark">@planInfo.OnePaidEnrollmentPeriodAsMonth!.Value</span> months.</p>
                     }
                 </div> 
             </div> 

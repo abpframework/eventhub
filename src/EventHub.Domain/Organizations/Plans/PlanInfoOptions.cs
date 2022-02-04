@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace EventHub.Organizations.PaymentRequests;
+namespace EventHub.Organizations.Plans;
 
 public class PlanInfoOptions
 {

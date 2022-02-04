@@ -36,6 +36,10 @@
     overflow: hidden;
 }
 
+.plan-card {
+    height: 570px;
+}
+
 html:not([dir=rtl]) .mb-4, html:not([dir=rtl]) .my-4 {
     margin-bottom: 1.5rem !important;
 }

@@ -4,7 +4,7 @@ using System.Text;
 using EventHub.Organizations;
 using Volo.Abp;
 
-namespace EventHub.Web.Pages.Payment;
+namespace EventHub.Web.Pages.Organizations;
 
 public static class PlanInfoHelper
 {
@@ -68,6 +68,7 @@ public static class PlanInfoHelper
     
     public static string GetRestrictionInfoByCount(uint? count)
     {
-        return count is null ? "Unlimited" : count.ToString();
+        count ??= uint.MaxValue;
+        return count == uint.MaxValue ? "Unlimited" : count.ToString();
     }
 }

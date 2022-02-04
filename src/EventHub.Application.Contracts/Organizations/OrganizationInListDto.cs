@@ -11,6 +11,6 @@ namespace EventHub.Organizations
 
         public string Description { get; set; }
 
-        public bool IsPremium { get; set; }
+        public OrganizationPlanType PlanType { get; set; }
     }
 }

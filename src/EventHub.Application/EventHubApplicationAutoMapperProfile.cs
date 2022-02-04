@@ -5,7 +5,7 @@ using EventHub.Events.Registrations;
 using EventHub.Members;
 using EventHub.Organizations;
 using EventHub.Organizations.Memberships;
-using EventHub.Organizations.PaymentRequests;
+using EventHub.Organizations.Plans;
 using EventHub.Users;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity;

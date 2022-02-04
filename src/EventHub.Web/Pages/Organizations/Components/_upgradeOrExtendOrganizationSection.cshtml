@@ -3,57 +3,65 @@
 @inject IOrganizationAppService OrganizationAppService
 
 @{
-    var premiumPlanInfo = (await OrganizationAppService.GetPlanInfosAsync()).MaxBy(x => x.Price)!;
+    PlanInfoDefinitionDto currentPlanInfo = null;
+    if (Model is not null)
+    {
+        var planInfos = await OrganizationAppService.GetPlanInfosAsync();
+        currentPlanInfo = planInfos.SingleOrDefault(x => x.PlanType == Model.PlanType);
+    }
 }
 
-<abp-container class="mt-4">
-    <abp-row>
-        @if (Model.IsPremium && premiumPlanInfo.IsActive && premiumPlanInfo.IsExtendable && Model.PremiumEndDate!.Value.IsBetween(DateTime.Now, DateTime.Now.AddMonths(premiumPlanInfo.OnePremiumPeriodAsMonth!.Value - premiumPlanInfo.CanBeExtendedAfterHowManyMonths!.Value)))
-        {
-            <span class="mb-2 ms-5 text-center strong">Premium end date: @Model.PremiumEndDate!.Value.ToShortDateString()</span>
-        }
-        <abp-column>
-            <a href="/organization/edit/@Model.Name" class="btn btn-success text-white">Edit</a>
-        </abp-column>
-        <abp-column size="_9">
-            @if (premiumPlanInfo.IsActive)
+@if (Model is not null && currentPlanInfo is not null)
+{
+    <abp-container class="mt-4">
+        <abp-row>
+            @if (Model.PlanType != OrganizationPlanType.Free && currentPlanInfo.IsActive && currentPlanInfo.IsExtendable && Model.PaidEnrollmentEndDate!.Value.IsBetween(DateTime.Now, DateTime.Now.AddMonths(currentPlanInfo.OnePaidEnrollmentPeriodAsMonth!.Value - currentPlanInfo.CanBeExtendedAfterHowManyMonths!.Value)))
             {
-                @if (Model.IsPremium)
+                <span class="mb-2 ms-5 text-center strong">@Model.PlanType end date: @Model.PaidEnrollmentEndDate!.Value.ToShortDateString()</span>
+            }
+            <abp-column>
+                <a href="/organization/edit/@Model.Name" class="btn btn-success text-white">Edit</a>
+            </abp-column>
+            <abp-column size="_9">
+                @if (currentPlanInfo.IsActive)
                 {
-                    @if (premiumPlanInfo.IsExtendable && Model.PremiumEndDate!.Value.IsBetween(DateTime.Now, DateTime.Now.AddMonths(premiumPlanInfo.OnePremiumPeriodAsMonth!.Value - premiumPlanInfo.CanBeExtendedAfterHowManyMonths!.Value)))
+                    @if (Model.PlanType != OrganizationPlanType.Free)
                     {
-                        <div class="d-grid gap-2">
-                            <a href="@Url.Page("/Pricing", new { organizationName = Model.Name })" class="btn btn-info">
-                                <i class="fas fa-crown me-2"></i> Extend Now
-                            </a>
-                        </div>
+                        @if (currentPlanInfo.IsExtendable && Model.PaidEnrollmentEndDate!.Value.IsBetween(DateTime.Now, DateTime.Now.AddMonths(currentPlanInfo.OnePaidEnrollmentPeriodAsMonth!.Value - currentPlanInfo.CanBeExtendedAfterHowManyMonths!.Value)))
+                        {
+                            <div class="d-grid gap-2">
+                                <a href="@Url.Page("/Pricing", new { organizationName = Model.Name })" class="btn btn-info">
+                                    <i class="fas fa-crown me-2"></i> Extend Now
+                                </a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-info">
+                                    <span class="mt-2">@Model.PlanType end date: @Model.PaidEnrollmentEndDate!.Value.ToShortDateString()</span>
+                                </button>
+                            </div>
+                        }
                     }
                     else
                     {
                         <div class="d-grid gap-2">
-                            <button class="btn btn-info">
-                                <span class="mt-2">Premium end date: @Model.PremiumEndDate!.Value.ToShortDateString()</span>
-                            </button>
+                            <a href="@Url.Page("/Pricing", new { organizationName = Model.Name })" class="btn btn-info">
+                                <i class="fas fa-crown me-2"></i> Upgrade your organization
+                            </a>
                         </div>
                     }
                 }
                 else
                 {
-                    <div class="d-grid gap-2">
-                        <a href="@Url.Page("/Pricing", new { organizationName = Model.Name })" class="btn btn-info">
-                            <i class="fas fa-crown me-2"></i> Upgrade To @premiumPlanInfo.PlanType
-                        </a>
-                    </div>
+                    <abp-card class="text-center">
+                        <abp-card-body>
+                            <span>@Model.PlanType end date: @Model.PaidEnrollmentEndDate!.Value.ToShortDateString()</span>
+                        </abp-card-body>
+                    </abp-card>
                 }
-            }
-            else
-            {
-                <abp-card class="text-center">
-                    <abp-card-body>
-                        <span>Premium end date: @Model.PremiumEndDate!.Value.ToShortDateString()</span>
-                    </abp-card-body>
-                </abp-card>
-            }
-        </abp-column>
-    </abp-row>
-</abp-container>
+            </abp-column>
+        </abp-row>
+    </abp-container>
+}

@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace EventHub.Organizations.PaymentRequests;
+namespace EventHub.Organizations.Plans;
 
 public class PlanInfoDefinitionStore : IPlanInfoDefinitionStore, ITransientDependency
 {
@@ -14,8 +15,13 @@ public class PlanInfoDefinitionStore : IPlanInfoDefinitionStore, ITransientDepen
         PlanInfoOptions = planInfoOptions.Value;
     }
 
-    public Task<List<PlanInfoDefinition>> GetPlanInfosAsync()
+    public async Task<List<PlanInfoDefinition>> GetPlanInfosAsync()
     {
-        return Task.FromResult(PlanInfoOptions.Infos);
+        return await Task.FromResult(PlanInfoOptions.Infos);
+    }
+
+    public async Task<PlanInfoDefinition> GetPlanInfoByTypeAsync(OrganizationPlanType type)
+    {
+        return await Task.FromResult(PlanInfoOptions.Infos.SingleOrDefault(x => x.PlanType == type));
     }
 }

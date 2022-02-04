@@ -16,6 +16,6 @@ namespace EventHub.Emailing
         
         public const string PaymentRequestFailed = "EventHub.Organization.PaymentRequestFailed";
         
-        public const string PremiumEndDateReminder = "EventHub.Organization.PremiumEndDateReminder";
+        public const string PaidEnrollmentEndDateReminder = "EventHub.Organization.PaidEnrollmentEndDateReminder";
     }
 }

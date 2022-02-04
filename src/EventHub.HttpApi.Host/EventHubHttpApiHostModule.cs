@@ -7,6 +7,7 @@ using EventHub.EntityFrameworkCore;
 using EventHub.Events;
 using EventHub.Organizations;
 using EventHub.Organizations.PaymentRequests;
+using EventHub.Organizations.Plans;
 using EventHub.Utils;
 using EventHub.Web;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -219,9 +220,9 @@ namespace EventHub
                         
                         if (config.IsActive && config.IsExtendable)
                         {
-                            Check.NotNull(config.OnePremiumPeriodAsMonth, nameof(config.OnePremiumPeriodAsMonth));
+                            Check.NotNull(config.OnePaidEnrollmentPeriodAsMonth, nameof(config.OnePaidEnrollmentPeriodAsMonth));
                             Check.NotNull(config.CanBeExtendedAfterHowManyMonths, nameof(config.CanBeExtendedAfterHowManyMonths));
-                            return config.OnePremiumPeriodAsMonth > config.CanBeExtendedAfterHowManyMonths;
+                            return config.OnePaidEnrollmentPeriodAsMonth > config.CanBeExtendedAfterHowManyMonths;
                         }
                     }
 

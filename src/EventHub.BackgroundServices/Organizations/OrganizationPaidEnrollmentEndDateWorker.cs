@@ -12,9 +12,9 @@ using Volo.Abp.Uow;
 
 namespace EventHub.Organizations
 {
-    public class OrganizationPremiumEndDateWorker : AsyncPeriodicBackgroundWorkerBase
+    public class OrganizationPaidEnrollmentEndDateWorker : AsyncPeriodicBackgroundWorkerBase
     {
-        public OrganizationPremiumEndDateWorker(AbpAsyncTimer timer, IServiceScopeFactory serviceScopeFactory) : base(timer, serviceScopeFactory)
+        public OrganizationPaidEnrollmentEndDateWorker(AbpAsyncTimer timer, IServiceScopeFactory serviceScopeFactory) : base(timer, serviceScopeFactory)
         {
             Timer.Period = (int)TimeSpan.FromDays(1).TotalMilliseconds;
         }
@@ -22,26 +22,26 @@ namespace EventHub.Organizations
         [UnitOfWork(isTransactional: false)]
         protected override async Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
         {
-            var organizationPremiumEndDateNotifier = workerContext.ServiceProvider.GetRequiredService<OrganizationPremiumEndDateNotifier>();
+            var organizationPaidEnrollmentEndDateNotifier = workerContext.ServiceProvider.GetRequiredService<OrganizationPlanEndDateNotifier>();
             var organizationRepository = workerContext.ServiceProvider.GetRequiredService<IRepository<Organization, Guid>>();
             var asyncExecuter = workerContext.ServiceProvider.GetRequiredService<IAsyncQueryableExecuter>();
             var clock = workerContext.ServiceProvider.GetRequiredService<IClock>();
 
-            await SendPremiumReminderEmail(organizationRepository, organizationPremiumEndDateNotifier, asyncExecuter, clock);
+            await SendPremiumReminderEmail(organizationRepository, organizationPaidEnrollmentEndDateNotifier, asyncExecuter, clock);
             await UpdatePremiumExpiredOrganization(organizationRepository, asyncExecuter, clock);
         }
 
         private async Task SendPremiumReminderEmail(
             IRepository<Organization, Guid> organizationRepository,
-            OrganizationPremiumEndDateNotifier organizationPremiumEndDateNotifier, 
+            OrganizationPlanEndDateNotifier organizationPlanEndDateNotifier, 
             IAsyncQueryableExecuter asyncExecuter,
             IClock clock)
         {
             var oneMonthLater = clock.Now.AddMonths(1);
             var queryable = await organizationRepository.GetQueryableAsync();
             var query = queryable.Where(x =>
-                x.IsSendPremiumReminderEmail == false &&
-                x.PremiumEndDate <= oneMonthLater
+                x.IsSendPaidEnrollmentReminderEmail == false &&
+                x.PaidEnrollmentEndDate <= oneMonthLater
             );
 
             var organizations = await asyncExecuter.ToListAsync(query);
@@ -50,14 +50,14 @@ namespace EventHub.Organizations
             {
                 try
                 {
-                    if (organization.IsPremium)
+                    if (organization.PlanType != OrganizationPlanType.Free)
                     {
-                        if (organization.PremiumEndDate >= clock.Now)
+                        if (organization.PaidEnrollmentEndDate >= clock.Now)
                         {
-                            await organizationPremiumEndDateNotifier.NotifyAsync(organization);
+                            await organizationPlanEndDateNotifier.NotifyAsync(organization);
                         }
 
-                        organization.IsSendPremiumReminderEmail = true;
+                        organization.IsSendPaidEnrollmentReminderEmail = true;
                         await organizationRepository.UpdateAsync(organization);
                     }
                 }
@@ -72,7 +72,7 @@ namespace EventHub.Organizations
         {
             var queryable = await organizationRepository.GetQueryableAsync();
             var query = queryable.Where(x =>
-                x.PremiumEndDate >= clock.Now
+                x.PaidEnrollmentEndDate >= clock.Now
             );
 
             var organizations = await asyncExecuter.ToListAsync(query);
@@ -81,13 +81,13 @@ namespace EventHub.Organizations
             {
                 try
                 {
-                    if (!organization.IsPremium)
+                    if (organization.PlanType == OrganizationPlanType.Free)
                     {
                         continue;
                     }
 
-                    organization.DowngradeToPremium();
-                    organization.IsSendPremiumReminderEmail = false;
+                    organization.SetFreeToPlanType();
+                    organization.IsSendPaidEnrollmentReminderEmail = false;
                     await organizationRepository.UpdateAsync(organization);
                 }
                 catch (Exception ex)

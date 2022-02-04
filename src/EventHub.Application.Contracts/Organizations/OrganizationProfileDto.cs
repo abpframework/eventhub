@@ -27,8 +27,8 @@ namespace EventHub.Organizations
 
         public string MediumUsername { get; set; }
 
-        public bool IsPremium { get; set; }
-        
-        public DateTime? PremiumEndDate { get; set; }
+        public OrganizationPlanType PlanType { get; set; }
+
+        public DateTime? PaidEnrollmentEndDate { get; set; }
     }
 }
