@@ -87,12 +87,12 @@ namespace EventHub.Organizations
                 return this;
             }
             
-            SetPlanType(OrganizationPlanType.Free, DateTime.Today);
+            SetPlanType(OrganizationPlanType.Free);
 
             return this;
         }
 
-        private Organization SetPlanType(OrganizationPlanType planType, DateTime endDate)
+        private Organization SetPlanType(OrganizationPlanType planType, DateTime? endDate = null)
         {
             if (!Enum.IsDefined(typeof(OrganizationPlanType), planType))
             {
