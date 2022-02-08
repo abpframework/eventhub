@@ -9,7 +9,7 @@ using Volo.Abp.Timing;
 
 namespace EventHub.Events.Registrations
 {
-    public class EventRegistrationManager : IDomainService
+    public class EventRegistrationManager : DomainService
     {
         private readonly IEventRegistrationRepository _eventRegistrationRepository;
         private readonly IGuidGenerator _guidGenerator;

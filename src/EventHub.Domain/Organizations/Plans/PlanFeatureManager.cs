@@ -26,7 +26,7 @@ public class PlanFeatureManager : ITransientDependency
         _eventRegistrationRepository = eventRegistrationRepository;
     }
     
-    public async Task<bool> CanCreateNewEvent(Guid organizationId)
+    public virtual async Task<bool> CanCreateNewEvent(Guid organizationId)
     {
         var currentPlanOfOrganization = await GetCurrentPlanByOrganizationIdAsync(organizationId);
         
@@ -35,7 +35,7 @@ public class PlanFeatureManager : ITransientDependency
         return currentPlanOfOrganization.Feature.MaxAllowedEventsCount >= totalEventCountByOrganization;
     }
     
-    public async Task<bool> CanAddNewTrack(Event @event)
+    public virtual async Task<bool> CanAddNewTrack(Event @event)
     {
         var currentPlanOfOrganization = await GetCurrentPlanByOrganizationIdAsync(@event.OrganizationId);
 
@@ -44,7 +44,7 @@ public class PlanFeatureManager : ITransientDependency
         return currentPlanOfOrganization.Feature.MaxAllowedTracksCountInOneEvent >= tracksCount;
     }
     
-    public async Task<bool> CanRegisterToEvent(Event @event)
+    public virtual async Task<bool> CanRegisterToEvent(Event @event)
     {
         var currentPlanOfOrganization = await GetCurrentPlanByOrganizationIdAsync(@event.OrganizationId);
 

@@ -203,7 +203,6 @@ namespace EventHub
                 .Validate(PlanInfoDefinition.IsValid, "PlanInfoDefinition is not valid!");
 
             var planInfos = context.Services.GetRequiredServiceLazy<IOptions<List<PlanInfoDefinition>>>();
- 
             Configure<PlanInfoOptions>(options =>
             {
                 options.AddPlanInfos(planInfos.Value.Value);

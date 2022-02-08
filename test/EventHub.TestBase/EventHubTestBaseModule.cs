@@ -1,4 +1,6 @@
 ﻿using System;
+using EventHub.Organizations;
+using EventHub.Organizations.Plans;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.Authorization;
@@ -40,6 +42,18 @@ namespace EventHub
             });
 
             context.Services.AddAlwaysAllowAuthorization();
+            
+            Configure<PlanInfoOptions>(options =>
+            {
+                options.Infos.Add(new PlanInfoDefinition
+                {
+                    PlanType = OrganizationPlanType.Free,
+                    Description = "This is a default plan.",
+                    IsActive = true,
+                    Price = 0,
+                    IsExtendable = false
+                });
+            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
