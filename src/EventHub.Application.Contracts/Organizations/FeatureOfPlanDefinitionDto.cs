@@ -4,7 +4,7 @@ namespace EventHub.Organizations;
 
 public class FeatureOfPlanDefinitionDto
 {
-    public uint? MaxAllowedEventsCount { get; set; }
+    public uint? MaxAllowedEventsCountInOneYear { get; set; }
 
     public uint? MaxAllowedTracksCountInOneEvent { get; set; }
 

@@ -8,7 +8,7 @@ public class FeatureOfPlanDefinition
 {
     [CanBeNull]
     [Range(0, uint.MaxValue, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
-    public uint? MaxAllowedEventsCount { get; set; }
+    public uint? MaxAllowedEventsCountInOneYear { get; set; }
 
     [CanBeNull]
     [Range(0, uint.MaxValue, ErrorMessage = "Value for {0} must be between {1} and {2}.")]

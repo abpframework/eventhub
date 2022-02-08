@@ -25,7 +25,7 @@
                             <span>@plan.Price</span>
                         </div>
                         <ul class="list-check-icon mb-4 text-start">
-                            <li><i class="fa fa-check-circle"></i> @PlanInfoHelper.GetFeatureInfoByCount(plan.Feature.MaxAllowedEventsCount) events in a year. </li>
+                            <li><i class="fa fa-check-circle"></i> @PlanInfoHelper.GetFeatureInfoByCount(plan.Feature.MaxAllowedEventsCountInOneYear) events in a year. </li>
                             <li><i class="fa fa-check-circle"></i> Up to @PlanInfoHelper.GetFeatureInfoByCount(plan.Feature.MaxAllowedTracksCountInOneEvent).ToLower() tracks for an event. </li>
                             <li><i class="fa fa-check-circle"></i> Up to @PlanInfoHelper.GetFeatureInfoByCount(plan.Feature.MaxAllowedAttendeesCountInOneEvent).ToLower() attendees per event. </li>
                             @foreach (var additionalFeatureInfo in plan.Feature.AdditionalFeatureInfos)

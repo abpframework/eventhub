@@ -36,7 +36,7 @@ public class PlanInfoDefinition
     {
         Feature = new FeatureOfPlanDefinition
         {
-            MaxAllowedEventsCount = uint.MaxValue,
+            MaxAllowedEventsCountInOneYear = uint.MaxValue,
             MaxAllowedTracksCountInOneEvent = uint.MaxValue,
             MaxAllowedAttendeesCountInOneEvent = uint.MaxValue,
             AdditionalFeatureInfos = new List<string>()

@@ -30,9 +30,9 @@ public class PlanFeatureManager : ITransientDependency
     {
         var currentPlanOfOrganization = await GetCurrentPlanByOrganizationIdAsync(organizationId);
         
-        var totalEventCountByOrganization = await _eventRepository.CountAsync(x => x.OrganizationId == organizationId);
+        var totalEventCountByOrganization = await _eventRepository.CountAsync(x => x.OrganizationId == organizationId && x.CreationTime.Year < DateTime.Now.Year + 1 && x.CreationTime.Year > DateTime.Now.Year - 1);
         totalEventCountByOrganization++;
-        return currentPlanOfOrganization.Feature.MaxAllowedEventsCount >= totalEventCountByOrganization;
+        return currentPlanOfOrganization.Feature.MaxAllowedEventsCountInOneYear >= totalEventCountByOrganization;
     }
     
     public virtual async Task<bool> CanAddNewTrack(Event @event)
