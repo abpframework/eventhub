@@ -14,6 +14,7 @@ using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
+using Volo.CmsKit;
 
 namespace EventHub
 {
@@ -25,6 +26,7 @@ namespace EventHub
         typeof(AbpPermissionManagementDomainSharedModule),
         typeof(AbpSettingManagementDomainSharedModule),
         typeof(BlobStoringDatabaseDomainSharedModule),
+        typeof(CmsKitDomainSharedModule),
         typeof(PaymentDomainSharedModule)
     )]
     public class EventHubDomainSharedModule : AbpModule

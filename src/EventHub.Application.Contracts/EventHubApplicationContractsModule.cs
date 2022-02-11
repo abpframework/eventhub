@@ -2,12 +2,14 @@
 using Volo.Abp.Application;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Modularity;
+using Volo.CmsKit.Public;
 
 namespace EventHub
 {
     [DependsOn(
         typeof(EventHubDomainSharedModule),
         typeof(AbpDddApplicationContractsModule),
+        typeof(CmsKitPublicApplicationContractsModule),
         typeof(PaymentApplicationContractsModule)
     )]
     public class EventHubApplicationContractsModule : AbpModule

@@ -36,6 +36,7 @@
     <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="5.0.1" />
     <PackageReference Include="Volo.Abp.Http.Client.IdentityModel.Web" Version="5.0.1" />
     <PackageReference Include="Volo.Abp.Swashbuckle" Version="5.0.1" />
+    <PackageReference Include="Volo.CmsKit.Public.Web" Version="5.0.1" />
   </ItemGroup>
 
   <ItemGroup>

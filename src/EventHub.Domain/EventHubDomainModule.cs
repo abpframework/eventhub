@@ -12,6 +12,10 @@ using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.IdentityServer;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.VirtualFileSystem;
+using Volo.CmsKit;
+using Volo.CmsKit.Comments;
+using EventHub.Events;
+using Volo.CmsKit.Tags;
 
 namespace EventHub
 {
@@ -26,6 +30,7 @@ namespace EventHub
         typeof(AbpSettingManagementDomainModule),
         typeof(AbpEmailingModule),
         typeof(BlobStoringDatabaseDomainModule),
+        typeof(CmsKitDomainModule),
         typeof(PaymentDomainModule)
     )]
     public class EventHubDomainModule : AbpModule
@@ -36,6 +41,17 @@ namespace EventHub
             {
                 options.FileSets.AddEmbedded<EventHubDomainModule>();
             });
+            
+            Configure<CmsKitCommentOptions>(options =>
+            {
+                options.EntityTypes.Add(new CommentEntityTypeDefinition(nameof(Event)));
+            });
+            
+            Configure<CmsKitTagOptions>(options =>
+            {
+                options.EntityTypes.Add(new TagEntityTypeDefiniton(nameof(Event)));
+            });
+            
 #if DEBUG
             context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
 #endif

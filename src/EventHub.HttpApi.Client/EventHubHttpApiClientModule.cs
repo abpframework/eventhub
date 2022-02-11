@@ -3,12 +3,14 @@ using Payment;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
+using Volo.CmsKit.Public;
 
 namespace EventHub
 {
     [DependsOn(
         typeof(EventHubApplicationContractsModule),
         typeof(AbpHttpClientModule),
+        typeof(CmsKitPublicHttpApiClientModule),
         typeof(PaymentHttpApiClientModule)
     )]
     public class EventHubHttpApiClientModule : AbpModule

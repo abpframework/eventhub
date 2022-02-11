@@ -5,6 +5,7 @@
 @using EventHub.Localization
 @using EventHub.Web
 @using EventHub.Web.Pages.Events
+@using EventHub.Events
 @using EventHub.Web.Pages.Events.Components.AttendeesArea
 @using EventHub.Web.Pages.Events.Components.EventsArea
 @using EventHub.Web.Pages.Events.Components.LocationArea
@@ -13,6 +14,7 @@
 @using Microsoft.Extensions.Options
 @using Volo.Abp.Timing
 @using Volo.Abp.Users
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting
 @model EventHub.Web.Pages.Events.DetailPageModel
 @inject IOptions<EventHubUrlOptions> UrlOptions
 
@@ -64,9 +66,15 @@
                 @await Component.InvokeAsync(typeof(RegistrationAreaViewComponent), new {eventId = Model.Event.Id})
                 <h5 class="detail-head mt-5 font-weight-bold">Share Event</h5>
                 <div class="share-container">
-                    <a href="#" target="_blank" id="TwitterShareLink" title="Twitter"><img src="/assets/twitter2.svg"></a>   
-                    <a href="#" target="_blank" id="LinkedinShareLink" title="LinkedIn"><img src="/assets/in2.svg"></a>   
-                    <a href="#" target="_blank" id="FacebookShareLink" title="Facebook"><img src="/assets/facebook2.png"></a>
+                    <a href="#" target="_blank" id="TwitterShareLink" title="Twitter">
+                        <img src="/assets/twitter2.svg">
+                    </a>
+                    <a href="#" target="_blank" id="LinkedinShareLink" title="LinkedIn">
+                        <img src="/assets/in2.svg">
+                    </a>
+                    <a href="#" target="_blank" id="FacebookShareLink" title="Facebook">
+                        <img src="/assets/facebook2.png">
+                    </a>
                 </div>
             </div>
         </div>
@@ -82,12 +90,12 @@
                                     <p id="EventDescription">
                                         @Model.Event.Description
                                     </p>
-                      
+
                                     <h5 class="detail-head mt-5 font-weight-bold">Date</h5>
                                     <p>
                                         @EventDateHelper.GetDateRangeText(Model.Event.StartTime, Model.Event.EndTime)
                                     </p>
-                                    @await Component.InvokeAsync(typeof(AttendeesAreaViewComponent), new { eventId = Model.Event.Id })
+                                    @await Component.InvokeAsync(typeof(AttendeesAreaViewComponent), new {eventId = Model.Event.Id})
                                 </abp-tab>
                                 <abp-tab class="tab" title=" Track / Session">
                                     <table class="table mt-3">
@@ -135,13 +143,29 @@
                             <p id="EventDescription">
                                 @Model.Event.Description
                             </p>
-                      
+
                             <h5 class="detail-head mt-5 font-weight-bold">Date</h5>
                             <p>
                                 @EventDateHelper.GetDateRangeText(Model.Event.StartTime, Model.Event.EndTime)
                             </p>
-                            @await Component.InvokeAsync(typeof(AttendeesAreaViewComponent), new { eventId = Model.Event.Id })
-                        }  
+                            @await Component.InvokeAsync(typeof(AttendeesAreaViewComponent), new {eventId = Model.Event.Id})
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 mt-4">
+                <div class="card">
+                    <div class="card-body p-5">
+                        <div class="card-title">
+                            <h4>@L["Comments"]</h3>
+                        </div>
+                        @await Component.InvokeAsync(typeof(CommentingViewComponent), new
+                        {
+                            entityType = "Event",
+                            entityId = @Model.Event.Id.ToString()
+                        })
                     </div>
                 </div>
             </div>
