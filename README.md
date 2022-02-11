@@ -98,3 +98,4 @@ The payment module provides an API to make payments via **PayPal** easily. This 
 #### Pre-Checkout Page
 
 ![Pre Checkout Page](etc/images/pre-checkout-page.png)
+
