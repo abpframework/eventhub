@@ -2,6 +2,7 @@
 using Volo.Abp.Application;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
+using Volo.CmsKit.Public;
 
 namespace EventHub
 {
@@ -9,6 +10,7 @@ namespace EventHub
         typeof(EventHubDomainModule),
         typeof(EventHubApplicationContractsModule),
         typeof(AbpDddApplicationModule),
+        typeof(CmsKitPublicApplicationModule),
         typeof(PaymentApplicationModule)
     )]
     public class EventHubApplicationModule : AbpModule

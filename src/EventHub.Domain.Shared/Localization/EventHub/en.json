@@ -151,6 +151,7 @@
     "MinStartTime": "Min Start Time",
     "MaxStartTime": "Max Start Time",
     "Online": "Online",
+    "Comments": "Comments",
     "InPerson": "In Person",
     "UpgradeToPremium": "Upgrade To Premium",
     "EventHub:TrackNameAlreadyExist": "The track {Name} already exists",

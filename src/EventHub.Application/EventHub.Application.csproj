@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="Volo.Abp.Ddd.Application" Version="5.0.1" />
+    <PackageReference Include="Volo.CmsKit.Public.Application" Version="5.0.1" />
   </ItemGroup>
 
 </Project>

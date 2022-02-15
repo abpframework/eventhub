@@ -11,6 +11,7 @@ using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.CmsKit.EntityFrameworkCore;
 
 namespace EventHub.EntityFrameworkCore
 {
@@ -24,6 +25,7 @@ namespace EventHub.EntityFrameworkCore
         typeof(AbpBackgroundJobsEntityFrameworkCoreModule),
         typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(BlobStoringDatabaseEntityFrameworkCoreModule),
+        typeof(CmsKitEntityFrameworkCoreModule),
         typeof(PaymentEntityFrameworkCoreModule)
         )]
     public class EventHubEntityFrameworkCoreModule : AbpModule

@@ -16,6 +16,16 @@ using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.CmsKit.Blogs;
+using Volo.CmsKit.Comments;
+using Volo.CmsKit.EntityFrameworkCore;
+using Volo.CmsKit.MediaDescriptors;
+using Volo.CmsKit.Menus;
+using Volo.CmsKit.Pages;
+using Volo.CmsKit.Ratings;
+using Volo.CmsKit.Reactions;
+using Volo.CmsKit.Tags;
+using Volo.CmsKit.Users;
 
 namespace EventHub.EntityFrameworkCore
 {
@@ -69,6 +79,7 @@ namespace EventHub.EntityFrameworkCore
             builder.ConfigureIdentityServer();
             builder.ConfigureBlobStoring();
             builder.ConfigurePayment();
+            builder.ConfigureCmsKit();
             builder.ConfigureEventHub();
         }
     }
