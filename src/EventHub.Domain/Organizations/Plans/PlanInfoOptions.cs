@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EventHub.Organizations.Plans;
 
@@ -26,5 +27,15 @@ public class PlanInfoOptions
         Infos.AddIfNotContains(info);
 
         return this;
+    }
+    
+    public List<PlanInfoDefinition> GetPlanInfos()
+    {
+        return Infos.Where(x => x.IsActive).ToList();
+    }
+
+    public PlanInfoDefinition GetPlanInfoByType(OrganizationPlanType type)
+    {
+        return Infos.SingleOrDefault(x => x.IsActive && x.PlanType == type);
     }
 }

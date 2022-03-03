@@ -17,17 +17,17 @@ public class PlanInfoDefinition
     
     public bool IsActive { get; set; }
 
-    [Range(1.0, 100.0, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
+    [Range(1.0, 100.0)]
     public decimal Price { get; set; } = 1.0M;
 
     public bool IsExtendable { get; set; }
     
     [CanBeNull]
-    [Range(0, 12, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
+    [Range(0, 12)]
     public int? CanBeExtendedAfterHowManyMonths { get; set; }
 
     [CanBeNull]
-    [Range(1, 24, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
+    [Range(1, 24)]
     public int? OnePaidEnrollmentPeriodAsMonth { get; set; } = 12;
     
     public FeatureOfPlanDefinition Feature { get; set; }

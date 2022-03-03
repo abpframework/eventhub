@@ -58,8 +58,8 @@ namespace EventHub.Events.Registrations
             var clock = Substitute.For<IClock>();
             clock.Now.Returns(DateTime.Now);
 
-            var planFeatureManager = Substitute.For<PlanFeatureManager>(null, null, null, null);
-            planFeatureManager.CanRegisterToEvent(@event).Returns(Task.FromResult(true));
+            var planFeatureManager = Substitute.For<PlanFeatureManager>(null, null, null, null, null);
+            planFeatureManager.CanRegisterToEventAsync(@event).Returns(Task.FromResult(true));
 
             var registrationManager = new EventRegistrationManager(
                 repository, guidGenerator, clock, planFeatureManager

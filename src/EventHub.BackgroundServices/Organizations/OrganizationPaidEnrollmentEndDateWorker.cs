@@ -41,7 +41,8 @@ namespace EventHub.Organizations
             var queryable = await organizationRepository.GetQueryableAsync();
             var query = queryable.Where(x =>
                 x.IsSendPaidEnrollmentReminderEmail == false &&
-                x.PaidEnrollmentEndDate <= oneMonthLater
+                x.PaidEnrollmentEndDate <= oneMonthLater &&
+                x.PlanType != OrganizationPlanType.Free
             );
 
             var organizations = await asyncExecuter.ToListAsync(query);
@@ -50,16 +51,13 @@ namespace EventHub.Organizations
             {
                 try
                 {
-                    if (organization.PlanType != OrganizationPlanType.Free)
+                    if (organization.PaidEnrollmentEndDate >= clock.Now)
                     {
-                        if (organization.PaidEnrollmentEndDate >= clock.Now)
-                        {
-                            await organizationPlanEndDateNotifier.NotifyAsync(organization);
-                        }
-
-                        organization.IsSendPaidEnrollmentReminderEmail = true;
-                        await organizationRepository.UpdateAsync(organization);
+                        await organizationPlanEndDateNotifier.NotifyAsync(organization);
                     }
+
+                    organization.IsSendPaidEnrollmentReminderEmail = true;
+                    await organizationRepository.UpdateAsync(organization);
                 }
                 catch (Exception ex)
                 {
@@ -72,7 +70,8 @@ namespace EventHub.Organizations
         {
             var queryable = await organizationRepository.GetQueryableAsync();
             var query = queryable.Where(x =>
-                x.PaidEnrollmentEndDate >= clock.Now
+                x.PaidEnrollmentEndDate > clock.Now.Date &&
+                x.PlanType != OrganizationPlanType.Free
             );
 
             var organizations = await asyncExecuter.ToListAsync(query);
@@ -81,11 +80,6 @@ namespace EventHub.Organizations
             {
                 try
                 {
-                    if (organization.PlanType == OrganizationPlanType.Free)
-                    {
-                        continue;
-                    }
-
                     organization.SetFreeToPlanType();
                     organization.IsSendPaidEnrollmentReminderEmail = false;
                     await organizationRepository.UpdateAsync(organization);

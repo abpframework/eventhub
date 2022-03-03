@@ -52,7 +52,7 @@ namespace EventHub.Events.Registrations
                 }
             }
 
-            if (!await _planFeatureManager.CanRegisterToEvent(@event))
+            if (!await _planFeatureManager.CanRegisterToEventAsync(@event))
             {
                 throw new BusinessException(EventHubErrorCodes.CannotRegisterToEvent);
             }

@@ -35,7 +35,7 @@ namespace EventHub.Events
             DateTime endTime,
             string description)
         {
-            if (!await _planFeatureManager.CanCreateNewEvent(organization.Id))
+            if (!await _planFeatureManager.CanCreateNewEventAsync(organization.Id))
             {
                 throw new BusinessException(EventHubErrorCodes.CannotCreateNewEvent);
             }
@@ -53,7 +53,7 @@ namespace EventHub.Events
         
         public async Task AddTrackAsync(Event @event, string name)
         {
-            if (!await _planFeatureManager.CanAddNewTrack(@event))
+            if (!await _planFeatureManager.CanAddNewTrackAsync(@event))
             {
                 throw new BusinessException(EventHubErrorCodes.CannotAddNewTrack);
             }
