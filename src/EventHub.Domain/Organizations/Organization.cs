@@ -98,8 +98,12 @@ namespace EventHub.Organizations
             {
                 throw new AbpValidationException();
             }
+
+            if (planType != OrganizationPlanType.Free)
+            {
+                Check.NotNull(endDate, nameof(endDate));
+            }
             
-            Check.NotNull(endDate, nameof(endDate));
             PlanType = planType;
             PaidEnrollmentEndDate = endDate;
 
