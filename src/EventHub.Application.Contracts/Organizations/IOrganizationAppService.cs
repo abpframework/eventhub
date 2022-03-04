@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -21,5 +22,7 @@ namespace EventHub.Organizations
         Task UpdateAsync(Guid id, UpdateOrganizationDto input);
 
         Task<IRemoteStreamContent> GetProfilePictureAsync(Guid id);
+        
+        Task<List<PlanInfoDefinitionDto>> GetPlanInfosAsync();
     }
 }

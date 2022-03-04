@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using EventHub.Organizations.Plans;
 using Volo.Abp;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
@@ -8,20 +9,23 @@ using Volo.Abp.Timing;
 
 namespace EventHub.Events.Registrations
 {
-    public class EventRegistrationManager : IDomainService
+    public class EventRegistrationManager : DomainService
     {
         private readonly IEventRegistrationRepository _eventRegistrationRepository;
         private readonly IGuidGenerator _guidGenerator;
         private readonly IClock _clock;
+        private readonly PlanFeatureManager _planFeatureManager;
 
         public EventRegistrationManager(
             IEventRegistrationRepository eventRegistrationRepository,
             IGuidGenerator guidGenerator,
-            IClock clock)
+            IClock clock, 
+            PlanFeatureManager planFeatureManager)
         {
             _eventRegistrationRepository = eventRegistrationRepository;
             _guidGenerator = guidGenerator;
             _clock = clock;
+            _planFeatureManager = planFeatureManager;
         }
 
         public async Task RegisterAsync(
@@ -46,6 +50,11 @@ namespace EventHub.Events.Registrations
                     throw new BusinessException(EventHubErrorCodes.CapacityOfEventFull)
                         .WithData("EventTitle", @event.Title);
                 }
+            }
+
+            if (!await _planFeatureManager.CanRegisterToEventAsync(@event))
+            {
+                throw new BusinessException(EventHubErrorCodes.CannotRegisterToEvent);
             }
                 
             await _eventRegistrationRepository.InsertAsync(

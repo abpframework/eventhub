@@ -1,6 +1,7 @@
 ﻿@page "/organizations/{name}"
 @inject IHtmlLocalizer<EventHubResource> L
 @using EventHub.Localization
+@using EventHub.Organizations
 @using EventHub.Web
 @using EventHub.Web.Pages.Events.Components.EventsArea
 @using EventHub.Web.Pages.Organizations.Components.JoinArea
@@ -47,9 +48,9 @@
                             <div class="col-md-7">
                                 <h5 class="detail-head mt-3 font-weight-bold">
                                     @Model.Organization.DisplayName
-                                    @if (Model.Organization.IsPremium)
+                                    @if (Model.Organization.PlanType != OrganizationPlanType.Free)
                                     {
-                                        <span class="align-top text-dark font-weight-bold" style="font-size: x-small" abp-badge-pill="Warning"> Premium </span>
+                                        <span class="align-top text-dark font-weight-bold" style="font-size: x-small" abp-badge-pill="Warning"> @Model.Organization.PlanType </span>
                                     }
                                 </h5>
                                 <p>

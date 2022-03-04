@@ -6,6 +6,8 @@ namespace EventHub.Organizations
         
         public bool IsExtend { get; set; }
 
-        public int PremiumPeriodAsMonth { get; set; }
+        public int? PremiumPeriodAsMonth { get; set; }
+
+        public OrganizationPlanType TargetPlanType { get; set; }
     }
 }

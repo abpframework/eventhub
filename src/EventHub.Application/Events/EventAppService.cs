@@ -299,10 +299,7 @@ namespace EventHub.Events
             var @event = await _eventRepository.GetAsync(id, true);
             await CheckIfValidOwnerAsync(@event);
 
-            @event.AddTrack(
-                GuidGenerator.Create(),
-                input.Name
-            );
+            await _eventManager.AddTrackAsync(@event, input.Name);
 
             await _eventRepository.UpdateAsync(@event);
         }

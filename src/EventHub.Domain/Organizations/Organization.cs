@@ -1,6 +1,8 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.Validation;
 
 namespace EventHub.Organizations
 {
@@ -28,11 +30,11 @@ namespace EventHub.Organizations
 
         public int MemberCount { get; internal set; }
 
-        public bool IsPremium { get; private set; }
+        public OrganizationPlanType PlanType { get; private set; }
 
-        public DateTime? PremiumEndDate { get; private set; }
+        public DateTime? PaidEnrollmentEndDate { get; private set; }
 
-        public bool IsSendPremiumReminderEmail { get; set; }
+        public bool IsSendPaidEnrollmentReminderEmail { get; set; }
 
         private Organization()
         {
@@ -50,6 +52,7 @@ namespace EventHub.Organizations
             SetName(name);
             SetDisplayName(displayName);
             SetDescription(description);
+            SetFreeToPlanType();
         }
 
         internal Organization SetName(string name)
@@ -70,38 +73,40 @@ namespace EventHub.Organizations
             return this;
         }
 
-        internal Organization UpgradeToPremium(DateTime endDate)
+        internal Organization UpgradeToPlanType(OrganizationPlanType planType, DateTime endDate)
         {
-            SetPremiumStatus(true, endDate);
+            SetPlanType(planType, endDate);
 
             return this;
         }
         
-        public Organization DowngradeToPremium()
+        public Organization SetFreeToPlanType()
         {
-            if (!IsPremium)
+            if (PlanType == OrganizationPlanType.Free)
             {
                 return this;
             }
             
-            SetPremiumStatus(false);
+            SetPlanType(OrganizationPlanType.Free);
 
             return this;
         }
 
-        private Organization SetPremiumStatus(bool isPremium, DateTime? endDate = null)
+        private Organization SetPlanType(OrganizationPlanType planType, DateTime? endDate = null)
         {
-            if (isPremium)
+            if (!Enum.IsDefined(typeof(OrganizationPlanType), planType))
             {
-                Check.NotNull(endDate, nameof(endDate));
-                IsPremium = true;
-                PremiumEndDate = endDate;
-
-                return this;
+                throw new AbpValidationException();
             }
 
-            IsPremium = false;
+            if (planType != OrganizationPlanType.Free)
+            {
+                Check.NotNull(endDate, nameof(endDate));
+            }
             
+            PlanType = planType;
+            PaidEnrollmentEndDate = endDate;
+
             return this;
         }
     }

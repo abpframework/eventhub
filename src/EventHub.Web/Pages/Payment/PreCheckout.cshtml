@@ -1,13 +1,13 @@
 @page
 @inherits Payment.Web.Pages.PaymentPageBase
 @using EventHub.Organizations
-@using EventHub.Web.PaymentRequests
+@using EventHub.Web.Pages.Organizations
+@using EventHub.Web.Pages.Payment
 @using Microsoft.AspNetCore.Http
-@using Microsoft.Extensions.Options
 @using Newtonsoft.Json
 @using Payment.Web.Pages.Payment
 @model Payment.Web.Pages.Payment.PreCheckoutPageModel
-@inject IOptionsSnapshot<PremiumPlanInfoOptions> PremiumPlanInfoOptionsSnapshot
+@inject IOrganizationAppService OrganizationAppService
 
 @{
     var isExistExtraProperties = Model.PaymentRequest.ExtraProperties.TryGetValue(nameof(OrganizationPaymentRequestExtraParameterConfiguration), out var ExtraProperties);
@@ -22,7 +22,7 @@
         throw new BadHttpRequestException("");
     }
     var organizationName = organizationPaymentRequestExtraParameterConfiguration.OrganizationName;
-    var planInfo = PremiumPlanInfoOptionsSnapshot.Value;
+    var planInfo = PlanInfoHelper.GetPlan(organizationPaymentRequestExtraParameterConfiguration.TargetPlanType, await OrganizationAppService.GetPlanInfosAsync());
 
 }
 @section scripts {
@@ -38,14 +38,14 @@
                 <div class="card-body px-5 py-4"> 
                     <h2 class="my-4">Product Detail</h2>
                     <h3 class="my-4">@OrganizationPlanType.Premium Account: <span class="text-primary">@organizationName.ToUpperInvariant()</span></h3>
-                    @if (!organizationPaymentRequestExtraParameterConfiguration.IsExtend)
+                    @if (!organizationPaymentRequestExtraParameterConfiguration.IsExtend && planInfo.IsExtendable)
                     {
                         <p>Start Date: <span class="text-dark">@DateTime.Now.ToShortDateString()</span></p>
-                        <p>End Date: <span class="text-dark">@DateTime.Now.AddMonths(planInfo.OnePremiumPeriodAsMonth).ToShortDateString()</span></p>    
+                        <p>End Date: <span class="text-dark">@DateTime.Now.AddMonths(planInfo.OnePaidEnrollmentPeriodAsMonth!.Value).ToShortDateString()</span></p>
                     }
                     else
                     {
-                        <p>Your license will be extended for  <span class="text-dark">@planInfo.OnePremiumPeriodAsMonth</span> months.</p>
+                        <p>Your license will be extended for  <span class="text-dark">@planInfo.OnePaidEnrollmentPeriodAsMonth!.Value</span> months.</p>
                     }
                 </div> 
             </div> 

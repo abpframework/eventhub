@@ -129,7 +129,7 @@ namespace EventHub.Events
             return this;
         }
 
-        public Event AddTrack(Guid trackId, string name)
+        internal Event AddTrack(Guid trackId, string name)
         {
             if (Tracks.Any(x => x.Name == name))
             {

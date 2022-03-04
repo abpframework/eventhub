@@ -159,6 +159,9 @@
     "EventHub:SessionNotFound": "The session not found!",
     "EventHub:SessionTimeShouldBeInTheEventTime": "Session time should be in the event time!",
     "EventHub:SessionTimeConflictsWithAnExistingSession": "Session time conflicts with an existing session!",
-    "EventHub:SessionTitleAlreadyExist": "The session {Title} already exists"
+    "EventHub:SessionTitleAlreadyExist": "The session {Title} already exists",
+    "EventHub:CannotCreateNewEvent": "Cannot create a new event, you need to upgrade your organization!",
+    "EventHub:CannotAddNewTrack": "Cannot add a new track, you need to upgrade your organization!",
+    "EventHub:CannotRegisterToEvent": "The maximum number of participants allowed by the organization has been reached!"
   }
 }

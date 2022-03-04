@@ -76,9 +76,9 @@ namespace EventHub.Emailing
             
             context.Add(
                 new TemplateDefinition(
-                        EmailTemplates.PremiumEndDateReminder)
+                        EmailTemplates.PaidEnrollmentEndDateReminder)
                     .WithVirtualFilePath(
-                        "/Emailing/Templates/PremiumEndDateReminder.tpl",
+                        "/Emailing/Templates/PaidEnrollmentEndDateReminder.tpl",
                         isInlineLocalized: true
                     )
             );

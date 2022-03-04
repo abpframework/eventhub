@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using EventHub.Countries;
 using EventHub.Events.Registrations;
 using EventHub.Organizations;
+using EventHub.Organizations.Plans;
 using Volo.Abp;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
@@ -14,15 +15,17 @@ namespace EventHub.Events
         private readonly EventUrlCodeGenerator _eventUrlCodeGenerator;
         private readonly IRepository<EventRegistration, Guid> _eventRegistrationRepository;
         private readonly IRepository<Country, Guid> _countriesRepository;
-
+        private readonly PlanFeatureManager _planFeatureManager;
         public EventManager(
             EventUrlCodeGenerator eventUrlCodeGenerator, 
             IRepository<EventRegistration, Guid> eventRegistrationRepository, 
-            IRepository<Country, Guid> countriesRepository)
+            IRepository<Country, Guid> countriesRepository, 
+            PlanFeatureManager planFeatureManager)
         {
             _eventUrlCodeGenerator = eventUrlCodeGenerator;
             _eventRegistrationRepository = eventRegistrationRepository;
             _countriesRepository = countriesRepository;
+            _planFeatureManager = planFeatureManager;
         }
 
         public async Task<Event> CreateAsync(
@@ -32,6 +35,11 @@ namespace EventHub.Events
             DateTime endTime,
             string description)
         {
+            if (!await _planFeatureManager.CanCreateNewEventAsync(organization.Id))
+            {
+                throw new BusinessException(EventHubErrorCodes.CannotCreateNewEvent);
+            }
+            
             return new Event(
                 GuidGenerator.Create(),
                 organization.Id,
@@ -40,6 +48,19 @@ namespace EventHub.Events
                 startTime,
                 endTime,
                 description
+            );
+        }
+        
+        public async Task AddTrackAsync(Event @event, string name)
+        {
+            if (!await _planFeatureManager.CanAddNewTrackAsync(@event))
+            {
+                throw new BusinessException(EventHubErrorCodes.CannotAddNewTrack);
+            }
+            
+            @event.AddTrack(
+                GuidGenerator.Create(),
+                name
             );
         }
 

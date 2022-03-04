@@ -5,6 +5,7 @@ using EventHub.Events.Registrations;
 using EventHub.Members;
 using EventHub.Organizations;
 using EventHub.Organizations.Memberships;
+using EventHub.Organizations.Plans;
 using EventHub.Users;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity;
@@ -48,6 +49,9 @@ namespace EventHub
             CreateMap<IdentityUser, UserDto>();
             
             CreateMap<UserWithoutDetails, UserInListDto>();
+
+            CreateMap<PlanInfoDefinition, PlanInfoDefinitionDto>();
+            CreateMap<FeatureOfPlanDefinition, FeatureOfPlanDefinitionDto>();
         }
     }
 }

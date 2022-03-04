@@ -10,18 +10,18 @@ using Volo.Abp.TextTemplating;
 
 namespace EventHub.Organizations
 {
-    public class OrganizationPremiumEndDateNotifier : ITransientDependency
+    public class OrganizationPlanEndDateNotifier : ITransientDependency
     {
         private readonly IEmailSender _emailSender;
         private readonly ITemplateRenderer _templateRenderer;
         private readonly IRepository<IdentityUser, Guid> _userRepository;
-        private readonly ILogger<OrganizationPremiumEndDateNotifier> _logger;
+        private readonly ILogger<OrganizationPlanEndDateNotifier> _logger;
 
-        public OrganizationPremiumEndDateNotifier(
+        public OrganizationPlanEndDateNotifier(
             IEmailSender emailSender, 
             ITemplateRenderer templateRenderer,
             IRepository<IdentityUser, Guid> userRepository,
-            ILogger<OrganizationPremiumEndDateNotifier> logger)
+            ILogger<OrganizationPlanEndDateNotifier> logger)
         {
             _emailSender = emailSender;
             _templateRenderer = templateRenderer;
@@ -31,7 +31,7 @@ namespace EventHub.Organizations
         
         public async Task NotifyAsync(Organization organization)
         {
-            if (organization is null || organization.IsSendPremiumReminderEmail || !organization.IsPremium)
+            if (organization is null || organization.IsSendPaidEnrollmentReminderEmail || organization.PlanType != OrganizationPlanType.Free)
             {
                 return;
             }
@@ -39,20 +39,20 @@ namespace EventHub.Organizations
             var user = await _userRepository.FindAsync(organization.OwnerUserId);
             if (user is null)
             {
-                _logger.LogError("(OrganizationPremiumEndDateNotifier) User not found!");
+                _logger.LogError("(OrganizationPaidEnrollmentEndDateNotifier) User not found!");
                 return;
             }
             
             var templateModel = new
             {
                 OrganizationName = organization.Name,
-                EndDate = organization.PremiumEndDate!.Value.ToShortDateString()
+                EndDate = organization.PaidEnrollmentEndDate!.Value.ToShortDateString()
             };
 
             await _emailSender.SendAsync(
                 user.Email,
-                "EventHub: Your Premium Organization is expiring!",
-                await _templateRenderer.RenderAsync(EmailTemplates.PremiumEndDateReminder, templateModel)
+                "EventHub: Your" + organization.PlanType +  "Organization is expiring!",
+                await _templateRenderer.RenderAsync(EmailTemplates.PaidEnrollmentEndDateReminder, templateModel)
             );
         }
     }

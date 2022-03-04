@@ -1,11 +1,9 @@
 @page "/pricing/{organizationName}"
 @using EventHub.Localization
-@using EventHub.Web.PaymentRequests
+@using EventHub.Web.Pages.Organizations
 @using Microsoft.AspNetCore.Mvc.Localization
-@using Microsoft.Extensions.Options
 @model EventHub.Web.Pages.Pricing
 @inject IHtmlLocalizer<EventHubResource> L
-@inject IOptionsSnapshot<PremiumPlanInfoOptions> PremiumPlanInfoOptionsSnapshot
 
 @section styles {
   <abp-style src="/Pages/Pricing.css" />
@@ -14,89 +12,89 @@
 <main class="static-page container mt-5"> 
     <h1 class="text-center mb-3">Pricing</h1>
     <p class="text-center mb-5">Simple plans for everyone</p>
-    <div class="row"> 
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body px-4 py-4 text-center"> 
-                    <h2 class="mt-4">Free Account</h2>
-                    <p class="my-4">For individuals and small organizations.</p>
-                    <div class="price mb-4">
-                        <small>$</small>
-                        <span>0</span>
+    <div class="row">
+        @foreach (var plan in Model.PlanInfos)
+        {
+            <div class="col-md-6">
+                <div class="card plan-card">
+                    <div class="card-body px-4 py-4 text-center">
+                        <h2 class="mt-4">@plan.PlanType Account</h2>
+                        <p class="my-4">@L[plan.Description]</p>
+                        <div class="price mb-4">
+                            <small>$</small>
+                            <span>@plan.Price</span>
+                        </div>
+                        <ul class="list-check-icon mb-4 text-start">
+                            <li><i class="fa fa-check-circle"></i> @PlanInfoHelper.GetFeatureInfoByCount(plan.Feature.MaxAllowedEventsCountInOneYear) events in a year. </li>
+                            <li><i class="fa fa-check-circle"></i> Up to @PlanInfoHelper.GetFeatureInfoByCount(plan.Feature.MaxAllowedTracksCountInOneEvent).ToLower() tracks for an event. </li>
+                            <li><i class="fa fa-check-circle"></i> Up to @PlanInfoHelper.GetFeatureInfoByCount(plan.Feature.MaxAllowedAttendeesCountInOneEvent).ToLower() attendees per event. </li>
+                            @foreach (var additionalFeatureInfo in plan.Feature.AdditionalFeatureInfos)
+                            {
+                                <li><i class="fa fa-check-circle"></i> @additionalFeatureInfo </li>
+                            }
+                        </ul>
+                        @if (Model.Organization.PlanType == plan.PlanType && plan.Price > 0 && plan.IsExtendable)
+                        {
+                            <form id="Extend" method="post" asp-page-handler="Extend">
+                                <abp-input asp-for="TargetPlanToUpgrade" value="@plan.PlanType"></abp-input>
+                                <abp-input asp-for="OrganizationName"></abp-input>
+                                <a onclick="document.getElementById('Extend').submit()" class="btn btn-info my-4"><i class="fas fa-crown me-2"></i> Extend Now</a>
+                            </form>
+                        }
+                        else if (plan.Price > 0)
+                        {
+                            <form id="Upgrade-@plan.PlanType" method="post" asp-page-handler="Upgrade">
+                                <abp-input asp-for="TargetPlanToUpgrade" value="@plan.PlanType"></abp-input>
+                                <abp-input asp-for="OrganizationName"></abp-input>
+                                <a onclick="document.getElementById('Upgrade-@plan.PlanType').submit()" class="btn btn-info my-4"><i class="fas fa-crown me-2"></i> Upgrade to @plan.PlanType</a>
+                            </form>
+                        }
                     </div>
-                    <ul class="list-check-icon mb-4 text-start">
-                        <li><i class="fa fa-check-circle"></i> 2 events in a year. </li>
-                        <li><i class="fa fa-check-circle"></i> Up to 2 tracks for an event. </li>
-                        <li><i class="fa fa-check-circle"></i> Up to 1,000 attendees per event. </li> 
-                    </ul>
-                </div> 
-            </div> 
-        </div>
-         @if (Model.PremiumPlanInfo is not null)
-         {
-             <div class="col-md-6">
-                 <div class="card">
-                     <div class="card-body px-4 py-4 text-center">
-                         <h2 class="mt-4">Premium Account</h2>
-                         <p class="my-4">For those organize regular events.</p>
-                         <div class="price mb-4">
-                             <small>$</small>
-                             <span>@Model.PremiumPlanInfo.Price</span>
-                         </div>
-                         <ul class="list-check-icon mb-4 text-start">
-                             <li><i class="fa fa-check-circle"></i> Unlimited events. </li>
-                             <li><i class="fa fa-check-circle"></i> Unlimited tracks and sessions for an event. </li>
-                             <li><i class="fa fa-check-circle"></i> Unlimited attendees. </li> 
-                             <li><i class="fa fa-check-circle"></i> Be more prominent in the organization list. </li>
-                             <li><i class="fa fa-check-circle"></i> Premium badge in the organization page. </li>
-                         </ul>
-                          @if (Model.Organization.IsPremium)
-                          {
-                              <form id="Extend" method="post" asp-page-handler="Extend">
-                                  <abp-input asp-for="TargetPlanToUpgrade" value="@Model.PremiumPlanInfo.PlanType"></abp-input>
-                                  <abp-input asp-for="OrganizationName"></abp-input>
-                                  <a onclick="document.getElementById('Extend').submit()" class="btn btn-info my-4"><i class="fas fa-crown me-2"></i> Extend Now</a>
-                              </form>
-                          }
-                          else
-                          {
-                              <form id="Upgrade" method="post" asp-page-handler="Upgrade">
-                                  <abp-input asp-for="TargetPlanToUpgrade" value="@Model.PremiumPlanInfo.PlanType"></abp-input>
-                                  <abp-input asp-for="OrganizationName"></abp-input>
-                                  <a onclick="document.getElementById('Upgrade').submit()" class="btn btn-info my-4"><i class="fas fa-crown me-2"></i> Upgrade to @Model.PremiumPlanInfo.PlanType</a>
-                              </form>   
-                          }
-                     </div>
-                 </div>
-             </div>
-         }
+                </div>
+            </div>
+        }
         <h2 class="text-center mb-3">Frequently Asked Questions</h2>
-         <div id="accordion" class="mb-5 pb-5 faq-container">
-             <div class="faq" data-anchor-id="accordion12">
-                 <div class="faq-header">
-                     <h5><button class="btn btn-faq collapsed" data-bs-toggle="collapse" data-bs-target="#accordion12" aria-expanded="false" aria-controls="accordion12">How do I renew my plan?<i class="fas fa-chevron-up"></i> </button></h5>
-                 </div>
-                 <div id="accordion12" class="collapse" data-bs-parent="#accordion" style="">
-                     <div class="faq-body">
-                         @{
-                             var  canExtendBeforeHowManyMonths = PremiumPlanInfoOptionsSnapshot.Value.OnePremiumPeriodAsMonth - PremiumPlanInfoOptionsSnapshot.Value.CanBeExtendedAfterHowManyMonths;
-                         }
-                         <p>@(canExtendBeforeHowManyMonths == PremiumPlanInfoOptionsSnapshot.Value.OnePremiumPeriodAsMonth ? "You " : "In the last " + canExtendBeforeHowManyMonths + " months of your premium period, you") can renew your plan by going to the Organization detail page.
-                         </p>
-                     </div>
-                 </div>
-             </div>
-             <div class="faq" data-anchor-id="accordion123">
-                 <div class="faq-header">
-                     <h5><button class="btn btn-faq collapsed" data-bs-toggle="collapse" data-bs-target="#accordion123" aria-expanded="false" aria-controls="accordion123">What happens when my license period ends?<i class="fas fa-chevron-up"></i> </button></h5>
-                 </div>
-                 <div id="accordion123" class="collapse" data-bs-parent="#accordion" style="">
-                     <div class="faq-body">
-                         <p>Don't worry about even if your organization has run out of premium, you can upgrade back to the Premium plan at any time.
-                         </p>
-                     </div>
-                 </div>
-             </div>
-         </div>
+        <div id="accordion" class="mb-5 pb-5 faq-container">
+            <div class="faq" data-anchor-id="accordion12">
+                <div class="faq-header">
+                    <h5><button class="btn btn-faq collapsed" data-bs-toggle="collapse" data-bs-target="#accordion12" aria-expanded="false" aria-controls="accordion12">How do I renew my plan?<i class="fas fa-chevron-up"></i> </button></h5>
+                </div>
+                <div id="accordion12" class="collapse" data-bs-parent="#accordion" style="">
+                    <div class="faq-body">
+                        @foreach (var plan in Model.PlanInfos.Where(x => x.Price > 0))
+                        {
+                            @if (plan.IsExtendable)
+                            {
+                                var canExtendBeforeHowManyMonths = plan.OnePaidEnrollmentPeriodAsMonth!.Value - plan.CanBeExtendedAfterHowManyMonths!.Value;
+                                @if (canExtendBeforeHowManyMonths != 0)
+                                {
+                                    <p>For @plan.PlanType, @(canExtendBeforeHowManyMonths == plan.OnePaidEnrollmentPeriodAsMonth!.Value ? "You " : "in the last " + canExtendBeforeHowManyMonths + " months of your " + plan.PlanType.ToString().ToLower() + " period, you") can renew your plan by going to the organization detail page.</p>
+                                }
+                                else
+                                {
+                                    <p>For @plan.PlanType, when your @plan.PlanType period expires, you can repurchase your plan by going to the organization detail page.</p>
+                                }
+                            }
+                            else
+                            {
+                                <p>For @plan.PlanType, when your @plan.PlanType period is over, you can buy again your plan by going to the Organization detail page.</p>
+                            }
+                          
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="faq" data-anchor-id="accordion123">
+                <div class="faq-header">
+                    <h5><button class="btn btn-faq collapsed" data-bs-toggle="collapse" data-bs-target="#accordion123" aria-expanded="false" aria-controls="accordion123">What happens when my license period ends?<i class="fas fa-chevron-up"></i> </button></h5>
+                </div>
+                <div id="accordion123" class="collapse" data-bs-parent="#accordion" style="">
+                    <div class="faq-body">
+                        <p>Don't worry about even if your organization has run out of premium, you can upgrade back to the plan at any time.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </main>

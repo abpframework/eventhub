@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Organizations.Memberships;
+using EventHub.Organizations.PaymentRequests;
+using EventHub.Organizations.Plans;
 using EventHub.Users;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
 using Volo.Abp.BlobStoring;
@@ -21,19 +24,22 @@ namespace EventHub.Organizations
         private readonly OrganizationManager _organizationManager;
         private readonly IBlobContainer<OrganizationProfilePictureContainer> _organizationBlobContainer;
         private readonly IUserRepository _userRepository;
+        private readonly IOptions<PlanInfoOptions> _planInfoOptions;
 
         public OrganizationAppService(
             IRepository<Organization, Guid> organizationRepository,
             IOrganizationMembershipRepository organizationMembershipsRepository,
             OrganizationManager organizationManager,
             IBlobContainer<OrganizationProfilePictureContainer> organizationBlobContainer,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            IOptions<PlanInfoOptions> planInfoOptions)
         {
             _organizationRepository = organizationRepository;
             _organizationMembershipsRepository = organizationMembershipsRepository;
             _organizationManager = organizationManager;
             _organizationBlobContainer = organizationBlobContainer;
             _userRepository = userRepository;
+            _planInfoOptions = planInfoOptions;
         }
 
         [Authorize]
@@ -162,6 +168,13 @@ namespace EventHub.Organizations
 
             return new RemoteStreamContent(pictureContent, blobName);
         }
+
+        [Authorize]
+        public async Task<List<PlanInfoDefinitionDto>> GetPlanInfosAsync()
+        {
+            var planInfoDefinitions = _planInfoOptions.Value.GetPlanInfos();
+            return await Task.FromResult(ObjectMapper.Map<List<PlanInfoDefinition>, List<PlanInfoDefinitionDto>>(planInfoDefinitions));
+        } 
 
         private async Task SaveProfilePictureAsync(Guid id, IRemoteStreamContent streamContent)
         {
