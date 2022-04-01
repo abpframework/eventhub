@@ -185,7 +185,7 @@ namespace EventHub.Web
             {
                 Configure<AbpVirtualFileSystemOptions>(options =>
                 {
-                    options.FileSets.ReplaceEmbeddedByPhysical<EventHubDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}EventHub.Domain"));
+                    options.FileSets.ReplaceEmbeddedByPhysical<EventHubDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}EventHub.Domain.Shared"));
                     options.FileSets.ReplaceEmbeddedByPhysical<EventHubApplicationContractsModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}EventHub.Application.Contracts"));
                     options.FileSets.ReplaceEmbeddedByPhysical<EventHubWebThemeModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}EventHub.Web.Theme"));
                     options.FileSets.ReplaceEmbeddedByPhysical<EventHubWebModule>(hostingEnvironment.ContentRootPath);
