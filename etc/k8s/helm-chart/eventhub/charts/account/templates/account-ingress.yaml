@@ -11,6 +11,7 @@ metadata:
     nginx.ingress.kubernetes.io/configuration-snippet: |
       more_set_input_headers "from-ingress: true";
 spec:
+  ingressClassName: nginx
   tls:
   - hosts:
       - {{ .Values.global.accountDomain }}
