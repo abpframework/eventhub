@@ -9,6 +9,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-buffers-number: "{{ .Values.global.nginxProxyBuffersNumber }}"
     cert-manager.io/cluster-issuer: letsencrypt
 spec:
+  ingressClassName: nginx
   tls:
   - hosts:
       - {{ .Values.global.adminApiDomain }}
