@@ -32,7 +32,7 @@ namespace EventHub.DbMigrator
                     IsExtendable = false
                 });
             });
-        }
 #endif
+        }
     }
 }
