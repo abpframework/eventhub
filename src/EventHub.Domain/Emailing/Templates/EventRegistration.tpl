@@ -1,43 +1,17 @@
-<h1
-	style="font-size: 40px;  font-family: Arial, sans-serif;  color: #00044a;  font-weight: bold;  line-height: 1.2; margin-top: 50px;">
-	{{model.title}}</h1>
-<p style="font-size: 24px; font-family: Arial, sans-serif;  color: #00044a;">
-	<strong>Hi,</strong></p>
-<p style="font-size: 18px; font-family: Arial, sans-serif;  color: #666; margin-top: 20px; margin-bottom: 20px;">
-	Great news! You attended the "{{model.title}}" event.
-</p>
-<p style=" margin-top: 30px; margin-bottom: 30px;">
-	<div>
-		<table border="0" cellpadding="0" cellspacing="0"
-			style=" border-collapse: separate; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;">
-			<tbody>
-				<tr style="text-align: center">
-					<td style="vertical-align: top;">
-
-						<p
-							style="font-size: 13px; font-family: Arial, sans-serif; color: #777777; margin: 0; margin-top: 30px;">
-							Start Time</p>
-						<p
-							style="font-size: 21px; font-family: Arial, sans-serif; color: #444444; margin-bottom: 30px; margin-top: 6px;">
-							{{model.start_time}}</p>
-					</td>
-					<td style="vertical-align: top;">
-
-						<p
-							style="font-size: 13px; font-family: Arial, sans-serif; color: #777777; margin: 0; margin-top: 30px;">
-							End Time</p>
-						<p
-							style="font-size: 21px; font-family: Arial, sans-serif; color: #444444; margin-bottom: 30px; margin-top: 6px;">
-							{{model.end_time}}</p>
-					</td>
-
-				</tr>
-			</tbody>
-		</table>
-		<p style="margin-bottom: 20px; margin-top: 20px; text-align: center;">
-			<a href="{{app_url}}/events/{{model.url}}" class="btn" target="_blank"
-				style="padding: 15px; background: #e90052; border-radius: 40px; text-align: center; color: white; font-weight: bold; text-decoration: none; font-size: 18px; padding-left: 45px; padding-right: 45px;">Event
-				Details</a>
-		</p>
-	</div>
-</p>
+        <tr width="680">
+            <td width="680" style="width: 680px;">
+                <table style="padding-bottom: 50px; padding-top: 50px; width: 680px; font-family:Arial, Helvetica, sans-serif; font-size:22px; color: #00044A; border-top: 2px solid rgba(41, 45, 51, 0.08); border-bottom: 2px solid rgba(41, 45, 51, 0.08);">
+                    <tr>
+                        <td>
+                            <h1 style="margin-top: 0; font-size: 30px;"> Phasellus sed dui feugiat </h1>
+                            <p style="line-height: 37px; color: #6B7E92;"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam varius tellus mollis tellus pellentesque, sit amet iaculis sem porttitor. Maecenas nec urna sem. Nulla vulputate consectetur blandit. Duis lacus lacus, ullamcorper elementum aliquam id, rutrum sit amet est. Nunc tincidunt sapien et hendrerit posuere. In hac habitasse platea dictumst. Phasellus sed dui feugiat, imperdiet sem id, dictum orci. Suspendisse ullamcorper varius lobortis. Proin rutrum risus eros, non tempus sem blandit sodales. Fusce ac viverra felis, a placerat diam. Aenean dui eros, mollis egestas turpis a, aliquam bibendum ipsum. Donec consequat feugiat leo varius aliquam. Donec et sodales ex.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                          <a href="" style="display: inline-block; border-radius: 10px; padding:12px 20px; background-color: #E8345D; text-decoration: none; color: #fff;">E-Mail Button</a>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
