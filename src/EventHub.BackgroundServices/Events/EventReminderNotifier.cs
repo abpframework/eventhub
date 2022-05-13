@@ -3,7 +3,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Emailing;
 using EventHub.Events.Registrations;
+using EventHub.Options;
 using EventHub.Users;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Emailing;
@@ -20,19 +22,22 @@ namespace EventHub.Events
         private readonly IRepository<IdentityUser, Guid> _userRepository;
         private readonly IRepository<EventRegistration, Guid> _eventRegistrationRepository;
         private readonly IAsyncQueryableExecuter _asyncExecuter;
+        private readonly EventHubUrlOptions _eventHubUrlOptions;
 
         public EventReminderNotifier(
             IEmailSender emailSender,
             ITemplateRenderer templateRenderer,
             IRepository<IdentityUser, Guid> userRepository,
             IRepository<EventRegistration, Guid> eventRegistrationRepository,
-            IAsyncQueryableExecuter asyncExecuter)
+            IAsyncQueryableExecuter asyncExecuter,
+            IOptions<EventHubUrlOptions> eventHubUrlOptions)
         {
             _emailSender = emailSender;
             _templateRenderer = templateRenderer;
             _userRepository = userRepository;
             _eventRegistrationRepository = eventRegistrationRepository;
             _asyncExecuter = asyncExecuter;
+            _eventHubUrlOptions = eventHubUrlOptions.Value;
         }
 
         public async Task NotifyAsync(Event @event)
@@ -60,7 +65,10 @@ namespace EventHub.Events
                     Title = @event.Title,
                     StartTime = @event.StartTime,
                     EndTime = @event.EndTime,
-                    Url = @event.Url
+                    Url = @event.Url,
+                    Address = $"{@event.City}, {@event.CountryName}",
+                    Description = @event.Description.TruncateWithPostfix(250, "..."),
+                    ImageUrl = _eventHubUrlOptions.Api.EnsureEndsWith('/') + $"api/eventhub/event/cover-image/{@event.Id}"
                 };
 
                 await _emailSender.QueueAsync(

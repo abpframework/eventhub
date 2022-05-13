@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using EventHub.Localization;
+using EventHub.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Account.Localization;
