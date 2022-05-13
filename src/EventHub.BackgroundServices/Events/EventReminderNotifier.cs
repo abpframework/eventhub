@@ -3,8 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventHub.Emailing;
 using EventHub.Events.Registrations;
+using EventHub.Localization;
 using EventHub.Options;
 using EventHub.Users;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
@@ -23,6 +25,7 @@ namespace EventHub.Events
         private readonly IRepository<EventRegistration, Guid> _eventRegistrationRepository;
         private readonly IAsyncQueryableExecuter _asyncExecuter;
         private readonly EventHubUrlOptions _eventHubUrlOptions;
+        private readonly IStringLocalizer<EventHubResource> _localizer; 
 
         public EventReminderNotifier(
             IEmailSender emailSender,
@@ -30,13 +33,15 @@ namespace EventHub.Events
             IRepository<IdentityUser, Guid> userRepository,
             IRepository<EventRegistration, Guid> eventRegistrationRepository,
             IAsyncQueryableExecuter asyncExecuter,
-            IOptions<EventHubUrlOptions> eventHubUrlOptions)
+            IOptions<EventHubUrlOptions> eventHubUrlOptions, 
+            IStringLocalizer<EventHubResource> localizer)
         {
             _emailSender = emailSender;
             _templateRenderer = templateRenderer;
             _userRepository = userRepository;
             _eventRegistrationRepository = eventRegistrationRepository;
             _asyncExecuter = asyncExecuter;
+            _localizer = localizer;
             _eventHubUrlOptions = eventHubUrlOptions.Value;
         }
 
@@ -66,7 +71,7 @@ namespace EventHub.Events
                     StartTime = @event.StartTime,
                     EndTime = @event.EndTime,
                     Url = @event.Url,
-                    Address = $"{@event.City}, {@event.CountryName}",
+                    Address = @event.IsOnline ? _localizer["Online"] : $"{@event.City}, {@event.CountryName}",
                     Description = @event.Description.TruncateWithPostfix(250, "..."),
                     ImageUrl = _eventHubUrlOptions.Api.EnsureEndsWith('/') + $"api/eventhub/event/cover-image/{@event.Id}"
                 };

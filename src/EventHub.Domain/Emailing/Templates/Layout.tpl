@@ -48,7 +48,7 @@
                     <tr>
                         <td width="680" align="center" style="width: 680px; padding-top:40px; padding-bottom:40px;">
                             <a href="https://www.openeventhub.com/" target="_blank" style="display: block; color:#E8345D; font-size: 16px; font-weight: 600; text-decoration: none; padding-bottom: 20px;">www.openeventhub.com</a>
-                            <span style="font-size:14px; color: rgba(41, 45, 51, 0.6);">Copyright © 2021 Eventhub.com All rights reserved</span>
+                            <span style="font-size:14px; color: rgba(41, 45, 51, 0.6);">Copyright © 2021 - All rights reserved.</span>
 
                             <span style="display: block; padding-top: 25px;">
                                 <a href="#" style="display: inline-block; background-color: rgba(41, 45, 51, 0.15); border-radius: 5px; text-decoration: none; color: rgba(41, 45, 51, 0.3); font-weight: 600; padding: 5px 10px; margin-right: 10px;">View in browser</a>
