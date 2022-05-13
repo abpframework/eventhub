@@ -13,10 +13,7 @@ using Volo.Abp.TextTemplating.Scriban;
 namespace EventHub.Emailing
 {
     [Dependency(ServiceLifetime.Transient, ReplaceServices = true)]
-    [ExposeServices(
-        typeof(ScribanTemplateRenderingEngine), 
-        typeof(EventHubEmailTemplateRenderingEngine)
-        )]
+    [ExposeServices(typeof(ScribanTemplateRenderingEngine), typeof(EventHubEmailTemplateRenderingEngine))]
     public class EventHubEmailTemplateRenderingEngine : ScribanTemplateRenderingEngine
     {
         private readonly EventHubUrlOptions _options;

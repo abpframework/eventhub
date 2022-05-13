@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using EventHub.Emailing;
 using Volo.Abp.DependencyInjection;
@@ -32,8 +33,7 @@ namespace EventHub.Events.Registrations
             var model = new
             {
                 Title = @event.Title,
-                StartTime = @event.StartTime,
-                EndTime = @event.EndTime,
+                Description = @event.Description.TruncateWithPostfix(250, "..."),
                 Url = @event.Url
             };
 
