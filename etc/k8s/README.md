@@ -23,3 +23,6 @@
 * *You may wait ~30 seconds on first run for preparing the database*.
 * Browse https://eh-st-www and https://eh-st-admin
 * Username: `admin`, password: `1q2w3E*`.
+
+### How to stop?
+* Run `helm uninstall eh-st` command.
