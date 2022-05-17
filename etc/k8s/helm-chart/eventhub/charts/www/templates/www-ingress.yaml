@@ -12,6 +12,7 @@ metadata:
 {{- end }}
     cert-manager.io/cluster-issuer: letsencrypt
 spec:
+  ingressClassName: nginx
   tls:
   - hosts:
       - {{ .Values.global.wwwDomain }}
