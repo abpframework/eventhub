@@ -6,7 +6,7 @@ using EventHub.Admin.Events;
 using EventHub.Admin.Organizations;
 using EventHub.Admin.Utils;
 using EventHub.EntityFrameworkCore;
-using EventHub.Web;
+using EventHub.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;

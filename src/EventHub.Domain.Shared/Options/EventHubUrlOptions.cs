@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace EventHub.Web
+namespace EventHub.Options
 {
     public class EventHubUrlOptions
     {

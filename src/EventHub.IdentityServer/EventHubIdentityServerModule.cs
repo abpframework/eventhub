@@ -2,6 +2,7 @@ using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using EventHub.EntityFrameworkCore;
 using EventHub.Localization;
+using EventHub.Options;
 using EventHub.Utils;
 using EventHub.Web;
 using EventHub.Web.Theme;

@@ -1,43 +1,42 @@
-<h1
-	style="font-size: 40px;  font-family: Arial, sans-serif;  color: #00044a;  font-weight: bold;  line-height: 1.2; margin-top: 50px;">
-	{{model.title}}</h1>
-<p style="font-size: 24px; font-family: Arial, sans-serif;  color: #00044a;">
-	<strong>Hi,</strong></p>
-<p style="font-size: 18px; font-family: Arial, sans-serif;  color: #666; margin-top: 20px; margin-bottom: 20px;">
-	Great news! You attended the "{{model.title}}" event.
-</p>
-<p style=" margin-top: 30px; margin-bottom: 30px;">
-	<div>
-		<table border="0" cellpadding="0" cellspacing="0"
-			style=" border-collapse: separate; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;">
-			<tbody>
-				<tr style="text-align: center">
-					<td style="vertical-align: top;">
+     <tr width="680">
+            <td width="680" style="width: 680px;">
+                <table
+                    style="padding-bottom: 50px; padding-top: 50px; width: 680px; font-family:Arial, Helvetica, sans-serif; font-size:22px; color: #00044A; border-top: 2px solid rgba(41, 45, 51, 0.08); border-bottom: 2px solid rgba(41, 45, 51, 0.08);">
+                    <tr>
+                        <td>
+                            <p style="line-height: 37px; color: #6B7E92;">Great news, {{model.full_name_or_user_name}}! You are attending to the "{{model.title}}" event.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table>
+                                <tr style="vertical-align: top;">
+                                    <td style="width:232px;" width="232">
+                                        <img src="{{model.thumbnail_url}}" style="width: 232px; border-radius: 10px;">
+                                    </td>
+                                    <td style="padding-left: 15px;">
+                                        <h4 style="margin-top:0; margin-bottom: 10px;">{{model.title}}</h4>
+                                        <span style="color: #6F32E2; font-size: 16px;">{{model.start_time}} - {{model.end_time}} | {{model.location}}</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p style="line-height: 37px; color: #6B7E92;">
+                                {{model.description}}
+                            </p>
+                        </td>
+                    </tr>
 
-						<p
-							style="font-size: 13px; font-family: Arial, sans-serif; color: #777777; margin: 0; margin-top: 30px;">
-							Start Time</p>
-						<p
-							style="font-size: 21px; font-family: Arial, sans-serif; color: #444444; margin-bottom: 30px; margin-top: 6px;">
-							{{model.start_time}}</p>
-					</td>
-					<td style="vertical-align: top;">
-
-						<p
-							style="font-size: 13px; font-family: Arial, sans-serif; color: #777777; margin: 0; margin-top: 30px;">
-							End Time</p>
-						<p
-							style="font-size: 21px; font-family: Arial, sans-serif; color: #444444; margin-bottom: 30px; margin-top: 6px;">
-							{{model.end_time}}</p>
-					</td>
-
-				</tr>
-			</tbody>
-		</table>
-		<p style="margin-bottom: 20px; margin-top: 20px; text-align: center;">
-			<a href="{{app_url}}/events/{{model.url}}" class="btn" target="_blank"
-				style="padding: 15px; background: #e90052; border-radius: 40px; text-align: center; color: white; font-weight: bold; text-decoration: none; font-size: 18px; padding-left: 45px; padding-right: 45px;">Event
-				Details</a>
-		</p>
-	</div>
-</p>
+                    <tr>
+                        <td style="text-align:center; padding-top:30px">
+                            <a href="{{app_url}}/events/{{model.url}}" style="border-radius: 10px; padding:12px 30px; background-color: #E8345D; text-decoration: none; color: #fff;">
+                                Details
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>

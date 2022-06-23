@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using EventHub.Localization;
+using EventHub.Options;
 using EventHub.Web.Menus;
 using EventHub.Web.Theme;
 using EventHub.Web.Theme.Bundling;

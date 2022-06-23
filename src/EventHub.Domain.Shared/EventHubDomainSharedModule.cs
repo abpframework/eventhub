@@ -1,5 +1,5 @@
 using EventHub.Localization;
-using EventHub.Web;
+using EventHub.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Payment;
 using Volo.Abp.AuditLogging;

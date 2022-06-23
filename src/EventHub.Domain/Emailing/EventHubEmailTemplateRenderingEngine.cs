@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using EventHub.Web;
+using EventHub.Options;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
@@ -13,10 +13,7 @@ using Volo.Abp.TextTemplating.Scriban;
 namespace EventHub.Emailing
 {
     [Dependency(ServiceLifetime.Transient, ReplaceServices = true)]
-    [ExposeServices(
-        typeof(ScribanTemplateRenderingEngine), 
-        typeof(EventHubEmailTemplateRenderingEngine)
-        )]
+    [ExposeServices(typeof(ScribanTemplateRenderingEngine), typeof(EventHubEmailTemplateRenderingEngine))]
     public class EventHubEmailTemplateRenderingEngine : ScribanTemplateRenderingEngine
     {
         private readonly EventHubUrlOptions _options;
