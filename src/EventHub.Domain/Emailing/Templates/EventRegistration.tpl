@@ -32,8 +32,8 @@
 
                     <tr>
                         <td>
-                            <a href="{{model.url}}" style="display: inline-block; border-radius: 10px; padding:12px 20px; background-color: #E8345D; text-decoration: none; color: #fff;">
-                                View Event Details
+                            <a href="{{app_url}}/events/{{model.url}}" style="display: flex; justify-content: center; border-radius: 10px; padding:12px 20px; background-color: #E8345D; text-decoration: none; color: #fff;">
+                                Details
                             </a>
                         </td>
                     </tr>
