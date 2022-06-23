@@ -43,8 +43,8 @@
         </tr>
 
         <tr>
-            <td width="680" style="width: 680px;">
-                <table width="680" style="width: 680px; font-family:Arial, Helvetica, sans-serif; font-size:14px;">
+              <td width="680" style="width: 680px;" align="center">
+                <table width="680" align="center" style="width: 680px; font-family:Arial, Helvetica, sans-serif; font-size:14px;">
                     <tr>
                         <td width="680" align="center" style="width: 680px; padding-top:40px; padding-bottom:40px;">
                             <a href="https://www.openeventhub.com/" target="_blank" style="display: block; color:#E8345D; font-size: 16px; font-weight: 600; text-decoration: none; padding-bottom: 20px;">www.openeventhub.com</a>

@@ -31,8 +31,8 @@
                     </tr>
 
                     <tr>
-                        <td>
-                            <a href="{{app_url}}/events/{{model.url}}" style="display: flex; justify-content: center; border-radius: 10px; padding:12px 20px; background-color: #E8345D; text-decoration: none; color: #fff;">
+                        <td style="text-align:center; padding-top:30px">
+                            <a href="{{app_url}}/events/{{model.url}}" style="border-radius: 10px; padding:12px 20px; background-color: #E8345D; text-decoration: none; color: #fff;">
                                 Details
                             </a>
                         </td>
