@@ -15,6 +15,7 @@ using Volo.Abp.Autofac.WebAssembly;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity.Blazor.WebAssembly;
 using Volo.Abp.Modularity;
+using Volo.Abp.SettingManagement.Blazor.WebAssembly;
 using Volo.Abp.UI.Navigation;
 
 namespace EventHub.Admin.Web
@@ -24,7 +25,8 @@ namespace EventHub.Admin.Web
         typeof(EventHubAdminHttpApiClientModule),
         typeof(AbpAspNetCoreComponentsWebAssemblyBasicThemeModule),
         typeof(AbpIdentityBlazorWebAssemblyModule),
-        typeof(PaymentAdminBlazorModule)
+        typeof(PaymentAdminBlazorModule),
+        typeof(AbpSettingManagementBlazorWebAssemblyModule)
     )]
     public class EventHubBlazorModule : AbpModule
     {
