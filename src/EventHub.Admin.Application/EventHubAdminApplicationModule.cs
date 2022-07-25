@@ -4,6 +4,7 @@ using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
+using Volo.Abp.SettingManagement;
 using Volo.CmsKit.Admin;
 
 namespace EventHub.Admin
@@ -16,7 +17,8 @@ namespace EventHub.Admin
         typeof(AbpPermissionManagementApplicationModule),
         typeof(AbpAutoMapperModule),
         typeof(CmsKitAdminApplicationModule),
-        typeof(PaymentAdminApplicationModule)
+        typeof(PaymentAdminApplicationModule),
+        typeof(AbpSettingManagementApplicationModule)
     )]
     public class EventHubAdminApplicationModule : AbpModule
     {
