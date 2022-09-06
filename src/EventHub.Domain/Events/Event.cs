@@ -66,7 +66,7 @@ namespace EventHub.Events
         : base(id)
         {
             OrganizationId = organizationId;
-            UrlCode = Check.NotNullOrWhiteSpace(urlCode, urlCode, EventConsts.UrlCodeLength, EventConsts.UrlCodeLength);
+            UrlCode = Check.NotNullOrWhiteSpace(urlCode, nameof(urlCode), EventConsts.UrlCodeLength, EventConsts.UrlCodeLength);
             
             SetTitle(title);
             SetDescription(description);
