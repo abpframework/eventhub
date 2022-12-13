@@ -102,6 +102,12 @@ namespace EventHub.Admin.Web.Pages
             IsLoadingProfileImage = false;
         }
 
+        private void CancelButtonClose()
+        {
+            DisabledProfileImageButton = false;
+            EditOrganizationModal.Hide();
+        }
+        
         private async Task DeleteOrganizationAsync(OrganizationInListDto organization)
         {
             await OrganizationAppService.DeleteAsync(organization.Id);

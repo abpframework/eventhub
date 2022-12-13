@@ -60,27 +60,27 @@
                   <div class="col-md-6">
                     <div class="form-label-group">
                       <input type="text" id="inputTitle" asp-for="@Model.Title" class="form-control" placeholder="Title">
-                      <label for="inputTitle">Title</label>
+                      <label for="inputTitle">Title *</label>
                       <span asp-validation-for="@Model.Title" class="text-danger"></span>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-label-group">
                       <input id="inputStartdate" asp-for="@Model.StartTime" class="form-control" placeholder="Start Date">
-                      <label for="inputStartdate">Start Date</label>
+                      <label for="inputStartdate">Start Date *</label>
                       <span asp-validation-for="@Model.StartTime" class="text-danger"></span>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-label-group">
                       <input  id="inputEnddate" asp-for="@Model.EndTime" class="form-control" placeholder="End Date">
-                      <label for="inputEnddate">End Date</label>
+                      <label for="inputEnddate">End Date *</label>
                       <span asp-validation-for="@Model.EndTime" class="text-danger"></span>
                     </div>
                   </div>
                   <div class="col-md-12">
                     <div class="form-label-group">
-                      <textarea type="text" id="inputDescription" asp-for="@Model.Description" class="form-control" placeholder="Description"></textarea>
+                      <textarea type="text" id="inputDescription" asp-for="@Model.Description" class="form-control" placeholder="Description*" style="resize: none"></textarea>
                       <span asp-validation-for="@Model.Description" class="text-danger"></span>
                     </div>
                   </div>
@@ -126,20 +126,20 @@
                   </div>
                   <div class="col-md-6">
                     <div class="form-label-group">
-                      <input type="number" id="inputCapacity" asp-for="@Model.Capacity" class="form-control" placeholder="Capacity">
-                      <label for="inputCapacity">Capacity</label>
+                      <input type="number" id="inputCapacity" min="0" oninput="validity.valid||(value='');" asp-for="@Model.Capacity" class="form-control" placeholder="Capacity" >
+                      <label for="inputCapacity">Capacity </label>
                       <span asp-validation-for="@Model.Capacity" class="text-danger"></span>
                     </div>
                   </div>
                   <div class="col-md-6 event-location-group">
                     <select asp-for="@Model.CountryId" asp-items="countries" class="form-select">
-                      <option selected="" value="">Country</option>
+                      <option selected="" value="">Country *</option>
                     </select>
                     <span asp-validation-for="@Model.CountryId" class="text-danger"></span>
                   </div>
                   <div class="col-md-6 event-location-group">
                     <div class="form-label-group">
-                      <input type="text" id="inputCity" asp-for="@Model.City" class="form-control" placeholder="City">
+                      <input type="text" id="inputCity" asp-for="@Model.City" class="form-control" placeholder="City*">
                       <label for="inputCity">City</label>
                       <span asp-validation-for="@Model.City" class="text-danger"></span>
                     </div>
