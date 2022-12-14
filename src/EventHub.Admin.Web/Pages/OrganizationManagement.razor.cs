@@ -102,7 +102,7 @@ namespace EventHub.Admin.Web.Pages
             IsLoadingProfileImage = false;
         }
 
-        private void ClouseUpdateOrganizationModal()
+        private void CloseUpdateOrganizationModal()
         {
             DisabledProfileImageButton = false;
             EditOrganizationModal.Hide();
