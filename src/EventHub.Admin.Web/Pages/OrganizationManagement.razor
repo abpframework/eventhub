@@ -111,7 +111,7 @@
         <Form id="EditOrganizationForm">
             <ModalHeader>
                 <ModalTitle>@L["UpdateOrganization"]</ModalTitle>
-                <CloseButton Clicked="@CancelButtonClose"/>
+                <CloseButton Clicked="@ClouseUpdateOrganizationModal"/>
             </ModalHeader>
             <ModalBody>
                 <Tabs SelectedTab="@SelectedTabInEditModal" SelectedTabChanged="@OnSelectedTabChangedInEditModal">
@@ -256,7 +256,7 @@
             </ModalBody>
             <ModalFooter>
                 <Button Color="Color.Secondary"
-                        Clicked="@CancelButtonClose">
+                        Clicked="@ClouseUpdateOrganizationModal">
                      @L["Cancel"]
                 </Button>
                 <Button Type="ButtonType.Submit" PreventDefaultOnSubmit="true" Color="Color.Primary"
