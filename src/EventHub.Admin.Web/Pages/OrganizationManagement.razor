@@ -111,7 +111,7 @@
         <Form id="EditOrganizationForm">
             <ModalHeader>
                 <ModalTitle>@L["UpdateOrganization"]</ModalTitle>
-                <CloseButton Clicked="() => EditOrganizationModal.Hide()"/>
+                <CloseButton Clicked="@ClouseUpdateOrganizationModal"/>
             </ModalHeader>
             <ModalBody>
                 <Tabs SelectedTab="@SelectedTabInEditModal" SelectedTabChanged="@OnSelectedTabChangedInEditModal">
@@ -241,7 +241,7 @@
                                     <Column ColumnSize="ColumnSize.Is3">
                                         @if (DisabledProfileImageButton)
                                         {
-                                            <Button disabled Color="Color.Secondary" Clicked="@OnDeleteCoverImageButtonClicked">@L["DeleteCoverImage"]</Button>
+                                            <Button disabled Color="Color.Secondary" Clicked="@OnDeleteCoverImageButtonClicked" >@L["DeleteCoverImage"]</Button>
                                         }
                                         else
                                         {
@@ -256,8 +256,8 @@
             </ModalBody>
             <ModalFooter>
                 <Button Color="Color.Secondary"
-                        Clicked="() => EditOrganizationModal.Hide()">
-                    @L["Cancel"]
+                        Clicked="@ClouseUpdateOrganizationModal">
+                     @L["Cancel"]
                 </Button>
                 <Button Type="ButtonType.Submit" PreventDefaultOnSubmit="true" Color="Color.Primary"
                         Clicked="UpdateOrganizationAsync">
