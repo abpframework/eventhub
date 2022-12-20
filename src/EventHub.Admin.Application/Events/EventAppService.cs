@@ -64,7 +64,7 @@ namespace EventHub.Admin.Events
             @event.SetTitle(input.Title);
             @event.SetDescription(input.Description);
             @event.Language = input.Language;
-            @event.SetTime(input.StartTime, @event.EndTime);
+            @event.SetTime(input.StartTime, input.EndTime);
             await _eventManager.SetCapacityAsync(@event, input.Capacity);
 
             if (input.CoverImageStreamContent != null && input.CoverImageStreamContent.ContentLength > 0)

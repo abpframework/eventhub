@@ -29,6 +29,7 @@ using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Swashbuckle;
+using Volo.Abp.Timing;
 using Volo.Abp.VirtualFileSystem;
 
 namespace EventHub.Admin
@@ -61,6 +62,7 @@ namespace EventHub.Admin
             ConfigureCookies(context);
             ConfigureSwaggerServices(context, configuration);
             ConfigureBackgroundJobs();
+            ConfigureTiming();
             ConfigureAutoApiControllers();
         }
         
@@ -84,6 +86,11 @@ namespace EventHub.Admin
         private void ConfigureCache(IConfiguration configuration)
         {
             Configure<AbpDistributedCacheOptions>(options => { options.KeyPrefix = "EventHub:"; });
+        }
+        
+        private void ConfigureTiming()
+        {
+            Configure<AbpClockOptions>(options => { options.Kind = DateTimeKind.Utc; });
         }
 
         private void ConfigureVirtualFileSystem(ServiceConfigurationContext context)
