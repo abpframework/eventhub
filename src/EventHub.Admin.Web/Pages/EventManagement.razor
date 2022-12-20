@@ -230,7 +230,7 @@
                                 <Validation>
                                     <Field>
                                         <FieldLabel>@L["StartTime"] *</FieldLabel>
-                                        <DateEdit TValue="DateTime" @bind-Date="@EditingEvent.StartTime">
+                                        <DateEdit TValue="DateTime"  InputMode="DateInputMode.DateTime" @bind-Date="@EditingEvent.StartTime">
                                             <Feedback>
                                                 <ValidationError/>
                                             </Feedback>
@@ -240,7 +240,7 @@
                                 <Validation>
                                     <Field>
                                         <FieldLabel>@L["EndTime"] *</FieldLabel>
-                                        <DateEdit TValue="DateTime" @bind-Date="@EditingEvent.EndTime">
+                                        <DateEdit TValue="DateTime"  InputMode="DateInputMode.DateTime" @bind-Date="@EditingEvent.EndTime">
                                             <Feedback>
                                                 <ValidationError/>
                                             </Feedback>
