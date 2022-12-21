@@ -1,11 +1,14 @@
 ﻿@using Microsoft.AspNetCore.Http.Extensions
 @using Microsoft.Extensions.Options
 @using Volo.Abp.Users
-@using EventHub.Web
 @using System.Net
+@using EventHub.Web
 @using EventHub.Options
 @inject ICurrentUser CurrentUser
 @inject IOptions<EventHubUrlOptions> UrlOptions
+@{
+    var currentPageUrl = Context.Request.GetDisplayUrl();
+}
 
 <footer class="mt-5">
     <div class="container">
@@ -51,7 +54,10 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-auto">
-                    <span class="copyright">© 2021 EventHub</span>
+                    <span class="copyright">© 2021 - @DateTime.Now.Year © <a>OpenEventHub</a></span>
+                    <div>
+                        <span class="copyright">Open source license with <a href="https://github.com/abpframework/eventhub/blob/main/LICENSE">LGPLv3.0</a></span>
+                    </div>
                 </div>
                 <div class="col-md text-center text-md-end">
                     <a href="@UrlOptions.Value.Www/terms-service">

@@ -1,0 +1,43 @@
+@page "/abouts"
+@section styles{
+    <abp-style-bundle>
+        <abp-style src="/Pages/Abouts/Index.css"/>
+    </abp-style-bundle>
+}
+
+<div class="container-fluid p-0">
+    <div class="inner-banner">
+        <div class="container">
+            <div class="row align-items-center" style="min-height: 250px;">
+                <div class="col">
+                    <h1>About</h1>
+                    <nav aria-label="breadcrumb" class="breadcrumb-container">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="@Url.Page("/Index")">Home</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">About</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row text-center">
+    <div class="col-md-8 mx-auto"> 
+        <h1 class="mb-2 mt-4">ABP Framework</h1>
+        <p>ABP Framework is a complete infrastructure to create modern web applications by following the best practices and conventions of software development.</p> 
+        <a class="btn btn-primary" target="_blank" href="https://abp.io">abp.io</a>
+        <hr class="my-5"/>
+        <h1 class="mb-4">How the eventhub.com was Created?</h1>
+        <p>EventHub is a reference project showing how real-world examples are implemented with the open source ABP Framework. </p>
+        <p>Click the button below to check out the source-code of this project and have detailed information about it.</p> 
+        <a class="btn btn-secondary mb-3" href="https://github.com/abpframework/eventhub" target="_blank" rel="noopener">
+            <i class="fas fa-code me-2"></i> SOURCE CODE
+        </a>
+    </div>
+    </div>
+</div>
