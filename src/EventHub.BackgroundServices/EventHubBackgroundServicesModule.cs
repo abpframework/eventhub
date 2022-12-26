@@ -43,11 +43,11 @@ namespace EventHub
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            context.AddBackgroundWorker<EventReminderWorker>();
-            context.AddBackgroundWorker<NewEventWorker>();
-            context.AddBackgroundWorker<EventTimingChangeWorker>();
+            context.AddBackgroundWorkerAsync<EventReminderWorker>();
+            context.AddBackgroundWorkerAsync<NewEventWorker>();
+            context.AddBackgroundWorkerAsync<EventTimingChangeWorker>();
             
-            context.AddBackgroundWorker<OrganizationPaidEnrollmentEndDateWorker>();
+            context.AddBackgroundWorkerAsync<OrganizationPaidEnrollmentEndDateWorker>();
         }
     }
 }

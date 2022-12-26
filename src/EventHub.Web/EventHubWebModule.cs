@@ -171,7 +171,7 @@ namespace EventHub.Web
                     options.Scope.Add("EventHub");
                 });
         }
-
+        
         private void ConfigureAutoMapper()
         {
             Configure<AbpAutoMapperOptions>(options =>

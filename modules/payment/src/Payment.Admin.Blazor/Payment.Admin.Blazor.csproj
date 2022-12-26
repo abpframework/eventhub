@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <Import Project="..\..\common.props" />
     <Import Project="..\..\configureawait.props" />
@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Volo.Abp.AspNetCore.Components.WebAssembly.Theming" Version="5.0.0-beta.1" />
+        <PackageReference Include="Volo.Abp.AspNetCore.Components.WebAssembly.Theming" Version="6.0.0" />
         <ProjectReference Include="..\Payment.Admin.HttpApi.Client\Payment.Admin.HttpApi.Client.csproj" />
     </ItemGroup>
 
