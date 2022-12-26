@@ -8,6 +8,7 @@
 @inject IOptions<EventHubUrlOptions> UrlOptions
 @{
     var currentPageUrl = Context.Request.GetDisplayUrl();
+    var platformVersion = EventHub.AssemblyInfoHelper.Get();
 }
 
 <footer class="mt-5">
@@ -34,16 +35,16 @@
             <div class="col-md">
                 <h5>Follow Us</h5>
                 <div class="footer-links">
-                    <a href="https://www.facebook.com/openeventhub">
+                    <a target="_blank" href="https://www.facebook.com/openeventhub">
                         <i class="fab fa-facebook"></i>
                     </a>
-                    <a href="https://twitter.com/openeventhub">
+                    <a target="_blank" href="https://twitter.com/openeventhub">
                         <i class="fab fa-twitter"></i>
                     </a>
-                    <a href="https://www.instagram.com/openeventhub/">
+                    <a target="_blank" href="https://www.instagram.com/openeventhub/">
                         <i class="fab fa-instagram"></i>
                     </a>
-                    <a href="https://github.com/openeventhub">
+                    <a target="_blank" href="https://github.com/abpframework/eventhub">
                         <i class="fab fa-github"></i>
                     </a>
                 </div>
@@ -56,8 +57,11 @@
                 <div class="col-md-auto">
                     <span class="copyright">© 2021 - @DateTime.Now.Year © <a>OpenEventHub</a></span>
                     <div>
-                        <span class="copyright">Open source license with <a href="https://github.com/abpframework/eventhub/blob/main/LICENSE">LGPLv3.0</a></span>
+                        <span class="copyright">Open source license with <a href="https://github.com/abpframework/eventhub/blob/main/LICENSE" target="_blank">LGPLv3.0</a></span>
                     </div>
+                      <span style="font-size: 0.7rem;">
+                           Made with ❤️ on <a href="https://github.com/abpframework/abp" target="_blank">ABP</a> @($"v{platformVersion.AbpCoreVersion}") <br/> Updated on @($"{platformVersion.ModificationDate.ToString("MMMM dd, yyyy, HH:mm")}")
+                                    </span>
                 </div>
                 <div class="col-md text-center text-md-end">
                     <a href="@UrlOptions.Value.Www/terms-service">
