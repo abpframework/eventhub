@@ -33,6 +33,8 @@ namespace EventHub.EntityFrameworkCore
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             EventHubEfCoreEntityExtensionMappings.Configure();
+            
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)

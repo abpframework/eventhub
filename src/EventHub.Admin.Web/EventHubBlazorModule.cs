@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Net.Http;
-using Blazorise.Bootstrap;
+using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 using EventHub.Admin.Web.Menus;
 using IdentityModel;
@@ -63,7 +63,7 @@ namespace EventHub.Admin.Web
         private void ConfigureBlazorise(ServiceConfigurationContext context)
         {
             context.Services
-                .AddBootstrapProviders()
+                .AddBootstrap5Providers()
                 .AddFontAwesomeIcons();
         }
 

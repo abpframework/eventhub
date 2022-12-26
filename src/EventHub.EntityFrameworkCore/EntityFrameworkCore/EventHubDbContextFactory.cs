@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +14,8 @@ namespace EventHub.EntityFrameworkCore
         {
             EventHubEfCoreEntityExtensionMappings.Configure();
 
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+            
             var configuration = BuildConfiguration();
 
             var builder = new DbContextOptionsBuilder<EventHubDbContext>()

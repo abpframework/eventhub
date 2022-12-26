@@ -92,7 +92,7 @@ namespace EventHub.Admin.Web.Components.UserPicker
         private async Task OnDataGridReadAsync(DataGridReadDataEventArgs<UserDto> e)
         {
             CurrentSorting = e.Columns
-                .Where(c => c.SortDirection != SortDirection.None)
+                .Where(c => c.SortDirection != SortDirection.Default)
                 .Select(c => c.Field + (c.SortDirection == SortDirection.Descending ? " DESC" : ""))
                 .JoinAsString(",");
             CurrentPage = e.Page - 1;
