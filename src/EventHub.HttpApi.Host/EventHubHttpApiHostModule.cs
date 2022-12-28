@@ -69,10 +69,6 @@ namespace EventHub
             ConfigureTiming();
             ConfigurePremiumPlanInfo(context, configuration);
             
-            Configure<AbpApplicationConfigurationOptions>(options =>
-            {
-                options.Contributors.AddIfNotContains(new VersionApplicationConfigurationContributor());
-            });
         }
         
         private void ConfigureAutoApiControllers()
