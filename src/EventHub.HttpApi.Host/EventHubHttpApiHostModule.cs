@@ -22,7 +22,6 @@ using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
@@ -68,7 +67,6 @@ namespace EventHub
             ConfigureAutoApiControllers();
             ConfigureTiming();
             ConfigurePremiumPlanInfo(context, configuration);
-            
         }
         
         private void ConfigureAutoApiControllers()
