@@ -40,8 +40,8 @@
                 <li class="nav-item @(GetPageActiveClassOrEmpty(ViewContext, "/organizations/index"))">
                     <a class="nav-link" href="@UrlOptions.Value.Www/organizations">Organizations</a>
                 </li>
-                <li class="nav-item @(GetPageActiveClassOrEmpty(ViewContext, "/abouts/index"))">
-                    <a class="nav-link" href="@UrlOptions.Value.Www/abouts">About</a>
+                <li class="nav-item @(GetPageActiveClassOrEmpty(ViewContext, "/about/index"))">
+                    <a class="nav-link" href="@UrlOptions.Value.Www/about">About</a>
                     </li>
             </ul>
             @if (UrlOptions.Value.Www.Contains(Context.Request.Host.ToString()))

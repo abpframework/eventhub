@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace EventHub.Web.Pages.Abouts;
+namespace EventHub.Web.Pages.About;
 
 public class Index : EventHubPageModel
 {
