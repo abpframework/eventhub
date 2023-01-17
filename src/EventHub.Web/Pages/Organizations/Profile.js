@@ -13,7 +13,7 @@ $(function () {
 
     var searchParams = new URLSearchParams(window.location.search);
     var paymentRequestId = searchParams.get('paymentRequestId');
-    if (paymentRequestId.length === 36) {
+    if (paymentRequestId && paymentRequestId.length === 36) {
         payment.paymentRequests.paymentRequest
             .get(paymentRequestId)
             .then(function (r) {
