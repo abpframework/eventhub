@@ -3,7 +3,7 @@
     <Import Project="..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <RootNamespace>EventHub.Admin</RootNamespace>
     </PropertyGroup>
 
@@ -13,11 +13,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Volo.Abp.Account.HttpApi" Version="6.0.0" />
-        <PackageReference Include="Volo.Abp.Identity.HttpApi" Version="6.0.0" />
-        <PackageReference Include="Volo.Abp.PermissionManagement.HttpApi" Version="6.0.0" />
-        <PackageReference Include="Volo.CmsKit.Admin.HttpApi" Version="6.0.0" />
-        <PackageReference Include="Volo.Abp.SettingManagement.HttpApi" Version="6.0.0" />
+        <PackageReference Include="Volo.Abp.Account.HttpApi" Version="7.0.0" />
+        <PackageReference Include="Volo.Abp.Identity.HttpApi" Version="7.0.0" />
+        <PackageReference Include="Volo.Abp.PermissionManagement.HttpApi" Version="7.0.0" />
+        <PackageReference Include="Volo.CmsKit.Admin.HttpApi" Version="7.0.0" />
+        <PackageReference Include="Volo.Abp.SettingManagement.HttpApi" Version="7.0.0" />
     </ItemGroup>
 
 </Project>

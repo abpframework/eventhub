@@ -12,4 +12,12 @@
       <ProjectReference Include="..\Payment.Domain\Payment.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Update="Fody" Version="6.6.4">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      </PackageReference>
+      <PackageReference Update="ConfigureAwait.Fody" Version="3.3.2" />
+    </ItemGroup>
+
 </Project>

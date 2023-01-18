@@ -12,6 +12,10 @@
 @using EventHub.Web.Theme.Bundling
 @using EventHub.Web.Theme.Themes.EventHub.Components.MainNavbar
 @using EventHub.Web.Theme.Themes.EventHub.Components.PageAlerts
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Alert
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
+@using Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
+@using Volo.Abp.Ui.LayoutHooks
 @inject IBrandingProvider BrandingProvider
 @inject IOptions<AbpMultiTenancyOptions> MultiTenancyOptions
 @inject ICurrentTenant CurrentTenant
@@ -96,6 +100,7 @@
 
     <abp-script-bundle name="@EventHubThemeBundles.Scripts.Global" />
 
+    <script src="~/Abp/ApplicationLocalizationScript?cultureName=@CultureInfo.CurrentUICulture.Name"></script>
     <script src="~/Abp/ApplicationConfigurationScript"></script>
     <script src="~/Abp/ServiceProxyScript"></script>
 

@@ -15,7 +15,6 @@ namespace EventHub.EntityFrameworkCore
             EventHubEfCoreEntityExtensionMappings.Configure();
 
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-            
             var configuration = BuildConfiguration();
 
             var builder = new DbContextOptionsBuilder<EventHubDbContext>()
