@@ -1,0 +1,67 @@
+variables:
+  version: $(Build.BuildId)
+
+trigger:
+  branches:
+    include:
+      - refs/heads/main
+
+pool:
+  vmImage: "ubuntu-latest"
+
+steps:
+  - task: UseDotNet@2
+    displayName: "Use .NET sdk"
+    inputs:
+      packageType: sdk
+      version: 7.0.x
+      installationPath: $(Agent.ToolsDirectory)/dotnet
+      includePreviewVersions: true
+
+  - task: PowerShell@2
+    displayName: Build docker images
+    inputs:
+      filePath: "etc/k8s/scripts/build-images.ps1"
+      arguments: "-version $(version)"
+
+  - task: Docker@2
+    displayName: Login to ACR
+    inputs:
+      containerRegistry: "volocr"
+      command: "login"
+
+  - task: PowerShell@2
+    displayName: Push images to ACR
+    inputs:
+      filePath: "etc/azure/scripts/push-images.ps1"
+      arguments: "-version $(version)"
+
+  - task: Kubernetes@1
+    displayName: Delete migrator job
+    continueOnError: true
+    inputs:
+      connectionType: "Azure Resource Manager"
+      azureSubscriptionEndpoint: "volosoft (fe02ef9f-9e1c-4e40-b924-505981688dd8)"
+      azureResourceGroup: "volo"
+      kubernetesCluster: "volo"
+      namespace: "eventhub"
+      command: "delete"
+      arguments: "job eh-az-dbmigrator"
+      secretType: "dockerRegistry"
+      containerRegistryType: "Azure Container Registry"
+
+  - task: HelmDeploy@0
+    displayName: Helm deploy
+    inputs:
+      connectionType: "Azure Resource Manager"
+      azureSubscription: "volosoft(fe02ef9f-9e1c-4e40-b924-505981688dd8)"
+      azureResourceGroup: "volo"
+      kubernetesCluster: "volo"
+      useClusterAdmin: true
+      namespace: "eventhub"
+      command: "upgrade"
+      chartType: "Name"
+      chartName: "etc/k8s/helm-chart/eventhub"
+      releaseName: "eh-az"
+      valueFile: "etc/k8s/helm-chart/eventhub/values.azure.yaml"
+      arguments: "--timeout 20m --namespace eventhub --create-namespace --set global.eventHubImageVersion=$(version)"
