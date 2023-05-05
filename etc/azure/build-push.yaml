@@ -42,7 +42,7 @@ steps:
       arguments: "-version $(tag)"
 
   - bash: |
-      sed -i "s/eventHubImageVersion: latest/eventHubImageVersion: \"${tag}\"/" etc/k8s/helm-chart/eventhub/values.azure.yaml
+      sed -i "s/eventHubImageVersion: latest/eventHubImageVersion: \"$(tag)\"/" etc/k8s/helm-chart/eventhub/values.azure.yaml
 
 
   - task: PublishPipelineArtifact@1
