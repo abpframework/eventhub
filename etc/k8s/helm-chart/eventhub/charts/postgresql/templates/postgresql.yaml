@@ -36,8 +36,8 @@ spec:
       name: {{ .Release.Name }}-{{ .Chart.Name }}-database-volume
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: "managed-premium-retain"
+      storageClassName: "managed-csi"
       resources:
         requests:
-          storage: 64Gi
+          storage: 32Gi
 {{- end }}
