@@ -45,8 +45,8 @@ steps:
       sed -i "s/eventHubImageVersion: latest/eventHubImageVersion: $(tag)/" etc/k8s/helm-chart/eventhub/values.azure.yaml
 
   - task: PublishPipelineArtifact@1
-      inputs:
-        targetPath: '$(buildContextBasePath)/etc/k8s/helm-chart/eventhub'
-        artifact: helm
-        publishLocation: pipeline
+    inputs:
+      targetPath: '$(buildContextBasePath)/etc/k8s/helm-chart/eventhub'
+      artifact: helm
+      publishLocation: pipeline
 
