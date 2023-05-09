@@ -34,3 +34,5 @@ dbmigrator:
   containerImage: "volosoft.azurecr.io/eventhub.dbmigrator"
 background-services:
   containerImage: "volosoft.azurecr.io/eventhub.background-services"
+nodeSelector:
+    agentpool: demopool
