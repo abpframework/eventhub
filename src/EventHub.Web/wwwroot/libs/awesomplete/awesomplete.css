@@ -53,6 +53,7 @@
 		opacity: 0;
 		transform: scale(0);
 		display: block;
+		visibility: hidden;
 		transition-timing-function: ease;
 	}
 }
@@ -101,4 +102,5 @@
 			background: hsl(86, 100%, 21%);
 			color: inherit;
 		}
+
 /*# sourceMappingURL=awesomplete.css.map */

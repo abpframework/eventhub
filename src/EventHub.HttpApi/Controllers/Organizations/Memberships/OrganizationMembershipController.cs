@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Asp.Versioning;
 using EventHub.Organizations.Memberships;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;

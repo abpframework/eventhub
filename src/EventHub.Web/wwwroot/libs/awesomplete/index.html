@@ -220,6 +220,20 @@ new Awesomplete(input, {
 				<td>Boolean</td>
 				<td>false</td>
 			</tr>
+			<tr>
+				<td><code>tabSelect</code></td>
+				<td><code>data-tabSelect</code></td>
+				<td>Should the first element be selected when the user hits the TAB key when the field has focus?></td>
+				<td>Boolean</td>
+				<td>false</td>
+			</tr>
+			<tr>
+				<td><code>listLabel</code></td>
+				<td><code>data-listlabel</code></td>
+				<td>Denotes a label to be used as aria-label on the generated autocomplete list.</td>
+				<td>String</td>
+				<td>Results List</td>
+			</tr>
 		</tbody>
 	</table>
 
@@ -387,7 +401,7 @@ We can also <strong>generate list items based on user's input</strong>. See E-ma
 			</tr>
 			<tr>
 				<td><code>destroy()</code></td>
-				<td>Clean up and remove the instance from the input.</td>
+				<td>Clean up and remove the instance from the input. The container is only removed if it wasn't manually set but created by Awesomplete.</td>
 			</tr>
 		</tbody>
 	</table>
@@ -440,6 +454,30 @@ ajax.onload = function() {
 	new Awesomplete(document.querySelector("#ajax-example input"),{ list: list });
 };
 ajax.send();</script></code></pre>
+	</section>
+
+	<section id="ajax-example">
+	<h2>Custom list example <small>(based on user input)</small></h2>
+	<pre class="language-markup"><code>&lt;input id="query" class="awesomplete"  /&gt;</code></pre>
+	<pre class="language-javascript"><code><script>
+const queryInput = document.querySelector("#query");
+
+const awesomplete = new Awesomplete(queryInput, {
+  filter: () => { // We will provide a list that is already filtered ...
+    return true;
+  },
+  sort: false,    // ... and sorted.
+  list: []
+});
+
+queryInput.addEventListener("input", (event) => {
+  const inputText = event.target.value;
+  // Process inputText as you want, e.g. make an API request.
+  awesomplete.list = ["my"+inputText, "custom"+inputText, "list"+inputText];
+  awesomplete.evaluate();
+});
+
+</script></code></pre>
 	</section>
 
 	<section id="combobox">

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Asp.Versioning;
 using EventHub.Admin.Events;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,7 @@ namespace EventHub.Admin.Controllers.Events
     public class EventController : AbpController, IEventAppService
     {
         private readonly IEventAppService _eventAppService;
-        
+
         public EventController(IEventAppService eventAppService)
         {
             _eventAppService = eventAppService;
@@ -46,7 +47,7 @@ namespace EventHub.Admin.Controllers.Events
             {
                 return null;
             }
-            
+
             Response.Headers.Add("Accept-Ranges", "bytes");
             Response.ContentType = remoteStreamContent.ContentType;
 

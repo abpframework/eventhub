@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Asp.Versioning;
 using EventHub.Admin.Organizations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,7 @@ namespace EventHub.Admin.Controllers.Organizations
     public class OrganizationController : AbpController, IOrganizationAppService
     {
         private readonly IOrganizationAppService _organizationAppService;
-        
+
         public OrganizationController(IOrganizationAppService organizationAppService)
         {
             _organizationAppService = organizationAppService;
@@ -36,7 +37,7 @@ namespace EventHub.Admin.Controllers.Organizations
         {
             return _organizationAppService.GetAsync(id);
         }
-        
+
         [HttpGet]
         [Route("by-name/{name}")]
         public Task<OrganizationProfileDto> GetByNameAsync(string name)
@@ -67,7 +68,7 @@ namespace EventHub.Admin.Controllers.Organizations
             {
                 return null;
             }
-            
+
             Response.Headers.Add("Accept-Ranges", "bytes");
             Response.ContentType = remoteStreamContent.ContentType;
 

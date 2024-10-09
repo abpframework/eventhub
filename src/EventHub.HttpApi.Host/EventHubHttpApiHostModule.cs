@@ -152,7 +152,7 @@ namespace EventHub
         {
             Configure<AbpLocalizationOptions>(options =>
             {
-                options.Languages.Add(new LanguageInfo("en", "en", "English", "gb"));
+                options.Languages.Add(new LanguageInfo("en", "en", "English"));
             });
         }
 

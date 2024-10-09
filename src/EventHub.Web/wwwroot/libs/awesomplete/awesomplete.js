@@ -10,9 +10,9 @@
 var _ = function (input, o) {
 	var me = this;
 
-    // Keep track of number of instances for unique IDs
-    _.count = (_.count || 0) + 1;
-    this.count = _.count;
+	// Keep track of number of instances for unique IDs
+	_.count = (_.count || 0) + 1;
+	this.count = _.count;
 
 	// Setup
 
@@ -20,7 +20,9 @@ var _ = function (input, o) {
 
 	this.input = $(input);
 	this.input.setAttribute("autocomplete", "off");
+	this.input.setAttribute("aria-autocomplete", "list");
 	this.input.setAttribute("aria-expanded", "false");
+	this.input.setAttribute("aria-controls", "awesomplete_list_" + this.count);
 	this.input.setAttribute("aria-owns", "awesomplete_list_" + this.count);
 	this.input.setAttribute("role", "combobox");
 
@@ -38,7 +40,11 @@ var _ = function (input, o) {
 		container: _.CONTAINER,
 		item: _.ITEM,
 		replace: _.REPLACE,
-		tabSelect: false
+		tabSelect: false,
+		listLabel: "Results List",
+		statusNoResults: "No results found",
+		statusXResults: "{0} results found", // uses index placeholder {0}
+		statusTypeXChar: "Type {0} or more characters for results"
 	}, o);
 
 	this.index = -1;
@@ -49,18 +55,19 @@ var _ = function (input, o) {
 
 	this.ul = $.create("ul", {
 		hidden: "hidden",
-        role: "listbox",
-        id: "awesomplete_list_" + this.count,
-		inside: this.container
+		role: "listbox",
+		id: "awesomplete_list_" + this.count,
+		inside: this.container,
+		"aria-label": this.listLabel
 	});
 
 	this.status = $.create("span", {
 		className: "visually-hidden",
 		role: "status",
 		"aria-live": "assertive",
-        "aria-atomic": true,
-        inside: this.container,
-        textContent: this.minChars != 0 ? ("Type " + this.minChars + " or more characters for results.") : "Begin typing for results."
+		"aria-atomic": true,
+		inside: this.container,
+		textContent: ""  // live region should start empty. Only when the text is changed it will be read by the screen reader.
 	});
 
 	// Bind events
@@ -80,6 +87,7 @@ var _ = function (input, o) {
 						me.select(undefined, undefined, evt);
 					}
 					else if (c === 9 && me.selected && me.tabSelect) {
+						evt.preventDefault();
 						me.select(undefined, undefined, evt);
 					}
 					else if (c === 27) { // Esc
@@ -187,6 +195,7 @@ _.prototype = {
 		this.index = -1;
 
 		this.status.setAttribute("hidden", "");
+		this.input.setAttribute("aria-activedescendant", "");
 
 		$.fire(this.input, "awesomplete-close", o || {});
 	},
@@ -219,9 +228,13 @@ _.prototype = {
 			parentNode.removeChild(this.container);
 		}
 
-		//remove autocomplete and aria-autocomplete attributes
+		// remove autocomplete and aria attributes
 		this.input.removeAttribute("autocomplete");
 		this.input.removeAttribute("aria-autocomplete");
+		this.input.removeAttribute("aria-expanded");
+		this.input.removeAttribute("aria-controls");
+		this.input.removeAttribute("aria-owns");		
+		this.input.removeAttribute("role");
 
 		//remove this awesomeplete instance from the global array of instances
 		var indexOfAwesomplete = _.all.indexOf(this);
@@ -256,9 +269,12 @@ _.prototype = {
 		if (i > -1 && lis.length > 0) {
 			lis[i].setAttribute("aria-selected", "true");
 
-			this.status.textContent = lis[i].textContent + ", list item " + (i + 1) + " of " + lis.length;
+			// fix: Turned off this status update.
+			//		Screen readers Voiceover and Talkback won't read this status change.
+			//		Narrator and NVDA do, but they already tell: 'X of Y (selected)'
+			// this.status.textContent = lis[i].textContent + ", list item " + (i + 1) + " of " + lis.length;
 
-            this.input.setAttribute("aria-activedescendant", this.ul.id + "_item_" + this.index);
+			this.input.setAttribute("aria-activedescendant", this.ul.id + "_item_" + this.index);
 
 			// scroll to highlighted element in case parent's height is fixed
 			this.ul.scrollTop = lis[i].offsetTop - this.ul.clientHeight + lis[i].clientHeight;
@@ -325,20 +341,28 @@ _.prototype = {
 
 			if (this.ul.children.length === 0) {
 
-                this.status.textContent = "No results found";
+				this.status.textContent = this.statusNoResults;
 
 				this.close({ reason: "nomatches" });
 
 			} else {
+				this.input.setAttribute("aria-activedescendant", ""); // none of the list items currently has aria-selected="true"
+
 				this.open();
 
-                this.status.textContent = this.ul.children.length + " results found";
+				this.status.textContent = this.statusXResults.replaceAll('{0}', this.ul.children.length); // N results found;
 			}
 		}
 		else {
+
 			this.close({ reason: "nomatches" });
 
-                this.status.textContent = "No results found";
+			if (this.minChar <= 1 || value.length >= this.minChars) {
+			   this.status.textContent = this.statusNoResults;
+			} else {
+			   this.status.textContent = this.statusTypeXChar.replaceAll('{0}', this.minChars); // Type N or more characters for results
+			}
+
 		}
 	}
 };
@@ -376,6 +400,7 @@ _.ITEM = function (text, input, item_id) {
 		innerHTML: html,
 		"role": "option",
 		"aria-selected": "false",
+		"tabindex": "-1", // for the Talkback screen reader
 		"id": "awesomplete_list_" + this.count + "_item_" + item_id
 	});
 };
@@ -406,7 +431,7 @@ Suggestion.prototype.toString = Suggestion.prototype.valueOf = function () {
 function configure(instance, properties, o) {
 	for (var i in properties) {
 		var initial = properties[i],
-		    attrValue = instance.input.getAttribute("data-" + i.toLowerCase());
+			attrValue = instance.input.getAttribute("data-" + i.toLowerCase());
 
 		if (typeof initial === "number") {
 			instance[i] = parseInt(attrValue);

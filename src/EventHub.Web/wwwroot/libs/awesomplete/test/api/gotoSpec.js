@@ -48,20 +48,6 @@ describe("awesomplete.goto", function () {
 		it("sets aria-selected", function () {
 			expect(this.subject.ul.children[0].getAttribute("aria-selected")).toBe("true");
 		});
-
-		it("updates status", function () {
-			expect(this.subject.status.textContent).toBe("item1, list item 1 of 3");
-		});
 	});
 
-	describe("with item index = -1", function () {
-		beforeEach(function () {
-			this.subject.goto(0);
-			this.subject.goto(-1);
-		});
-
-		it("does not update status", function () {
-			expect(this.subject.status.textContent).toBe("item1, list item 1 of 3");
-		});
-	});
 });
