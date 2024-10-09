@@ -19,7 +19,7 @@ steps:
     displayName: "Use .NET sdk"
     inputs:
       packageType: sdk
-      version: 7.0.x
+      version: 8.x
       installationPath: $(Agent.ToolsDirectory)/dotnet
       includePreviewVersions: true
 
