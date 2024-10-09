@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Asp.Versioning;
 using EventHub.Admin.Users;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;

@@ -3,7 +3,7 @@
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>EventHub</RootNamespace>
   </PropertyGroup>
 
@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0-preview-20221221-03" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
   </ItemGroup>
 
 </Project>

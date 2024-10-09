@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Asp.Versioning;
 using EventHub.Events.Registrations;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;

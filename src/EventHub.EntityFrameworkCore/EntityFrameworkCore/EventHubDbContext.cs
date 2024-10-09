@@ -58,9 +58,11 @@ namespace EventHub.EntityFrameworkCore
         public DbSet<OrganizationUnit> OrganizationUnits { get; set; }
         public DbSet<IdentitySecurityLog> SecurityLogs { get; set; }
         public DbSet<IdentityLinkUser> LinkUsers { get; set; }
+        public DbSet<IdentityUserDelegation> UserDelegations { get; set; }
+        public DbSet<IdentitySession> Sessions { get; set; }
 
         #endregion
-        
+
         public EventHubDbContext(DbContextOptions<EventHubDbContext> options)
             : base(options)
         {

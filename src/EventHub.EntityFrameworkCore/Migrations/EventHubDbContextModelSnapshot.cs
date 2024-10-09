@@ -19,7 +19,7 @@ namespace EventHub.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.PostgreSql)
-                .HasAnnotation("ProductVersion", "7.0.2")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -55,6 +55,7 @@ namespace EventHub.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -90,6 +91,7 @@ namespace EventHub.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
 
@@ -180,6 +182,7 @@ namespace EventHub.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -196,6 +199,7 @@ namespace EventHub.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
 
@@ -289,6 +293,7 @@ namespace EventHub.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -302,6 +307,7 @@ namespace EventHub.Migrations
                         .HasColumnName("CreatorId");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
 
@@ -327,6 +333,7 @@ namespace EventHub.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -358,6 +365,7 @@ namespace EventHub.Migrations
                         .HasColumnType("character varying(128)");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
 
@@ -432,6 +440,7 @@ namespace EventHub.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -452,6 +461,7 @@ namespace EventHub.Migrations
                         .HasColumnType("character varying(100)");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
 
@@ -526,6 +536,7 @@ namespace EventHub.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -546,6 +557,7 @@ namespace EventHub.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
 
@@ -677,7 +689,6 @@ namespace EventHub.Migrations
                         .HasColumnName("ChangeType");
 
                     b.Property<string>("EntityId")
-                        .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)")
                         .HasColumnName("EntityId");
@@ -758,6 +769,7 @@ namespace EventHub.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -767,6 +779,7 @@ namespace EventHub.Migrations
                         .HasColumnName("CreationTime");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
 
@@ -816,6 +829,7 @@ namespace EventHub.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -828,6 +842,7 @@ namespace EventHub.Migrations
                         .HasColumnType("bytea");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
 
@@ -857,11 +872,13 @@ namespace EventHub.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)")
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
 
@@ -888,6 +905,7 @@ namespace EventHub.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -897,6 +915,7 @@ namespace EventHub.Migrations
                         .HasColumnType("character varying(256)");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
 
@@ -959,11 +978,16 @@ namespace EventHub.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)")
                         .HasColumnName("ConcurrencyStamp");
 
+                    b.Property<int>("EntityVersion")
+                        .HasColumnType("integer");
+
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
 
@@ -1055,6 +1079,7 @@ namespace EventHub.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -1067,6 +1092,7 @@ namespace EventHub.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
 
@@ -1102,6 +1128,57 @@ namespace EventHub.Migrations
                     b.ToTable("AbpSecurityLogs", (string)null);
                 });
 
+            modelBuilder.Entity("Volo.Abp.Identity.IdentitySession", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ClientId")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("Device")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("DeviceInfo")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("IpAddresses")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<DateTime?>("LastAccessed")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("SessionId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<DateTime>("SignedIn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Device");
+
+                    b.HasIndex("SessionId");
+
+                    b.HasIndex("TenantId", "UserId");
+
+                    b.ToTable("AbpSessions", (string)null);
+                });
+
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUser", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1115,6 +1192,7 @@ namespace EventHub.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -1147,7 +1225,11 @@ namespace EventHub.Migrations
                         .HasDefaultValue(false)
                         .HasColumnName("EmailConfirmed");
 
+                    b.Property<int>("EntityVersion")
+                        .HasColumnType("integer");
+
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
 
@@ -1174,6 +1256,9 @@ namespace EventHub.Migrations
                     b.Property<Guid?>("LastModifierId")
                         .HasColumnType("uuid")
                         .HasColumnName("LastModifierId");
+
+                    b.Property<DateTimeOffset?>("LastPasswordChangeTime")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("LockoutEnabled")
                         .ValueGeneratedOnAdd()
@@ -1222,6 +1307,9 @@ namespace EventHub.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
                         .HasColumnName("SecurityStamp");
+
+                    b.Property<bool>("ShouldChangePasswordOnNextLogin")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Surname")
                         .HasMaxLength(64)
@@ -1283,6 +1371,32 @@ namespace EventHub.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("AbpUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Volo.Abp.Identity.IdentityUserDelegation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid>("SourceUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid>("TargetUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AbpUserDelegations", (string)null);
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUserLogin", b =>
@@ -1398,6 +1512,7 @@ namespace EventHub.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -1424,7 +1539,11 @@ namespace EventHub.Migrations
                         .HasColumnType("character varying(128)")
                         .HasColumnName("DisplayName");
 
+                    b.Property<int>("EntityVersion")
+                        .HasColumnType("integer");
+
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
 
@@ -1497,6 +1616,7 @@ namespace EventHub.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -1529,6 +1649,7 @@ namespace EventHub.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
 
@@ -1638,6 +1759,7 @@ namespace EventHub.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -1673,6 +1795,7 @@ namespace EventHub.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
 
@@ -1804,6 +1927,7 @@ namespace EventHub.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -1841,6 +1965,7 @@ namespace EventHub.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
 
@@ -2080,6 +2205,7 @@ namespace EventHub.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -2111,6 +2237,7 @@ namespace EventHub.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
 
@@ -2152,6 +2279,7 @@ namespace EventHub.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -2175,6 +2303,7 @@ namespace EventHub.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
 
@@ -2213,6 +2342,7 @@ namespace EventHub.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -2248,6 +2378,7 @@ namespace EventHub.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
 
@@ -2459,6 +2590,55 @@ namespace EventHub.Migrations
                     b.ToTable("AbpSettings", (string)null);
                 });
 
+            modelBuilder.Entity("Volo.Abp.SettingManagement.SettingDefinitionRecord", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("DefaultValue")
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsEncrypted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsInherited")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsVisibleToClients")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<string>("Providers")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("AbpSettingDefinitions", (string)null);
+                });
+
             modelBuilder.Entity("Volo.CmsKit.Comments.Comment", b =>
                 {
                     b.Property<Guid>("Id")
@@ -2467,6 +2647,7 @@ namespace EventHub.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -2490,8 +2671,16 @@ namespace EventHub.Migrations
                         .HasColumnType("character varying(64)");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
+
+                    b.Property<string>("IdempotencyToken")
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
+                    b.Property<bool?>("IsApproved")
+                        .HasColumnType("boolean");
 
                     b.Property<Guid?>("RepliedCommentId")
                         .HasColumnType("uuid");
@@ -2502,6 +2691,10 @@ namespace EventHub.Migrations
 
                     b.Property<string>("Text")
                         .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)");
+
+                    b.Property<string>("Url")
                         .HasMaxLength(512)
                         .HasColumnType("character varying(512)");
 
@@ -2541,6 +2734,7 @@ namespace EventHub.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -2567,6 +2761,7 @@ namespace EventHub.Migrations
                         .HasColumnType("character varying(64)");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
 
@@ -2608,6 +2803,7 @@ namespace EventHub.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -2625,6 +2821,7 @@ namespace EventHub.Migrations
                         .HasColumnName("EmailConfirmed");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
 

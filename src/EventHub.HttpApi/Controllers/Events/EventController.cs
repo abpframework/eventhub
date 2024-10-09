@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Asp.Versioning;
 using EventHub.Events;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;

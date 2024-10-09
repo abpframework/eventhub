@@ -4,7 +4,7 @@
     
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <RootNamespace>EventHub</RootNamespace>
         <UserSecretsId>EventHub-4681b4fd-151f-4221-84a4-929d86723e4c</UserSecretsId>
     </PropertyGroup>
@@ -14,18 +14,18 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Volo.Abp.Autofac" Version="7.0.0" />
-        <PackageReference Include="Volo.Abp.BackgroundWorkers" Version="7.0.0" />
-        <PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" Version="7.0.0" />
+        <PackageReference Include="Volo.Abp.Autofac" Version="8.3.1" />
+        <PackageReference Include="Volo.Abp.BackgroundWorkers" Version="8.3.1" />
+        <PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" Version="8.3.1" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
-        <PackageReference Include="Serilog.Extensions.Hosting" Version="5.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+        <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
         <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
-        <PackageReference Include="Serilog.Sinks.Console" Version="4.1.1-dev-00901" />
-        <PackageReference Include="Serilog.Sinks.File" Version="5.0.1-dev-00947" />
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="7.0.2" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="5.0.0" />
+        <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.4" />
     </ItemGroup>
 
     <ItemGroup>

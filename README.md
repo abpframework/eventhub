@@ -16,7 +16,7 @@ This solution is originally prepared to be a real-world example for the **Master
 
 ## Requirements
 
-* .NET 6.0+
+* .NET 8.0+
 * Docker
 
 ## How to run

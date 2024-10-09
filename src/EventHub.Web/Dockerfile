@@ -1,4 +1,4 @@
-  FROM mcr.microsoft.com/dotnet/aspnet:7.0.0-bullseye-slim
-  COPY bin/Release/net7.0/publish/ app/
+  FROM mcr.microsoft.com/dotnet/aspnet:8.3.1-bullseye-slim
+  COPY bin/Release/net8.0/publish/ app/
   WORKDIR /app
   ENTRYPOINT ["dotnet", "EventHub.Web.dll"]
