@@ -21,18 +21,18 @@ global:
   imagePullPolicy: Always
   eventHubImageVersion: latest
 account:
-  containerImage: "volosoft.azurecr.io/eventhub.account"
+  containerImage: "volosoft.azurecr.io/eventhub/identityserver"
 api:
-  containerImage: "volosoft.azurecr.io/eventhub.api"
+  containerImage: "volosoft.azurecr.io/eventhub/apihost"
 www:
-  containerImage: "volosoft.azurecr.io/eventhub.www"
+  containerImage: "volosoft.azurecr.io/eventhub/web"
 admin-api:
-  containerImage: "volosoft.azurecr.io/eventhub.admin-api"
+  containerImage: "volosoft.azurecr.io/eventhub/adminapihost"
 admin:
-  containerImage: "volosoft.azurecr.io/eventhub.admin"
+  containerImage: "volosoft.azurecr.io/eventhub/adminweb"
 dbmigrator:
-  containerImage: "volosoft.azurecr.io/eventhub.dbmigrator"
+  containerImage: "volosoft.azurecr.io/eventhub/dbmigrator"
 background-services:
-  containerImage: "volosoft.azurecr.io/eventhub.background-services"
+  containerImage: "volosoft.azurecr.io/eventhub/background"
 nodeSelector:
     agentpool: demopool

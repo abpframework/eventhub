@@ -1,0 +1,220 @@
+trigger:
+  tags:
+    include:
+      - "*.*.*"
+
+resources:
+  repositories:
+    - repository: abp-studio
+      type: github
+      endpoint: github.com_skoc10
+      name: volosoft/abp-studio
+      ref: main
+
+variables:
+  dockerRegistryServiceConnection: 'volosoft-reg'
+  tag: $(Build.BuildNumber)
+  DOCKER_BUILDKIT: 1
+
+pool:
+  name: aks-deployer-agent
+
+
+stages:
+- stage: Package
+  displayName: Package
+  jobs:
+  - job: Build
+    displayName: EventHub Build
+    pool:
+      name: aks-deployer-agent
+
+    steps:
+
+    - checkout: self
+    - checkout: abp-studio
+
+    - task: Docker@2
+      displayName: Build Base Image
+      inputs:
+        command: build
+        repository: eventhub-base
+        dockerfile: $(Build.SourcesDirectory)/eventhub/etc/azure/Dockerfile.base
+        buildContext: $(Build.SourcesDirectory)
+        tags: |
+          $(tag)
+
+# Build images
+    - task: Docker@2
+      displayName: Build DB MIGRATOR
+      continueOnError: true
+      inputs:
+        command: build
+        repository: eventhub/dbmigrator
+        dockerfile: $(Build.SourcesDirectory)/eventhub/src/EventHub.DbMigrator/Dockerfile.azure
+        buildContext: $(Build.SourcesDirectory)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        arguments: "--build-arg=BASE_IMAGE=eventhub-base:$(tag)"
+        tags: |
+          $(tag)
+
+    - task: Docker@2
+      displayName: Build WEB
+      continueOnError: true
+      inputs:
+        command: build
+        repository: eventhub/web
+        dockerfile: $(Build.SourcesDirectory)/eventhub/src/EventHub.Web/Dockerfile.azure
+        buildContext: $(Build.SourcesDirectory)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        arguments: "--build-arg=BASE_IMAGE=eventhub-base:$(tag)"
+        tags: |
+          $(tag)
+
+    - task: Docker@2
+      displayName: Build API HOST
+      continueOnError: true
+      inputs:
+        command: build
+        repository: eventhub/apihost
+        dockerfile: $(Build.SourcesDirectory)/eventhub/src/EventHub.HttpApi.Host/Dockerfile.azure
+        buildContext: $(Build.SourcesDirectory)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        arguments: "--build-arg=BASE_IMAGE=eventhub-base:$(tag)"
+        tags: |
+          $(tag)
+
+    - task: Docker@2
+      displayName: Build ADMIN WEB
+      continueOnError: true
+      inputs:
+        command: build
+        repository: eventhub/adminweb
+        dockerfile: $(Build.SourcesDirectory)/eventhub/src/EventHub.Admin.Web/Dockerfile.azure
+        buildContext: $(Build.SourcesDirectory)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        arguments: "--build-arg=BASE_IMAGE=eventhub-base:$(tag)"
+        tags: |
+          $(tag)
+
+    - task: Docker@2
+      displayName: Build ADMIN API HOST
+      continueOnError: true
+      inputs:
+        command: build
+        repository: eventhub/adminapihost
+        dockerfile: $(Build.SourcesDirectory)/eventhub/src/EventHub.Admin.HttpApi.Host/Dockerfile.azure
+        buildContext: $(Build.SourcesDirectory)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        arguments: "--build-arg=BASE_IMAGE=eventhub-base:$(tag)"
+        tags: |
+          $(tag)
+
+    - task: Docker@2
+      displayName: Build IDENTITY SERVER
+      continueOnError: true
+      inputs:
+        command: build
+        repository: eventhub/identityserver
+        dockerfile: $(Build.SourcesDirectory)/eventhub/src/EventHub.IdentityServer/Dockerfile.azure
+        buildContext: $(Build.SourcesDirectory)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        arguments: "--build-arg=BASE_IMAGE=eventhub-base:$(tag)"
+        tags: |
+          $(tag)
+
+    - task: Docker@2
+      displayName: Build BACKGROUND
+      continueOnError: true
+      inputs:
+        command: build
+        repository: eventhub/background
+        dockerfile: $(Build.SourcesDirectory)/eventhub/src/EventHub.BackgroundServices/Dockerfile.azure
+        buildContext: $(Build.SourcesDirectory)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        arguments: "--build-arg=BASE_IMAGE=eventhub-base:$(tag)"
+        tags: |
+          $(tag)
+
+
+# Push images
+    - task: Docker@2
+      displayName: Push DB MIGRATOR
+      continueOnError: true
+      inputs:
+        command: push
+        repository: eventhub/dbmigrator
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+    - task: Docker@2
+      displayName: Push WEB
+      continueOnError: true
+      inputs:
+        command: push
+        repository: eventhub/web
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+    - task: Docker@2
+      displayName: Push API HOST
+      continueOnError: true
+      inputs:
+        command: push
+        repository: eventhub/apihost
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+    - task: Docker@2
+      displayName: Push ADMIN WEB
+      continueOnError: true
+      inputs:
+        command: push
+        repository: eventhub/adminweb
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+    - task: Docker@2
+      displayName: Push ADMIN API HOST
+      continueOnError: true
+      inputs:
+        command: push
+        repository: eventhub/adminapihost
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+    - task: Docker@2
+      displayName: Push IDENTITY SERVER
+      continueOnError: true
+      inputs:
+        command: push
+        repository: eventhub/identityserver
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+    - task: Docker@2
+      displayName: Push BACKGROUND
+      continueOnError: true
+      inputs:
+        command: push
+        repository: eventhub/background
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+# Artifact
+    - bash: |
+        sed -i "s/eventHubImageVersion: latest/eventHubImageVersion: \"$(tag)\"/" $(Build.SourcesDirectory)/eventhub/etc/k8s/helm-chart/eventhub/values.azure.yaml
+
+
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Build.SourcesDirectory)/eventhub/etc/k8s/helm-chart/eventhub'
+        artifact: helm
+        publishLocation: pipeline
