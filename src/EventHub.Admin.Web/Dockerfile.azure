@@ -1,0 +1,10 @@
+ARG BASE_IMAGE=base
+
+FROM ${BASE_IMAGE} AS base
+
+WORKDIR /app/eventhub/src/EventHub.Admin.Web
+RUN dotnet publish -c Release -o bin/Release/publish
+
+FROM nginx:latest AS publish
+COPY --from=base /app/eventhub/src/EventHub.Admin.Web/bin/Release/publish/wwwroot/ /usr/share/nginx/html/
+COPY --from=base /app/eventhub/src/EventHub.Admin.Web/nginx.conf /etc/nginx/conf.d/default.conf
