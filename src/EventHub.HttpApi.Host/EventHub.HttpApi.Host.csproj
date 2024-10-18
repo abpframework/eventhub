@@ -26,7 +26,6 @@
     <ProjectReference Include="..\EventHub.Application\EventHub.Application.csproj" />
     <ProjectReference Include="..\EventHub.HttpApi\EventHub.HttpApi.csproj" />
     <ProjectReference Include="..\EventHub.EntityFrameworkCore\EventHub.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\EventHub.Web.Theme\EventHub.Web.Theme.csproj" />
     <ProjectReference Include="..\EventHub.Web.Shared\EventHub.Web.Shared.csproj" />
   </ItemGroup>
 
