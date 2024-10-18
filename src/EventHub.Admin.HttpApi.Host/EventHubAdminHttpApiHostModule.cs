@@ -7,6 +7,7 @@ using EventHub.Admin.Organizations;
 using EventHub.Admin.Utils;
 using EventHub.EntityFrameworkCore;
 using EventHub.Options;
+using EventHub.Web.Shared;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
@@ -42,7 +43,8 @@ namespace EventHub.Admin
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpSwashbuckleModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule)
+        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+        typeof(EventHubWebSharedModule)
     )]
     public class EventHubAdminHttpApiHostModule : AbpModule
     {
@@ -65,7 +67,7 @@ namespace EventHub.Admin
             ConfigureTiming();
             ConfigureAutoApiControllers();
         }
-        
+
         private void ConfigureAutoApiControllers()
         {
             Configure<AbpAspNetCoreMvcOptions>(options =>
@@ -87,7 +89,7 @@ namespace EventHub.Admin
         {
             Configure<AbpDistributedCacheOptions>(options => { options.KeyPrefix = "EventHub:"; });
         }
-        
+
         private void ConfigureTiming()
         {
             Configure<AbpClockOptions>(options => { options.Kind = DateTimeKind.Utc; });
@@ -185,7 +187,7 @@ namespace EventHub.Admin
         {
             context.Services.AddSameSiteCookiePolicy();
         }
-        
+
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
@@ -200,7 +202,7 @@ namespace EventHub.Admin
             {
                 new CultureInfo("en")
             };
-            
+
             app.UseAbpRequestLocalization(options =>
             {
                 options.DefaultRequestCulture = new RequestCulture("en");

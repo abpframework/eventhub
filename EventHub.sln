@@ -65,6 +65,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventHub.Web.Theme", "src\E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventHub.Admin.HttpApi.Host", "src\EventHub.Admin.HttpApi.Host\EventHub.Admin.HttpApi.Host.csproj", "{1434105B-DE2C-4AA2-A865-EBA0DBCCA5B0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventHub.Web.Shared", "src\EventHub.Web.Shared\EventHub.Web.Shared.csproj", "{6F7DDDD3-1AC3-4304-AB2C-3BAB294F94AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -163,6 +165,10 @@ Global
 		{1434105B-DE2C-4AA2-A865-EBA0DBCCA5B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1434105B-DE2C-4AA2-A865-EBA0DBCCA5B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1434105B-DE2C-4AA2-A865-EBA0DBCCA5B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F7DDDD3-1AC3-4304-AB2C-3BAB294F94AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F7DDDD3-1AC3-4304-AB2C-3BAB294F94AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F7DDDD3-1AC3-4304-AB2C-3BAB294F94AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F7DDDD3-1AC3-4304-AB2C-3BAB294F94AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -197,6 +203,7 @@ Global
 		{69BC428E-5C49-4391-9985-0D15523D6922} = {F8CF0FE2-9F75-4940-92EC-3D021416DEBF}
 		{E6D5BF0E-DE92-4D82-A352-EF04B37CB11C} = {F8CF0FE2-9F75-4940-92EC-3D021416DEBF}
 		{1434105B-DE2C-4AA2-A865-EBA0DBCCA5B0} = {7016C0D2-D0D5-498B-9FA7-8ABA8F5C39EF}
+		{6F7DDDD3-1AC3-4304-AB2C-3BAB294F94AA} = {81F0EB50-4CF9-402D-B723-A07E95F8D7CB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6AAFA1C6-603E-13FA-45E5-7910AA9F661D}
