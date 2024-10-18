@@ -5,6 +5,7 @@ using EventHub.Localization;
 using EventHub.Options;
 using EventHub.Utils;
 using EventHub.Web;
+using EventHub.Web.Shared;
 using EventHub.Web.Theme;
 using EventHub.Web.Theme.Bundling;
 using IdentityServer4.Configuration;
@@ -42,10 +43,11 @@ namespace EventHub
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAccountApplicationModule),
-        typeof(AbpAccountHttpApiModule), 
+        typeof(AbpAccountHttpApiModule),
         typeof(EventHubWebThemeModule),
         typeof(EventHubEntityFrameworkCoreModule),
-        typeof(AbpAspNetCoreSerilogModule)
+        typeof(AbpAspNetCoreSerilogModule),
+        typeof(EventHubWebSharedModule)
         )]
     public class EventHubIdentityServerModule : AbpModule
     {
@@ -70,7 +72,7 @@ namespace EventHub
                 });
             }
         }
-        
+
         private X509Certificate2 GetSigningCertificate(IWebHostEnvironment hostingEnv, IConfiguration configuration)
         {
             var fileName = "account.openeventhub.pfx";
@@ -84,7 +86,7 @@ namespace EventHub
 
             return new X509Certificate2(file, passPhrase);
         }
-        
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
@@ -180,8 +182,8 @@ namespace EventHub
                         .AllowCredentials();
                 });
             });
-            
-            context.Services.AddSameSiteCookiePolicy(); 
+
+            context.Services.AddSameSiteCookiePolicy();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -196,10 +198,10 @@ namespace EventHub
                 {
                     ctx.SetIdentityServerOrigin(EventHubUrlOptions.GetAccountConfigValue(configuration));
                 }
-                
+
                 await next();
             });
-            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -211,7 +213,7 @@ namespace EventHub
             {
                 app.UseErrorPage();
             }
-            
+
             app.UseCookiePolicy();
             app.UseCorrelationId();
             app.UseStaticFiles();
