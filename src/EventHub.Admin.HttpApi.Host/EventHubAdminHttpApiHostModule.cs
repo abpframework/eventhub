@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Security.Claims;
 using EventHub.Admin.Events;
 using EventHub.Admin.Organizations;
 using EventHub.Admin.Utils;
@@ -29,6 +30,7 @@ using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.Timing;
 using Volo.Abp.VirtualFileSystem;
@@ -128,6 +130,17 @@ namespace EventHub.Admin
                     options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
                     options.Audience = "EventHubAdmin";
                 });
+            MapClaims();
+        }
+
+        private void MapClaims()
+        {
+            AbpClaimTypes.UserName = ClaimTypes.Name;
+            AbpClaimTypes.Name = ClaimTypes.GivenName;
+            AbpClaimTypes.SurName = ClaimTypes.Surname;
+            AbpClaimTypes.UserId = ClaimTypes.NameIdentifier;
+            AbpClaimTypes.Role = ClaimTypes.Role;
+            AbpClaimTypes.Email = ClaimTypes.Email;
         }
 
         private static void ConfigureSwaggerServices(ServiceConfigurationContext context, IConfiguration configuration)
@@ -222,7 +235,7 @@ namespace EventHub.Admin
 
             app.UseCookiePolicy();
             app.UseCorrelationId();
-            app.UseStaticFiles();
+            app.MapAbpStaticAssets();
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();

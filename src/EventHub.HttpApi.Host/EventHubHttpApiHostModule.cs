@@ -251,7 +251,7 @@ namespace EventHub
 
             app.UseCookiePolicy();
             app.UseCorrelationId();
-            app.UseStaticFiles();
+            app.MapAbpStaticAssets();
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();
