@@ -259,7 +259,7 @@ namespace EventHub.Web
 
             app.UseCookiePolicy();
             app.UseCorrelationId();
-            app.UseStaticFiles();
+            app.MapAbpStaticAssets();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

@@ -1,5 +1,5 @@
   FROM mcr.microsoft.com/dotnet/aspnet:8.0
-  COPY bin/Release/net8.0/ app/
+  COPY bin/Release/net9.0/ app/
   WORKDIR /app
   EXPOSE 80
   ENV ASPNETCORE_URLS=http://+:80
