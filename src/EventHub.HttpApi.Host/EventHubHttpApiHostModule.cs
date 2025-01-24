@@ -176,7 +176,8 @@ namespace EventHub
                 {
                     builder
                         .WithOrigins(
-                            EventHubUrlOptions.GetWwwConfigValue(configuration)
+                            EventHubUrlOptions.GetWwwConfigValue(configuration),
+                            EventHubUrlOptions.GetAdminConfigValue(configuration)
                         )
                         .WithAbpExposedHeaders()
                         .SetIsOriginAllowedToAllowWildcardSubdomains()

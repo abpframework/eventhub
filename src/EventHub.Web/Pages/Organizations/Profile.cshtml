@@ -155,20 +155,31 @@
                             }
                         </div>
                         <div class="tab-content">
-                            <div id="PastEvent" class="tab-pane active">
-                                @await Component.InvokeAsync(typeof(EventsAreaViewComponent), new
-                                {
-                                    organizationId = Model.Organization.Id,
-                                    maxDate = Clock.Now.ClearTime()
-                                })
-                            </div>
-                            <div id="UpcomingEvent" class="tab-pane">
-                                @await Component.InvokeAsync(typeof(EventsAreaViewComponent), new
-                                {
-                                    organizationId = Model.Organization.Id,
-                                    minDate = Clock.Now.ClearTime()
-                                })
-                            </div>
+                            @if (!Model.HasPastEvents && !Model.HasUpcomingEvents)
+                            {
+                                <p>There is no Event</p>
+                            }
+                            @if (Model.HasPastEvents)
+                            {
+                                <div id="PastEvent" class="tab-pane active">
+                                    @await Component.InvokeAsync(typeof(EventsAreaViewComponent), new
+                                    {
+                                        organizationId = Model.Organization.Id,
+                                        maxDate = Clock.Now.ClearTime()
+                                    })
+                                </div>
+                            }
+                            @if (Model.HasUpcomingEvents)
+                            {
+                                var isActive = Model.HasPastEvents ? "" : "active";
+                                <div id="UpcomingEvent" class="tab-pane @isActive">
+                                    @await Component.InvokeAsync(typeof(EventsAreaViewComponent), new
+                                    {
+                                        organizationId = Model.Organization.Id,
+                                        minDate = Clock.Now.ClearTime()
+                                    })
+                                </div>
+                            }
                         </div>
                     </div>
                     <div id="members-section" class="tab-pane fade">
