@@ -1,4 +1,5 @@
-page "/Account/LoggedOut"
+@page "/Account/LoggedOut"
+
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.Account.Localization
 @using Volo.Abp.Account.Web.Pages.Account
@@ -18,18 +19,19 @@ page "/Account/LoggedOut"
 @section styles {
     <abp-style src="/Pages/Account/LoggedOut.css" />
 }
-
-<abp-card class="loggedOutCard">
-    <abp-card-body>
-        <abp-card-title>@L["LoggedOutTitle"]</abp-card-title>
-        <abp-card-text>@L["LoggedOutText"]</abp-card-text>
-        @if (Model.PostLogoutRedirectUri != null)
-        {
-            <a abp-button="Primary" id="redirectButton" href="@Model.PostLogoutRedirectUri" cname="@Model.ClientName">@L["ReturnToText"]</a>
-        }
-        @if (Model.SignOutIframeUrl != null)
-        {
-            <iframe class="signout logoutiframe" src="@Model.SignOutIframeUrl"></iframe>
-        }
-    </abp-card-body>
-</abp-card>
+<div class="container mt-5">
+    <abp-card class="loggedOutCard">
+        <abp-card-body>
+            <abp-card-title>@L["LoggedOutTitle"]</abp-card-title>
+            <abp-card-text>@L["LoggedOutText"]</abp-card-text>
+            @if (Model.PostLogoutRedirectUri != null)
+            {
+                <a abp-button="Primary" id="redirectButton" href="@Model.PostLogoutRedirectUri" cname="@Model.ClientName">@L["ReturnToText"]</a>
+            }
+            @if (Model.SignOutIframeUrl != null)
+            {
+                <iframe class="signout logoutiframe" src="@Model.SignOutIframeUrl"></iframe>
+            }
+        </abp-card-body>
+    </abp-card>
+</div>
