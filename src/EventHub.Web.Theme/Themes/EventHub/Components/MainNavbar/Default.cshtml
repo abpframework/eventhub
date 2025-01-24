@@ -14,10 +14,17 @@
 
 @{
     var returnUrl = WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery());
+    
+    if(Context.Request.Path.Equals("/Account/Login", StringComparison.OrdinalIgnoreCase))
+    {
+        returnUrl = WebUtility.UrlEncode(Context.Request.Query["returnUrl"]);
+    }
+    
     if (returnUrl.IsNullOrWhiteSpace())
     {
         returnUrl = "/";
     }
+    
 }
 <nav class="navbar navbar-expand-lg navbar-light bg-light static-top">
     <div class="container">
