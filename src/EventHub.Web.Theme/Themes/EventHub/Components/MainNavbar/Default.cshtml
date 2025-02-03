@@ -13,12 +13,7 @@
 @inject IOptions<EventHubUrlOptions> UrlOptions
 
 @{
-    var returnUrl = WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery());
-    
-    if(Context.Request.Path.Equals("/Account/Login", StringComparison.OrdinalIgnoreCase))
-    {
-        returnUrl = WebUtility.UrlEncode(Context.Request.Query["returnUrl"]);
-    }
+    var returnUrl = WebUtility.UrlEncode(Context.Request.Query.ContainsKey("returnUrl") ? Context.Request.Query["returnUrl"] : Context.Request.GetEncodedPathAndQuery());
     
     if (returnUrl.IsNullOrWhiteSpace())
     {
