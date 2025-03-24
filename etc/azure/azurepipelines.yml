@@ -12,7 +12,7 @@ resources:
       ref: main
 
 variables:
-  dockerRegistryServiceConnection: 'volosoft-reg'
+  dockerRegistryServiceConnection: 'volosoft-reg1'
   tag: $(Build.BuildNumber)
   DOCKER_BUILDKIT: 1
 
