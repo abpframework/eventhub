@@ -24,4 +24,6 @@ spec:
 {{ include "eventhub.global.env" . | indent 8 }}
         - name: "ConnectionStrings__Default"
           value: {{ .Values.global.defaultConnString }}
+      nodeSelector:
+        agentpool: {{ .Values.global.nodeSelector.agentpool }}
 

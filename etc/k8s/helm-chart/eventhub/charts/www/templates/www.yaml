@@ -22,3 +22,5 @@ spec:
           containerPort: 443
         env:
 {{ include "eventhub.global.env" . | indent 8 }}
+      nodeSelector:
+        agentpool: {{ .Values.global.nodeSelector.agentpool }}
