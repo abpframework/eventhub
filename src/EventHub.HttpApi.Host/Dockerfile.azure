@@ -5,7 +5,7 @@ FROM ${BASE_IMAGE} AS base
 WORKDIR /app/eventhub/src/EventHub.HttpApi.Host
 RUN dotnet publish -c Release -o bin/Release/publish
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS publish
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS publish
 WORKDIR /app
 EXPOSE 80
 ENV ASPNETCORE_URLS=http://+:80

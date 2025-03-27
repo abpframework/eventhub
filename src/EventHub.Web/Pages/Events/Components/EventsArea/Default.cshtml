@@ -1,6 +1,6 @@
 @model EventHub.Web.Pages.Events.Components.EventsArea.EventsAreaViewComponent.ListAreaViewComponentModel
 
-@if (Model.Events != null && Model.Events.Count > 0)
+@if (Model.Events is { Count: > 0 })
 {
     <div id="EventList" class="row" data-hash-code="@Model.GetHashCode()" data-total-count="@Model.TotalCount" data-skip-count="@Model.SkipCount" data-max-result-count="@Model.MaxResultCount">
         <partial name="~/Pages/Events/Components/EventsArea/_eventListSection.cshtml" model="@Model.Events"/>

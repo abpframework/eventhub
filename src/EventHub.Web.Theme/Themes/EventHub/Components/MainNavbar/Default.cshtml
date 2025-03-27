@@ -13,11 +13,13 @@
 @inject IOptions<EventHubUrlOptions> UrlOptions
 
 @{
-    var returnUrl = WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery());
+    var returnUrl = WebUtility.UrlEncode(Context.Request.Query.ContainsKey("returnUrl") ? Context.Request.Query["returnUrl"] : Context.Request.GetEncodedPathAndQuery());
+    
     if (returnUrl.IsNullOrWhiteSpace())
     {
         returnUrl = "/";
     }
+    
 }
 <nav class="navbar navbar-expand-lg navbar-light bg-light static-top">
     <div class="container">

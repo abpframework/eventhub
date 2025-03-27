@@ -132,34 +132,54 @@
                         <div class="row mb-4">
                             <div class="col-md">
                             </div>
-                            <div class="col-md-auto">
-                                <div class="list-style">
-                                    <ul class="nav nav-pills events" role="tablist">
-                                        <li class="nav-item">
-                                            <a href="#PastEvent" class="selected" data-bs-toggle="tab"><img src="/assets/past.svg"> Past</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="#UpcomingEvent" data-bs-toggle="tab"><img src="/assets/now.svg"> Upcoming</a>
-                                        </li>
-                                    </ul>
+                            @if (Model.HasPastEvents || Model.HasUpcomingEvents)
+                            {
+                                <div class="col-md-auto">
+                                    <div class="list-style">
+                                        <ul class="nav nav-pills events" role="tablist">
+                                            @if (Model.HasPastEvents)
+                                            {
+                                                <li class="nav-item">
+                                                    <a href="#PastEvent" class="selected" data-bs-toggle="tab"><img src="/assets/past.svg"> Past</a>
+                                                </li>
+                                            }
+                                            @if (Model.HasUpcomingEvents)
+                                            {
+                                                <li class="nav-item">
+                                                    <a href="#UpcomingEvent" data-bs-toggle="tab"><img src="/assets/now.svg"> Upcoming</a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
                                 </div>
-                            </div>
+                            }
                         </div>
                         <div class="tab-content">
-                            <div id="PastEvent" class="tab-pane active">
-                                @await Component.InvokeAsync(typeof(EventsAreaViewComponent), new
-                                {
-                                    organizationId = Model.Organization.Id,
-                                    maxDate = Clock.Now.ClearTime()
-                                })
-                            </div>
-                            <div id="UpcomingEvent" class="tab-pane">
-                                @await Component.InvokeAsync(typeof(EventsAreaViewComponent), new
-                                {
-                                    organizationId = Model.Organization.Id,
-                                    minDate = Clock.Now.ClearTime()
-                                })
-                            </div>
+                            @if (!Model.HasPastEvents && !Model.HasUpcomingEvents)
+                            {
+                                <p>There is no Event</p>
+                            }
+                            @if (Model.HasPastEvents)
+                            {
+                                <div id="PastEvent" class="tab-pane active">
+                                    @await Component.InvokeAsync(typeof(EventsAreaViewComponent), new
+                                    {
+                                        organizationId = Model.Organization.Id,
+                                        maxDate = Clock.Now.ClearTime()
+                                    })
+                                </div>
+                            }
+                            @if (Model.HasUpcomingEvents)
+                            {
+                                var isActive = Model.HasPastEvents ? "" : "active";
+                                <div id="UpcomingEvent" class="tab-pane @isActive">
+                                    @await Component.InvokeAsync(typeof(EventsAreaViewComponent), new
+                                    {
+                                        organizationId = Model.Organization.Id,
+                                        minDate = Clock.Now.ClearTime()
+                                    })
+                                </div>
+                            }
                         </div>
                     </div>
                     <div id="members-section" class="tab-pane fade">
