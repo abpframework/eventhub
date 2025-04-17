@@ -25,5 +25,5 @@ spec:
         - name: "ConnectionStrings__Default"
           value: {{ .Values.global.defaultConnString }}
       nodeSelector:
-        agentpool: {{ .Values.global.nodeSelector.agentpool }}
+        agentpool: demopool
 
