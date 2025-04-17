@@ -1,2 +1,2 @@
 nodeSelector:
-    agentpool: demopool
+    agentpool: default
