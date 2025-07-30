@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Net.Http;
 using EventHub.Localization;
 using EventHub.Options;
 using EventHub.Web.Menus;
@@ -89,7 +90,7 @@ namespace EventHub.Web
             ConfigureSwaggerServices(context.Services);
             ConfigureRazorPageOptions();
         }
-        
+
         private void ConfigureBundles()
         {
             Configure<AbpBundlingOptions>(options =>
@@ -118,7 +119,7 @@ namespace EventHub.Web
             {
                 options.Applications["MVC"].RootUrl = EventHubUrlOptions.GetWwwConfigValue(configuration);
             });
-            
+
             Configure<AbpRemoteServiceOptions>(options =>
             {
                 options.RemoteServices.Default = new RemoteServiceConfiguration(
@@ -127,7 +128,7 @@ namespace EventHub.Web
                     );
             });
         }
-        
+
         private void ConfigureRazorPageOptions()
         {
             Configure<RazorPagesOptions>(options =>
@@ -169,9 +170,11 @@ namespace EventHub.Web
                     options.Scope.Add("email");
                     options.Scope.Add("phone");
                     options.Scope.Add("EventHub");
+
+                    options.BackchannelHttpHandler = new LoggingHandler();
                 });
         }
-        
+
         private void ConfigureAutoMapper()
         {
             Configure<AbpAutoMapperOptions>(options =>
@@ -206,7 +209,7 @@ namespace EventHub.Web
                 options.Contributors.Add(new EventHubToolbarContributor());
             });
         }
-        
+
         private void ConfigureCookies(ServiceConfigurationContext context)
         {
             context.Services.AddSameSiteCookiePolicy();
@@ -238,7 +241,7 @@ namespace EventHub.Web
         {
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
-            
+
             app.Use((context, next) =>
             {
                 context.Request.Scheme = "https";
