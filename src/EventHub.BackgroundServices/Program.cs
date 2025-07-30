@@ -12,12 +12,7 @@ namespace EventHub
         public static async Task<int> Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
-#if DEBUG
                 .MinimumLevel.Debug()
-#else
-                .MinimumLevel.Information()
-#endif
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .Enrich.FromLogContext()
                 .WriteTo.Async(c => c.File("Logs/logs.txt"))
                 .WriteTo.Async(c => c.Console())
