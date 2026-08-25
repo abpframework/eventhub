@@ -1,0 +1,53 @@
+version: 1
+name: eventhub
+description: EventHub public web preview
+
+env:
+  - Kestrel__Certificates__Default__Password
+
+init:
+  - docker network inspect eventhub-network >/dev/null 2>&1 || docker network create eventhub-network
+  - docker compose -f etc/docker/infrastructure/postgres.yml -f etc/docker/infrastructure/redis.yml up -d --remove-orphans
+  - dotnet restore EventHub.sln
+  - dotnet run --project src/EventHub.DbMigrator/EventHub.DbMigrator.csproj
+
+services:
+  - name: identityserver
+    kind: command
+    command: dotnet run --project src/EventHub.IdentityServer/EventHub.IdentityServer.csproj --no-launch-profile
+    port: 44313
+    env:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: https://0.0.0.0:44313
+      Kestrel__Certificates__Default__Path: etc/dev-cert/localhost.pfx
+      Kestrel__Certificates__Default__Password: ${env.Kestrel__Certificates__Default__Password}
+    restartPolicy: on-change
+
+  - name: api
+    kind: command
+    command: dotnet run --project src/EventHub.HttpApi.Host/EventHub.HttpApi.Host.csproj --no-launch-profile
+    port: 44362
+    env:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: https://0.0.0.0:44362
+      Kestrel__Certificates__Default__Path: etc/dev-cert/localhost.pfx
+      Kestrel__Certificates__Default__Password: ${env.Kestrel__Certificates__Default__Password}
+    dependsOn: [identityserver]
+    restartPolicy: on-change
+
+  - name: web
+    kind: command
+    command: dotnet run --project src/EventHub.Web/EventHub.Web.csproj --no-launch-profile
+    port: 44308
+    primary: true
+    env:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: https://0.0.0.0:44308
+      Kestrel__Certificates__Default__Path: etc/dev-cert/localhost.pfx
+      Kestrel__Certificates__Default__Password: ${env.Kestrel__Certificates__Default__Password}
+    dependsOn: [identityserver, api]
+    restartPolicy: watch
+
+preview:
+  startTimeoutMinutes: 10
+  idleTimeoutMinutes: 30
